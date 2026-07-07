@@ -54,16 +54,14 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .hamburger.open span:nth-child(2) { width: 19px; margin-right: 0; align-self: center; transform: translateY(-4px) rotate(-45deg); }
 .mobile-menu { display: none; }
 /* nav item tags ("New", "Popular") — same language as the section eyebrows:
-   mono, bordered pill, glowing dot — floated to the item's top-right corner */
-.nav-links a { position: relative; }
-.mega-item { position: relative; }
+   mono, bordered pill, glowing dot */
 .nav-tag { display: inline-flex; align-items: center; gap: 5px; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 8.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1; padding: 4px 8px; border-radius: 100px; }
 .nav-tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
-.tag-light { position: absolute; top: -5px; right: -9px; color: #4F46E5; background: rgba(247,248,255,.92); border: 1px solid rgba(79,70,229,.34); box-shadow: 0 0 12px rgba(79,70,229,.28); }
+.tag-light { color: #4F46E5; background: rgba(247,248,255,.92); border: 1px solid rgba(79,70,229,.34); box-shadow: 0 0 12px rgba(79,70,229,.28); }
 .tag-light::before { background: #4F46E5; box-shadow: 0 0 6px rgba(79,70,229,.85); }
-.tag-dark { position: absolute; top: 12px; right: 12px; color: #B7B9FF; background: rgba(139,142,255,.08); border: 1px solid rgba(139,142,255,.32); box-shadow: 0 0 12px rgba(109,106,240,.4); }
+.tag-dark { color: #B7B9FF; background: rgba(139,142,255,.08); border: 1px solid rgba(139,142,255,.32); box-shadow: 0 0 12px rgba(109,106,240,.4); }
 .tag-dark::before { background: #6D6AF0; box-shadow: 0 0 6px rgba(109,106,240,.95); }
-.mobile-menu .tag-light { position: static; margin-left: 8px; vertical-align: 2px; }
+.mobile-menu .tag-light { margin-left: 8px; vertical-align: 2px; }
 
 /* ===== buttons ===== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: none; cursor: pointer; font-family: var(--font-sora), sans-serif; font-weight: 600; letter-spacing: -.01em; border-radius: 13px; transition: background .22s ease, color .22s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }

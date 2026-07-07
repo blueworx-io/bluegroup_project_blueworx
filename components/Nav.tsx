@@ -172,7 +172,7 @@ export default function Nav() {
               </div>
             )}
           </div>
-          <Link className={cls("/ai")} href="/ai">AI Powered{aiBadge}</Link>
+          <Link className={cls("/ai")} href="/ai" style={{ gap: 7 }}>AI Powered{aiBadge}</Link>
         </div>
         <div className="nav-cta">
           <span className="nav-sign-in" onClick={() => router.push("/portal")}>Client Login</span>
