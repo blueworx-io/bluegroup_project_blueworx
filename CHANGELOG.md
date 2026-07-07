@@ -13,6 +13,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Added a site favicon (`app/icon.svg`) — every page previously 404'd on `/favicon.ico`.
 - Toolbox mega menu items no longer spill outside the dropdown panel: the items inherited `white-space: nowrap` from the top-level `.nav-links a` rule, which stopped descriptions wrapping and forced the grid wider than its fixed-width container.
 
+### Changed
+
+- Redesigned the nav "New" and mega-menu "Popular" tags to match the section-eyebrow language (mono uppercase, bordered pill, glowing dot) and float them at the top-right of their menu items; the mobile menu keeps the tag inline.
+
 ### Added
 
 - Playwright mobile regression tests: no horizontal overflow on any page at 375px, and all home feature tabs remain reachable.

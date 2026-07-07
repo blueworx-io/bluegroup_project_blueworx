@@ -88,23 +88,7 @@ export default function Nav() {
     aboutT.current = setTimeout(() => setAboutOpen(false), 300);
   };
 
-  const aiBadge = (
-    <span
-      style={{
-        fontSize: "9.5px",
-        fontWeight: 700,
-        letterSpacing: ".04em",
-        textTransform: "uppercase",
-        color: "#0A0C29",
-        background: "#A5A7FF",
-        padding: "2px 7px",
-        borderRadius: 100,
-        lineHeight: 1.5,
-      }}
-    >
-      New
-    </span>
-  );
+  const aiBadge = <span className="nav-tag tag-light">New</span>;
 
   return (
     <>
@@ -158,9 +142,7 @@ export default function Nav() {
                     <div>
                       <div style={{ fontSize: "14.5px", fontWeight: 600, color: "#fff", display: "flex", alignItems: "center", gap: 7 }}>
                         {t.name}
-                        {t.popular && (
-                          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: "#0A0C29", background: "#A5A7FF", padding: "2px 7px", borderRadius: 100 }}>Popular</span>
-                        )}
+                        {t.popular && <span className="nav-tag tag-dark">Popular</span>}
                       </div>
                       <div style={{ fontSize: "12.5px", color: "rgba(255,255,255,.5)", lineHeight: 1.4, marginTop: 2 }}>{t.desc}</div>
                     </div>
@@ -190,7 +172,7 @@ export default function Nav() {
               </div>
             )}
           </div>
-          <Link className={cls("/ai")} href="/ai" style={{ gap: 7 }}>AI Powered{aiBadge}</Link>
+          <Link className={cls("/ai")} href="/ai">AI Powered{aiBadge}</Link>
         </div>
         <div className="nav-cta">
           <span className="nav-sign-in" onClick={() => router.push("/portal")}>Client Login</span>
@@ -229,7 +211,7 @@ export default function Nav() {
           <Link className={cls("/pricing")} href="/pricing">Pricing</Link>
           <Link className={cls("/about")} href="/about">About Us</Link>
           <Link className={cls("/work")} href="/work" style={{ fontSize: "13.5px", paddingLeft: 24 }}>Work</Link>
-          <Link className={cls("/ai")} href="/ai" style={{ gap: 7 }}>AI Powered{aiBadge}</Link>
+          <Link className={cls("/ai")} href="/ai">AI Powered{aiBadge}</Link>
           <Link href="/portal">Client Login</Link>
           <button className="btn btn-brand btn-md" onClick={() => router.push("/pricing")}>Get a Quote</button>
         </div>
