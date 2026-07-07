@@ -1,10 +1,13 @@
 {
   "name": "bluegroup_project_blueworx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "scripts": {
     "lint": "echo \"no lint configured yet\"",
     "build": "echo \"no build configured yet\""
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
   }
 }
