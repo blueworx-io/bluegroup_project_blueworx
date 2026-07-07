@@ -228,7 +228,7 @@ export default function Home() {
           <div className="eyebrow" style={{ marginBottom: 20 }}>Ongoing Partnership</div>
           <h2 className="h2">Integrate smarter, collaborate better, and scale with BlueWorx</h2>
           <p className="lead" style={{ fontSize: 18, margin: "18px 0 30px" }}>Through ongoing support and retainer services, BlueWorx works alongside your team to support your digital solutions as your business grows.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 28px" }}>
+          <div className="collab-list">
             {COLLAB_ITEMS.map((tool) => (
               <div key={tool.label} className="fli" style={{ borderBottom: "none", padding: "10px 0" }}>
                 <div className="fli-icon"><Icon name={tool.icon} /></div>

@@ -432,7 +432,7 @@ export default function Portal() {
                 <h2>Your Toolbox</h2>
                 <p>Every tool included in your plan, set up, managed, and maintained by BlueWorx.</p>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
+              <div className="pt-tool-grid">
                 {TOOLBOX_TOOLS.map((t) => (
                   <a
                     key={t.slug}
@@ -545,7 +545,7 @@ export default function Portal() {
                   </div>
                 ))}
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
+              <div className="pt-tool-grid">
                 {TOOLBOX_TOOLS.map((t, i) => (
                   <div key={t.slug} className="pt-tool-link" style={{ display: "flex", flexDirection: "column", gap: 12, padding: 20, background: "#fff", border: "1px solid #E9E9F2", borderRadius: 14, cursor: "pointer", transition: "border-color .2s, box-shadow .2s" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -570,7 +570,7 @@ export default function Portal() {
 
           {tab === "subs" && (
             <div>
-              <div className="pt-stats" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
+              <div className="pt-stats pt-stats-3">
                 <div className="pt-stat"><div className="pt-stat-ic"><Icon name="cart" /></div><b>$938/mo</b><span>Total monthly spend</span></div>
                 <div className="pt-stat"><div className="pt-stat-ic"><Icon name="plug" /></div><b>{SUBS.length}</b><span>Active subscriptions</span></div>
                 <div className="pt-stat"><div className="pt-stat-ic"><Icon name="calendar" /></div><b>Mar 20</b><span>Next renewal</span></div>
@@ -704,7 +704,7 @@ export default function Portal() {
 
               <div className="pt-card">
                 <div className="pt-card-head"><h3>Your commission tier</h3><span className="pt-link">How tiers work</span></div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+                <div className="pt-tier-grid">
                   {PN_TIERS.map((t) => {
                     const on = t.key === pnTier;
                     return (
@@ -737,7 +737,7 @@ export default function Portal() {
 
               <div className="pt-card">
                 <div className="pt-card-head"><h3>Pricing &amp; commission calculator</h3><span className="pt-link">Your rate: {pnRateText}</span></div>
-                <div className="pt-cols" style={{ gridTemplateColumns: "1.25fr 1fr" }}>
+                <div className="pt-cols pt-cols-nrw">
                   <div>
                     <div className="calc-field">
                       <label>Partner brand</label>

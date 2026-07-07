@@ -53,6 +53,15 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .hamburger.open span:nth-child(1) { width: 19px; transform: translateY(4px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { width: 19px; margin-right: 0; align-self: center; transform: translateY(-4px) rotate(-45deg); }
 .mobile-menu { display: none; }
+/* nav item tags ("New", "Popular") — same language as the section eyebrows:
+   mono, bordered pill, glowing dot */
+.nav-tag { display: inline-flex; align-items: center; gap: 5px; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 8.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1; padding: 4px 8px; border-radius: 100px; }
+.nav-tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+.tag-light { color: #4F46E5; background: rgba(247,248,255,.92); border: 1px solid rgba(79,70,229,.34); box-shadow: 0 0 12px rgba(79,70,229,.28); }
+.tag-light::before { background: #4F46E5; box-shadow: 0 0 6px rgba(79,70,229,.85); }
+.tag-dark { color: #B7B9FF; background: rgba(139,142,255,.08); border: 1px solid rgba(139,142,255,.32); box-shadow: 0 0 12px rgba(109,106,240,.4); }
+.tag-dark::before { background: #6D6AF0; box-shadow: 0 0 6px rgba(109,106,240,.95); }
+.mobile-menu .tag-light { margin-left: 8px; vertical-align: 2px; }
 
 /* ===== buttons ===== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: none; cursor: pointer; font-family: var(--font-sora), sans-serif; font-weight: 600; letter-spacing: -.01em; border-radius: 13px; transition: background .22s ease, color .22s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }
@@ -422,6 +431,7 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 .pt-welcome h2 { font-size: 26px; font-weight: 600; letter-spacing: -.4px; margin-bottom: 5px; }
 .pt-welcome p { font-size: 14.5px; color: #6B6E86; }
 .pt-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-bottom: 24px; }
+.pt-stats-3 { grid-template-columns: repeat(3,1fr); }
 .pt-stat { background: #fff; border: 1px solid #EAEAF3; border-radius: 16px; padding: 20px 22px; }
 .pt-stat-ic { width: 40px; height: 40px; border-radius: 11px; background: #EEF0FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
 .pt-stat-ic span[data-ic] { width: 20px; height: 20px; }
@@ -430,6 +440,7 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 .pt-stat .pt-delta { font-size: 12px; font-weight: 600; color: #1F9D57; margin-left: 8px; }
 
 .pt-cols { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; align-items: start; }
+.pt-cols-nrw { grid-template-columns: 1.25fr 1fr; }
 .pt-card { background: #fff; border: 1px solid #EAEAF3; border-radius: 16px; padding: 22px 24px; margin-bottom: 20px; }
 .pt-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .pt-card-head h3 { font-size: 16px; font-weight: 600; }
@@ -676,6 +687,15 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 .proc h4 { font-size: 19px; font-weight: 600; margin-bottom: 8px; }
 .proc p { font-size: 14px; line-height: 1.6; color: #667085; }
 
+/* ===== page-specific grid variants (formerly inline styles; kept here so the
+   responsive rules below can override them on smaller screens) ===== */
+.about-why { grid-template-columns: 0.92fr 1.08fr; gap: 56px; }
+.why-grid { grid-template-columns: 1fr 1fr; }
+.collab-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
+.sv-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
+.pt-tool-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.pt-tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+
 /* ===== responsive ===== */
 @media (max-width: 1400px) {
   :root { --gut: 80px; }
@@ -772,12 +792,19 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
   .pt-platform { grid-template-columns: 1fr; }
   .pt-table { display: block; overflow-x: auto; }
   .pt-table th, .pt-table td { white-space: nowrap; }
+  .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .sv-tools { grid-template-columns: 1fr; }
+  .tab-bar { display: flex; flex-wrap: wrap; width: 100%; }
+  .tab { flex: 1 1 auto; padding: 0 18px; }
 }
 @media (max-width: 560px) {
   .gr-cards, .ft, .tbx-grid, .proc-grid { grid-template-columns: 1fr; }
   .frow { grid-template-columns: 1fr; }
   .cta-actions .btn, .hero-cta .btn { width: 100%; }
   .pt-stats { grid-template-columns: 1fr 1fr; }
+  .collab-list, .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr; }
 }
 /* ===== AI Powered page ===== */
 @keyframes aiBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
@@ -906,6 +933,10 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 
 /* mega menu item hover (ported from inline style-hover in the design export) */
 .mega-item:hover { background: rgba(255,255,255,.07); }
+/* mega items live inside .nav-links, whose anchors are nowrap for the top-level
+   labels — without this the descriptions can't wrap and the grid overflows its
+   fixed-width panel */
+.nav-links a.mega-item { white-space: normal; }
 
 /* portal toolbox / learning card hover (ported from inline style-hover in the design export) */
 .pt-tool-link:hover { border-color: #C7C9F5 !important; box-shadow: 0 8px 22px rgba(10,12,41,.07); }

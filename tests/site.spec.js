@@ -20,6 +20,21 @@ test.describe('marketing pages', () => {
     await expect(page.locator('h1')).toContainText('From Prompt to Production');
   });
 
+  test('toolbox mega menu items stay inside the panel', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.nav-links a[href="/toolbox"]').hover();
+    const item = page.locator('.mega-item').first();
+    await expect(item).toBeVisible();
+    const overflow = await item.evaluate((el) => {
+      const panel = el.parentElement;
+      const panelRight = panel.getBoundingClientRect().right;
+      const worst = Math.max(...[...panel.querySelectorAll('.mega-item')].map((it) => it.getBoundingClientRect().right));
+      return { spill: Math.round(worst - panelRight), scrollOverflow: panel.scrollWidth - panel.clientWidth };
+    });
+    expect(overflow.spill).toBeLessThanOrEqual(0);
+    expect(overflow.scrollOverflow).toBeLessThanOrEqual(0);
+  });
+
   test('home feature tabs switch the analytics panel', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.af-text h2')).toHaveText('Support Guides');
@@ -78,6 +93,31 @@ test.describe('contact form', () => {
     await page.locator('#agree').check();
     await page.getByRole('button', { name: 'Send Message' }).click();
     await expect(page.locator('.form-success h3')).toHaveText('Message sent!');
+  });
+});
+
+test.describe('mobile layout', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  const pages = ['/', '/services', '/work', '/pricing', '/about', '/toolbox', '/ai', '/contact', '/portal'];
+  for (const path of pages) {
+    test(`no horizontal overflow on ${path} at 375px`, async ({ page }) => {
+      await page.goto(path);
+      const { vw, scrollW } = await page.evaluate(() => ({
+        vw: document.documentElement.clientWidth,
+        scrollW: document.documentElement.scrollWidth,
+      }));
+      expect(scrollW).toBeLessThanOrEqual(vw + 1);
+    });
+  }
+
+  test('all home feature tabs stay reachable at 375px', async ({ page }) => {
+    await page.goto('/');
+    for (const label of ['Support', 'Toolbox', 'Hosting']) {
+      const tab = page.locator('.tab-bar button', { hasText: label });
+      await tab.scrollIntoViewIfNeeded();
+      await expect(tab).toBeInViewport();
+    }
   });
 });
 
