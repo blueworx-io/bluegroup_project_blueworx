@@ -11,6 +11,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Mobile design audit cleanup: removed the horizontal page scroll at phone widths caused by the logos-band tagline (`white-space: nowrap`), and made the home feature tab bar wrap so every tab stays reachable on small screens.
 - Replaced inline `gridTemplateColumns` styles (which overrode the responsive CSS) with stylesheet classes so grids collapse properly on mobile: About "Why BlueWorx" split and cards, home collaboration checklist, toolbox savings-calculator tool list, and the portal's toolbox/learning grids, subscription stats, tier picker, and partner calculator columns.
 - Added a site favicon (`app/icon.svg`) — every page previously 404'd on `/favicon.ico`.
+- Toolbox mega menu items no longer spill outside the dropdown panel: the items inherited `white-space: nowrap` from the top-level `.nav-links a` rule, which stopped descriptions wrapping and forced the grid wider than its fixed-width container.
 
 ### Added
 

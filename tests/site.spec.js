@@ -20,6 +20,21 @@ test.describe('marketing pages', () => {
     await expect(page.locator('h1')).toContainText('From Prompt to Production');
   });
 
+  test('toolbox mega menu items stay inside the panel', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.nav-links a[href="/toolbox"]').hover();
+    const item = page.locator('.mega-item').first();
+    await expect(item).toBeVisible();
+    const overflow = await item.evaluate((el) => {
+      const panel = el.parentElement;
+      const panelRight = panel.getBoundingClientRect().right;
+      const worst = Math.max(...[...panel.querySelectorAll('.mega-item')].map((it) => it.getBoundingClientRect().right));
+      return { spill: Math.round(worst - panelRight), scrollOverflow: panel.scrollWidth - panel.clientWidth };
+    });
+    expect(overflow.spill).toBeLessThanOrEqual(0);
+    expect(overflow.scrollOverflow).toBeLessThanOrEqual(0);
+  });
+
   test('home feature tabs switch the analytics panel', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.af-text h2')).toHaveText('Support Guides');

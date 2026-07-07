@@ -924,6 +924,10 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 
 /* mega menu item hover (ported from inline style-hover in the design export) */
 .mega-item:hover { background: rgba(255,255,255,.07); }
+/* mega items live inside .nav-links, whose anchors are nowrap for the top-level
+   labels — without this the descriptions can't wrap and the grid overflows its
+   fixed-width panel */
+.nav-links a.mega-item { white-space: normal; }
 
 /* portal toolbox / learning card hover (ported from inline style-hover in the design export) */
 .pt-tool-link:hover { border-color: #C7C9F5 !important; box-shadow: 0 8px 22px rgba(10,12,41,.07); }
