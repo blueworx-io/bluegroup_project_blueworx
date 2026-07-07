@@ -81,6 +81,31 @@ test.describe('contact form', () => {
   });
 });
 
+test.describe('mobile layout', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  const pages = ['/', '/services', '/work', '/pricing', '/about', '/toolbox', '/ai', '/contact', '/portal'];
+  for (const path of pages) {
+    test(`no horizontal overflow on ${path} at 375px`, async ({ page }) => {
+      await page.goto(path);
+      const { vw, scrollW } = await page.evaluate(() => ({
+        vw: document.documentElement.clientWidth,
+        scrollW: document.documentElement.scrollWidth,
+      }));
+      expect(scrollW).toBeLessThanOrEqual(vw + 1);
+    });
+  }
+
+  test('all home feature tabs stay reachable at 375px', async ({ page }) => {
+    await page.goto('/');
+    for (const label of ['Support', 'Toolbox', 'Hosting']) {
+      const tab = page.locator('.tab-bar button', { hasText: label });
+      await tab.scrollIntoViewIfNeeded();
+      await expect(tab).toBeInViewport();
+    }
+  });
+});
+
 test.describe('client portal', () => {
   test('tabs switch views and the site switcher works', async ({ page }) => {
     await page.goto('/portal');

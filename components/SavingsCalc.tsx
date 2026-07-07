@@ -18,7 +18,7 @@ export default function SavingsCalc() {
   return (
     <div className="calc">
       <div className="calc-panel">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 36px" }}>
+        <div className="sv-tools">
           {TOOLBOX_TOOLS.map((t) => (
             <div key={t.slug} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #F0F0F5" }}>
               <div style={{ width: 32, height: 32, borderRadius: 9, background: "#F5F6FB", border: "1px solid #EEEEF5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

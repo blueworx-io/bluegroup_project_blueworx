@@ -54,7 +54,7 @@ export default function About() {
       </section>
 
       <section className="sec">
-        <div className="af-wrap" style={{ display: "grid", gridTemplateColumns: "0.92fr 1.08fr", gap: 56, alignItems: "center" }}>
+        <div className="af-wrap about-why">
           <div>
             <div className="eyebrow" style={{ marginBottom: 20 }}>Why BlueWorx</div>
             <h2 className="h2">We&apos;re the team behind digital solutions that grow businesses</h2>
@@ -64,7 +64,7 @@ export default function About() {
               <Link href="/work" className="btn btn-outline btn-md">View Our Work</Link>
             </div>
           </div>
-          <div className="svc-grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+          <div className="svc-grid why-grid">
             {WHY_CARDS.map((c) => (
               <div key={c.title} className="svc">
                 <div className="svc-ic"><Icon name={c.icon} /></div>

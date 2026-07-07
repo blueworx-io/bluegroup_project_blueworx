@@ -18,7 +18,7 @@ export default function LogosBand() {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 18, width: "100%", maxWidth: 720, padding: "0 32px", boxSizing: "border-box" }}>
         <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg,transparent,#E3E4E8)" }}></span>
-        <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: "#8A8F98", whiteSpace: "nowrap" }}>
+        <p style={{ margin: 0, fontSize: "12.5px", fontWeight: 600, letterSpacing: ".14em", textTransform: "uppercase", color: "#8A8F98", textAlign: "center" }}>
           Loved by owners. Trusted by businesses.
         </p>
         <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg,#E3E4E8,transparent)" }}></span>
