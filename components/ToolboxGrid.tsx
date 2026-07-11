@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { TOOLBOX_TOOLS, faviconUrl, type Tool } from "@/lib/data";
+import { faviconUrl, type Tool } from "@/lib/data";
+import { getTools } from "@/lib/api/content";
 
 const ARROW = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -9,15 +10,17 @@ const ARROW = (
 );
 
 // Dark "tbx" band listing toolbox tools — shared by home, toolbox, and tool detail pages.
-export default function ToolboxGrid({
+// Server component: fetches the tool list itself when a caller doesn't pass one.
+export default async function ToolboxGrid({
   title = "Do more with the BlueWorx Toolbox",
   sub = "Access premium tools, reduce unnecessary costs, and run your digital operations more efficiently.",
-  tools = TOOLBOX_TOOLS,
+  tools,
 }: {
   title?: string;
   sub?: string;
   tools?: Tool[];
 }) {
+  const list = tools ?? (await getTools());
   return (
     <section className="tbx">
       <div className="blob" style={{ width: 320, height: 320, top: -100, left: -120, opacity: 0.14 }}></div>
@@ -26,7 +29,7 @@ export default function ToolboxGrid({
         <p>{sub}</p>
       </div>
       <div className="tbx-grid">
-        {tools.map((t) => (
+        {list.map((t) => (
           <Link key={t.slug} href={`/toolbox/${t.slug}`} className="tbx-card" style={{ textDecoration: "none" }}>
             <div className="tbx-top">
               {/* eslint-disable-next-line @next/next/no-img-element */}

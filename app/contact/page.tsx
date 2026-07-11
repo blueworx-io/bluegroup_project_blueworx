@@ -2,6 +2,7 @@ import Icon from "@/components/Icon";
 import ContactForm from "@/components/ContactForm";
 import FaqList from "@/components/FaqList";
 import Testimonials from "@/components/Testimonials";
+import { getFaqs } from "@/lib/api/content";
 
 export const metadata = { title: "Contact Us — BlueWorx" };
 
@@ -11,7 +12,8 @@ const CONTACT_CARDS = [
   { icon: "mail", title: "Email us here", sub: "Let us know how we can help.", link: "info@blueworx.com" },
 ];
 
-export default function Contact() {
+export default async function Contact() {
+  const faqs = await getFaqs();
   return (
     <div>
       <section className="tech-hero" style={{ textAlign: "center", paddingBottom: 72 }}>
@@ -54,7 +56,7 @@ export default function Contact() {
           <h2 className="h2">Frequently asked questions</h2>
           <p className="lead">Everything you need to know about the product and billing.</p>
         </div>
-        <FaqList />
+        <FaqList faqs={faqs} />
       </section>
 
       <Testimonials style={{ paddingTop: 0 }} />

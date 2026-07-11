@@ -3,7 +3,7 @@ import LogosBand from "@/components/LogosBand";
 import { BillingProvider, BillingToggle, PlanCards } from "@/components/Plans";
 import SavingsCalc from "@/components/SavingsCalc";
 import ToolboxGrid from "@/components/ToolboxGrid";
-import { TOOLBOX_PLANS } from "@/lib/data";
+import { getToolboxPlans, getFaqs, getTools, getSoloPrices } from "@/lib/api/content";
 
 export const metadata = { title: "Toolbox Plans — BlueWorx" };
 
@@ -32,7 +32,13 @@ const CMP_ROWS: { label: React.ReactNode; cells: React.ReactNode[] }[] = [
   { label: "Dedicated account manager", cells: ["—", "—", CHECK] },
 ];
 
-export default function Toolbox() {
+export default async function Toolbox() {
+  const [plans, faqs, tools, soloPrices] = await Promise.all([
+    getToolboxPlans(),
+    getFaqs(),
+    getTools(),
+    getSoloPrices(),
+  ]);
   return (
     <div>
       <BillingProvider>
@@ -44,7 +50,7 @@ export default function Toolbox() {
             <div style={{ display: "flex", justifyContent: "center", marginTop: 34 }}><BillingToggle /></div>
           </div>
         </section>
-        <PlanCards plans={TOOLBOX_PLANS} />
+        <PlanCards plans={plans} />
       </BillingProvider>
 
       <LogosBand />
@@ -76,7 +82,7 @@ export default function Toolbox() {
           <h2 className="h2">See what you save</h2>
           <p className="lead">Compare the Toolbox to paying for each tool individually. Toggle off anything you wouldn&apos;t buy on its own.</p>
         </div>
-        <SavingsCalc />
+        <SavingsCalc tools={tools} soloPrices={soloPrices} />
       </section>
 
       <section className="sec" style={{ paddingTop: 0 }}>
@@ -84,7 +90,7 @@ export default function Toolbox() {
           <h2 className="h2">Frequently asked questions</h2>
           <p className="lead">Everything you need to know about the product and billing.</p>
         </div>
-        <FaqList />
+        <FaqList faqs={faqs} />
       </section>
 
       <ToolboxGrid />

@@ -3,6 +3,7 @@ import { Sora } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CtaBand from "@/components/CtaBand";
+import { getTools } from "@/lib/api/content";
 import "./globals.css";
 
 const sora = Sora({
@@ -16,13 +17,14 @@ export const metadata: Metadata = {
     "BlueWorx is the agency behind high-performing digital solutions: websites, platforms, and automations. Strategy, design, build, hosting, and ongoing support from one dedicated team.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const tools = await getTools();
   return (
     <html lang="en">
       <body className={sora.variable}>
-        <Nav />
+        <Nav tools={tools} />
         <main>{children}</main>
         <CtaBand />
         <Footer />

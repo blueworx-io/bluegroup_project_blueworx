@@ -2,7 +2,7 @@ import FaqList from "@/components/FaqList";
 import LogosBand from "@/components/LogosBand";
 import { BillingProvider, BillingToggle, PlanCards } from "@/components/Plans";
 import PricingCalc from "@/components/PricingCalc";
-import { RETAINER_PLANS } from "@/lib/data";
+import { getRetainerPlans, getFaqs } from "@/lib/api/content";
 
 export const metadata = { title: "Pricing — BlueWorx" };
 
@@ -30,7 +30,8 @@ const CMP_ROWS: { label: React.ReactNode; cells: React.ReactNode[] }[] = [
   { label: "Major updates", cells: ["—", "—", CHECK] },
 ];
 
-export default function Pricing() {
+export default async function Pricing() {
+  const [plans, faqs] = await Promise.all([getRetainerPlans(), getFaqs()]);
   return (
     <div>
       <BillingProvider>
@@ -42,7 +43,7 @@ export default function Pricing() {
             <div style={{ display: "flex", justifyContent: "center", marginTop: 34 }}><BillingToggle /></div>
           </div>
         </section>
-        <PlanCards plans={RETAINER_PLANS} />
+        <PlanCards plans={plans} />
       </BillingProvider>
 
       <LogosBand />
@@ -82,7 +83,7 @@ export default function Pricing() {
           <h2 className="h2">Frequently asked questions</h2>
           <p className="lead">Everything you need to know about the product and billing.</p>
         </div>
-        <FaqList />
+        <FaqList faqs={faqs} />
       </section>
     </div>
   );
