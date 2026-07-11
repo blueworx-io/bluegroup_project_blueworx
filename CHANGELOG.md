@@ -4,6 +4,29 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-07-11
+
+### Added
+
+- Headless integration layer so the site is ready to consume the in-progress BlueWorx WordPress plugin (content + SureCart subscriptions) with no UI changes when it ships:
+  - `docs/API_CONTRACT.md` — the endpoint and JSON-shape spec the plugin builds against, derived from the current mock data and categorised by source (WordPress content vs SureCart vs the custom plugin).
+  - `lib/config.ts` + `.env.example` — one place for every integration env var, with a `useMockData` kill-switch that flips the whole site from mock to live once `NEXT_PUBLIC_WP_API_URL` is set.
+  - `lib/api/content.ts` — async content data layer (tools, plans, FAQs, testimonials, solo prices) wrapping the mock data; swaps to real fetches with no page/component changes.
+  - `lib/api/portal.ts` — authenticated portal data layer (`getPortalData()`), with subscriptions/invoices earmarked for SureCart and the rest for the plugin's account/project endpoints.
+  - `lib/auth.ts` — `getSession()` auth seam for the portal, returning a demo session until `PORTAL_REQUIRE_AUTH=true` wires real SureCart/WordPress auth.
+- `app/api/contact/route.ts` — real server-side contact endpoint that validates submissions and forwards to `CONTACT_FORWARD_URL` (plugin/SureForms) when set. Covered by `tests/contact-api.spec.js` (400 invalid / 200 valid).
+
+### Changed
+
+- Pages now read content through the data layer and pass it into client components as props (`Nav`, `FaqList`, `SavingsCalc`); `ToolboxGrid` self-fetches its tool list.
+- The contact form POSTs to `/api/contact`, surfaces server-side field errors, and shows a submitting state instead of faking success locally.
+- The client portal fetches its data server-side (`/portal` is now dynamic) and renders from props; presentation-derived fields (status chips, hours text, percentages) are computed in the component from raw API values.
+
+### Notes
+
+- Testimonials still render inline copy in `Testimonials.tsx`; wiring them to the data layer is a follow-up pending the "real" testimonial content (the inline copy differs from `HOME_REVIEWS`).
+- The portal's auth-enforced redirect path (when `PORTAL_REQUIRE_AUTH=true`) needs an integration test once the plugin's auth backend exists — the current single-server test harness can't toggle the env per test.
+
 ## [0.2.1] - 2026-07-07
 
 ### Fixed
