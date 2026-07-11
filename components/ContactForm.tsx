@@ -19,13 +19,14 @@ export default function ContactForm() {
   const [form, setForm] = useState<Form>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const setField = <K extends keyof Form>(k: K, v: Form[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
     setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next: Errors = {};
     if (!form.firstName.trim()) next.firstName = "Please enter your first name";
@@ -35,7 +36,32 @@ export default function ContactForm() {
     if (!form.message.trim()) next.message = "Tell us a little about your project";
     if (!form.agree) next.agree = "Please agree to the privacy policy";
     setErrors(next);
-    if (Object.keys(next).length === 0) setSent(true);
+    if (Object.keys(next).length > 0) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; errors?: Errors };
+      if (res.ok && data.ok) {
+        setSent(true);
+      } else {
+        setErrors(data.errors ?? { message: "Something went wrong. Please try again." });
+      }
+    } catch {
+      setErrors({ message: "Couldn't reach the server. Please try again." });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (sent) {
@@ -96,7 +122,7 @@ export default function ContactForm() {
         <input type="checkbox" checked={form.agree} onChange={(e) => setField("agree", e.target.checked)} id="agree" />
         <label htmlFor="agree">You agree to our friendly privacy policy.</label>
       </div>
-      <button type="submit" className="btn btn-brand btn-md" style={{ width: "100%" }}>Send Message</button>
+      <button type="submit" className="btn btn-brand btn-md" style={{ width: "100%" }} disabled={submitting}>{submitting ? "Sending…" : "Send Message"}</button>
     </form>
   );
 }
