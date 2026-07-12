@@ -60,11 +60,7 @@ export async function getFaqs(): Promise<Faq[]> {
   return fetchFromApi<Faq[]>("/faqs");
 }
 
-/**
- * Marketing testimonials. Note: Testimonials.tsx currently renders its own inline
- * copy, which differs from this data. Wiring the component to this function is a
- * follow-up once the "real" testimonial copy is agreed — see docs/API_CONTRACT.md §3.3.
- */
+/** Marketing testimonials (rendered by Testimonials.tsx) — see docs/API_CONTRACT.md §3.3. */
 export async function getTestimonials(): Promise<Testimonial[]> {
   if (useMockData) return HOME_REVIEWS;
   return fetchFromApi<Testimonial[]>("/testimonials");

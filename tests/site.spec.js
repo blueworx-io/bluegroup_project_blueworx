@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { HOME_REVIEWS } from '../lib/data';
 
 test.describe('marketing pages', () => {
   test('home page renders hero and key sections', async ({ page }) => {
@@ -6,6 +7,18 @@ test.describe('marketing pages', () => {
     await expect(page.locator('h1')).toContainText('We Design, Build & Grow');
     await expect(page.locator('.svc2 .svc')).toHaveCount(2);
     await expect(page.locator('.tbx-grid .tbx-card')).toHaveCount(12);
+  });
+
+  test('testimonials render from the content data layer', async ({ page }) => {
+    await page.goto('/');
+    const cards = page.locator('.tg .tc');
+    // Sources from HOME_REVIEWS via getTestimonials(), not the old inline copy.
+    await expect(cards).toHaveCount(HOME_REVIEWS.length);
+    for (const review of HOME_REVIEWS) {
+      const card = cards.filter({ hasText: review.name });
+      await expect(card.locator('.tname')).toHaveText(review.name);
+      await expect(card.locator('.trole')).toHaveText(review.role);
+    }
   });
 
   test('nav links reach every page', async ({ page }) => {
