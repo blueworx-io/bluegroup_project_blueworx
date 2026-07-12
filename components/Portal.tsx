@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Icon from "@/components/Icon";
-import { TOOLBOX_TOOLS, faviconUrl } from "@/lib/data";
+import { faviconUrl, type Tool } from "@/lib/data";
+import type { PortalData } from "@/lib/api/portal";
 
 type Tab =
   | "overview"
@@ -18,33 +19,7 @@ type Tab =
   | "support"
   | "partner";
 
-const CLIENT = { name: "Hannah Whitfield", first: "Hannah", company: "Bloom & Co.", initials: "HW", tier: "Growth Partner" };
-
-const SITES = [
-  { label: "Bloom & Co.", url: "bloomandco.com", platform: "WordPress + Woo", status: "Live", uptime: "99.98%", ssl: "Valid · auto-renew", plan: "Growth Retainer", visits: "18,420", shot: "/assets/feature-image-2.png", dot: "#1F9D57" },
-  { label: "Bloom Store", url: "shop.bloomandco.com", platform: "Shopify Plus", status: "Live", uptime: "99.95%", ssl: "Valid · auto-renew", plan: "E-commerce Care", visits: "9,110", shot: "/assets/feature-image-4.png", dot: "#1F9D57" },
-  { label: "Bloom Events", url: "events.bloomandco.com", platform: "WordPress", status: "Staging", uptime: "—", ssl: "Pending", plan: "Build in progress", visits: "—", shot: "/assets/feature-image-3.png", dot: "#C4610C" },
-];
-
 const siteChip = (status: string) => (status === "Live" ? "pt-chip ok" : status === "Staging" ? "pt-chip stage" : "pt-chip warn");
-
-const SUBS = [
-  { name: "Growth Support Retainer", site: "bloomandco.com", price: "$490", cycle: "/mo", status: "Active", renews: "Apr 1, 2026", icon: "users" },
-  { name: "Managed Hosting — Pro", site: "bloomandco.com", price: "$79", cycle: "/mo", status: "Active", renews: "Apr 1, 2026", icon: "server" },
-  { name: "E-commerce Care Plan", site: "shop.bloomandco.com", price: "$320", cycle: "/mo", status: "Active", renews: "Apr 12, 2026", icon: "cart" },
-  { name: "Toolbox — Business", site: "All sites", price: "$49", cycle: "/mo", status: "Trial ends soon", renews: "Mar 20, 2026", icon: "plug" },
-].map((x) => ({ ...x, chipCls: x.status === "Active" ? "pt-chip ok" : "pt-chip warn" }));
-
-const PACKAGES = [
-  { name: "Design & Dev Hours", used: 6.5, total: 10, period: "This month", color: "#4F46E5" },
-  { name: "SEO & Content Hours", used: 3, total: 4, period: "This month", color: "#6C63FF" },
-  { name: "Priority Support Credits", used: 2, total: 8, period: "This quarter", color: "#3686F7" },
-].map((p) => ({
-  ...p,
-  numText: `${p.used} / ${p.total} hrs`,
-  leftText: `${p.total - p.used} hrs remaining`,
-  pct: Math.round((p.used / p.total) * 100),
-}));
 
 const NAV_ITEMS: { key: Tab; label: string; icon: string; badge?: string }[] = [
   { key: "overview", label: "Overview", icon: "chart" },
@@ -74,47 +49,6 @@ const TITLES: Record<Tab, [string, string]> = {
 
 type StepState = "done" | "current" | "waiting" | "todo";
 
-const OB_PROJECTS = [
-  {
-    name: "Bloom Events",
-    type: "New website build",
-    stage: "Design stage",
-    steps: [
-      { title: "Discovery call", desc: "Goals, scope & strategy agreed", state: "done" as StepState },
-      { title: "Package & sign-up", desc: "Growth retainer configured and signed", state: "done" as StepState },
-      { title: "Content collection", desc: "Brand assets, copy, and photography", state: "waiting" as StepState },
-      { title: "Design", desc: "On-brand, conversion-first layouts", state: "current" as StepState },
-      { title: "Build", desc: "Development on the BlueWorx platform", state: "todo" as StepState },
-      { title: "Review & launch", desc: "Your sign-off, then we go live", state: "todo" as StepState },
-      { title: "Support & growth", desc: "Ongoing updates, SEO & reporting", state: "todo" as StepState },
-    ],
-    docs: [
-      { name: "Logo files", hint: "SVG or high-res PNG", state: "received" },
-      { name: "Domain access", hint: "Registrar login or DNS delegation", state: "received" },
-      { name: "Brand guidelines", hint: "PDF — colors, fonts, tone", state: "pending" },
-      { name: "Event photography", hint: "10–20 images, min 1600px wide", state: "pending" },
-    ],
-    milestone: { label: "Design presentation", date: "Mar 21, 2026", who: "Jess Moreau" },
-  },
-  {
-    name: "Bloom Store refresh",
-    type: "E-commerce update",
-    stage: "Scope stage",
-    steps: [
-      { title: "Discovery call", desc: "Refresh goals & priorities agreed", state: "done" as StepState },
-      { title: "Scope & quote", desc: "Update pack confirmed", state: "current" as StepState },
-      { title: "Design", desc: "Product page & checkout refinements", state: "todo" as StepState },
-      { title: "Build", desc: "Implementation & QA", state: "todo" as StepState },
-      { title: "Launch", desc: "Staged rollout with zero downtime", state: "todo" as StepState },
-    ],
-    docs: [
-      { name: "Updated price list", hint: "Spreadsheet or PDF", state: "received" },
-      { name: "New product imagery", hint: "From your photographer", state: "pending" },
-    ],
-    milestone: { label: "Scope sign-off", date: "Mar 18, 2026", who: "Ross Palmer" },
-  },
-];
-
 const OB_DOT_BASE: React.CSSProperties = { width: 30, height: 30, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12.5px", fontWeight: 700, flexShrink: 0 };
 
 const OB_STATES: Record<StepState, { dot: React.CSSProperties; mark: string | null; chipCls: string; chipStyle?: React.CSSProperties; status: string }> = {
@@ -124,79 +58,6 @@ const OB_STATES: Record<StepState, { dot: React.CSSProperties; mark: string | nu
   todo: { dot: { background: "#F3F4FB", color: "#A0A2B8" }, mark: null, chipCls: "pt-chip", chipStyle: { background: "#F3F4FB", color: "#8A8DA6" }, status: "Queued" },
 };
 
-const LC_STARTERS = [
-  { icon: "book", title: "Getting started with your BlueWorx site", meta: "6 guides · approx 25 min" },
-  { icon: "palette", title: "Editing pages with Elementor", meta: "8 guides · video walkthroughs" },
-  { icon: "cart", title: "Managing orders & subscriptions in SureCart", meta: "5 guides · approx 20 min" },
-  { icon: "chart", title: "Reading your monthly performance report", meta: "3 guides · approx 10 min" },
-];
-
-const PT_STATS = [
-  { icon: "server", value: "3", label: "Active websites" },
-  { icon: "plug", value: "4", label: "Active subscriptions" },
-  { icon: "clock", value: "9.5", label: "Hours left this month" },
-  { icon: "cart", value: "$938", label: "Next invoice · Apr 1" },
-];
-
-const PT_PLATFORM = [
-  { icon: "server", label: "Primary host", value: "BlueWorx Cloud · EU-West" },
-  { icon: "clock", label: "Last backup", value: "Today, 04:00 AM" },
-  { icon: "chart", label: "CDN & caching", value: "Enabled · Cloudflare" },
-  { icon: "doc", label: "PHP / runtime", value: "PHP 8.3 · MySQL 8" },
-];
-
-const ACTIVITY = [
-  { icon: "server", text: "Automated backup completed for bloomandco.com", time: "2 hours ago" },
-  { icon: "chart", text: "February performance report is ready to view", time: "Yesterday" },
-  { icon: "users", text: "Ross logged 2.5 hrs — homepage redesign", time: "2 days ago" },
-  { icon: "plug", text: "Stripe integration updated on shop.bloomandco.com", time: "4 days ago" },
-];
-
-const INVOICES = [
-  { id: "INV-2026-014", date: "Mar 1, 2026", amount: "$938.00", status: "Paid" },
-  { id: "INV-2026-009", date: "Feb 1, 2026", amount: "$938.00", status: "Paid" },
-  { id: "INV-2026-003", date: "Jan 1, 2026", amount: "$889.00", status: "Paid" },
-  { id: "INV-2025-142", date: "Dec 1, 2025", amount: "$889.00", status: "Paid" },
-];
-
-const TIME_LOG = [
-  { date: "Mar 12", task: "Homepage hero redesign", who: "Ross P.", hrs: "2.5" },
-  { date: "Mar 9", task: "Product schema & SEO fixes", who: "Jess M.", hrs: "1.5" },
-  { date: "Mar 5", task: "Checkout bug — Woo plugin", who: "Ross P.", hrs: "1.0" },
-  { date: "Mar 2", task: "Monthly content refresh", who: "Jess M.", hrs: "1.5" },
-];
-
-const TICKETS = [
-  { title: "Add gift-card option at checkout", ref: "#BW-4821", time: "Updated 3h ago", status: "In progress", chipCls: "pt-chip stage" },
-  { title: "Newsletter signup not syncing to CRM", ref: "#BW-4799", time: "Updated 2 days ago", status: "Awaiting you", chipCls: "pt-chip warn" },
-  { title: "Update team photos on About page", ref: "#BW-4750", time: "Closed Mar 4", status: "Resolved", chipCls: "pt-chip ok" },
-];
-
-const TEAM = [
-  { initial: "R", name: "Ross Palmer", role: "Project Manager" },
-  { initial: "J", name: "Jess Moreau", role: "Digital Designer" },
-];
-
-const PN_TIERS = [
-  { key: "referral", name: "Referral", rate: 0.1, desc: "Send us a lead and earn on every invoice they pay.", req: "1+ referral" },
-  { key: "certified", name: "Certified Partner", rate: 0.15, desc: "Trained on the BlueWorx platform, with priority hand-offs.", req: "5+ active clients" },
-  { key: "agency", name: "Agency Partner", rate: 0.2, desc: "White-label delivery under your own brand for your clients.", req: "10+ active clients" },
-];
-
-const PN_BRANDS = [
-  { name: "BlueWorx", mult: 1 },
-  { name: "BlueWorx Commerce", mult: 1.3 },
-  { name: "BabyBlue Digital", mult: 1.15 },
-];
-
-const PN_EARNERS = [
-  { name: "Harbour & Co Creative", type: "Agency Partner", refs: "14", mrr: "$6,420", month: "$1,284", status: "Paid" },
-  { name: "Nina Okafor", type: "Certified Partner", refs: "6", mrr: "$2,890", month: "$433", status: "Paid" },
-  { name: "Studio Meridian", type: "Certified Partner", refs: "5", mrr: "$2,140", month: "$321", status: "Pending" },
-  { name: "Westgate Accounting", type: "Referral", refs: "3", mrr: "$1,110", month: "$111", status: "Pending" },
-  { name: "Bloom & Co", type: "Referral", refs: "2", mrr: "$640", month: "$64", status: "Paid" },
-];
-
 const EXIT_SVG = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -205,8 +66,41 @@ const EXIT_SVG = (
   </svg>
 );
 
-export default function Portal() {
+export default function Portal({ data, tools }: { data: PortalData; tools: Tool[] }) {
   const router = useRouter();
+
+  // Portal data comes from the server (SureCart + plugin), destructured into the
+  // names the view below already uses. Presentation-derived fields (chip classes,
+  // "x / y hrs", percentages) are computed here from the raw API values, matching
+  // the contract that keeps the plugin's payload presentation-free.
+  const {
+    client: CLIENT,
+    sites: SITES,
+    onboarding: OB_PROJECTS,
+    learning: LC_STARTERS,
+    stats: PT_STATS,
+    platform: PT_PLATFORM,
+    activity: ACTIVITY,
+    invoices: INVOICES,
+    timeLog: TIME_LOG,
+    team: TEAM,
+    partner,
+  } = data;
+  const SUBS = data.subscriptions.map((x) => ({ ...x, chipCls: x.status === "Active" ? "pt-chip ok" : "pt-chip warn" }));
+  const PACKAGES = data.packages.map((p) => ({
+    ...p,
+    numText: `${p.used} / ${p.total} hrs`,
+    leftText: `${p.total - p.used} hrs remaining`,
+    pct: Math.round((p.used / p.total) * 100),
+  }));
+  const TICKETS = data.tickets.map((t) => ({
+    ...t,
+    chipCls: t.status === "In progress" ? "pt-chip stage" : t.status === "Resolved" ? "pt-chip ok" : "pt-chip warn",
+  }));
+  const PN_TIERS = partner.tiers;
+  const PN_BRANDS = partner.brands;
+  const PN_EARNERS = partner.earners;
+
   const [tab, setTab] = useState<Tab>("overview");
   const [siteIdx, setSiteIdx] = useState(0);
   const [siteMenuOpen, setSiteMenuOpen] = useState(false);
@@ -433,7 +327,7 @@ export default function Portal() {
                 <p>Every tool included in your plan, set up, managed, and maintained by BlueWorx.</p>
               </div>
               <div className="pt-tool-grid">
-                {TOOLBOX_TOOLS.map((t) => (
+                {tools.map((t) => (
                   <a
                     key={t.slug}
                     href={`https://${t.domain}`}
@@ -546,7 +440,7 @@ export default function Portal() {
                 ))}
               </div>
               <div className="pt-tool-grid">
-                {TOOLBOX_TOOLS.map((t, i) => (
+                {tools.map((t, i) => (
                   <div key={t.slug} className="pt-tool-link" style={{ display: "flex", flexDirection: "column", gap: 12, padding: 20, background: "#fff", border: "1px solid #E9E9F2", borderRadius: 14, cursor: "pointer", transition: "border-color .2s, box-shadow .2s" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <div style={{ width: 42, height: 42, borderRadius: 11, background: "#F5F6FB", border: "1px solid #EEEEF5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

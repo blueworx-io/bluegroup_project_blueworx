@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { FAQS } from "@/lib/data";
 
-export default function FaqList() {
+type Faq = { q: string; a: string };
+
+export default function FaqList({ faqs }: { faqs: Faq[] }) {
   const [open, setOpen] = useState(0);
   return (
     <div className="faq-list">
-      {FAQS.map((f, i) => (
+      {faqs.map((f, i) => (
         <div key={f.q} className={open === i ? "faq-item open" : "faq-item"}>
           <div className="faq-q" onClick={() => setOpen(open === i ? -1 : i)}>
             {f.q}

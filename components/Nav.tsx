@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { TOOLBOX_TOOLS, faviconUrl } from "@/lib/data";
+import { faviconUrl, type Tool } from "@/lib/data";
 
 const CHEVRON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: 13, height: 13 }}>
@@ -11,7 +11,7 @@ const CHEVRON = (
   </svg>
 );
 
-export default function Nav() {
+export default function Nav({ tools }: { tools: Tool[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [megaOpen, setMegaOpen] = useState(false);
@@ -120,7 +120,7 @@ export default function Nav() {
                   zIndex: 60,
                 }}
               >
-                {TOOLBOX_TOOLS.map((t) => (
+                {tools.map((t) => (
                   <Link
                     key={t.slug}
                     href={`/toolbox/${t.slug}`}
@@ -202,7 +202,7 @@ export default function Nav() {
           <Link className={cls("/services")} href="/services">Services</Link>
           <Link className={cls("/toolbox")} href="/toolbox">Toolbox</Link>
           <div style={{ display: "flex", flexDirection: "column", gap: 0, paddingLeft: 12, borderLeft: "2px solid rgba(79,70,229,.15)", margin: "0 0 4px" }}>
-            {TOOLBOX_TOOLS.map((t) => (
+            {tools.map((t) => (
               <Link key={t.slug} href={`/toolbox/${t.slug}`} style={{ fontSize: "13.5px", padding: "8px 8px" }}>
                 {t.name}
               </Link>

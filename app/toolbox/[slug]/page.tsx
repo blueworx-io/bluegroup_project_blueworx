@@ -2,25 +2,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Icon from "@/components/Icon";
 import ToolboxGrid from "@/components/ToolboxGrid";
-import { TOOLBOX_TOOLS, faviconUrl } from "@/lib/data";
+import { faviconUrl } from "@/lib/data";
+import { getTools, getToolBySlug } from "@/lib/api/content";
 
 const MONO = "'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace" as const;
 
-export function generateStaticParams() {
-  return TOOLBOX_TOOLS.map((t) => ({ slug: t.slug }));
+export async function generateStaticParams() {
+  const tools = await getTools();
+  return tools.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const tool = TOOLBOX_TOOLS.find((t) => t.slug === slug);
+  const tool = await getToolBySlug(slug);
   return { title: tool ? `${tool.name} — BlueWorx Toolbox` : "BlueWorx Toolbox" };
 }
 
 export default async function ToolDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const tool = TOOLBOX_TOOLS.find((t) => t.slug === slug);
+  const tools = await getTools();
+  const tool = tools.find((t) => t.slug === slug);
   if (!tool) notFound();
-  const related = TOOLBOX_TOOLS.filter((t) => t.slug !== slug).slice(0, 4);
+  const related = tools.filter((t) => t.slug !== slug).slice(0, 4);
 
   return (
     <div>

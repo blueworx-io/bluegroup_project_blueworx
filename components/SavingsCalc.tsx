@@ -3,23 +3,23 @@
 import { useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import { TOOLBOX_TOOLS, SOLO_PRICES, faviconUrl } from "@/lib/data";
+import { faviconUrl, type Tool } from "@/lib/data";
 
 const HOSTING = 30;
 const TOOLBOX = 30;
 
 // "See what you save" calculator on the toolbox page.
-export default function SavingsCalc() {
+export default function SavingsCalc({ tools, soloPrices }: { tools: Tool[]; soloPrices: Record<string, number> }) {
   const [off, setOff] = useState<Record<string, boolean>>({});
 
-  const solo = TOOLBOX_TOOLS.filter((t) => !off[t.slug]).reduce((a, t) => a + (SOLO_PRICES[t.slug] || 0), 0) + HOSTING;
+  const solo = tools.filter((t) => !off[t.slug]).reduce((a, t) => a + (soloPrices[t.slug] || 0), 0) + HOSTING;
   const save = Math.max(0, solo - TOOLBOX);
 
   return (
     <div className="calc">
       <div className="calc-panel">
         <div className="sv-tools">
-          {TOOLBOX_TOOLS.map((t) => (
+          {tools.map((t) => (
             <div key={t.slug} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #F0F0F5" }}>
               <div style={{ width: 32, height: 32, borderRadius: 9, background: "#F5F6FB", border: "1px solid #EEEEF5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,7 +27,7 @@ export default function SavingsCalc() {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "#0A0C29" }}>{t.name}</div>
-                <div style={{ fontSize: 12, color: "#8A8DA6" }}>${SOLO_PRICES[t.slug] || 0}/mo individually</div>
+                <div style={{ fontSize: 12, color: "#8A8DA6" }}>${soloPrices[t.slug] || 0}/mo individually</div>
               </div>
               <button
                 className={off[t.slug] ? "toggle-pill" : "toggle-pill on"}
