@@ -7,13 +7,14 @@ type Form = {
   lastName: string;
   email: string;
   phone: string;
+  countryCode: string;
   message: string;
   agree: boolean;
 };
 
 type Errors = Partial<Record<keyof Form, string>>;
 
-const EMPTY: Form = { firstName: "", lastName: "", email: "", phone: "", message: "", agree: false };
+const EMPTY: Form = { firstName: "", lastName: "", email: "", phone: "", countryCode: "US", message: "", agree: false };
 
 export default function ContactForm() {
   const [form, setForm] = useState<Form>(EMPTY);
@@ -48,6 +49,7 @@ export default function ContactForm() {
           lastName: form.lastName,
           email: form.email,
           phone: form.phone,
+          countryCode: form.countryCode,
           message: form.message,
         }),
       });
@@ -104,7 +106,7 @@ export default function ContactForm() {
       <div className={fieldCls("phone")}>
         <label htmlFor="cf-phone">Phone number</label>
         <div className="phone-row">
-          <select aria-label="Country code">
+          <select aria-label="Country code" value={form.countryCode} onChange={(e) => setField("countryCode", e.target.value)}>
             <option>US</option>
             <option>UK</option>
             <option>AU</option>
