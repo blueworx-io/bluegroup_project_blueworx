@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-07-12
+
+### Changed
+
+- `Testimonials.tsx` now renders from the content data layer (`getTestimonials()`) instead of a hardcoded inline list, closing the follow-up noted in 0.3.0. The homepage/services/contact testimonials are now the `HOME_REVIEWS` set — consistent with the rest of the app's cast — and will switch to the plugin's `/testimonials` endpoint with no component change once it goes live. Covered by a new test in `tests/site.spec.js` that asserts the rendered cards match `HOME_REVIEWS` field-for-field.
+
 ## [0.3.1] - 2026-07-12
 
 ### Fixed
