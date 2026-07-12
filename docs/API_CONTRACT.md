@@ -312,3 +312,23 @@ format front‑end. Track that as a follow‑up before it becomes load‑bearing
    This decides the `getSession()` implementation in [`lib/auth.ts`](../lib/auth.ts).
 3. Are toolbox/retainer **plans** SureCart products (so pricing is one source of truth), or WP content?
 4. Should `soloPrice` live on the tool object (preferred) or a separate endpoint?
+
+## 10. Recommended defaults (front-end team)
+
+These are the front-end's recommended answers to §9. They are **defaults, not decisions** — the
+plugin team can override any of them, but building to these keeps the current front-end unchanged.
+
+1. **Normalise, don't proxy.** Have the plugin map SureCart into the §5.2 / §5.3 shapes rather than
+   forwarding raw SureCart JSON. This insulates the front-end from SureCart API changes and matches
+   the "plugin owns formatting" stance in §6. (Answers Q1.)
+2. **Session cookie for portal auth.** An `httpOnly`, `SameSite` session cookie tied to the SureCart
+   customer, read server-side by `getSession()` in [`lib/auth.ts`](../lib/auth.ts). It's the simplest
+   secure option for a same-origin headless portal and needs no token handling in the client. Use a
+   bearer token only if the portal ends up on a different origin from the API. (Answers Q2.)
+3. **SureCart products are the source of truth for price.** Surface toolbox/retainer plans through
+   `GET /plans` but drive their prices from SureCart products, so marketing pricing and checkout can
+   never drift apart. WP content owns only the copy (name, desc, feature bullets). (Answers Q3.)
+4. **`soloPrice` on each tool.** Return it on the `Tool` object (the field is already reserved in
+   §3.1) so there is one source of truth and the separate `SOLO_PRICES` map can retire. Until that
+   lands, `tests/fixtures-parity.spec.ts` guards that the tools list and `SOLO_PRICES` stay in
+   lockstep. (Answers Q4.)

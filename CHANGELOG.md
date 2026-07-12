@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-07-12
+
+### Fixed
+
+- Contact form now sends the selected `countryCode` with the submission. The country `<select>` was uncontrolled and its value was dropped before the POST, even though the API contract (§4) and `/api/contact` already expect the field. Covered by a new test that intercepts the request and asserts the chosen code is included.
+
+### Added
+
+- `tests/portal-auth.spec.js` + a dedicated `portal-auth` Playwright project — starts a second server with `PORTAL_REQUIRE_AUTH=true` and asserts `/portal` redirects unauthenticated visitors to home without leaking the demo client's data. Closes the auth-redirect test gap noted in 0.3.0 (the harness now runs two servers, so the env can differ per project).
+- `tests/fixtures-parity.spec.ts` — pins the content data layer's golden payloads (tool/plan/FAQ/testimonial shapes) against the API contract, and guards that the tools list and `SOLO_PRICES` stay in lockstep, so any future front-end/plugin drift fails loudly.
+- `docs/API_CONTRACT.md` §10 — the front-end team's recommended defaults answering the open questions in §9 (normalise SureCart rather than proxy, session-cookie portal auth, SureCart as the pricing source of truth, `soloPrice` on each tool).
+
 ## [0.3.0] - 2026-07-11
 
 ### Added

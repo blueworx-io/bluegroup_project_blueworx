@@ -94,6 +94,29 @@ test.describe('contact form', () => {
     await page.getByRole('button', { name: 'Send Message' }).click();
     await expect(page.locator('.form-success h3')).toHaveText('Message sent!');
   });
+
+  test('includes the selected country code in the submission', async ({ page }) => {
+    await page.goto('/contact');
+
+    let posted = null;
+    await page.route('**/api/contact', async (route) => {
+      posted = route.request().postDataJSON();
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
+    });
+
+    await page.getByPlaceholder('First name').fill('Luke');
+    await page.getByPlaceholder('Last name').fill('McFarland');
+    await page.getByPlaceholder('you@company.com').fill('luke@example.com');
+    await page.getByLabel('Country code').selectOption('AU');
+    await page.getByPlaceholder('+1 (555) 000-0000').fill('+61 400 000 000');
+    await page.getByPlaceholder('Leave us a message...').fill('Tell me about retainers.');
+    await page.locator('#agree').check();
+    await page.getByRole('button', { name: 'Send Message' }).click();
+
+    await expect(page.locator('.form-success h3')).toHaveText('Message sent!');
+    expect(posted, 'the form should POST to /api/contact').toBeTruthy();
+    expect(posted.countryCode).toBe('AU');
+  });
 });
 
 test.describe('mobile layout', () => {
