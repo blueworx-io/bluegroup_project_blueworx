@@ -2,15 +2,13 @@
 //
 // Returns everything the client portal renders for the signed-in customer.
 // Subscriptions and invoices come from SureCart (via the plugin); the rest come
-// from the plugin's own account/project endpoints. Today this serves the captured
-// mock data; once NEXT_PUBLIC_WP_API_URL is set it fetches GET /portal/me for the
-// authenticated user. See docs/API_CONTRACT.md §5.
+// from the plugin's own account/project endpoints. The plugin's auth is
+// browser-only JWT with no /portal/me endpoint yet, so this always serves the
+// captured demo payload until Cycle 2 wires a normalized client + endpoint.
 //
 // Presentation-derived fields (chip classes, "x / y hrs", percentages) are NOT in
 // these shapes — Portal.tsx derives them from the raw values below, matching the
 // contract so the plugin returns pure data.
-
-import { config, useMockData } from "@/lib/config";
 
 export type PortalClient = { name: string; first: string; company: string; initials: string; tier: string };
 export type PortalSite = {
@@ -182,15 +180,11 @@ const MOCK_PORTAL: PortalData = {
 };
 
 /**
- * Fetch the portal payload for the authenticated customer. Per-user data, so it
- * is never cached. Until the plugin is live, returns the demo client's data.
+ * Fetch the portal payload for the authenticated customer. Cycle 2: the plugin's
+ * browser-only JWT auth makes portal data a client concern, and there is no
+ * /portal/me endpoint yet — so until Cycle 2 wires the §10 client + a normalized
+ * endpoint, always serve the demo payload.
  */
 export async function getPortalData(): Promise<PortalData> {
-  if (useMockData) return MOCK_PORTAL;
-  const res = await fetch(`${config.wpApiUrl}/portal/me`, {
-    headers: config.wpApiToken ? { Authorization: `Bearer ${config.wpApiToken}` } : undefined,
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`BlueWorx portal API failed: ${res.status} ${res.statusText}`);
-  return res.json() as Promise<PortalData>;
+  return MOCK_PORTAL;
 }
