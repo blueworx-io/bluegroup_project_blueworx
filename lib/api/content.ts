@@ -1,73 +1,73 @@
-// Content data-access layer (server-side).
-//
-// This is the seam between the front-end and the BlueWorx WordPress plugin.
-// Every page reads its content through these functions. Today they return the
-// captured mock data from lib/data.ts; once NEXT_PUBLIC_WP_API_URL is set, they
-// fetch the real content instead — with no changes required in any page or
-// component. See docs/API_CONTRACT.md §3 for the endpoint shapes.
+// Content data-access layer (server-side). Marketing content flows through here.
+// Live: fetch CPTs from wp/v2 and map ACF → front-end types (lib/api/mappers.ts).
+// Fallback: static data from lib/data.ts whenever the CMS is unconfigured, a CPT
+// is absent/empty, or a fetch fails — a public page must never render blank.
 
 import {
-  TOOLBOX_TOOLS,
-  TOOLBOX_PLANS,
-  RETAINER_PLANS,
-  FAQS,
-  HOME_REVIEWS,
-  SOLO_PRICES,
-  type Tool,
-  type Plan,
+  TOOLBOX_TOOLS, TOOLBOX_PLANS, RETAINER_PLANS, FAQS, HOME_REVIEWS, SOLO_PRICES,
+  type Tool, type Plan,
 } from "@/lib/data";
-import { config, useMockData } from "@/lib/config";
+import { useMockData } from "@/lib/config";
+import { listCpt } from "@/lib/api/wp";
+import {
+  mapTool, mapPlan, planGroup, mapFaq, mapTestimonial,
+  type Faq, type Testimonial, type WpTool, type WpPlan, type WpFaq, type WpTestimonial,
+} from "@/lib/api/mappers";
 
-type Faq = { q: string; a: string };
-type Testimonial = { text: string; initials: string; name: string; role: string };
+export type { Faq, Testimonial };
 
-/** Fetch JSON from the plugin REST API. Content is cacheable; revalidate periodically. */
-async function fetchFromApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${config.wpApiUrl}${path}`, {
-    headers: config.wpApiToken ? { Authorization: `Bearer ${config.wpApiToken}` } : undefined,
-    next: { revalidate: 300 },
-  });
-  if (!res.ok) {
-    throw new Error(`BlueWorx content API ${path} failed: ${res.status} ${res.statusText}`);
+/** Run `fetcher` live; on mock mode, empty result, or any error, return `fallback`. */
+async function liveOrFallback<T>(fallback: T, label: string, fetcher: () => Promise<T>): Promise<T> {
+  if (useMockData) return fallback;
+  try {
+    const value = await fetcher();
+    if (Array.isArray(value) && value.length === 0) {
+      console.warn(`[content] ${label} returned empty; using static fallback`);
+      return fallback;
+    }
+    return value;
+  } catch (err) {
+    console.warn(`[content] ${label} failed; using static fallback:`, err);
+    return fallback;
   }
-  return res.json() as Promise<T>;
 }
 
 export async function getTools(): Promise<Tool[]> {
-  if (useMockData) return TOOLBOX_TOOLS;
-  return fetchFromApi<Tool[]>("/tools");
+  return liveOrFallback(TOOLBOX_TOOLS, "getTools", async () =>
+    ((await listCpt("bw_tool")) as WpTool[]).map(mapTool));
 }
 
 export async function getToolBySlug(slug: string): Promise<Tool | undefined> {
-  const tools = await getTools();
-  return tools.find((t) => t.slug === slug);
+  return (await getTools()).find((t) => t.slug === slug);
 }
 
-export async function getToolboxPlans(): Promise<Plan[]> {
-  if (useMockData) return TOOLBOX_PLANS;
-  const { toolbox } = await fetchFromApi<{ toolbox: Plan[]; retainers: Plan[] }>("/plans");
-  return toolbox;
+async function getPlans(group: "toolbox" | "retainer"): Promise<Plan[]> {
+  const fallback = group === "retainer" ? RETAINER_PLANS : TOOLBOX_PLANS;
+  return liveOrFallback(fallback, `getPlans:${group}`, async () => {
+    const items = (await listCpt("bw_plan")) as WpPlan[];
+    return items.filter((i) => planGroup(i) === group).map(mapPlan);
+  });
 }
 
-export async function getRetainerPlans(): Promise<Plan[]> {
-  if (useMockData) return RETAINER_PLANS;
-  const { retainers } = await fetchFromApi<{ toolbox: Plan[]; retainers: Plan[] }>("/plans");
-  return retainers;
-}
+export function getToolboxPlans(): Promise<Plan[]> { return getPlans("toolbox"); }
+export function getRetainerPlans(): Promise<Plan[]> { return getPlans("retainer"); }
 
 export async function getFaqs(): Promise<Faq[]> {
-  if (useMockData) return FAQS;
-  return fetchFromApi<Faq[]>("/faqs");
+  return liveOrFallback(FAQS, "getFaqs", async () =>
+    ((await listCpt("bw_faq")) as WpFaq[]).map(mapFaq));
 }
 
-/** Marketing testimonials (rendered by Testimonials.tsx) — see docs/API_CONTRACT.md §3.3. */
 export async function getTestimonials(): Promise<Testimonial[]> {
-  if (useMockData) return HOME_REVIEWS;
-  return fetchFromApi<Testimonial[]>("/testimonials");
+  return liveOrFallback(HOME_REVIEWS, "getTestimonials", async () =>
+    ((await listCpt("bw_testimonial")) as WpTestimonial[]).map(mapTestimonial));
 }
 
-/** slug → per-tool solo price, for the savings calculator. */
+/** slug → per-tool solo price, for the savings calculator. Derived from tools when live. */
 export async function getSoloPrices(): Promise<Record<string, number>> {
   if (useMockData) return SOLO_PRICES;
-  return fetchFromApi<Record<string, number>>("/tools/solo-prices");
+  const tools = await getTools();
+  const fromTools = Object.fromEntries(
+    tools.filter((t) => typeof t.soloPrice === "number").map((t) => [t.slug, t.soloPrice as number]),
+  );
+  return Object.keys(fromTools).length ? fromTools : SOLO_PRICES;
 }
