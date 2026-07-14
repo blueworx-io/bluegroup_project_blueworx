@@ -35,7 +35,8 @@ function formatDate(v: unknown): string {
     const s = str(v);
     if (s) { const t = Date.parse(s); if (!Number.isNaN(t)) d = new Date(t); }
   }
-  return d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+  // SureCart timestamps are UTC; format in UTC for deterministic output regardless of runner timezone.
+  return d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "";
 }
 
 const SUB_STATUS: Record<string, string> = {
