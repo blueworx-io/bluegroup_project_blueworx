@@ -8,7 +8,7 @@ test('api() refreshes once on 401 then retries with the new token', async () => 
   process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io';
   const calls: string[] = [];
   let authed = false;
-  globalThis.fetch = (async (url: string, init?: RequestInit) => {
+  globalThis.fetch = (async (url: string) => {
     calls.push(url);
     if (url.endsWith('/auth/refresh')) { authed = true; return { ok: true, json: async () => ({ access_token: 'tok' }) }; }
     if (url.endsWith('/auth/me')) return { status: authed ? 200 : 401, ok: authed, json: async () => ({ id: 1 }) };
