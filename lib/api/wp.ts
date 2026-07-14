@@ -1,6 +1,7 @@
 // Low-level fetchers for the BlueWorx WordPress plugin's generic endpoints.
-// Single responsibility: HTTP to the CMS, typed JSON out. No marketing mapping
-// (see lib/api/mappers.ts). Shapes mirror HEADLESS_INTEGRATION.md §5–§6.
+// Single responsibility: HTTP to the CMS, typed JSON out. Used for site config,
+// nav menus, path resolution, and real WordPress page bodies. Shapes mirror the
+// plugin's HEADLESS_INTEGRATION.md §5–§6.
 
 import { config } from "@/lib/config";
 
@@ -55,16 +56,6 @@ export function getAcfOptions(): Promise<Record<string, unknown>> {
 
 export function getByRestUrl<A = Record<string, unknown>>(restUrl: string): Promise<WpContent<A>> {
   return getJson<WpContent<A>>(restUrl);
-}
-
-export function listCpt<A = Record<string, unknown>>(
-  type: string, params: Record<string, string | number> = {},
-): Promise<WpContent<A>[]> {
-  const stringParams = Object.fromEntries(
-    Object.entries(params).map(([k, v]) => [k, String(v)]),
-  );
-  const qs = new URLSearchParams({ per_page: "100", ...stringParams }).toString();
-  return getJson<WpContent<A>[]>(`${config.wpApi}/${type}?${qs}`);
 }
 
 /** Menu URLs point at the WP origin; strip it so <Link>s stay on the front-end (§5.3). */

@@ -5,6 +5,15 @@
 **Repo:** `bluegroup_project_blueworx` (Next.js headless front-end)
 **Consumes:** `blueworx_labs_wordpress` plugin v1.10.1 — see its `HEADLESS_INTEGRATION.md`
 
+> **Amendment 2026-07-14.** After review, the team chose **not** to model marketing
+> content as WordPress CPTs. Tools, plans, FAQs, and testimonials remain **static** in
+> `lib/data.ts` (edited via PR). The CPT/ACF content model, the `lib/api/mappers.ts`
+> mapping layer, `listCpt`, and `docs/cms-content-model.md` were accordingly removed from
+> the shipped branch; `lib/api/content.ts` returns the static data directly. Everything
+> else in this spec (two-base config, `lib/api/wp.ts` generic fetchers, revalidation,
+> auth-client infra, the `/resolve`→`wp/v2` catch-all) stands. Sections §5/§6/§7 below
+> describing the CPT approach are retained as historical context only.
+
 ---
 
 ## 1. Background & problem

@@ -11,7 +11,6 @@ export type Tool = {
   popular?: boolean;
   tagline: string;
   features: ToolFeature[];
-  soloPrice?: number;
 };
 
 export const TOOLBOX_TOOLS: Tool[] = [
