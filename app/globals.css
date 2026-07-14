@@ -943,3 +943,19 @@ footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 
 /* buttons rendered as links (Next.js <Link>) must not inherit anchor underlines */
 a.btn, a.plan-btn, a.pt-btn { text-decoration: none; }
+
+/* --- Auth forms (Cycle 2 portal) --- */
+.auth-page { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 48px 20px; }
+.portal-auth-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px 20px; background: #F5F6FB; }
+.auth-form { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid #E9E9F2; border-radius: 16px; padding: 32px; }
+.auth-form h1 { font-size: 22px; font-weight: 700; margin: 0 0 8px; color: #0A0C29; }
+.auth-form label { font-size: 13px; font-weight: 600; color: #3A3D57; margin-top: 8px; }
+.auth-form input { height: 44px; padding: 0 14px; border: 1px solid #D9DBEA; border-radius: 10px; font-size: 14px; }
+.auth-form input:focus { outline: 2px solid #4F46E5; outline-offset: 1px; border-color: #4F46E5; }
+.auth-form button { margin-top: 16px; }
+.auth-error { color: #B4232B; background: #FDECEC; border: 1px solid #F5C6C6; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin: 0; }
+.auth-note { color: #1F5130; background: #E9F7EE; border: 1px solid #BFE6CC; border-radius: 10px; padding: 12px 14px; font-size: 14px; max-width: 420px; }
+.auth-links { display: flex; justify-content: space-between; margin-top: 14px; font-size: 13px; }
+.auth-links a { color: #4F46E5; text-decoration: none; }
+.pt-sample { background: #FFF7E8; border: 1px solid #F3D89B; color: #7A5B12; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 18px; }
+.pt-billing-error { color: #B4232B; font-size: 13px; margin: 4px 0 12px; }
