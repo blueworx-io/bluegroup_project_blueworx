@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { config } from '../lib/config';
 
 test.describe('wp fetchers', () => {
   test.beforeEach(() => { process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io'; });
@@ -12,7 +13,7 @@ test.describe('wp fetchers', () => {
 
     const wp = await import(`../lib/api/wp.ts?menu=${Date.now()}`);
     const items = await wp.getMenu('primary');
-    expect(calledUrl).toBe('https://cms.blueworx.io/wp-json/blueworx/v1/menus/primary');
+    expect(calledUrl).toBe(`${config.blueworxApi}/menus/primary`);
     expect(items).toHaveLength(1);
     expect(items[0].title).toBe('About');
   });
@@ -22,7 +23,7 @@ test.describe('wp fetchers', () => {
     globalThis.fetch = (async (url: string) => { calledUrl = url; return { ok: true, json: async () => ({ type: 'page', id: 12, slug: 'about', rest_url: 'x', template: 'single' }) }; }) as unknown as typeof fetch;
     const wp = await import(`../lib/api/wp.ts?res=${Date.now()}`);
     await wp.resolve('/about');
-    expect(calledUrl).toBe('https://cms.blueworx.io/wp-json/blueworx/v1/resolve?uri=%2Fabout');
+    expect(calledUrl).toBe(`${config.blueworxApi}/resolve?uri=%2Fabout`);
   });
 
   test('rewriteMenuUrl strips the WP origin to a path', async () => {
