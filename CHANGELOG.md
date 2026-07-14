@@ -4,6 +4,23 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-07-13
+
+### Changed
+
+- **Data layer re-based on the live `blueworx_labs_wordpress` plugin (v1.10.1).** `lib/config.ts` now derives two REST bases (`blueworx/v1` + `wp/v2`) from a single `NEXT_PUBLIC_WORDPRESS_URL` origin, replacing the invented `NEXT_PUBLIC_WP_API_URL`/`WP_API_TOKEN`. Marketing content (tools, plans, FAQs, testimonials) fetches from WordPress CPTs+ACF via `lib/api/wp.ts` + pure mappers in `lib/api/mappers.ts`, and `lib/api/content.ts` keeps its exact signatures so no page/component changed. Every function falls back to the static `lib/data.ts` values while the CMS is unconfigured, a CPT is empty, or a fetch fails — public pages never render blank. `docs/API_CONTRACT.md` reconciled to the real plugin; the content model the CMS must create is documented in `docs/cms-content-model.md`.
+
+### Added
+
+- `app/api/revalidate/route.ts` — secret-verified on-demand ISR receiver (constant-time compare, fails closed without a configured secret).
+- `lib/wp-client.ts` — browser auth client (in-memory JWT access token + single-flight refresh on 401). Infrastructure for the Cycle 2 portal; not yet consumed by any page.
+- `app/[...slug]/page.tsx` — catch-all that resolves a path via `/resolve` and renders the `wp/v2` body; unmatched paths (and all of mock mode) still 404.
+- Tests: config derivation, wp fetchers, CPT→type mappers, content fetch/fallback, revalidate auth, auth-client refresh, and catch-all 404 behaviour.
+
+### Notes
+
+- Portal (auth-gated §5 data), SureCart, and the contact-form backend are deferred to Cycle 2; the portal continues to render demo data.
+
 ## [0.3.2] - 2026-07-12
 
 ### Changed
