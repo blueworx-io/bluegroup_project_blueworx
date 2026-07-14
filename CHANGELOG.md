@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-07-14
+
+### Added
+
+- **Client portal auth.** The portal is now a client component tree under an `AuthProvider` that restores the session on mount (`/auth/refresh`) and hydrates via `GET /auth/me` — the browser-only JWT model the plugin requires (§11). `PORTAL_REQUIRE_AUTH=true` shows a sign-in screen in place (no data leak) instead of redirecting home.
+- **Auth UI** against `blueworx/v1`: sign-in (`/login` + in-portal gate), register (`/register`), email verify (`/verify`), forgot/reset password (`/forgot-password`, `/reset-password`), and in-portal change-password. Honours the non-enumerating responses, the documented error codes, and the 8-char password minimum. `lib/api/account.ts` + `lib/auth/` (`AuthProvider`, pure `errors.ts`, `identity.ts`).
+- **Live SureCart billing.** Subscriptions and invoices are fetched client-side from `/surecart/me/*` and mapped to the portal's shapes by pure `mapSubscription`/`mapInvoice` in `lib/api/surecart.ts` (the single place SureCart shape knowledge lives). Per-section loading + inline error states; empty (no customer) → empty tables.
+- `docs/plugin-endpoints-cycle2.md` — plugin-side deliverables (`POST /blueworx/v1/contact`; deferred SureCart normalization and `/portal/me`).
+
+### Changed
+
+- Portal identity now comes from `/auth/me`; `company`/`tier` fall back to placeholders (not in the WP user payload) until a later cycle. Bespoke sections (sites, hours, onboarding, tickets, team, partner, activity, time log) remain **labelled demo data**. `lib/api/portal.ts` exports `DEMO_PORTAL`; server-side `getPortalData`/`lib/auth.ts` retired.
+- Contact form still forwards via `CONTACT_FORWARD_URL`; point it at `POST /blueworx/v1/contact` once the plugin ships it.
+
+### Notes
+
+- SureCart raw field names are mapped front-end and verified against the live proxy during integration (`lib/api/surecart.ts` is the correction point). CMS must be on a subdomain of the frontend's registrable domain for the refresh cookie to persist (guide §4).
+
 ## [0.4.1] - 2026-07-14
 
 ### Fixed

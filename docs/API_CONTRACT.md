@@ -174,6 +174,14 @@ type PortalClient = {
 };
 ```
 
+> **Cycle 2 update — supersedes the §10.2 "session cookie" recommended default.** Auth shipped as
+> **client-side JWT**: a short-lived access token held in memory (`AuthProvider`), restored on mount
+> via `/auth/refresh`, backed by a refresh cookie path-scoped to `/auth/`. Identity is hydrated from
+> `GET /auth/me`; `company`/`tier` aren't in the WP user payload yet, so they fall back to
+> placeholders. Subscriptions/invoices (§5.2/§5.3) are fetched client-side from `/surecart/me/*` and
+> **mapped on the front-end** by `mapSubscription`/`mapInvoice` in `lib/api/surecart.ts` —
+> plugin-side normalization (§10.1) is deferred, not required for Cycle 2.
+
 ### 5.2 `subscriptions` — **SureCart**
 
 ```ts

@@ -959,3 +959,4 @@ a.btn, a.plan-btn, a.pt-btn { text-decoration: none; }
 .auth-links a { color: #4F46E5; text-decoration: none; }
 .pt-sample { background: #FFF7E8; border: 1px solid #F3D89B; color: #7A5B12; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 18px; }
 .pt-billing-error { color: #B4232B; font-size: 13px; margin: 4px 0 12px; }
+.pt-billing-loading { color: #6B6E86; font-size: 13px; margin: 4px 0 12px; }
