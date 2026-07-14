@@ -1,73 +1,47 @@
-// Content data-access layer (server-side).
+// Content data-access layer (server-side) for marketing collections.
 //
-// This is the seam between the front-end and the BlueWorx WordPress plugin.
-// Every page reads its content through these functions. Today they return the
-// captured mock data from lib/data.ts; once NEXT_PUBLIC_WP_API_URL is set, they
-// fetch the real content instead — with no changes required in any page or
-// component. See docs/API_CONTRACT.md §3 for the endpoint shapes.
+// Marketing content (tools, plans, FAQs, testimonials) is intentionally STATIC —
+// it lives in lib/data.ts and is edited via a code change / PR. There are no
+// WordPress custom post types behind it. Real WordPress *pages* are still served
+// separately through the catch-all resolve→wp/v2 flow (see lib/api/wp.ts); only
+// these marketing collections are static.
+//
+// These stay async so the calling Server Components (which `await` them) don't
+// change if a data set later moves to a live source.
 
 import {
-  TOOLBOX_TOOLS,
-  TOOLBOX_PLANS,
-  RETAINER_PLANS,
-  FAQS,
-  HOME_REVIEWS,
-  SOLO_PRICES,
-  type Tool,
-  type Plan,
+  TOOLBOX_TOOLS, TOOLBOX_PLANS, RETAINER_PLANS, FAQS, HOME_REVIEWS, SOLO_PRICES,
+  type Tool, type Plan,
 } from "@/lib/data";
-import { config, useMockData } from "@/lib/config";
 
-type Faq = { q: string; a: string };
-type Testimonial = { text: string; initials: string; name: string; role: string };
-
-/** Fetch JSON from the plugin REST API. Content is cacheable; revalidate periodically. */
-async function fetchFromApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${config.wpApiUrl}${path}`, {
-    headers: config.wpApiToken ? { Authorization: `Bearer ${config.wpApiToken}` } : undefined,
-    next: { revalidate: 300 },
-  });
-  if (!res.ok) {
-    throw new Error(`BlueWorx content API ${path} failed: ${res.status} ${res.statusText}`);
-  }
-  return res.json() as Promise<T>;
-}
+export type Faq = { q: string; a: string };
+export type Testimonial = { text: string; initials: string; name: string; role: string };
 
 export async function getTools(): Promise<Tool[]> {
-  if (useMockData) return TOOLBOX_TOOLS;
-  return fetchFromApi<Tool[]>("/tools");
+  return TOOLBOX_TOOLS;
 }
 
 export async function getToolBySlug(slug: string): Promise<Tool | undefined> {
-  const tools = await getTools();
-  return tools.find((t) => t.slug === slug);
+  return TOOLBOX_TOOLS.find((t) => t.slug === slug);
 }
 
 export async function getToolboxPlans(): Promise<Plan[]> {
-  if (useMockData) return TOOLBOX_PLANS;
-  const { toolbox } = await fetchFromApi<{ toolbox: Plan[]; retainers: Plan[] }>("/plans");
-  return toolbox;
+  return TOOLBOX_PLANS;
 }
 
 export async function getRetainerPlans(): Promise<Plan[]> {
-  if (useMockData) return RETAINER_PLANS;
-  const { retainers } = await fetchFromApi<{ toolbox: Plan[]; retainers: Plan[] }>("/plans");
-  return retainers;
+  return RETAINER_PLANS;
 }
 
 export async function getFaqs(): Promise<Faq[]> {
-  if (useMockData) return FAQS;
-  return fetchFromApi<Faq[]>("/faqs");
+  return FAQS;
 }
 
-/** Marketing testimonials (rendered by Testimonials.tsx) — see docs/API_CONTRACT.md §3.3. */
 export async function getTestimonials(): Promise<Testimonial[]> {
-  if (useMockData) return HOME_REVIEWS;
-  return fetchFromApi<Testimonial[]>("/testimonials");
+  return HOME_REVIEWS;
 }
 
 /** slug → per-tool solo price, for the savings calculator. */
 export async function getSoloPrices(): Promise<Record<string, number>> {
-  if (useMockData) return SOLO_PRICES;
-  return fetchFromApi<Record<string, number>>("/tools/solo-prices");
+  return SOLO_PRICES;
 }
