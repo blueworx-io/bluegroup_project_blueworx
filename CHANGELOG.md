@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-07-14
+
+### Fixed
+
+- `lib/wp-client.ts` `login()` now throws a typed `WpAuthError` (carrying `code`, `status`, and `retryAfter`) parsed from the plugin's WP_Error envelope, instead of throwing the raw parsed JSON body. Adds `errorFromResponse()` for reuse by the Cycle 2 auth UI.
+- `app/[...slug]/page.tsx` wraps `resolve()` and `getByRestUrl()` in try/catch so a live CMS outage degrades to `notFound()` (404) instead of a 500. The resolve→render decision is extracted to a pure, unit-tested `decideOutcome()` in `lib/api/resolve-page.ts`.
+- `app/api/revalidate/route.ts` validates that `paths[]` entries are strings before `revalidatePath()`, via a pure `filterPaths()` helper (`lib/revalidate.ts`). Non-string entries are ignored; the route still returns `200`.
+
 ## [0.4.0] - 2026-07-13
 
 ### Changed
