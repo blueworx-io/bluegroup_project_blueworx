@@ -1,25 +1,25 @@
-// tests/config-derivation.spec.ts
 import { test, expect } from '@playwright/test';
+import { deriveBases } from '../lib/config';
 
+// Tests the pure derivation directly (static import) — no module re-evaluation or
+// env juggling, which is both simpler and CI-safe (dynamic `import('...ts?query')`
+// is not transformed under the CI Node/Playwright loader).
 test.describe('config base derivation', () => {
-  // Restore a live origin after each test so a later canonical `@/lib/config`
-  // load in this worker never freezes in mock mode and poisons another spec.
-  test.afterEach(() => { process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io'; });
-
-  test('derives both REST bases from a live origin and disables mock', async () => {
-    process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io/';
-    const mod = await import(`../lib/config.ts?live=${Date.now()}`);
-    expect(mod.WP_ORIGIN).toBe('https://cms.blueworx.io');           // trailing slash stripped
-    expect(mod.BLUEWORX_API).toBe('https://cms.blueworx.io/wp-json/blueworx/v1');
-    expect(mod.WP_API).toBe('https://cms.blueworx.io/wp-json/wp/v2');
-    expect(mod.useMockData).toBe(false);
+  test('derives both REST bases from a live origin and strips a trailing slash', () => {
+    const b = deriveBases('https://cms.blueworx.io/');
+    expect(b.wpOrigin).toBe('https://cms.blueworx.io');
+    expect(b.blueworxApi).toBe('https://cms.blueworx.io/wp-json/blueworx/v1');
+    expect(b.wpApi).toBe('https://cms.blueworx.io/wp-json/wp/v2');
+    expect(b.useMockData).toBe(false);
   });
 
-  test('empty origin means mock mode and empty bases', async () => {
-    delete process.env.NEXT_PUBLIC_WORDPRESS_URL;
-    const mod = await import(`../lib/config.ts?mock=${Date.now()}`);
-    expect(mod.WP_ORIGIN).toBe('');
-    expect(mod.BLUEWORX_API).toBe('');
-    expect(mod.useMockData).toBe(true);
+  test('empty or missing origin means mock mode and empty bases', () => {
+    for (const input of ['', undefined, null]) {
+      const b = deriveBases(input);
+      expect(b.wpOrigin).toBe('');
+      expect(b.blueworxApi).toBe('');
+      expect(b.wpApi).toBe('');
+      expect(b.useMockData).toBe(true);
+    }
   });
 });

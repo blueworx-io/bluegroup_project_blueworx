@@ -7,14 +7,30 @@
 // See the plugin's HEADLESS_INTEGRATION.md and
 // docs/superpowers/specs/2026-07-13-headless-plugin-integration-cycle1-design.md.
 
+/**
+ * Pure derivation of the origin + two REST bases from a raw env value. Exported so
+ * it can be unit-tested directly (no module re-evaluation / env juggling needed).
+ */
+export function deriveBases(rawOrigin: string | undefined | null) {
+  const wpOrigin = rawOrigin?.replace(/\/$/, "") || "";
+  return {
+    wpOrigin,
+    blueworxApi: wpOrigin ? `${wpOrigin}/wp-json/blueworx/v1` : "",
+    wpApi: wpOrigin ? `${wpOrigin}/wp-json/wp/v2` : "",
+    useMockData: wpOrigin === "",
+  };
+}
+
+const bases = deriveBases(process.env.NEXT_PUBLIC_WORDPRESS_URL);
+
 /** WordPress origin, scheme + host, no trailing slash. Empty until the CMS is live. */
-export const WP_ORIGIN = process.env.NEXT_PUBLIC_WORDPRESS_URL?.replace(/\/$/, "") || "";
+export const WP_ORIGIN = bases.wpOrigin;
 
 /** BlueWorx headless namespace base (auth, menus, site, resolve). Empty in mock mode. */
-export const BLUEWORX_API = WP_ORIGIN ? `${WP_ORIGIN}/wp-json/blueworx/v1` : "";
+export const BLUEWORX_API = bases.blueworxApi;
 
 /** Core WordPress REST base (content bodies). Empty in mock mode. */
-export const WP_API = WP_ORIGIN ? `${WP_ORIGIN}/wp-json/wp/v2` : "";
+export const WP_API = bases.wpApi;
 
 export const config = {
   wpOrigin: WP_ORIGIN,
@@ -35,4 +51,4 @@ export const config = {
  * True while there is no live CMS to talk to. The data-access layer uses this to
  * choose between static fallback data and real fetches. Single mock⇄live switch.
  */
-export const useMockData = WP_ORIGIN === "";
+export const useMockData = bases.useMockData;
