@@ -1,22 +1,14 @@
-import { redirect } from "next/navigation";
-import Portal from "@/components/Portal";
-import { getSession } from "@/lib/auth";
-import { getPortalData } from "@/lib/api/portal";
+import PortalClient from "@/components/portal/PortalClient";
 import { getTools } from "@/lib/api/content";
+import { config } from "@/lib/config";
 
 export const metadata = { title: "Client Portal — BlueWorx" };
 
-// Per-customer, authenticated data — never statically cached.
+// Per-customer data is client-side (browser-only JWT). This shell only fetches
+// public `tools` and passes the auth-enforcement flag read server-side.
 export const dynamic = "force-dynamic";
 
 export default async function PortalPage() {
-  const session = await getSession();
-  if (!session) {
-    // TODO(plugin): send to the real sign-in flow once it exists. Only reached
-    // when PORTAL_REQUIRE_AUTH=true and no session is present.
-    redirect("/");
-  }
-
-  const [data, tools] = await Promise.all([getPortalData(), getTools()]);
-  return <Portal data={data} tools={tools} />;
+  const tools = await getTools();
+  return <PortalClient tools={tools} requireAuth={config.portalRequireAuth} />;
 }
