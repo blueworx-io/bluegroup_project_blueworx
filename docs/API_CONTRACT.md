@@ -1,5 +1,14 @@
 # BlueWorx Headless API Contract
 
+> **⚠️ Reconciled 2026-07-13.** The shipped `blueworx_labs_wordpress` plugin exposes a
+> **generic** headless-CMS API, not the bespoke `/tools`,`/plans`,`/faqs`,`/testimonials`,
+> `/portal/me` endpoints this document originally assumed. The authoritative contract is
+> the plugin's `HEADLESS_INTEGRATION.md`. Cycle 1 wires marketing content via WordPress
+> CPTs+ACF (see `docs/cms-content-model.md`) mapped in `lib/api/`; the portal (§5) and
+> SureCart move to Cycle 2. Sections below are retained for the field shapes the UI still
+> requires, but endpoint names/auth here are superseded by the plugin guide + the Cycle 1
+> spec (`docs/superpowers/specs/2026-07-13-headless-plugin-integration-cycle1-design.md`).
+
 This document is the **coordination spec between two repos**:
 
 - **This repo** (`bluegroup_project_blueworx`) — the headless Next.js front‑end.
