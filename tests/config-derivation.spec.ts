@@ -2,6 +2,10 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('config base derivation', () => {
+  // Restore a live origin after each test so a later canonical `@/lib/config`
+  // load in this worker never freezes in mock mode and poisons another spec.
+  test.afterEach(() => { process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io'; });
+
   test('derives both REST bases from a live origin and disables mock', async () => {
     process.env.NEXT_PUBLIC_WORDPRESS_URL = 'https://cms.blueworx.io/';
     const mod = await import(`../lib/config.ts?live=${Date.now()}`);
