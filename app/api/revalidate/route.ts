@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { config } from "@/lib/config";
+import { filterPaths } from "@/lib/revalidate";
 
 // CMS → frontend on-demand ISR. The plugin POSTs { paths: [...] } with the shared
 // secret in X-Blueworx-Revalidate. See HEADLESS_INTEGRATION.md §8.
@@ -13,8 +14,8 @@ export async function POST(req: NextRequest) {
   if (!expected || a.length !== b.length || !timingSafeEqual(a, b)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
-  const body = (await req.json().catch(() => ({}))) as { paths?: string[] };
-  const paths = Array.isArray(body.paths) ? body.paths : [];
+  const body = (await req.json().catch(() => ({}))) as { paths?: unknown };
+  const paths = filterPaths(body.paths);
   for (const p of paths) revalidatePath(p);
   return NextResponse.json({ ok: true, revalidated: paths });
 }
