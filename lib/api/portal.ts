@@ -29,7 +29,7 @@ export type LearningStarter = { icon: string; title: string; meta: string };
 export type PortalStat = { icon: string; value: string; label: string };
 export type PlatformFact = { icon: string; label: string; value: string };
 export type ActivityItem = { icon: string; text: string; time: string };
-export type Invoice = { id: string; date: string; amount: string; status: string };
+export type Invoice = { id: string; date: string; amount: string; status: string; url?: string };
 export type TimeLogEntry = { date: string; task: string; who: string; hrs: string };
 export type Ticket = { title: string; ref: string; time: string; status: string };
 export type TeamMember = { initial: string; name: string; role: string };
@@ -55,7 +55,7 @@ export type PortalData = {
   partner: PartnerData;
 };
 
-const MOCK_PORTAL: PortalData = {
+export const DEMO_PORTAL: PortalData = {
   client: { name: "Hannah Whitfield", first: "Hannah", company: "Bloom & Co.", initials: "HW", tier: "Growth Partner" },
   sites: [
     { label: "Bloom & Co.", url: "bloomandco.com", platform: "WordPress + Woo", status: "Live", uptime: "99.98%", ssl: "Valid · auto-renew", plan: "Growth Retainer", visits: "18,420", shot: "/assets/feature-image-2.png", dot: "#1F9D57" },
@@ -178,13 +178,3 @@ const MOCK_PORTAL: PortalData = {
     ],
   },
 };
-
-/**
- * Fetch the portal payload for the authenticated customer. Cycle 2: the plugin's
- * browser-only JWT auth makes portal data a client concern, and there is no
- * /portal/me endpoint yet — so until Cycle 2 wires the §10 client + a normalized
- * endpoint, always serve the demo payload.
- */
-export async function getPortalData(): Promise<PortalData> {
-  return MOCK_PORTAL;
-}

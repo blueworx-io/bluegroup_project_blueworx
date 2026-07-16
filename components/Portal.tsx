@@ -66,7 +66,12 @@ const EXIT_SVG = (
   </svg>
 );
 
-export default function Portal({ data, tools }: { data: PortalData; tools: Tool[] }) {
+export default function Portal({
+  data, tools, billingLoading = false, billingError = false, sample = false,
+}: {
+  data: PortalData; tools: Tool[];
+  billingLoading?: boolean; billingError?: boolean; sample?: boolean;
+}) {
   const router = useRouter();
 
   // Portal data comes from the server (SureCart + plugin), destructured into the
@@ -204,6 +209,11 @@ export default function Portal({ data, tools }: { data: PortalData; tools: Tool[
         </header>
 
         <div className="pt-body">
+          {sample && (
+            <div className="pt-sample" role="note">
+              Subscriptions and invoices are live. Other sections show sample data while we finish connecting your account.
+            </div>
+          )}
           {tab === "overview" && (
             <div>
               <div className="pt-welcome">
@@ -223,6 +233,8 @@ export default function Portal({ data, tools }: { data: PortalData; tools: Tool[
                 <div>
                   <div className="pt-card">
                     <div className="pt-card-head"><h3>Active subscriptions</h3><a onClick={() => goTab("subs")}>Manage</a></div>
+                    {billingError && <p className="pt-billing-error" role="alert">We couldn&apos;t load your billing right now. Please try again shortly.</p>}
+                    {billingLoading && <p className="pt-billing-loading">Loading your subscriptions…</p>}
                     {SUBS.map((s) => (
                       <div key={s.name} className="pt-sub">
                         <div className="pt-sub-ic"><Icon name={s.icon} /></div>
@@ -471,6 +483,8 @@ export default function Portal({ data, tools }: { data: PortalData; tools: Tool[
               </div>
               <div className="pt-card">
                 <div className="pt-card-head"><h3>All subscriptions</h3><Link href="/contact" style={{ fontSize: 13, fontWeight: 600, color: "#4F46E5", textDecoration: "none" }}>Need a change?</Link></div>
+                {billingError && <p className="pt-billing-error" role="alert">We couldn&apos;t load your billing right now. Please try again shortly.</p>}
+                {billingLoading && <p className="pt-billing-loading">Loading your subscriptions…</p>}
                 <table className="pt-table">
                   <thead>
                     <tr><th>Plan</th><th>Applies to</th><th>Billing</th><th>Renews</th><th className="pt-td-r">Status</th></tr>
@@ -528,6 +542,8 @@ export default function Portal({ data, tools }: { data: PortalData; tools: Tool[
             <div>
               <div className="pt-card">
                 <div className="pt-card-head"><h3>Billing history</h3><a>Download all</a></div>
+                {billingError && <p className="pt-billing-error" role="alert">We couldn&apos;t load your invoices right now. Please try again shortly.</p>}
+                {billingLoading && <p className="pt-billing-loading">Loading your invoices…</p>}
                 <table className="pt-table">
                   <thead>
                     <tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th className="pt-td-r">Action</th></tr>
@@ -539,7 +555,7 @@ export default function Portal({ data, tools }: { data: PortalData; tools: Tool[
                         <td>{v.date}</td>
                         <td>{v.amount}</td>
                         <td><span className="pt-chip paid">{v.status}</span></td>
-                        <td className="pt-td-r"><span className="pt-link">Download</span></td>
+                        <td className="pt-td-r">{v.url ? <a className="pt-link" href={v.url} target="_blank" rel="noopener">Download</a> : <span className="pt-link">Download</span>}</td>
                       </tr>
                     ))}
                   </tbody>

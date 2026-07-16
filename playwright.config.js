@@ -4,8 +4,9 @@ const port = Number(process.env.PORT || 3000);
 const baseURL = process.env.BASE_URL || `http://localhost:${port}`;
 
 // A second server started with PORTAL_REQUIRE_AUTH=true, so we can test the
-// authenticated-portal behaviour (redirect when no session) without disturbing
-// the main server, which runs the demo portal. See tests/portal-auth.spec.js.
+// authenticated-portal behaviour (client-side auth gate: unauthenticated visitors
+// see the sign-in screen) without disturbing the main server, which runs the demo
+// portal. See tests/portal-auth.spec.js.
 const authPort = port + 1;
 const authBaseURL = `http://localhost:${authPort}`;
 
@@ -39,8 +40,9 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      // Same build, but with portal auth enforced. getSession() returns null (no
-      // auth backend is wired yet), so /portal must redirect unauthenticated visitors.
+      // Same build, but with portal auth enforced. The client AuthProvider restores
+      // the session on mount; with no session it renders the sign-in screen in place
+      // (the E2E route-intercepts /auth/* and /surecart/me/*).
       command: `npm run start -- -p ${authPort}`,
       url: authBaseURL,
       reuseExistingServer: !process.env.CI,

@@ -174,6 +174,14 @@ type PortalClient = {
 };
 ```
 
+> **Cycle 2 update — supersedes the §10.2 "session cookie" recommended default.** Auth shipped as
+> **client-side JWT**: a short-lived access token held in memory (`AuthProvider`), restored on mount
+> via `/auth/refresh`, backed by a refresh cookie path-scoped to `/auth/`. Identity is hydrated from
+> `GET /auth/me`; `company`/`tier` aren't in the WP user payload yet, so they fall back to
+> placeholders. Subscriptions/invoices (§5.2/§5.3) are fetched client-side from `/surecart/me/*` and
+> **mapped on the front-end** by `mapSubscription`/`mapInvoice` in `lib/api/surecart.ts` —
+> plugin-side normalization (§10.1) is deferred, not required for Cycle 2.
+
 ### 5.2 `subscriptions` — **SureCart**
 
 ```ts
@@ -321,7 +329,9 @@ format front‑end. Track that as a follow‑up before it becomes load‑bearing
 1. Will subscriptions/invoices come straight from SureCart's REST API proxied by the plugin, or be
    normalised into the plugin's own endpoints? (Front‑end doesn't care as long as §5.2/§5.3 shapes hold.)
 2. Auth mechanism: SureCart customer portal session cookie, or a bearer token minted by the plugin?
-   This decides the `getSession()` implementation in [`lib/auth.ts`](../lib/auth.ts).
+   **Resolved (Cycle 2):** client-side JWT — an in-memory access token plus a refresh cookie
+   path-scoped to `/auth/`. There is no server-side session; `lib/auth.ts`/`getSession()` was retired.
+   See §5.1 and `lib/wp-client.ts` / `lib/auth/AuthProvider.tsx`.
 3. Are toolbox/retainer **plans** SureCart products (so pricing is one source of truth), or WP content?
 4. Should `soloPrice` live on the tool object (preferred) or a separate endpoint?
 
@@ -333,10 +343,11 @@ plugin team can override any of them, but building to these keeps the current fr
 1. **Normalise, don't proxy.** Have the plugin map SureCart into the §5.2 / §5.3 shapes rather than
    forwarding raw SureCart JSON. This insulates the front-end from SureCart API changes and matches
    the "plugin owns formatting" stance in §6. (Answers Q1.)
-2. **Session cookie for portal auth.** An `httpOnly`, `SameSite` session cookie tied to the SureCart
-   customer, read server-side by `getSession()` in [`lib/auth.ts`](../lib/auth.ts). It's the simplest
-   secure option for a same-origin headless portal and needs no token handling in the client. Use a
-   bearer token only if the portal ends up on a different origin from the API. (Answers Q2.)
+2. **~~Session cookie for portal auth.~~ Superseded by client-side JWT (Cycle 2).** The original
+   recommendation was a server-read session cookie. The shipped plugin exposes a browser-only access
+   token, so the portal uses client-side JWT instead (in-memory access token + refresh cookie
+   path-scoped to `/auth/`), fetched from Client Components via `lib/wp-client.ts`. There is no
+   server-side session. (Answers Q2 — see §5.1.)
 3. **SureCart products are the source of truth for price.** Surface toolbox/retainer plans through
    `GET /plans` but drive their prices from SureCart products, so marketing pricing and checkout can
    never drift apart. WP content owns only the copy (name, desc, feature bullets). (Answers Q3.)
