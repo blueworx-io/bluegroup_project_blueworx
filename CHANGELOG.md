@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-07-20
+
+### Added
+
+- `docs/plugin-migration-assessment.md` — assessment of moving BlueWorx from headless Next.js to a WordPress plugin, driven by shortcodes from third-party plugins not rendering headlessly. Covers what migration deletes (~1,800 of ~2,000 plugin REST lines, the JWT layer, both custom DB tables, CORS, the cross-site-cookie problem class), what it costs (962 lines of bespoke CSS with no token system; the portal, of which only Subscriptions and Invoices are real), what it loses (Netlify CDN/ISR/preview-per-PR, TypeScript, automatic deploys), and alignment with `bluegroup_core_foundation` CI for the WordPress project type.
+- Flags a blocker for any migration: the WordPress Playwright gate currently executes zero tests — `ci-wordpress.yml` has no `secrets:` block, placeholder preview URLs skip every spec, and nothing fails on an empty run.
+
+### Notes
+
+- Recommendation is a staged migration: ship a shortcode render endpoint first, fix the foundation CI gate, then migrate the marketing site, portal last. Tracked in #11, #12 and #13; plugin-side work in `blueworx_labs_wordpress` #24-#32; foundation work in `bluegroup_core_foundation` #11-#16.
+- Documentation only — no runtime code changed.
+
 ## [0.5.0] - 2026-07-14
 
 ### Added
