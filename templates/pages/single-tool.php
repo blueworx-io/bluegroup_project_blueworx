@@ -76,7 +76,7 @@ if ( null !== $blueworx_st_tool ) :
 				<div class="tech-inner tech-2col">
 					<div class="tc-copy">
 						<div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:rgba(226,228,255,.5);margin-bottom:28px">
-							<a href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>" style="cursor:pointer;color:inherit;text-decoration:none"><?php esc_html_e( 'Toolbox', 'blueworx-site' ); ?></a>
+							<a href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>" style="cursor:pointer;color:inherit;text-decoration:none"><?php esc_html_e( 'Toolbox', 'bluegroup-project-blueworx' ); ?></a>
 							<?php
 							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted chevron glyph, see $blueworx_st_chevron above.
 							echo $blueworx_st_chevron;
@@ -87,10 +87,10 @@ if ( null !== $blueworx_st_tool ) :
 						<h1 class="h1"><?php echo esc_html( $blueworx_st_tool['name'] ); ?></h1>
 						<p class="lead" style="max-width:520px;margin:20px 0 34px"><?php echo esc_html( $blueworx_st_tool['tagline'] ); ?></p>
 						<div style="display:flex;gap:14px;flex-wrap:wrap">
-							<a class="btn btn-white btn-lg" href="#tool-why" style="text-decoration:none"><?php esc_html_e( 'Add to Your Toolbox', 'blueworx-site' ); ?></a>
-							<a class="btn btn-outline-w btn-lg" href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php esc_html_e( 'View All Tools', 'blueworx-site' ); ?></a>
+							<a class="btn btn-white btn-lg" href="#tool-why" style="text-decoration:none"><?php esc_html_e( 'Add to Your Toolbox', 'bluegroup-project-blueworx' ); ?></a>
+							<a class="btn btn-outline-w btn-lg" href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php esc_html_e( 'View All Tools', 'bluegroup-project-blueworx' ); ?></a>
 						</div>
-						<div class="tech-status"><span><?php esc_html_e( 'included in every Toolbox plan', 'blueworx-site' ); ?></span><span><?php esc_html_e( 'set up & managed by BlueWorx', 'blueworx-site' ); ?></span></div>
+						<div class="tech-status"><span><?php esc_html_e( 'included in every Toolbox plan', 'bluegroup-project-blueworx' ); ?></span><span><?php esc_html_e( 'set up & managed by BlueWorx', 'bluegroup-project-blueworx' ); ?></span></div>
 					</div>
 					<div class="glass-wrap">
 						<div class="glass-card" style="padding:28px">
@@ -103,7 +103,7 @@ if ( null !== $blueworx_st_tool ) :
 									<div style="display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600;color:#fff">
 										<?php echo esc_html( $blueworx_st_tool['name'] ); ?>
 										<?php if ( ! empty( $blueworx_st_tool['popular'] ) ) : ?>
-											<span style="font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#0A0C29;background:#A5A7FF;padding:2px 7px;border-radius:100px"><?php esc_html_e( 'Popular', 'blueworx-site' ); ?></span>
+											<span style="font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#0A0C29;background:#A5A7FF;padding:2px 7px;border-radius:100px"><?php esc_html_e( 'Popular', 'bluegroup-project-blueworx' ); ?></span>
 										<?php endif; ?>
 									</div>
 									<div style="font-family:'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;color:rgba(226,228,255,.45);margin-top:3px"><?php echo esc_html( $blueworx_st_tool['domain'] ); ?></div>
@@ -130,13 +130,13 @@ if ( null !== $blueworx_st_tool ) :
 
 			<section class="sec" id="tool-why">
 				<div class="center-head" style="margin-bottom:40px">
-					<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( "Why it's in the Toolbox", 'blueworx-site' ); ?></div>
+					<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( "Why it's in the Toolbox", 'bluegroup-project-blueworx' ); ?></div>
 					<h2 class="h2">
 						<?php
 						echo esc_html(
 							sprintf(
 								/* translators: %s: tool name, e.g. "SureCart". */
-								__( 'What %s gives you', 'blueworx-site' ),
+								__( 'What %s gives you', 'bluegroup-project-blueworx' ),
 								$blueworx_st_tool['name']
 							)
 						);
@@ -158,8 +158,8 @@ if ( null !== $blueworx_st_tool ) :
 			blueworx_public_part(
 				'parts/toolbox-grid.php',
 				array(
-					'title' => __( 'More from the Toolbox', 'blueworx-site' ),
-					'sub'   => __( 'Every tool below is included in the same subscription. No extra logins, no extra bills.', 'blueworx-site' ),
+					'title' => __( 'More from the Toolbox', 'bluegroup-project-blueworx' ),
+					'sub'   => __( 'Every tool below is included in the same subscription. No extra logins, no extra bills.', 'bluegroup-project-blueworx' ),
 					'tools' => $blueworx_st_related,
 				)
 			);

@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.1.1
+Stable tag:        1.1.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ If the BlueWorx enhancement plugin happens to be active alongside it, the two in
 
 == Installation ==
 
-1. Upload the `blueworx-site` folder to `/wp-content/plugins/`.
+1. Upload the `bluegroup-project-blueworx` folder to `/wp-content/plugins/`.
 2. Activate the plugin through the **Plugins** menu in WordPress. On activation it installs its pages and sets the front page.
 3. Visit the site's front page to see the rendered marketing site.
 

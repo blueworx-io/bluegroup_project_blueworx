@@ -32,38 +32,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 // check glyph), '—' (an em dash), or literal text. A row label may carry a
 // trailing question-mark glyph via 'qmark' => true.
 $blueworx_pricing_cmp_head = array(
-	__( 'Essential Support', 'blueworx-site' ),
-	__( 'Growth Support', 'blueworx-site' ),
-	__( 'Advanced Support', 'blueworx-site' ),
+	__( 'Essential Support', 'bluegroup-project-blueworx' ),
+	__( 'Growth Support', 'bluegroup-project-blueworx' ),
+	__( 'Advanced Support', 'bluegroup-project-blueworx' ),
 );
 $blueworx_pricing_cmp_rows = array(
 	array(
-		'label' => __( 'Free toolbox', 'blueworx-site' ),
+		'label' => __( 'Free toolbox', 'bluegroup-project-blueworx' ),
 		'qmark' => true,
-		'cells' => array( __( 'Basic', 'blueworx-site' ), __( 'Advanced', 'blueworx-site' ), __( 'Advanced', 'blueworx-site' ) ),
+		'cells' => array( __( 'Basic', 'bluegroup-project-blueworx' ), __( 'Advanced', 'bluegroup-project-blueworx' ), __( 'Advanced', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
-		'label' => __( 'Template sites', 'blueworx-site' ),
+		'label' => __( 'Template sites', 'bluegroup-project-blueworx' ),
 		'cells' => array( 'check', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Large updates', 'blueworx-site' ),
+		'label' => __( 'Large updates', 'bluegroup-project-blueworx' ),
 		'cells' => array( 'check', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Small updates', 'blueworx-site' ),
+		'label' => __( 'Small updates', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Support allowance', 'blueworx-site' ),
+		'label' => __( 'Support allowance', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Minor updates', 'blueworx-site' ),
+		'label' => __( 'Minor updates', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Major updates', 'blueworx-site' ),
+		'label' => __( 'Major updates', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', '—', 'check' ),
 	),
 );
@@ -79,13 +79,13 @@ blueworx_public_part( 'parts/nav.php' );
 	<div>
 		<section class="tech-hero pb-tall" style="text-align:center">
 			<div class="tech-inner" style="max-width:780px;margin:0 auto">
-				<div class="tech-badge" style="margin-bottom:22px"><span class="dot"></span><?php esc_html_e( 'Digital Support Packages', 'blueworx-site' ); ?></div>
-				<h1 class="h1"><?php esc_html_e( 'Choose Your ', 'blueworx-site' ); ?><span class="tech-grad"><?php esc_html_e( 'Support Plan', 'blueworx-site' ); ?></span></h1>
-				<p class="lead"><?php esc_html_e( 'Choose the support plan that reflects the level of growth and support your business needs.', 'blueworx-site' ); ?></p>
+				<div class="tech-badge" style="margin-bottom:22px"><span class="dot"></span><?php esc_html_e( 'Digital Support Packages', 'bluegroup-project-blueworx' ); ?></div>
+				<h1 class="h1"><?php esc_html_e( 'Choose Your ', 'bluegroup-project-blueworx' ); ?><span class="tech-grad"><?php esc_html_e( 'Support Plan', 'bluegroup-project-blueworx' ); ?></span></h1>
+				<p class="lead"><?php esc_html_e( 'Choose the support plan that reflects the level of growth and support your business needs.', 'bluegroup-project-blueworx' ); ?></p>
 				<div style="display:flex;justify-content:center;margin-top:34px">
 					<div class="bill-toggle" data-widget="billing-toggle">
-						<button class="on" type="button"><?php esc_html_e( 'Monthly billing', 'blueworx-site' ); ?></button>
-						<button type="button"><?php esc_html_e( 'Annual billing', 'blueworx-site' ); ?></button>
+						<button class="on" type="button"><?php esc_html_e( 'Monthly billing', 'bluegroup-project-blueworx' ); ?></button>
+						<button type="button"><?php esc_html_e( 'Annual billing', 'bluegroup-project-blueworx' ); ?></button>
 					</div>
 				</div>
 			</div>
@@ -102,14 +102,14 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'All the features you need', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( "Compare what's included across every level of support.", 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'All the features you need', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( "Compare what's included across every level of support.", 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="cmp-scroll">
 				<table class="cmp">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Feature', 'blueworx-site' ); ?></th>
+							<th><?php esc_html_e( 'Feature', 'bluegroup-project-blueworx' ); ?></th>
 							<?php foreach ( $blueworx_pricing_cmp_head as $blueworx_pricing_col ) : ?>
 								<th><?php echo esc_html( $blueworx_pricing_col ); ?></th>
 							<?php endforeach; ?>
@@ -148,53 +148,53 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Pricing calculator', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Estimate your monthly investment. Adjust the options to match your needs.', 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'Pricing calculator', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'Estimate your monthly investment. Adjust the options to match your needs.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="calc" data-widget="pricing-calc">
 				<div class="calc-panel">
 					<div class="calc-field">
-						<label><?php esc_html_e( 'Support level', 'blueworx-site' ); ?></label>
+						<label><?php esc_html_e( 'Support level', 'bluegroup-project-blueworx' ); ?></label>
 						<div class="opt-row">
-							<button type="button" class="opt" data-support="essential"><?php esc_html_e( 'Essential', 'blueworx-site' ); ?></button>
-							<button type="button" class="opt on" data-support="growth"><?php esc_html_e( 'Growth', 'blueworx-site' ); ?></button>
-							<button type="button" class="opt" data-support="advanced"><?php esc_html_e( 'Advanced', 'blueworx-site' ); ?></button>
+							<button type="button" class="opt" data-support="essential"><?php esc_html_e( 'Essential', 'bluegroup-project-blueworx' ); ?></button>
+							<button type="button" class="opt on" data-support="growth"><?php esc_html_e( 'Growth', 'bluegroup-project-blueworx' ); ?></button>
+							<button type="button" class="opt" data-support="advanced"><?php esc_html_e( 'Advanced', 'bluegroup-project-blueworx' ); ?></button>
 						</div>
 					</div>
 					<div class="calc-field">
-						<label><?php esc_html_e( 'Update packs per year', 'blueworx-site' ); ?></label>
+						<label><?php esc_html_e( 'Update packs per year', 'bluegroup-project-blueworx' ); ?></label>
 						<div class="stepper" data-field="updates" data-min="1" data-max="6">
-							<button type="button" aria-label="<?php esc_attr_e( 'Fewer update packs', 'blueworx-site' ); ?>">&minus;</button>
+							<button type="button" aria-label="<?php esc_attr_e( 'Fewer update packs', 'bluegroup-project-blueworx' ); ?>">&minus;</button>
 							<b>2</b>
-							<button type="button" aria-label="<?php esc_attr_e( 'More update packs', 'blueworx-site' ); ?>">+</button>
+							<button type="button" aria-label="<?php esc_attr_e( 'More update packs', 'bluegroup-project-blueworx' ); ?>">+</button>
 						</div>
 					</div>
 					<div class="calc-field">
-						<label><?php esc_html_e( 'Number of websites', 'blueworx-site' ); ?></label>
+						<label><?php esc_html_e( 'Number of websites', 'bluegroup-project-blueworx' ); ?></label>
 						<div class="stepper" data-field="sites" data-min="1" data-max="5">
-							<button type="button" aria-label="<?php esc_attr_e( 'Fewer websites', 'blueworx-site' ); ?>">&minus;</button>
+							<button type="button" aria-label="<?php esc_attr_e( 'Fewer websites', 'bluegroup-project-blueworx' ); ?>">&minus;</button>
 							<b>1</b>
-							<button type="button" aria-label="<?php esc_attr_e( 'More websites', 'blueworx-site' ); ?>">+</button>
+							<button type="button" aria-label="<?php esc_attr_e( 'More websites', 'bluegroup-project-blueworx' ); ?>">+</button>
 						</div>
 					</div>
 					<div class="calc-field" style="display:flex;align-items:center;justify-content:space-between">
-						<label style="margin:0"><?php esc_html_e( 'Managed hosting add-on', 'blueworx-site' ); ?></label>
-						<button type="button" class="toggle-pill on" aria-label="<?php esc_attr_e( 'Managed hosting add-on', 'blueworx-site' ); ?>" aria-pressed="true"></button>
+						<label style="margin:0"><?php esc_html_e( 'Managed hosting add-on', 'bluegroup-project-blueworx' ); ?></label>
+						<button type="button" class="toggle-pill on" aria-label="<?php esc_attr_e( 'Managed hosting add-on', 'bluegroup-project-blueworx' ); ?>" aria-pressed="true"></button>
 					</div>
 				</div>
 				<div class="calc-out">
-					<div class="cl"><?php esc_html_e( 'Estimated total', 'blueworx-site' ); ?></div>
+					<div class="cl"><?php esc_html_e( 'Estimated total', 'bluegroup-project-blueworx' ); ?></div>
 					<div class="cv" data-testid="calc-total">$600</div>
-					<div class="cp"><?php esc_html_e( 'per month', 'blueworx-site' ); ?></div>
-					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get this plan', 'blueworx-site' ); ?></a>
+					<div class="cp"><?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></div>
+					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get this plan', 'bluegroup-project-blueworx' ); ?></a>
 				</div>
 			</div>
 		</section>
 
 		<section class="sec" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="faq-list">
 				<?php foreach ( blueworx_content_faqs() as $blueworx_pricing_faq ) : ?>

@@ -25,42 +25,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $blueworx_toolbox_cmp_head = array(
-	__( 'Personal', 'blueworx-site' ),
-	__( 'Business', 'blueworx-site' ),
-	__( 'Agency', 'blueworx-site' ),
+	__( 'Personal', 'bluegroup-project-blueworx' ),
+	__( 'Business', 'bluegroup-project-blueworx' ),
+	__( 'Agency', 'bluegroup-project-blueworx' ),
 );
 $blueworx_toolbox_cmp_rows = array(
 	array(
-		'label' => __( 'All 12+ premium tools', 'blueworx-site' ),
+		'label' => __( 'All 12+ premium tools', 'bluegroup-project-blueworx' ),
 		'cells' => array( 'check', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Managed website hosting', 'blueworx-site' ),
+		'label' => __( 'Managed website hosting', 'bluegroup-project-blueworx' ),
 		'qmark' => true,
-		'cells' => array( __( 'Included', 'blueworx-site' ), __( 'Included', 'blueworx-site' ), __( 'Included', 'blueworx-site' ) ),
+		'cells' => array( __( 'Included', 'bluegroup-project-blueworx' ), __( 'Included', 'bluegroup-project-blueworx' ), __( 'Included', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
-		'label' => __( 'Websites covered', 'blueworx-site' ),
-		'cells' => array( '1', __( 'Up to 5', 'blueworx-site' ), __( 'Up to 25', 'blueworx-site' ) ),
+		'label' => __( 'Websites covered', 'bluegroup-project-blueworx' ),
+		'cells' => array( '1', __( 'Up to 5', 'bluegroup-project-blueworx' ), __( 'Up to 25', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
-		'label' => __( 'Learning Center access', 'blueworx-site' ),
+		'label' => __( 'Learning Center access', 'bluegroup-project-blueworx' ),
 		'cells' => array( 'check', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Site stability support', 'blueworx-site' ),
+		'label' => __( 'Site stability support', 'bluegroup-project-blueworx' ),
 		'cells' => array( 'check', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Priority support', 'blueworx-site' ),
+		'label' => __( 'Priority support', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', 'check', 'check' ),
 	),
 	array(
-		'label' => __( 'Bulk licensing for client sites', 'blueworx-site' ),
+		'label' => __( 'Bulk licensing for client sites', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', '—', 'check' ),
 	),
 	array(
-		'label' => __( 'Dedicated account manager', 'blueworx-site' ),
+		'label' => __( 'Dedicated account manager', 'bluegroup-project-blueworx' ),
 		'cells' => array( '—', '—', 'check' ),
 	),
 );
@@ -75,13 +75,13 @@ blueworx_public_part( 'parts/nav.php' );
 	<div>
 		<section class="tech-hero pb-tall" style="text-align:center">
 			<div class="tech-inner" style="max-width:780px;margin:0 auto">
-				<div class="tech-badge" style="margin-bottom:22px"><span class="dot"></span><?php esc_html_e( 'BlueWorx Toolbox', 'blueworx-site' ); ?></div>
-				<h1 class="h1"><?php esc_html_e( 'Choose Your ', 'blueworx-site' ); ?><span class="tech-grad"><?php esc_html_e( 'Toolbox Plan', 'blueworx-site' ); ?></span></h1>
-				<p class="lead" style="max-width:580px;margin:22px auto 0"><?php esc_html_e( 'One subscription replaces a stack of individual licences. Every tool is set up and managed for you, with website hosting included. For BlueWorx clients, individuals, and agencies buying in bulk.', 'blueworx-site' ); ?></p>
+				<div class="tech-badge" style="margin-bottom:22px"><span class="dot"></span><?php esc_html_e( 'BlueWorx Toolbox', 'bluegroup-project-blueworx' ); ?></div>
+				<h1 class="h1"><?php esc_html_e( 'Choose Your ', 'bluegroup-project-blueworx' ); ?><span class="tech-grad"><?php esc_html_e( 'Toolbox Plan', 'bluegroup-project-blueworx' ); ?></span></h1>
+				<p class="lead" style="max-width:580px;margin:22px auto 0"><?php esc_html_e( 'One subscription replaces a stack of individual licences. Every tool is set up and managed for you, with website hosting included. For BlueWorx clients, individuals, and agencies buying in bulk.', 'bluegroup-project-blueworx' ); ?></p>
 				<div style="display:flex;justify-content:center;margin-top:34px">
 					<div class="bill-toggle" data-widget="billing-toggle">
-						<button class="on" type="button"><?php esc_html_e( 'Monthly billing', 'blueworx-site' ); ?></button>
-						<button type="button"><?php esc_html_e( 'Annual billing', 'blueworx-site' ); ?></button>
+						<button class="on" type="button"><?php esc_html_e( 'Monthly billing', 'bluegroup-project-blueworx' ); ?></button>
+						<button type="button"><?php esc_html_e( 'Annual billing', 'bluegroup-project-blueworx' ); ?></button>
 					</div>
 				</div>
 			</div>
@@ -98,14 +98,14 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'All the features you need', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( "Compare what's included across every level of support.", 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'All the features you need', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( "Compare what's included across every level of support.", 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="cmp-scroll">
 				<table class="cmp">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Feature', 'blueworx-site' ); ?></th>
+							<th><?php esc_html_e( 'Feature', 'bluegroup-project-blueworx' ); ?></th>
 							<?php foreach ( $blueworx_toolbox_cmp_head as $blueworx_toolbox_col ) : ?>
 								<th><?php echo esc_html( $blueworx_toolbox_col ); ?></th>
 							<?php endforeach; ?>
@@ -144,8 +144,8 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec" id="savings" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'See what you save', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( "Compare the Toolbox to paying for each tool individually. Toggle off anything you wouldn't buy on its own.", 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'See what you save', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( "Compare the Toolbox to paying for each tool individually. Toggle off anything you wouldn't buy on its own.", 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<?php
 			$blueworx_sv_tools   = blueworx_content_tools();
@@ -172,11 +172,11 @@ blueworx_public_part( 'parts/nav.php' );
 									<div style="font-size:12px;color:#8A8DA6">
 										<?php
 										/* translators: %d: monthly price in dollars. */
-										echo esc_html( sprintf( __( '$%d/mo individually', 'blueworx-site' ), $blueworx_sv_price ) );
+										echo esc_html( sprintf( __( '$%d/mo individually', 'bluegroup-project-blueworx' ), $blueworx_sv_price ) );
 										?>
 									</div>
 								</div>
-								<button type="button" class="toggle-pill on" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: tool name. */ __( 'Include %s', 'blueworx-site' ), $blueworx_sv_tool['name'] ) ); ?>" aria-pressed="true" style="transform:scale(.78);transform-origin:right center"></button>
+								<button type="button" class="toggle-pill on" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: tool name. */ __( 'Include %s', 'bluegroup-project-blueworx' ), $blueworx_sv_tool['name'] ) ); ?>" aria-pressed="true" style="transform:scale(.78);transform-origin:right center"></button>
 							</div>
 						<?php endforeach; ?>
 					</div>
@@ -185,36 +185,36 @@ blueworx_public_part( 'parts/nav.php' );
 							<?php blueworx_icon( 'server', '', 'width:16px;height:16px;display:block;color:#4338CA' ); ?>
 						</div>
 						<div style="flex:1;min-width:0">
-							<div style="font-size:14px;font-weight:600;color:#0A0C29"><?php esc_html_e( 'Managed website hosting', 'blueworx-site' ); ?></div>
-							<div style="font-size:12px;color:#8A8DA6"><?php esc_html_e( '$30/mo bought separately', 'blueworx-site' ); ?></div>
+							<div style="font-size:14px;font-weight:600;color:#0A0C29"><?php esc_html_e( 'Managed website hosting', 'bluegroup-project-blueworx' ); ?></div>
+							<div style="font-size:12px;color:#8A8DA6"><?php esc_html_e( '$30/mo bought separately', 'bluegroup-project-blueworx' ); ?></div>
 						</div>
-						<span style="font-size:12px;font-weight:600;color:#178048;background:#E6F6EC;padding:5px 12px;border-radius:20px"><?php esc_html_e( 'Included', 'blueworx-site' ); ?></span>
+						<span style="font-size:12px;font-weight:600;color:#178048;background:#E6F6EC;padding:5px 12px;border-radius:20px"><?php esc_html_e( 'Included', 'bluegroup-project-blueworx' ); ?></span>
 					</div>
 				</div>
 				<div class="calc-out">
-					<div class="cl"><?php esc_html_e( 'Buying everything individually', 'blueworx-site' ); ?></div>
+					<div class="cl"><?php esc_html_e( 'Buying everything individually', 'bluegroup-project-blueworx' ); ?></div>
 					<div style="position:relative;z-index:1;font-weight:700;font-size:34px;letter-spacing:-.5px;color:rgba(255,255,255,.55);text-decoration:line-through;text-decoration-color:rgba(255,107,107,.75);text-decoration-thickness:3px">
 						$<span data-testid="solo-total"><?php echo esc_html( (string) $blueworx_sv_solo ); ?></span><span style="font-size:15px;font-weight:500">/mo</span>
 					</div>
-					<div class="cl" style="margin-top:20px"><?php esc_html_e( 'With the BlueWorx Toolbox', 'blueworx-site' ); ?></div>
+					<div class="cl" style="margin-top:20px"><?php esc_html_e( 'With the BlueWorx Toolbox', 'bluegroup-project-blueworx' ); ?></div>
 					<div class="cv">$30<span style="font-size:20px;font-weight:500;color:rgba(255,255,255,.6)">/mo</span></div>
 					<div class="cp" style="margin-top:14px">
 						<span data-testid="savings-line" style="display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:#01D084;background:rgba(1,208,132,.12);border:1px solid rgba(1,208,132,.3);padding:8px 16px;border-radius:100px">
 							<?php
 							/* translators: 1: monthly saving, 2: yearly saving (thousands-separated). */
-							echo esc_html( sprintf( __( 'You save $%1$s/mo · $%2$s/yr', 'blueworx-site' ), number_format_i18n( $blueworx_sv_save ), number_format_i18n( $blueworx_sv_save * 12 ) ) );
+							echo esc_html( sprintf( __( 'You save $%1$s/mo · $%2$s/yr', 'bluegroup-project-blueworx' ), number_format_i18n( $blueworx_sv_save ), number_format_i18n( $blueworx_sv_save * 12 ) ) );
 							?>
 						</span>
 					</div>
-					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get the Toolbox', 'blueworx-site' ); ?></a>
+					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get the Toolbox', 'bluegroup-project-blueworx' ); ?></a>
 				</div>
 			</div>
 		</section>
 
 		<section class="sec" style="padding-top:0">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="faq-list">
 				<?php foreach ( blueworx_content_faqs() as $blueworx_toolbox_faq ) : ?>

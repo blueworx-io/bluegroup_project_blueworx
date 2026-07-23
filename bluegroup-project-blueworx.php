@@ -3,14 +3,14 @@
  * Plugin Name:       BlueWorx | Site
  * Plugin URI:        https://blueworx.io/
  * Description:       The BlueWorx public marketing site, rendered by the plugin itself so it is identical wherever it is hosted. Self-contained: no theme and no dependency on other plugins.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Requires at least: 5.0
  * Requires PHP:      8.0
  * Author:            BlueWorx
  * Author URI:        https://profiles.wordpress.org/blueworx/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       blueworx-site
+ * Text Domain:       bluegroup-project-blueworx
  * Domain Path:       /languages
  *
  * @package BlueWorxSite
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BLUEWORX_SITE_VERSION' ) ) {
-	define( 'BLUEWORX_SITE_VERSION', '1.1.1' );
+	define( 'BLUEWORX_SITE_VERSION', '1.1.2' );
 }
 
 if ( ! defined( 'BLUEWORX_SITE_PATH' ) ) {

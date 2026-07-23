@@ -52,101 +52,101 @@ $blueworx_ai_models = array(
 	array(
 		'icon'  => 'gauge',
 		'tier'  => 'Haiku',
-		'title' => __( 'Fast & light', 'blueworx-site' ),
-		'role'  => __( 'For quick, mechanical, high-volume work and simple tweaks.', 'blueworx-site' ),
-		'items' => array( __( 'High-volume edits', 'blueworx-site' ), __( 'Simple design tweaks', 'blueworx-site' ), __( 'Routine changes', 'blueworx-site' ) ),
+		'title' => __( 'Fast & light', 'bluegroup-project-blueworx' ),
+		'role'  => __( 'For quick, mechanical, high-volume work and simple tweaks.', 'bluegroup-project-blueworx' ),
+		'items' => array( __( 'High-volume edits', 'bluegroup-project-blueworx' ), __( 'Simple design tweaks', 'bluegroup-project-blueworx' ), __( 'Routine changes', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
 		'icon'  => 'code',
 		'tier'  => 'Sonnet',
-		'title' => __( 'The default', 'blueworx-site' ),
-		'role'  => __( 'Our everyday workhorse for building, planning and most design.', 'blueworx-site' ),
-		'items' => array( __( 'Day-to-day coding', 'blueworx-site' ), __( 'Issues & milestones', 'blueworx-site' ), __( 'Everyday screens', 'blueworx-site' ) ),
+		'title' => __( 'The default', 'bluegroup-project-blueworx' ),
+		'role'  => __( 'Our everyday workhorse for building, planning and most design.', 'bluegroup-project-blueworx' ),
+		'items' => array( __( 'Day-to-day coding', 'bluegroup-project-blueworx' ), __( 'Issues & milestones', 'bluegroup-project-blueworx' ), __( 'Everyday screens', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
 		'icon'  => 'sparkles',
 		'tier'  => 'Opus',
-		'title' => __( 'Deep reasoning', 'blueworx-site' ),
-		'role'  => __( 'For new or unclear briefs, hard bugs and demanding design.', 'blueworx-site' ),
-		'items' => array( __( 'New project briefs', 'blueworx-site' ), __( 'Hard bugs & architecture', 'blueworx-site' ), __( 'Demanding design', 'blueworx-site' ) ),
+		'title' => __( 'Deep reasoning', 'bluegroup-project-blueworx' ),
+		'role'  => __( 'For new or unclear briefs, hard bugs and demanding design.', 'bluegroup-project-blueworx' ),
+		'items' => array( __( 'New project briefs', 'bluegroup-project-blueworx' ), __( 'Hard bugs & architecture', 'bluegroup-project-blueworx' ), __( 'Demanding design', 'bluegroup-project-blueworx' ) ),
 	),
 	array(
 		'icon'  => 'zap',
 		'tier'  => 'Fable',
-		'title' => __( 'The big jobs', 'blueworx-site' ),
-		'role'  => __( 'Reserved for the largest builds and toughest design challenges.', 'blueworx-site' ),
-		'items' => array( __( 'Major migrations', 'blueworx-site' ), __( 'Multi-day builds', 'blueworx-site' ), __( 'Toughest design', 'blueworx-site' ) ),
+		'title' => __( 'The big jobs', 'bluegroup-project-blueworx' ),
+		'role'  => __( 'Reserved for the largest builds and toughest design challenges.', 'bluegroup-project-blueworx' ),
+		'items' => array( __( 'Major migrations', 'bluegroup-project-blueworx' ), __( 'Multi-day builds', 'bluegroup-project-blueworx' ), __( 'Toughest design', 'bluegroup-project-blueworx' ) ),
 	),
 );
 
 $blueworx_ai_stack = array(
 	array(
 		'name' => 'Radix Themes',
-		'sub'  => __( 'components', 'blueworx-site' ),
+		'sub'  => __( 'components', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'lucide-react',
-		'sub'  => __( 'icons', 'blueworx-site' ),
+		'sub'  => __( 'icons', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'Tailwind CSS',
-		'sub'  => __( 'styling', 'blueworx-site' ),
+		'sub'  => __( 'styling', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'GSAP',
-		'sub'  => __( 'motion', 'blueworx-site' ),
+		'sub'  => __( 'motion', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'Refero',
-		'sub'  => __( 'tokens', 'blueworx-site' ),
+		'sub'  => __( 'tokens', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'Playwright',
-		'sub'  => __( 'testing', 'blueworx-site' ),
+		'sub'  => __( 'testing', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'GitHub',
-		'sub'  => __( 'source', 'blueworx-site' ),
+		'sub'  => __( 'source', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'Netlify',
-		'sub'  => __( 'deploy', 'blueworx-site' ),
+		'sub'  => __( 'deploy', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'WordPress',
-		'sub'  => __( 'backend', 'blueworx-site' ),
+		'sub'  => __( 'backend', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'name' => 'Claude Code',
-		'sub'  => __( 'build', 'blueworx-site' ),
+		'sub'  => __( 'build', 'bluegroup-project-blueworx' ),
 	),
 );
 
 $blueworx_ai_offerings = array(
 	array(
 		'icon'  => 'doc',
-		'title' => __( 'AI-Built Websites', 'blueworx-site' ),
-		'desc'  => __( 'Conversion-focused sites generated from your brief and refined by hand. Fast, on-brand and production-ready.', 'blueworx-site' ),
+		'title' => __( 'AI-Built Websites', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Conversion-focused sites generated from your brief and refined by hand. Fast, on-brand and production-ready.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'plug',
-		'title' => __( 'AI Plugins & Integrations', 'blueworx-site' ),
-		'desc'  => __( 'Custom WordPress plugins and app integrations, built code-first so every change is reviewable through a pull request.', 'blueworx-site' ),
+		'title' => __( 'AI Plugins & Integrations', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Custom WordPress plugins and app integrations, built code-first so every change is reviewable through a pull request.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'workflow',
-		'title' => __( 'AI Automations & Workflows', 'blueworx-site' ),
-		'desc'  => __( 'Connect the tools you already use and let AI-designed workflows handle the busywork end to end.', 'blueworx-site' ),
+		'title' => __( 'AI Automations & Workflows', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Connect the tools you already use and let AI-designed workflows handle the busywork end to end.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'server',
-		'title' => __( 'Custom AI Tooling', 'blueworx-site' ),
-		'desc'  => __( 'Bespoke internal tools and AI features tailored to how your business actually runs day to day.', 'blueworx-site' ),
+		'title' => __( 'Custom AI Tooling', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Bespoke internal tools and AI features tailored to how your business actually runs day to day.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'palette',
-		'title' => __( 'AI-Assisted Design', 'blueworx-site' ),
-		'desc'  => __( 'Screens designed in Claude Design on your own design system (Radix, lucide and tokens), ready for a clean handoff.', 'blueworx-site' ),
+		'title' => __( 'AI-Assisted Design', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Screens designed in Claude Design on your own design system (Radix, lucide and tokens), ready for a clean handoff.', 'bluegroup-project-blueworx' ),
 	),
 );
 
@@ -161,36 +161,36 @@ blueworx_public_part( 'parts/nav.php' );
 					<div class="tc-copy">
 						<div class="claude-badge">
 							<span class="cb-spark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5c.62 5.4 3.6 8.38 9 9-5.4.62-8.38 3.6-9 9-.62-5.4-3.6-8.38-9-9 5.4-.62 8.38-3.6 9-9z"/></svg></span>
-							<span class="cb-lbl"><?php esc_html_e( 'Powered by', 'blueworx-site' ); ?></span>
+							<span class="cb-lbl"><?php esc_html_e( 'Powered by', 'bluegroup-project-blueworx' ); ?></span>
 							<b>Claude</b>
 							<span class="cb-div"></span>
 							<span class="cb-by">Anthropic</span>
 						</div>
-						<h1 class="h1" style="margin-top:22px"><?php esc_html_e( 'From Prompt to Production — ', 'blueworx-site' ); ?><span class="tech-grad"><?php esc_html_e( 'Built by AI', 'blueworx-site' ); ?></span><?php esc_html_e( ', Shipped by Experts', 'blueworx-site' ); ?></h1>
-						<p class="lead" style="margin-top:22px"><?php esc_html_e( 'We build websites, plugins, automations and custom tools with an AI-first process. Claude models turn your brief into production-ready code on a vetted stack, reviewed, tested and shipped by our team.', 'blueworx-site' ); ?></p>
+						<h1 class="h1" style="margin-top:22px"><?php esc_html_e( 'From Prompt to Production — ', 'bluegroup-project-blueworx' ); ?><span class="tech-grad"><?php esc_html_e( 'Built by AI', 'bluegroup-project-blueworx' ); ?></span><?php esc_html_e( ', Shipped by Experts', 'bluegroup-project-blueworx' ); ?></h1>
+						<p class="lead" style="margin-top:22px"><?php esc_html_e( 'We build websites, plugins, automations and custom tools with an AI-first process. Claude models turn your brief into production-ready code on a vetted stack, reviewed, tested and shipped by our team.', 'bluegroup-project-blueworx' ); ?></p>
 						<div class="hh-cta" style="margin-top:34px">
-							<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>" class="btn btn-white btn-lg"><?php esc_html_e( 'Get a Quote', 'blueworx-site' ); ?></a>
+							<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>" class="btn btn-white btn-lg"><?php esc_html_e( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
 							<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline-w btn-lg">
 								<?php
 								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted arrow markup.
 								echo $blueworx_ai_arrow;
 								?>
-								<?php esc_html_e( 'View Our Work', 'blueworx-site' ); ?>
+								<?php esc_html_e( 'View Our Work', 'bluegroup-project-blueworx' ); ?>
 							</a>
 						</div>
 						<div class="ai-lead-tags">
-							<span><?php esc_html_e( 'Opus · Sonnet · Haiku', 'blueworx-site' ); ?></span><span><?php esc_html_e( 'Radix + Tailwind', 'blueworx-site' ); ?></span><span><?php esc_html_e( 'GSAP motion', 'blueworx-site' ); ?></span>
+							<span><?php esc_html_e( 'Opus · Sonnet · Haiku', 'bluegroup-project-blueworx' ); ?></span><span><?php esc_html_e( 'Radix + Tailwind', 'bluegroup-project-blueworx' ); ?></span><span><?php esc_html_e( 'GSAP motion', 'bluegroup-project-blueworx' ); ?></span>
 						</div>
 					</div>
 					<div class="glass-wrap">
 						<div class="ai-demo-root ai-demo-a" data-widget="ai-demo">
 							<div class="ai-stages">
-								<div class="ai-stage on"><b>1</b><?php esc_html_e( 'Prompt', 'blueworx-site' ); ?><span class="bar"></span></div>
-								<div class="ai-stage on"><b>2</b><?php esc_html_e( 'Code', 'blueworx-site' ); ?><span class="bar"></span></div>
-								<div class="ai-stage on"><b>3</b><?php esc_html_e( 'Site', 'blueworx-site' ); ?></div>
+								<div class="ai-stage on"><b>1</b><?php esc_html_e( 'Prompt', 'bluegroup-project-blueworx' ); ?><span class="bar"></span></div>
+								<div class="ai-stage on"><b>2</b><?php esc_html_e( 'Code', 'bluegroup-project-blueworx' ); ?><span class="bar"></span></div>
+								<div class="ai-stage on"><b>3</b><?php esc_html_e( 'Site', 'bluegroup-project-blueworx' ); ?></div>
 							</div>
 							<div class="ai-demo">
-								<div class="ai-demo-head"><i></i><i></i><i></i><span class="lbl"><?php esc_html_e( 'generating', 'blueworx-site' ); ?></span></div>
+								<div class="ai-demo-head"><i></i><i></i><i></i><span class="lbl"><?php esc_html_e( 'generating', 'bluegroup-project-blueworx' ); ?></span></div>
 								<div class="ai-demo-body">
 									<div class="ai-prompt">
 										<div class="pi">
@@ -200,7 +200,7 @@ blueworx_public_part( 'parts/nav.php' );
 											?>
 										</div>
 										<div class="pt">
-											<span class="ai-typed"><?php echo esc_html__( 'Build a booking website with Stripe checkout + admin dashboard', 'blueworx-site' ); ?></span>
+											<span class="ai-typed"><?php echo esc_html__( 'Build a booking website with Stripe checkout + admin dashboard', 'bluegroup-project-blueworx' ); ?></span>
 											<span class="ai-caret" style="display:none"></span>
 										</div>
 									</div>
@@ -217,7 +217,7 @@ blueworx_public_part( 'parts/nav.php' );
 											<i style="background:#FF5F57"></i>
 											<i style="background:#FEBC2E"></i>
 											<i style="background:#28C840"></i>
-											<span class="u"><?php esc_html_e( 'yourbrand.com/book', 'blueworx-site' ); ?></span>
+											<span class="u"><?php esc_html_e( 'yourbrand.com/book', 'bluegroup-project-blueworx' ); ?></span>
 										</div>
 										<div class="ai-site-view">
 											<div class="ai-sv-hero"></div>
@@ -236,61 +236,61 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec">
 			<div class="center-head" style="margin-bottom:40px">
-				<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( 'The Full Flow', 'blueworx-site' ); ?></div>
-				<h2 class="h2"><?php esc_html_e( 'From Brief to Deploy, One Continuous Flow', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'A repeatable pipeline where the right Claude model handles each stage, and every change ships through review, tests and version control.', 'blueworx-site' ); ?></p>
+				<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( 'The Full Flow', 'bluegroup-project-blueworx' ); ?></div>
+				<h2 class="h2"><?php esc_html_e( 'From Brief to Deploy, One Continuous Flow', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'A repeatable pipeline where the right Claude model handles each stage, and every change ships through review, tests and version control.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<?php
 			$blueworx_ai_pipe_steps = array(
 				array(
 					'n'     => '01',
 					'icon'  => 'doc',
-					'title' => __( 'Brief', 'blueworx-site' ),
-					'desc'  => __( 'Your goal becomes a scoped brief with in-scope, out-of-scope and acceptance criteria.', 'blueworx-site' ),
-					'model' => __( 'Claude Opus', 'blueworx-site' ),
+					'title' => __( 'Brief', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'Your goal becomes a scoped brief with in-scope, out-of-scope and acceptance criteria.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Claude Opus', 'bluegroup-project-blueworx' ),
 				),
 				array(
 					'n'     => '02',
 					'icon'  => 'workflow',
-					'title' => __( 'Plan', 'blueworx-site' ),
-					'desc'  => __( 'The brief becomes GitHub Milestones and scoped Issues, one per screen or feature.', 'blueworx-site' ),
-					'model' => __( 'Claude Sonnet', 'blueworx-site' ),
+					'title' => __( 'Plan', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'The brief becomes GitHub Milestones and scoped Issues, one per screen or feature.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Claude Sonnet', 'bluegroup-project-blueworx' ),
 				),
 				array(
 					'n'     => '03',
 					'icon'  => 'palette',
-					'title' => __( 'Design', 'blueworx-site' ),
-					'desc'  => __( 'Screens designed on your design system, then handed off to build.', 'blueworx-site' ),
-					'model' => __( 'Claude Opus', 'blueworx-site' ),
+					'title' => __( 'Design', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'Screens designed on your design system, then handed off to build.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Claude Opus', 'bluegroup-project-blueworx' ),
 				),
 				array(
 					'n'     => '04',
 					'icon'  => 'code',
-					'title' => __( 'Build', 'blueworx-site' ),
-					'desc'  => __( 'Each Issue built on its own branch, following our recipe book and standards.', 'blueworx-site' ),
-					'model' => __( 'Claude Sonnet', 'blueworx-site' ),
+					'title' => __( 'Build', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'Each Issue built on its own branch, following our recipe book and standards.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Claude Sonnet', 'bluegroup-project-blueworx' ),
 				),
 				array(
 					'n'     => '05',
 					'icon'  => 'shield',
-					'title' => __( 'Review', 'blueworx-site' ),
-					'desc'  => __( 'Automated checks, Playwright tests and code review gate every pull request.', 'blueworx-site' ),
-					'model' => __( 'Claude Sonnet', 'blueworx-site' ),
+					'title' => __( 'Review', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'Automated checks, Playwright tests and code review gate every pull request.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Claude Sonnet', 'bluegroup-project-blueworx' ),
 				),
 				array(
 					'n'     => '06',
 					'icon'  => 'zap',
-					'title' => __( 'Deploy', 'blueworx-site' ),
-					'desc'  => __( 'Merged and shipped to Netlify, WordPress or standalone, versioned and logged.', 'blueworx-site' ),
-					'model' => __( 'Automated', 'blueworx-site' ),
+					'title' => __( 'Deploy', 'bluegroup-project-blueworx' ),
+					'desc'  => __( 'Merged and shipped to Netlify, WordPress or standalone, versioned and logged.', 'bluegroup-project-blueworx' ),
+					'model' => __( 'Automated', 'bluegroup-project-blueworx' ),
 				),
 			);
 			?>
 			<div class="ai-pipe-shell" data-widget="ai-pipeline">
 				<div class="ai-pipe-glow"></div>
 				<div class="ai-pipe-status">
-					<span><span class="dotp"></span><?php esc_html_e( 'Live Pipeline', 'blueworx-site' ); ?></span>
-					<span><?php esc_html_e( 'Brief → Deploy', 'blueworx-site' ); ?></span>
+					<span><span class="dotp"></span><?php esc_html_e( 'Live Pipeline', 'bluegroup-project-blueworx' ); ?></span>
+					<span><?php esc_html_e( 'Brief → Deploy', 'bluegroup-project-blueworx' ); ?></span>
 				</div>
 				<div class="ai-pipe">
 					<?php foreach ( $blueworx_ai_pipe_steps as $blueworx_ai_pipe_i => $blueworx_ai_pipe_step ) : ?>
@@ -309,9 +309,9 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="features-dark">
 			<div class="blob" style="width:360px;height:360px;bottom:-140px;right:-120px;opacity:.13"></div>
 			<div class="center-head" style="margin-bottom:40px">
-				<div class="eyebrow" style="margin-bottom:20px;background:rgba(139,142,255,.09);border-color:rgba(139,142,255,.28);color:#B7B9FF"><?php esc_html_e( 'Model Guidance', 'blueworx-site' ); ?></div>
-				<h2 class="h2" style="color:#fff"><?php esc_html_e( 'The Right Claude Model for Every Task', 'blueworx-site' ); ?></h2>
-				<p class="fd-sub" style="margin:16px auto 0;max-width:600px;text-align:center"><?php esc_html_e( 'We match each job to the model that fits it best, so you get the right balance of speed, cost and depth on every piece of work.', 'blueworx-site' ); ?></p>
+				<div class="eyebrow" style="margin-bottom:20px;background:rgba(139,142,255,.09);border-color:rgba(139,142,255,.28);color:#B7B9FF"><?php esc_html_e( 'Model Guidance', 'bluegroup-project-blueworx' ); ?></div>
+				<h2 class="h2" style="color:#fff"><?php esc_html_e( 'The Right Claude Model for Every Task', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="fd-sub" style="margin:16px auto 0;max-width:600px;text-align:center"><?php esc_html_e( 'We match each job to the model that fits it best, so you get the right balance of speed, cost and depth on every piece of work.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="ai-models">
 				<?php foreach ( $blueworx_ai_models as $blueworx_ai_model ) : ?>
@@ -331,9 +331,9 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec">
 			<div class="center-head" style="margin-bottom:40px">
-				<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( 'Approved Stack', 'blueworx-site' ); ?></div>
-				<h2 class="h2"><?php esc_html_e( 'Built on Tools We Trust', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'No guesswork. A vetted, approved toolset used consistently across every project.', 'blueworx-site' ); ?></p>
+				<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( 'Approved Stack', 'bluegroup-project-blueworx' ); ?></div>
+				<h2 class="h2"><?php esc_html_e( 'Built on Tools We Trust', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'No guesswork. A vetted, approved toolset used consistently across every project.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="ai-stack">
 				<?php foreach ( $blueworx_ai_stack as $blueworx_ai_chip ) : ?>
@@ -346,9 +346,9 @@ blueworx_public_part( 'parts/nav.php' );
 			<div class="blob" style="width:340px;height:340px;top:-120px;left:-120px;opacity:.14"></div>
 			<div class="blob" style="width:300px;height:300px;bottom:-120px;right:-100px;opacity:.11"></div>
 			<div class="center-head" style="margin-bottom:52px">
-				<div class="eyebrow" style="margin-bottom:20px;background:rgba(139,142,255,.09);border-color:rgba(139,142,255,.28);color:#B7B9FF"><?php esc_html_e( 'What We Build', 'blueworx-site' ); ?></div>
-				<h2 class="h2" style="color:#fff"><?php esc_html_e( 'AI Offerings, Built for Real Businesses', 'blueworx-site' ); ?></h2>
-				<p class="fd-sub" style="margin:16px auto 0;max-width:620px;text-align:center"><?php esc_html_e( 'Every build runs through our AI-first process: production-ready code on a vetted stack, reviewed and shipped by our team.', 'blueworx-site' ); ?></p>
+				<div class="eyebrow" style="margin-bottom:20px;background:rgba(139,142,255,.09);border-color:rgba(139,142,255,.28);color:#B7B9FF"><?php esc_html_e( 'What We Build', 'bluegroup-project-blueworx' ); ?></div>
+				<h2 class="h2" style="color:#fff"><?php esc_html_e( 'AI Offerings, Built for Real Businesses', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="fd-sub" style="margin:16px auto 0;max-width:620px;text-align:center"><?php esc_html_e( 'Every build runs through our AI-first process: production-ready code on a vetted stack, reviewed and shipped by our team.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="ai-off-grid">
 				<?php foreach ( $blueworx_ai_offerings as $blueworx_ai_offering ) : ?>
@@ -357,7 +357,7 @@ blueworx_public_part( 'parts/nav.php' );
 						<h3><?php echo esc_html( $blueworx_ai_offering['title'] ); ?></h3>
 						<p><?php echo esc_html( $blueworx_ai_offering['desc'] ); ?></p>
 						<span class="svc-link">
-							<?php esc_html_e( 'Learn more', 'blueworx-site' ); ?>
+							<?php esc_html_e( 'Learn more', 'bluegroup-project-blueworx' ); ?>
 							<?php
 							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted arrow markup.
 							echo $blueworx_ai_arrow;

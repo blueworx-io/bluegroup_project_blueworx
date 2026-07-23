@@ -6,8 +6,22 @@ versioning.
 
 Before 1.0.0 this repository was the BlueWorx marketing site as a **Next.js
 headless app**. That history is preserved in git. Since 1.1.0 the repository
-**is** the `blueworx-site` WordPress plugin — the same marketing site, rendered
-by WordPress instead of served headlessly from Netlify.
+**is** the `bluegroup-project-blueworx` WordPress plugin (slug `blueworx-site`
+before 1.1.2) — the same marketing site, rendered by WordPress instead of served
+headlessly from Netlify.
+
+## [1.1.2] - 2026-07-23
+
+### Changed
+
+- **Renamed the plugin slug from `blueworx-site` to `bluegroup-project-blueworx`**
+  so the plugin folder, main file, and zip all match the repository name. Updated
+  the main file (`bluegroup-project-blueworx.php`), text domain, `package.json`
+  name, the build script's slug, the `plugin_slug` CI input, `readme.txt`, and
+  the test asset-path assertions. Done before first upload, so no installed
+  plugin directory is affected. Internal PHP identifiers (the `BLUEWORX_SITE_*`
+  constants and `blueworx_*` function prefix) are unchanged — they are the
+  plugin's namespace token, not its slug.
 
 ## [1.1.1] - 2026-07-23
 

@@ -23,7 +23,7 @@ $blueworx_logos_marks  = array_merge( $blueworx_logos_brands, $blueworx_logos_br
 	<div style="display:flex;align-items:center;gap:18px;width:100%;max-width:720px;padding:0 32px;box-sizing:border-box">
 		<span style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#E3E4E8)"></span>
 		<p style="margin:0;font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A8F98;text-align:center">
-			<?php echo esc_html__( 'Loved by owners. Trusted by businesses.', 'blueworx-site' ); ?>
+			<?php echo esc_html__( 'Loved by owners. Trusted by businesses.', 'bluegroup-project-blueworx' ); ?>
 		</p>
 		<span style="flex:1;height:1px;background:linear-gradient(90deg,#E3E4E8,transparent)"></span>
 	</div>
