@@ -81,7 +81,7 @@ test.describe('Marketing home page', () => {
     const srcs = await tbxCards.locator('.tbx-logo img').evaluateAll((els) => els.map((el) => el.getAttribute('src')));
     for (const src of srcs) {
       expect(src, 'toolbox favicons must be bundled by the plugin, not fetched from Google').toMatch(
-        /\/wp-content\/plugins\/blueworx-labs-wordpress\/assets\/img\/tools\/[^/]+\.png$/
+        /\/wp-content\/plugins\/blueworx-site\/assets\/img\/tools\/[^/]+\.png$/
       );
     }
   });
@@ -97,7 +97,7 @@ test.describe('Marketing home page', () => {
     await expect(img).toHaveCount(1);
     const src = await img.getAttribute('src');
     expect(src, 'the collaboration image must be served from the plugin, not the theme/uploads').toMatch(
-      /\/wp-content\/plugins\/blueworx-labs-wordpress\/assets\/img\/fig-collab\.jpg$/
+      /\/wp-content\/plugins\/blueworx-site\/assets\/img\/fig-collab\.jpg$/
     );
   });
 });
