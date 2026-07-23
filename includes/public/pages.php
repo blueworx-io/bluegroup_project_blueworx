@@ -22,35 +22,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 function blueworx_public_pages() {
 	$pages = array(
 		'home'     => array(
-			'title'    => __( 'Home', 'blueworx-site' ),
+			'title'    => __( 'Home', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/home.php',
 		),
 		'about'    => array(
-			'title'    => __( 'About', 'blueworx-site' ),
+			'title'    => __( 'About', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/about.php',
 		),
 		'services' => array(
-			'title'    => __( 'Services', 'blueworx-site' ),
+			'title'    => __( 'Services', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/services.php',
 		),
 		'contact'  => array(
-			'title'    => __( 'Contact', 'blueworx-site' ),
+			'title'    => __( 'Contact', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/contact.php',
 		),
 		'work'     => array(
-			'title'    => __( 'Work', 'blueworx-site' ),
+			'title'    => __( 'Work', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/work.php',
 		),
 		'ai'       => array(
-			'title'    => __( 'AI Powered', 'blueworx-site' ),
+			'title'    => __( 'AI Powered', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/ai.php',
 		),
 		'pricing'  => array(
-			'title'    => __( 'Pricing', 'blueworx-site' ),
+			'title'    => __( 'Pricing', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/pricing.php',
 		),
 		'toolbox'  => array(
-			'title'    => __( 'Toolbox', 'blueworx-site' ),
+			'title'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/toolbox.php',
 		),
 	);

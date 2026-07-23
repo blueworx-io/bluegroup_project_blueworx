@@ -25,8 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $blueworx_tst_items   = isset( $testimonials ) && is_array( $testimonials ) ? $testimonials : array();
-$blueworx_tst_eyebrow = isset( $eyebrow ) ? (string) $eyebrow : __( 'What our clients say', 'blueworx-site' );
-$blueworx_tst_title   = isset( $title ) ? (string) $title : __( 'Kind words from our customers', 'blueworx-site' );
+$blueworx_tst_eyebrow = isset( $eyebrow ) ? (string) $eyebrow : __( 'What our clients say', 'bluegroup-project-blueworx' );
+$blueworx_tst_title   = isset( $title ) ? (string) $title : __( 'Kind words from our customers', 'bluegroup-project-blueworx' );
 $blueworx_tst_style   = isset( $style ) ? (string) $style : '';
 ?>
 <section class="sec"<?php echo '' === $blueworx_tst_style ? '' : ' style="' . esc_attr( $blueworx_tst_style ) . '"'; ?>>

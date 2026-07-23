@@ -28,51 +28,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 $blueworx_work_projects = array(
 	array(
 		'image'    => 'feature-image-1.jpg',
-		'alt'      => __( 'Hirasté website', 'blueworx-site' ),
-		'tags'     => array( __( 'Web Design', 'blueworx-site' ), __( 'Booking Platform', 'blueworx-site' ) ),
+		'alt'      => __( 'Hirasté website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'Hirasté',
 		'res'      => '+64%',
-		'res_text' => __( 'group booking enquiries', 'blueworx-site' ),
+		'res_text' => __( 'group booking enquiries', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'image'    => 'feature-image-3.jpg',
-		'alt'      => __( 'Padel365 website', 'blueworx-site' ),
-		'tags'     => array( __( 'E-commerce', 'blueworx-site' ), __( 'Court Booking', 'blueworx-site' ) ),
+		'alt'      => __( 'Padel365 website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'E-commerce', 'bluegroup-project-blueworx' ), __( 'Court Booking', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'Padel365',
-		'res'      => __( 'Sold-out', 'blueworx-site' ),
-		'res_text' => __( 'launch season', 'blueworx-site' ),
+		'res'      => __( 'Sold-out', 'bluegroup-project-blueworx' ),
+		'res_text' => __( 'launch season', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'image'    => 'feature-image-4.jpg',
-		'alt'      => __( 'QURE website', 'blueworx-site' ),
-		'tags'     => array( __( 'Brand', 'blueworx-site' ), __( 'Web Build', 'blueworx-site' ) ),
+		'alt'      => __( 'QURE website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'QURE',
 		'res'      => '+38%',
-		'res_text' => __( 'conversion rate', 'blueworx-site' ),
+		'res_text' => __( 'conversion rate', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'image'    => 'feature-image-2.jpg',
-		'alt'      => __( 'Bloom & Co. website', 'blueworx-site' ),
-		'tags'     => array( __( 'Migration', 'blueworx-site' ), __( 'Managed Hosting', 'blueworx-site' ) ),
+		'alt'      => __( 'Bloom & Co. website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'Migration', 'bluegroup-project-blueworx' ), __( 'Managed Hosting', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'Bloom & Co.',
-		'res'      => __( 'Zero-downtime', 'blueworx-site' ),
-		'res_text' => __( 'platform migration', 'blueworx-site' ),
+		'res'      => __( 'Zero-downtime', 'bluegroup-project-blueworx' ),
+		'res_text' => __( 'platform migration', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'image'    => 'fig-collab.jpg',
-		'alt'      => __( 'chromaesthesia website', 'blueworx-site' ),
-		'tags'     => array( __( 'Web Design', 'blueworx-site' ), __( 'CMS', 'blueworx-site' ) ),
+		'alt'      => __( 'chromaesthesia website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'CMS', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'chromaesthesia',
-		'res'      => __( '2× faster', 'blueworx-site' ),
-		'res_text' => __( 'publishing workflow', 'blueworx-site' ),
+		'res'      => __( '2× faster', 'bluegroup-project-blueworx' ),
+		'res_text' => __( 'publishing workflow', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'image'    => 'hero-image.png',
-		'alt'      => __( 'Reid Consulting website', 'blueworx-site' ),
-		'tags'     => array( __( 'SEO', 'blueworx-site' ), __( 'Growth Retainer', 'blueworx-site' ) ),
+		'alt'      => __( 'Reid Consulting website', 'bluegroup-project-blueworx' ),
+		'tags'     => array( __( 'SEO', 'bluegroup-project-blueworx' ), __( 'Growth Retainer', 'bluegroup-project-blueworx' ) ),
 		'name'     => 'Reid Consulting',
 		'res'      => '3×',
-		'res_text' => __( 'organic traffic in 12 months', 'blueworx-site' ),
+		'res_text' => __( 'organic traffic in 12 months', 'bluegroup-project-blueworx' ),
 	),
 );
 
@@ -80,41 +80,41 @@ $blueworx_work_stats = array(
 	array(
 		'value' => '5.0',
 		'star'  => true,
-		'label' => __( 'Google Rating', 'blueworx-site' ),
+		'label' => __( 'Google Rating', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'value' => '82+',
-		'label' => __( 'Projects Completed', 'blueworx-site' ),
+		'label' => __( 'Projects Completed', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'value' => '100k +',
-		'label' => __( 'Revenue Handled', 'blueworx-site' ),
+		'label' => __( 'Revenue Handled', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'value' => '2K +',
-		'label' => __( 'Toolbox Value', 'blueworx-site' ),
+		'label' => __( 'Toolbox Value', 'bluegroup-project-blueworx' ),
 	),
 );
 
 // Work's own testimonials, distinct from the shared homepage reviews.
 $blueworx_work_testimonials = array(
 	array(
-		'text'     => __( '"BlueWorx has completely transformed how we manage our website. The tools are powerful and the support team is incredibly responsive."', 'blueworx-site' ),
+		'text'     => __( '"BlueWorx has completely transformed how we manage our website. The tools are powerful and the support team is incredibly responsive."', 'bluegroup-project-blueworx' ),
 		'initials' => 'SJ',
 		'name'     => 'Sarah Johnson',
-		'role'     => __( 'Owner, Fresh Bakery Co.', 'blueworx-site' ),
+		'role'     => __( 'Owner, Fresh Bakery Co.', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'text'     => __( '"The live chat and booking system have increased our conversion rate significantly. Worth every penny — and then some."', 'blueworx-site' ),
+		'text'     => __( '"The live chat and booking system have increased our conversion rate significantly. Worth every penny — and then some."', 'bluegroup-project-blueworx' ),
 		'initials' => 'MR',
 		'name'     => 'Marcus Reid',
-		'role'     => __( 'Director, Reid Consulting', 'blueworx-site' ),
+		'role'     => __( 'Director, Reid Consulting', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'text'     => __( '"Finally, one platform that does it all. We cancelled three separate subscriptions when we switched to BlueWorx."', 'blueworx-site' ),
+		'text'     => __( '"Finally, one platform that does it all. We cancelled three separate subscriptions when we switched to BlueWorx."', 'bluegroup-project-blueworx' ),
 		'initials' => 'AL',
 		'name'     => 'Amy Leung',
-		'role'     => __( 'Founder, Leung Law Group', 'blueworx-site' ),
+		'role'     => __( 'Founder, Leung Law Group', 'bluegroup-project-blueworx' ),
 	),
 );
 
@@ -131,26 +131,26 @@ blueworx_public_part( 'parts/nav.php' );
 						'parts/tech-hero.php',
 						array(
 							'centered'        => false,
-							'badge'           => __( 'Selected Work', 'blueworx-site' ),
-							'title'           => __( 'Work That Moves the Needle', 'blueworx-site' ),
-							'title_highlight' => __( 'the Needle', 'blueworx-site' ),
-							'lead'            => __( "Digital solutions we've designed, built, and grown alongside our partners, with the outcomes to show for it.", 'blueworx-site' ),
+							'badge'           => __( 'Selected Work', 'bluegroup-project-blueworx' ),
+							'title'           => __( 'Work That Moves the Needle', 'bluegroup-project-blueworx' ),
+							'title_highlight' => __( 'the Needle', 'bluegroup-project-blueworx' ),
+							'lead'            => __( "Digital solutions we've designed, built, and grown alongside our partners, with the outcomes to show for it.", 'bluegroup-project-blueworx' ),
 							'cta'             => array(
 								array(
-									'label' => __( 'Start a Project', 'blueworx-site' ),
+									'label' => __( 'Start a Project', 'bluegroup-project-blueworx' ),
 									'href'  => home_url( '/contact' ),
 									'class' => 'btn btn-white btn-lg',
 								),
 								array(
-									'label' => __( 'Our Services', 'blueworx-site' ),
+									'label' => __( 'Our Services', 'bluegroup-project-blueworx' ),
 									'href'  => home_url( '/services' ),
 									'class' => 'btn btn-outline-w btn-lg',
 								),
 							),
 							'meta'            => array(
-								__( '82+ projects', 'blueworx-site' ),
-								__( '4.9 rating', 'blueworx-site' ),
-								__( '99.9% uptime', 'blueworx-site' ),
+								__( '82+ projects', 'bluegroup-project-blueworx' ),
+								__( '4.9 rating', 'bluegroup-project-blueworx' ),
+								__( '99.9% uptime', 'bluegroup-project-blueworx' ),
 							),
 						)
 					);
@@ -159,9 +159,9 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php
 				ob_start();
 				?>
-				<div class="gc-metric"><small><?php echo esc_html__( 'Hirasté — booking enquiries', 'blueworx-site' ); ?></small><b>+64%</b><span class="up">▲</span></div>
-				<div class="gc-metric"><small><?php echo esc_html__( 'QURE — conversion rate', 'blueworx-site' ); ?></small><b>+38%</b><span class="up">▲</span></div>
-				<div class="gc-metric" style="border-bottom:none"><small><?php echo esc_html__( 'Reid — organic traffic', 'blueworx-site' ); ?></small><b>3×</b><span class="up">▲</span></div>
+				<div class="gc-metric"><small><?php echo esc_html__( 'Hirasté — booking enquiries', 'bluegroup-project-blueworx' ); ?></small><b>+64%</b><span class="up">▲</span></div>
+				<div class="gc-metric"><small><?php echo esc_html__( 'QURE — conversion rate', 'bluegroup-project-blueworx' ); ?></small><b>+38%</b><span class="up">▲</span></div>
+				<div class="gc-metric" style="border-bottom:none"><small><?php echo esc_html__( 'Reid — organic traffic', 'bluegroup-project-blueworx' ); ?></small><b>3×</b><span class="up">▲</span></div>
 				<div class="gc-spark">
 					<i style="height:30%"></i><i style="height:44%"></i><i style="height:58%"></i><i style="height:52%"></i><i style="height:70%"></i><i class="hi" style="height:96%"></i><i style="height:78%"></i><i style="height:88%"></i>
 				</div>
@@ -171,12 +171,12 @@ blueworx_public_part( 'parts/nav.php' );
 				blueworx_public_part(
 					'parts/glass-card.php',
 					array(
-						'tag'    => __( 'results.log', 'blueworx-site' ),
+						'tag'    => __( 'results.log', 'bluegroup-project-blueworx' ),
 						'body'   => $blueworx_work_gc_body,
 						'floats' => array(
 							array(
 								'icon'  => 'chart',
-								'label' => __( 'Avg. lift', 'blueworx-site' ),
+								'label' => __( 'Avg. lift', 'bluegroup-project-blueworx' ),
 								'value' => '+41%',
 								'style' => 'bottom:-22px;left:-26px;animation-delay:.6s',
 							),
@@ -211,8 +211,8 @@ blueworx_public_part( 'parts/nav.php' );
 		blueworx_public_part(
 			'parts/stats-band.php',
 			array(
-				'title' => __( 'Outcomes, not just outputs.', 'blueworx-site' ),
-				'copy'  => __( 'Every engagement is measured against the goals we set together: traffic, conversions, and revenue. Not vanity metrics.', 'blueworx-site' ),
+				'title' => __( 'Outcomes, not just outputs.', 'bluegroup-project-blueworx' ),
+				'copy'  => __( 'Every engagement is measured against the goals we set together: traffic, conversions, and revenue. Not vanity metrics.', 'bluegroup-project-blueworx' ),
 				'stats' => $blueworx_work_stats,
 			)
 		);
@@ -220,8 +220,8 @@ blueworx_public_part( 'parts/nav.php' );
 		blueworx_public_part(
 			'parts/testimonials.php',
 			array(
-				'eyebrow'      => __( 'What Our Clients Say', 'blueworx-site' ),
-				'title'        => __( "Partners Who'd Recommend Us", 'blueworx-site' ),
+				'eyebrow'      => __( 'What Our Clients Say', 'bluegroup-project-blueworx' ),
+				'title'        => __( "Partners Who'd Recommend Us", 'bluegroup-project-blueworx' ),
 				'testimonials' => $blueworx_work_testimonials,
 			)
 		);

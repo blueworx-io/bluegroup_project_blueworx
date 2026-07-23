@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Builds the deployment artifact: dist/blueworx-site.zip containing a single
-// top-level `blueworx-site/` folder, with forward-slash entry paths so it
+// Builds the deployment artifact: dist/bluegroup-project-blueworx.zip containing a single
+// top-level `bluegroup-project-blueworx/` folder, with forward-slash entry paths so it
 // installs correctly on Linux WordPress hosts.
 //
-// Dependency-free: stages the runtime files into dist/blueworx-site/ and zips
+// Dependency-free: stages the runtime files into dist/bluegroup-project-blueworx/ and zips
 // with bsdtar (System32 tar.exe on Windows, `tar` elsewhere) rather than
 // PowerShell Compress-Archive, which writes backslash entries that mis-extract
 // on the server ("Plugin file does not exist.").
@@ -11,12 +11,12 @@ import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
-const SLUG = 'blueworx-site';
+const SLUG = 'bluegroup-project-blueworx';
 const DIST = 'dist';
 const STAGE = join(DIST, SLUG);
 
 // Runtime files/dirs that ship inside the plugin folder.
-const REQUIRED = ['blueworx-site.php', 'uninstall.php', 'readme.txt', 'includes', 'assets', 'templates'];
+const REQUIRED = ['bluegroup-project-blueworx.php', 'uninstall.php', 'readme.txt', 'includes', 'assets', 'templates'];
 const OPTIONAL = ['languages'];
 
 // bsdtar: on Windows the System32 tar.exe is bsdtar; GNU tar in Git Bash cannot

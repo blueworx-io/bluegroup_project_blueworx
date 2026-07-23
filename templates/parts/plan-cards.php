@@ -45,18 +45,18 @@ $blueworx_pc_check = '<svg class="ck" viewBox="0 0 24 24" fill="currentColor"><p
 					<div class="plan-name">
 						<span><?php echo esc_html( $blueworx_pc_plan['name'] ); ?></span>
 						<?php if ( $blueworx_pc_pop ) : ?>
-							<span class="pop"><?php esc_html_e( 'Popular', 'blueworx-site' ); ?></span>
+							<span class="pop"><?php esc_html_e( 'Popular', 'bluegroup-project-blueworx' ); ?></span>
 						<?php endif; ?>
 					</div>
 					<div class="plan-desc"><?php echo esc_html( $blueworx_pc_plan['desc'] ); ?></div>
 					<div class="plan-price" data-price-m="<?php echo esc_attr( (string) $blueworx_pc_plan['priceM'] ); ?>" data-price-a="<?php echo esc_attr( (string) $blueworx_pc_plan['priceA'] ); ?>">
 						<b>$<?php echo esc_html( (string) $blueworx_pc_plan['priceM'] ); ?></b>
-						<em data-sub-m="<?php esc_attr_e( 'per month', 'blueworx-site' ); ?>" data-sub-a="<?php esc_attr_e( 'per month, billed yearly', 'blueworx-site' ); ?>"><?php esc_html_e( 'per month', 'blueworx-site' ); ?></em>
+						<em data-sub-m="<?php esc_attr_e( 'per month', 'bluegroup-project-blueworx' ); ?>" data-sub-a="<?php esc_attr_e( 'per month, billed yearly', 'bluegroup-project-blueworx' ); ?>"><?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></em>
 					</div>
-					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="<?php echo esc_attr( $blueworx_pc_btn ); ?>" style="display:flex;align-items:center;justify-content:center;text-decoration:none"><?php esc_html_e( 'Get started', 'blueworx-site' ); ?></a>
+					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="<?php echo esc_attr( $blueworx_pc_btn ); ?>" style="display:flex;align-items:center;justify-content:center;text-decoration:none"><?php esc_html_e( 'Get started', 'bluegroup-project-blueworx' ); ?></a>
 				</div>
 				<div class="plan-feats">
-					<div class="lbl"><?php esc_html_e( 'FEATURES', 'blueworx-site' ); ?></div>
+					<div class="lbl"><?php esc_html_e( 'FEATURES', 'bluegroup-project-blueworx' ); ?></div>
 					<?php foreach ( (array) $blueworx_pc_plan['features'] as $blueworx_pc_feature ) : ?>
 						<div class="pf">
 							<?php

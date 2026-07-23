@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$blueworx_tbx_title = isset( $title ) ? (string) $title : __( 'Do more with the BlueWorx Toolbox', 'blueworx-site' );
-$blueworx_tbx_sub   = isset( $sub ) ? (string) $sub : __( 'Access premium tools, reduce unnecessary costs, and run your digital operations more efficiently.', 'blueworx-site' );
+$blueworx_tbx_title = isset( $title ) ? (string) $title : __( 'Do more with the BlueWorx Toolbox', 'bluegroup-project-blueworx' );
+$blueworx_tbx_sub   = isset( $sub ) ? (string) $sub : __( 'Access premium tools, reduce unnecessary costs, and run your digital operations more efficiently.', 'bluegroup-project-blueworx' );
 $blueworx_tbx_tools = isset( $tools ) && is_array( $tools ) ? $tools : blueworx_content_tools();
 
 // Static trusted arrow glyph, sized by `.tbx-arrow svg`.

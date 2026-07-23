@@ -1,7 +1,7 @@
 # Global CLAUDE.md
 
 > **This repo is a WordPress plugin.** `bluegroup_project_blueworx` **is** the
-> `blueworx-site` plugin (the BlueWorx marketing site), rendered by WordPress.
+> `bluegroup-project-blueworx` plugin (the BlueWorx marketing site), rendered by WordPress.
 > It was a headless Next.js app until v1.1.0; that history is in git. Follow the
 > **WordPress plugin** rules below (plugin-zip deployment via `npm run build`, CI
 > is `ci-wordpress.yml`), **not** the headless/Netlify ones.

@@ -33,60 +33,60 @@ $blueworx_about_arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
 $blueworx_about_why_cards = array(
 	array(
 		'icon'  => 'users',
-		'title' => __( 'One team, end to end', 'blueworx-site' ),
-		'desc'  => __( 'Strategy to support handled in-house. No hand-offs, no finger-pointing.', 'blueworx-site' ),
+		'title' => __( 'One team, end to end', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Strategy to support handled in-house. No hand-offs, no finger-pointing.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'chart',
-		'title' => __( 'Built to perform', 'blueworx-site' ),
-		'desc'  => __( 'Fast, accessible, search-ready builds measured against real goals.', 'blueworx-site' ),
+		'title' => __( 'Built to perform', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Fast, accessible, search-ready builds measured against real goals.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'server',
-		'title' => __( 'Reliable by default', 'blueworx-site' ),
-		'desc'  => __( 'Managed hosting, backups, and 99.9% uptime handled for you.', 'blueworx-site' ),
+		'title' => __( 'Reliable by default', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'Managed hosting, backups, and 99.9% uptime handled for you.', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'icon'  => 'chat',
-		'title' => __( 'Support that answers', 'blueworx-site' ),
-		'desc'  => __( 'A real team one message away, usually within the same business day.', 'blueworx-site' ),
+		'title' => __( 'Support that answers', 'bluegroup-project-blueworx' ),
+		'desc'  => __( 'A real team one message away, usually within the same business day.', 'bluegroup-project-blueworx' ),
 	),
 );
 
 $blueworx_about_stats = array(
 	array(
-		'value' => __( '5.0', 'blueworx-site' ),
+		'value' => __( '5.0', 'bluegroup-project-blueworx' ),
 		'star'  => true,
-		'label' => __( 'Google Rating', 'blueworx-site' ),
+		'label' => __( 'Google Rating', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'value' => __( '82+', 'blueworx-site' ),
-		'label' => __( 'Projects Completed', 'blueworx-site' ),
+		'value' => __( '82+', 'bluegroup-project-blueworx' ),
+		'label' => __( 'Projects Completed', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'value' => __( '100k +', 'blueworx-site' ),
-		'label' => __( 'Revenue Handled', 'blueworx-site' ),
+		'value' => __( '100k +', 'bluegroup-project-blueworx' ),
+		'label' => __( 'Revenue Handled', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'value' => __( '2K +', 'blueworx-site' ),
-		'label' => __( 'Toolbox Value', 'blueworx-site' ),
+		'value' => __( '2K +', 'bluegroup-project-blueworx' ),
+		'label' => __( 'Toolbox Value', 'bluegroup-project-blueworx' ),
 	),
 );
 
 $blueworx_about_team = array(
 	array(
 		'name'    => 'Ross',
-		'role'    => __( 'Project Manager', 'blueworx-site' ),
+		'role'    => __( 'Project Manager', 'bluegroup-project-blueworx' ),
 		'initial' => 'R',
 	),
 	array(
 		'name'    => 'Jess',
-		'role'    => __( 'Digital Designer', 'blueworx-site' ),
+		'role'    => __( 'Digital Designer', 'bluegroup-project-blueworx' ),
 		'initial' => 'J',
 	),
 	array(
 		'name'    => 'Jono',
-		'role'    => __( 'Sales Manager', 'blueworx-site' ),
+		'role'    => __( 'Sales Manager', 'bluegroup-project-blueworx' ),
 		'initial' => 'J',
 	),
 );
@@ -94,30 +94,30 @@ $blueworx_about_team = array(
 $blueworx_about_stories = array(
 	array(
 		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-1.jpg',
-		'alt'       => __( 'Hirasté website', 'blueworx-site' ),
-		'tags'      => array( __( 'Web Design', 'blueworx-site' ), __( 'Booking Platform', 'blueworx-site' ) ),
+		'alt'       => __( 'Hirasté website', 'bluegroup-project-blueworx' ),
+		'tags'      => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'Hirasté',
-		'desc'      => __( 'A curated platform for large group accommodation, with advanced search that helps groups book the perfect getaway.', 'blueworx-site' ),
-		'res_value' => __( '+64%', 'blueworx-site' ),
-		'res_text'  => __( 'group bookings', 'blueworx-site' ),
+		'desc'      => __( 'A curated platform for large group accommodation, with advanced search that helps groups book the perfect getaway.', 'bluegroup-project-blueworx' ),
+		'res_value' => __( '+64%', 'bluegroup-project-blueworx' ),
+		'res_text'  => __( 'group bookings', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-3.jpg',
-		'alt'       => __( 'Padel365 website', 'blueworx-site' ),
-		'tags'      => array( __( 'E-commerce', 'blueworx-site' ), __( 'Court Booking', 'blueworx-site' ) ),
+		'alt'       => __( 'Padel365 website', 'bluegroup-project-blueworx' ),
+		'tags'      => array( __( 'E-commerce', 'bluegroup-project-blueworx' ), __( 'Court Booking', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'Padel365',
-		'desc'      => __( 'Powering the launch of padel clubs across Australia with seamless court discovery and booking in one experience.', 'blueworx-site' ),
-		'res_value' => __( 'Sold-out', 'blueworx-site' ),
-		'res_text'  => __( 'launch weekend', 'blueworx-site' ),
+		'desc'      => __( 'Powering the launch of padel clubs across Australia with seamless court discovery and booking in one experience.', 'bluegroup-project-blueworx' ),
+		'res_value' => __( 'Sold-out', 'bluegroup-project-blueworx' ),
+		'res_text'  => __( 'launch weekend', 'bluegroup-project-blueworx' ),
 	),
 	array(
 		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-4.jpg',
-		'alt'       => __( 'QURE website', 'blueworx-site' ),
-		'tags'      => array( __( 'Brand', 'blueworx-site' ), __( 'Web Build', 'blueworx-site' ) ),
+		'alt'       => __( 'QURE website', 'bluegroup-project-blueworx' ),
+		'tags'      => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'QURE',
-		'desc'      => __( 'A clean, credible web presence for a cannabis science company, built to support growing research operations.', 'blueworx-site' ),
-		'res_value' => __( '+38%', 'blueworx-site' ),
-		'res_text'  => __( 'conversion rate', 'blueworx-site' ),
+		'desc'      => __( 'A clean, credible web presence for a cannabis science company, built to support growing research operations.', 'bluegroup-project-blueworx' ),
+		'res_value' => __( '+38%', 'bluegroup-project-blueworx' ),
+		'res_text'  => __( 'conversion rate', 'bluegroup-project-blueworx' ),
 	),
 );
 
@@ -130,10 +130,10 @@ blueworx_public_part( 'parts/nav.php' );
 		blueworx_public_part(
 			'parts/tech-hero.php',
 			array(
-				'badge'           => __( 'About BlueWorx', 'blueworx-site' ),
-				'title'           => __( 'The Digital Agency That Works Like a Partner', 'blueworx-site' ),
-				'title_highlight' => __( 'Works Like a Partner', 'blueworx-site' ),
-				'lead'            => __( 'Helping your business grow without breaking the bank. One platform, one team, endless support.', 'blueworx-site' ),
+				'badge'           => __( 'About BlueWorx', 'bluegroup-project-blueworx' ),
+				'title'           => __( 'The Digital Agency That Works Like a Partner', 'bluegroup-project-blueworx' ),
+				'title_highlight' => __( 'Works Like a Partner', 'bluegroup-project-blueworx' ),
+				'lead'            => __( 'Helping your business grow without breaking the bank. One platform, one team, endless support.', 'bluegroup-project-blueworx' ),
 			)
 		);
 		?>
@@ -141,12 +141,12 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="sec">
 			<div class="af-wrap about-why">
 				<div>
-					<div class="eyebrow" style="margin-bottom:20px"><?php echo esc_html__( 'Why BlueWorx', 'blueworx-site' ); ?></div>
-					<h2 class="h2"><?php echo esc_html__( "We're the team behind digital solutions that grow businesses", 'blueworx-site' ); ?></h2>
-					<p class="lead" style="font-size:18px;margin-top:18px"><?php echo esc_html__( 'Founded to remove the complexity of running a modern digital business, BlueWorx brings strategy, design, build, hosting, and support under one roof, so you have one accountable partner instead of five vendors.', 'blueworx-site' ); ?></p>
+					<div class="eyebrow" style="margin-bottom:20px"><?php echo esc_html__( 'Why BlueWorx', 'bluegroup-project-blueworx' ); ?></div>
+					<h2 class="h2"><?php echo esc_html__( "We're the team behind digital solutions that grow businesses", 'bluegroup-project-blueworx' ); ?></h2>
+					<p class="lead" style="font-size:18px;margin-top:18px"><?php echo esc_html__( 'Founded to remove the complexity of running a modern digital business, BlueWorx brings strategy, design, build, hosting, and support under one roof, so you have one accountable partner instead of five vendors.', 'bluegroup-project-blueworx' ); ?></p>
 					<div style="display:flex;gap:14px;margin-top:30px;flex-wrap:wrap">
-						<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-dark btn-md"><?php echo esc_html__( 'Book a Call', 'blueworx-site' ); ?></a>
-						<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md"><?php echo esc_html__( 'View Our Work', 'blueworx-site' ); ?></a>
+						<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-dark btn-md"><?php echo esc_html__( 'Book a Call', 'bluegroup-project-blueworx' ); ?></a>
+						<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md"><?php echo esc_html__( 'View Our Work', 'bluegroup-project-blueworx' ); ?></a>
 					</div>
 				</div>
 				<div class="svc-grid why-grid">
@@ -163,8 +163,8 @@ blueworx_public_part( 'parts/nav.php' );
 		blueworx_public_part(
 			'parts/stats-band.php',
 			array(
-				'title' => __( 'One partner powering everything digital your business needs.', 'blueworx-site' ),
-				'copy'  => __( 'BlueWorx brings together premium services that let owners run and manage their business in one platform. The results show in the businesses we support, the projects we deliver, and the value our platform provides.', 'blueworx-site' ),
+				'title' => __( 'One partner powering everything digital your business needs.', 'bluegroup-project-blueworx' ),
+				'copy'  => __( 'BlueWorx brings together premium services that let owners run and manage their business in one platform. The results show in the businesses we support, the projects we deliver, and the value our platform provides.', 'bluegroup-project-blueworx' ),
 				'stats' => $blueworx_about_stats,
 			)
 		);
@@ -172,8 +172,8 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php echo esc_html__( 'Our Team', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php echo esc_html__( 'Meet the team committed to collaboration and gold-standard delivery.', 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php echo esc_html__( 'Our Team', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php echo esc_html__( 'Meet the team committed to collaboration and gold-standard delivery.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="team-grid">
 				<?php foreach ( $blueworx_about_team as $blueworx_about_member ) : ?>
@@ -189,8 +189,8 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="sec" style="background:#F5F6FF;padding-top:0">
 			<div style="padding-top:96px">
 				<div class="center-head" style="margin-bottom:40px">
-					<h2 class="h2"><?php echo esc_html__( 'Client Success Stories', 'blueworx-site' ); ?></h2>
-					<p class="lead"><?php echo esc_html__( "Explore a selection of projects we've delivered in collaboration with our partners.", 'blueworx-site' ); ?></p>
+					<h2 class="h2"><?php echo esc_html__( 'Client Success Stories', 'bluegroup-project-blueworx' ); ?></h2>
+					<p class="lead"><?php echo esc_html__( "Explore a selection of projects we've delivered in collaboration with our partners.", 'bluegroup-project-blueworx' ); ?></p>
 				</div>
 				<div class="work-grid">
 					<?php
@@ -202,7 +202,7 @@ blueworx_public_part( 'parts/nav.php' );
 				</div>
 				<div style="display:flex;justify-content:center;margin-top:40px">
 					<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md">
-						<?php echo esc_html__( 'View All Work', 'blueworx-site' ); ?>
+						<?php echo esc_html__( 'View All Work', 'bluegroup-project-blueworx' ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_about_arrow above.
 						echo $blueworx_about_arrow;

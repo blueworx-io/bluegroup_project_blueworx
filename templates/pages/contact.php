@@ -32,22 +32,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 $blueworx_contact_cards = array(
 	array(
 		'icon'  => 'phone',
-		'title' => __( 'Give us a call', 'blueworx-site' ),
-		'sub'   => __( 'Mon–Fri from 8am to 5pm.', 'blueworx-site' ),
+		'title' => __( 'Give us a call', 'bluegroup-project-blueworx' ),
+		'sub'   => __( 'Mon–Fri from 8am to 5pm.', 'bluegroup-project-blueworx' ),
 		'link'  => '+00 (704) 555-0127',
 		'href'  => 'tel:+007045550127',
 	),
 	array(
 		'icon'  => 'chat',
-		'title' => __( 'Send us a WhatsApp', 'blueworx-site' ),
-		'sub'   => __( 'Speak to our friendly team.', 'blueworx-site' ),
+		'title' => __( 'Send us a WhatsApp', 'bluegroup-project-blueworx' ),
+		'sub'   => __( 'Speak to our friendly team.', 'bluegroup-project-blueworx' ),
 		'link'  => '+00 (704) 555-0127',
 		'href'  => 'https://wa.me/007045550127',
 	),
 	array(
 		'icon'  => 'mail',
-		'title' => __( 'Email us here', 'blueworx-site' ),
-		'sub'   => __( 'Let us know how we can help.', 'blueworx-site' ),
+		'title' => __( 'Email us here', 'bluegroup-project-blueworx' ),
+		'sub'   => __( 'Let us know how we can help.', 'bluegroup-project-blueworx' ),
 		'link'  => 'info@blueworx.com',
 		'href'  => 'mailto:info@blueworx.com',
 	),
@@ -75,14 +75,14 @@ blueworx_public_part( 'parts/nav.php' );
 		blueworx_public_part(
 			'parts/tech-hero.php',
 			array(
-				'badge'           => __( 'Contact Us', 'blueworx-site' ),
-				'title'           => __( 'Start Your Conversation With BlueWorx', 'blueworx-site' ),
-				'title_highlight' => __( 'With BlueWorx', 'blueworx-site' ),
-				'lead'            => __( 'Tell us where your digital presence is holding you back and we&rsquo;ll show you exactly how to fix it.', 'blueworx-site' ),
+				'badge'           => __( 'Contact Us', 'bluegroup-project-blueworx' ),
+				'title'           => __( 'Start Your Conversation With BlueWorx', 'bluegroup-project-blueworx' ),
+				'title_highlight' => __( 'With BlueWorx', 'bluegroup-project-blueworx' ),
+				'lead'            => __( 'Tell us where your digital presence is holding you back and we&rsquo;ll show you exactly how to fix it.', 'bluegroup-project-blueworx' ),
 				'max_width'       => 780,
 				'meta'            => array(
-					__( 'reply within 1 business day', 'blueworx-site' ),
-					__( 'no obligation', 'blueworx-site' ),
+					__( 'reply within 1 business day', 'bluegroup-project-blueworx' ),
+					__( 'no obligation', 'bluegroup-project-blueworx' ),
 				),
 			)
 		);
@@ -99,15 +99,15 @@ blueworx_public_part( 'parts/nav.php' );
 					} else {
 						?>
 						<div class="bw-plan3-placeholder" data-widget="contact-form">
-							<p><?php esc_html_e( 'Contact form goes here.', 'blueworx-site' ); ?></p>
-							<p class="bw-placeholder-note"><?php esc_html_e( 'Set the contact form shortcode (BlueWorx contact form option) to your form plugin&rsquo;s shortcode to display it here.', 'blueworx-site' ); ?></p>
+							<p><?php esc_html_e( 'Contact form goes here.', 'bluegroup-project-blueworx' ); ?></p>
+							<p class="bw-placeholder-note"><?php esc_html_e( 'Set the contact form shortcode (BlueWorx contact form option) to your form plugin&rsquo;s shortcode to display it here.', 'bluegroup-project-blueworx' ); ?></p>
 						</div>
 						<?php
 					}
 					?>
 				</div>
 				<div class="contact-illus">
-					<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/contact-illustration.jpg' ); ?>" alt="<?php esc_attr_e( 'Get in touch', 'blueworx-site' ); ?>" />
+					<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/contact-illustration.jpg' ); ?>" alt="<?php esc_attr_e( 'Get in touch', 'bluegroup-project-blueworx' ); ?>" />
 				</div>
 			</div>
 		</section>
@@ -128,8 +128,8 @@ blueworx_public_part( 'parts/nav.php' );
 
 		<section class="sec">
 			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'blueworx-site' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'blueworx-site' ); ?></p>
+				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="faq-list">
 				<?php foreach ( blueworx_content_faqs() as $blueworx_contact_faq ) : ?>
