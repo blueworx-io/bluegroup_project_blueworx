@@ -1,10 +1,10 @@
-=== BlueWorx | Site ===
+=== BlueWorx | Marketing Site ===
 Contributors:      blueworx
 Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.1.2
+Stable tag:        1.1.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ The BlueWorx public marketing site, rendered by the plugin itself so it is ident
 
 == Description ==
 
-BlueWorx | Site is the public-facing blueworx.io marketing site packaged as a self-contained WordPress plugin. The plugin renders every page itself — home, services, work, pricing, about, contact, the AI page, and the toolbox — rather than relying on a theme, so the site looks the same on any host.
+BlueWorx | Marketing Site is the public-facing blueworx.io marketing site packaged as a self-contained WordPress plugin. The plugin renders every page itself — home, services, work, pricing, about, contact, the AI page, and the toolbox — rather than relying on a theme, so the site looks the same on any host.
 
 It is fully self-contained: no theme is required, and it has no dependency on any other plugin. On plugin-owned pages it loads only its own styles and scripts and steps aside from the active theme's stylesheet, so it never restyles content it does not own.
 
