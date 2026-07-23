@@ -1,5 +1,11 @@
 # Global CLAUDE.md
 
+> **This repo is a WordPress plugin.** `bluegroup_project_blueworx` **is** the
+> `blueworx-site` plugin (the BlueWorx marketing site), rendered by WordPress.
+> It was a headless Next.js app until v1.1.0; that history is in git. Follow the
+> **WordPress plugin** rules below (plugin-zip deployment via `npm run build`, CI
+> is `ci-wordpress.yml`), **not** the headless/Netlify ones.
+
 Global rules that apply to every project. Lives at `~/.claude/CLAUDE.md`. Full detail, all copy-paste prompts, and the complete Recipe Book live in the `bluegroup_core_foundation` repo and the Team Guidelines doc — this file is the condensed version Claude Code needs every session, and should never contradict them.
 
 ## How Projects Are Structured

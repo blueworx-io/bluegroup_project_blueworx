@@ -1,23 +1,14 @@
-import { FlatCompat } from "@eslint/eslintrc";
+import js from '@eslint/js';
+import globals from 'globals';
 
-const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
-
-const config = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default [
+  js.configs.recommended,
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "playwright-report/**",
-      "test-results/**",
-      "next-env.d.ts",
-      // The WordPress marketing plugin has its own toolchain, ESLint config,
-      // and browser-JS globals — linted from within plugin/, not by the
-      // Next.js config here.
-      "plugin/**",
-    ],
+    files: ['assets/js/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'script',
+      globals: { ...globals.browser },
+    },
   },
 ];
-
-export default config;
