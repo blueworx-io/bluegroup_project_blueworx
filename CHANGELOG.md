@@ -9,6 +9,27 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 **is** the `blueworx-site` WordPress plugin — the same marketing site, rendered
 by WordPress instead of served headlessly from Netlify.
 
+## [1.1.1] - 2026-07-23
+
+### Added
+
+- **Ported the marketing Playwright suite** from `blueworx_labs_wordpress`
+  history into `tests/`: the public-rendering and widget specs — `marketing-*`
+  (home, about, services, work, ai, contact, plans), `public-content`, and
+  `widgets-commerce` / `widgets-showcase` — plus the shared `helpers.js` fixture
+  (reduced-motion, base URL, cache-busting). These assert the real rendered
+  content and interactive widgets on every marketing page, alongside the
+  existing smoke/render gate.
+- Fixed the `readme.txt` stable tag, which was left at `1.0.0` in 1.1.0.
+
+### Notes
+
+- The Site-Protection integration specs (`public-site.spec.js`, and the
+  Site-Protection parts of `marketing-single-tool.spec.js`) were deliberately
+  **not** ported: they test the interaction between the marketing pages and the
+  BlueWorx **enhancement** plugin's Site Protection, which `blueworx-site` does
+  not ship. That coverage belongs with the enhancement plugin.
+
 ## [1.1.0] - 2026-07-23
 
 ### Changed
