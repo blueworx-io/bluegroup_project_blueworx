@@ -1,4 +1,4 @@
-# Changelog — BlueWorx | Site
+# Changelog — BlueWorx | Marketing Site
 
 All notable changes to this project are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); this project uses semantic
@@ -9,6 +9,15 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 **is** the `bluegroup-project-blueworx` WordPress plugin (slug `blueworx-site`
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
+
+## [1.1.3] - 2026-07-23
+
+### Changed
+
+- Renamed the plugin's display name from **BlueWorx | Site** to **BlueWorx |
+  Marketing Site** (the `Plugin Name` header shown on the WordPress Plugins
+  page), and matched it in `readme.txt`, the `package.json` description, and this
+  changelog's title. Slug, files, and internal identifiers are unchanged.
 
 ## [1.1.2] - 2026-07-23
 
