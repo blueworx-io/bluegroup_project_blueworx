@@ -1,14 +1,14 @@
 node_modules/
-playwright-report/
+dist/
 test-results/
+playwright-report/
+*.log
+.DS_Store
 
-# next.js
-.next/
-out/
-next-env.d.ts
-*.tsbuildinfo
+# The local WordPress test harness (foundation ci-wordpress local mode).
+.wp-test/
 
-# local env (keep .env.example checked in)
+# Local env — keep .env.example checked in.
 .env
-.env.local
-.env*.local
+.env.*
+!.env.example
