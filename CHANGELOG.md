@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-23
+
+### Added
+
+- **`plugin/` — BlueWorx | Site, the marketing site as a self-contained WordPress plugin (Stage A of the headless→plugin migration).** The public marketing code (`includes/public/`, `templates/pages/` + `templates/parts/`, and the marketing CSS/JS/fonts/images) is brought over from the `blueworx-labs-wordpress` enhancement plugin into its own always-on plugin with slug `blueworx-site`. Decoupled from the enhancement plugin: the `public_site` feature gate is gone (the front-end is this plugin's sole job); `blueworx_get_admin_asset_version()` is vendored as `blueworx_site_asset_version()`; own constants (`BLUEWORX_SITE_PATH`/`_URL`/`_VERSION`) and text domain (`blueworx-site`); the enhancement plugin's `blueworx_site_protection_applies` filter is used only as optional integration, harmless when that plugin is absent. Ships its own main file, `uninstall.php`, `readme.txt`, and a dependency-free `build-zip.mjs` (bsdtar, forward-slash entries). See `plugin/CHANGELOG.md`.
+
+### Notes
+
+- Non-destructive: the Next.js app is untouched and still owns the repo root. Retiring it (and promoting the plugin) is a later, separately-approved stage. `plugin/**` is excluded from the root ESLint run — the plugin has its own toolchain.
+
 ## [0.5.1] - 2026-07-20
 
 ### Added

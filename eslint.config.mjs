@@ -12,6 +12,10 @@ const config = [
       "playwright-report/**",
       "test-results/**",
       "next-env.d.ts",
+      // The WordPress marketing plugin has its own toolchain, ESLint config,
+      // and browser-JS globals — linted from within plugin/, not by the
+      // Next.js config here.
+      "plugin/**",
     ],
   },
 ];
