@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once BLUEWORX_SITE_PATH . 'includes/public/helpers-public.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/content.php';
+// After content.php — commerce filters the plans that file defines.
+require_once BLUEWORX_SITE_PATH . 'includes/public/commerce.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/pages.php';
 // After pages.php — the backfill calls blueworx_public_page_is_ours().
 require_once BLUEWORX_SITE_PATH . 'includes/public/upgrade.php';

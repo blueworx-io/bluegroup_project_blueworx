@@ -10,6 +10,24 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.6.0] - 2026-08-03
+
+### Added
+
+- **Plan prices can now come from SureCart instead of being written into the
+  plugin.** Enter a SureCart price ID per plan, per billing period, under
+  Settings → BlueWorx Site, and the Pricing page shows what SureCart actually
+  charges — so changing a price in one place changes it everywhere.
+- **"Get started" can now go to checkout.** A plan with a price ID sends the
+  visitor straight to a checkout for that plan, and switching between monthly
+  and annual billing moves the button as well as the figure, so nobody picks
+  annual and is charged monthly.
+
+A plan left blank behaves exactly as before: the price built into the plugin,
+and a button that goes to the contact form. The same applies if SureCart is
+switched off, a price ID is wrong, or SureCart cannot be reached — the page
+falls back rather than breaking.
+
 ## [1.5.4] - 2026-08-03
 
 ### Fixed

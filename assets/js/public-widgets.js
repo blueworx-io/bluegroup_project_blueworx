@@ -36,6 +36,18 @@
 					em.textContent = annual ? em.getAttribute( 'data-sub-a' ) : em.getAttribute( 'data-sub-m' );
 				}
 			}
+
+			// The buy link has to follow the toggle, or picking annual billing
+			// and clicking through lands the visitor on a monthly checkout.
+			// Only plans wired to SureCart carry these; the rest keep whatever
+			// href the template gave them.
+			var buys = document.querySelectorAll( '[data-buy-m], [data-buy-a]' );
+			for ( var j = 0; j < buys.length; j++ ) {
+				var target = buys[ j ].getAttribute( annual ? 'data-buy-a' : 'data-buy-m' );
+				if ( target ) {
+					buys[ j ].setAttribute( 'href', target );
+				}
+			}
 		}
 
 		toggle.setAttribute( 'role', 'group' );

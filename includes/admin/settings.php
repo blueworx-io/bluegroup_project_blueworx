@@ -52,6 +52,26 @@ function blueworx_site_register_settings() {
 		)
 	);
 
+	register_setting(
+		BLUEWORX_SITE_SETTINGS_GROUP,
+		'blueworx_checkout_url',
+		array(
+			'type'              => 'string',
+			'default'           => '',
+			'sanitize_callback' => 'blueworx_site_sanitize_link_target',
+		)
+	);
+
+	register_setting(
+		BLUEWORX_SITE_SETTINGS_GROUP,
+		'blueworx_surecart_price_ids',
+		array(
+			'type'              => 'array',
+			'default'           => array(),
+			'sanitize_callback' => 'blueworx_site_sanitize_price_ids',
+		)
+	);
+
 	add_settings_section(
 		'blueworx_site_main',
 		'',
@@ -75,6 +95,23 @@ function blueworx_site_register_settings() {
 		BLUEWORX_SITE_SETTINGS_SLUG,
 		'blueworx_site_main',
 		array( 'label_for' => 'blueworx_client_login_url' )
+	);
+
+	add_settings_field(
+		'blueworx_checkout_url',
+		__( 'Checkout page', 'bluegroup-project-blueworx' ),
+		'blueworx_site_render_checkout_url_field',
+		BLUEWORX_SITE_SETTINGS_SLUG,
+		'blueworx_site_main',
+		array( 'label_for' => 'blueworx_checkout_url' )
+	);
+
+	add_settings_field(
+		'blueworx_surecart_price_ids',
+		__( 'SureCart plan prices', 'bluegroup-project-blueworx' ),
+		'blueworx_site_render_price_ids_field',
+		BLUEWORX_SITE_SETTINGS_SLUG,
+		'blueworx_site_main'
 	);
 }
 add_action( 'admin_init', 'blueworx_site_register_settings' );
@@ -158,10 +195,122 @@ function blueworx_site_render_login_url_field() {
 }
 
 /**
+ * Sanitises the SureCart price-ID map.
+ *
+ * Rebuilt from the known plans rather than from whatever was posted, so a
+ * crafted request cannot add keys, and only IDs matching SureCart's own format
+ * are stored. Anything else is dropped to empty, which falls back to the
+ * hardcoded price — the same as never having filled the field in.
+ *
+ * @param mixed $value Raw submitted value.
+ * @return array Map of plan slug => array( 'm' => id, 'a' => id ).
+ */
+function blueworx_site_sanitize_price_ids( $value ) {
+	$value = is_array( $value ) ? $value : array();
+	$clean = array();
+
+	foreach ( blueworx_content_retainer_plans() as $plan ) {
+		if ( empty( $plan['name'] ) ) {
+			continue;
+		}
+
+		$slug = blueworx_commerce_plan_slug( $plan['name'] );
+
+		foreach ( array( 'm', 'a' ) as $interval ) {
+			$raw = isset( $value[ $slug ][ $interval ] ) ? trim( (string) $value[ $slug ][ $interval ] ) : '';
+
+			$clean[ $slug ][ $interval ] = preg_match( '/^price_[A-Za-z0-9]+$/', $raw ) ? $raw : '';
+		}
+	}
+
+	return $clean;
+}
+
+/**
+ * Renders the checkout page field.
+ *
+ * @return void
+ */
+function blueworx_site_render_checkout_url_field() {
+	$value = (string) get_option( 'blueworx_checkout_url', '' );
+	?>
+	<input type="text" class="regular-text" id="blueworx_checkout_url" name="blueworx_checkout_url" value="<?php echo esc_attr( $value ); ?>" placeholder="/checkout" />
+	<p class="description">
+		<?php echo esc_html__( 'Where the plan buttons send a visitor to pay. Leave it empty to use /checkout.', 'bluegroup-project-blueworx' ); ?>
+	</p>
+	<?php
+}
+
+/**
+ * Renders the per-plan SureCart price ID fields.
+ *
+ * One row per plan, two IDs each. Filling a row in makes that plan show
+ * SureCart's price and sends its button to checkout; leaving it empty keeps the
+ * price written into the plugin and the button on the contact form.
+ *
+ * @return void
+ */
+function blueworx_site_render_price_ids_field() {
+	$stored = blueworx_commerce_price_ids();
+	?>
+	<table class="widefat striped" style="max-width:640px">
+		<thead>
+			<tr>
+				<th scope="col"><?php echo esc_html__( 'Plan', 'bluegroup-project-blueworx' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Monthly price ID', 'bluegroup-project-blueworx' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Annual price ID', 'bluegroup-project-blueworx' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( blueworx_content_retainer_plans() as $plan ) : ?>
+				<?php
+				if ( empty( $plan['name'] ) ) {
+					continue;
+				}
+				$slug = blueworx_commerce_plan_slug( $plan['name'] );
+				?>
+				<tr>
+					<th scope="row"><?php echo esc_html( $plan['name'] ); ?></th>
+					<?php foreach ( array( 'm', 'a' ) as $interval ) : ?>
+						<?php
+						$field = 'blueworx_price_' . $slug . '_' . $interval;
+						$value = isset( $stored[ $slug ][ $interval ] ) ? (string) $stored[ $slug ][ $interval ] : '';
+						?>
+						<td>
+							<label class="screen-reader-text" for="<?php echo esc_attr( $field ); ?>">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: 1: plan name, 2: billing interval. */
+										__( '%1$s, %2$s SureCart price ID', 'bluegroup-project-blueworx' ),
+										$plan['name'],
+										'm' === $interval ? __( 'monthly', 'bluegroup-project-blueworx' ) : __( 'annual', 'bluegroup-project-blueworx' )
+									)
+								);
+								?>
+							</label>
+							<input type="text" id="<?php echo esc_attr( $field ); ?>" name="blueworx_surecart_price_ids[<?php echo esc_attr( $slug ); ?>][<?php echo esc_attr( $interval ); ?>]" value="<?php echo esc_attr( $value ); ?>" placeholder="price_..." class="regular-text" />
+						</td>
+					<?php endforeach; ?>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<p class="description">
+		<?php echo esc_html__( 'Find these in SureCart under each product. A plan left empty keeps the price built into the plugin and sends its button to the contact form.', 'bluegroup-project-blueworx' ); ?>
+		<?php if ( ! blueworx_commerce_ready() ) : ?>
+			<br /><strong><?php echo esc_html__( 'SureCart is not active, so these are stored but not used yet.', 'bluegroup-project-blueworx' ); ?></strong>
+		<?php endif; ?>
+	</p>
+	<?php
+}
+
+/**
  * Adds the screen under Settings.
  *
- * Under Settings rather than as a top-level menu: this is two fields, and a
- * top-level item for two fields is how admin menus become unusable.
+ * Under Settings rather than as a top-level menu: this is a handful of fields,
+ * and a top-level item for a handful of fields is how admin menus become
+ * unusable.
  *
  * @return void
  */

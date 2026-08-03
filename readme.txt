@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.5.4
+Stable tag:        1.6.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,7 +40,13 @@ At /portal by default. Change it under Settings > BlueWorx Site — a full URL o
 = How do I add a contact form? =
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
 
+= How do I show real SureCart prices on the Pricing page? =
+Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
+
 == Changelog ==
+
+= 1.6.0 =
+* Added: plan prices on the Pricing page can now be read from SureCart, and the "Get started" buttons can go straight to checkout. Enter a SureCart price ID per plan under Settings > BlueWorx Site. Plans left blank keep the price built into the plugin and the contact-form button, and the page falls back to that whenever SureCart cannot be reached.
 
 = 1.5.4 =
 * Fixed: the plugin treated any page whose slug matched one of its own as its own, and stripped that page's theme and page-builder CSS — a site's existing "home", "about" or "pricing" page lost all its styling. A page now counts as the plugin's only if the plugin created it. Existing sites upgrade automatically and keep their pages.
