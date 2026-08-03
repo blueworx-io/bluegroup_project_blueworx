@@ -66,12 +66,15 @@ add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
  * get_template() . '-style' for the parent) is the convention every default
  * WordPress theme since Twenty Ten uses for its main style.css, and it is
  * what a from-scratch block theme like Twenty Twenty-Five/Twenty
- * Twenty-Four registers too. Nothing else is touched: nothing enqueued by
- * OTHER plugins is dequeued, so their front-end CSS still loads on a page
- * that genuinely needs it — only the theme's own visual styling is removed.
- * Hooked late (priority 100) so it runs after the theme itself (and other
- * plugins) have had a chance to enqueue on the normal wp_enqueue_scripts
- * priority.
+ * Twenty-Four registers too. Hooked late (priority 100) so it runs after the
+ * theme itself (and other plugins) have had a chance to enqueue on the normal
+ * wp_enqueue_scripts priority.
+ *
+ * Kept separate from blueworx_public_dequeue_foreign_assets() below, which
+ * sweeps other plugins' assets too. The two answer different questions and can
+ * be switched off independently: this is a narrow, named removal that must keep
+ * working even on a page where the sweep has been filtered off because it
+ * genuinely needs a third party's CSS.
  *
  * @return void
  */
@@ -93,3 +96,134 @@ function blueworx_public_dequeue_theme_styles() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_public_dequeue_theme_styles', 100 );
+
+/**
+ * Whether the current owned page will run a shortcode belonging to another
+ * plugin, and therefore needs that plugin's styles and scripts.
+ *
+ * The sweep below is an allowlist, so anything it does not recognise goes —
+ * including the assets a legitimately embedded third-party form needs. The
+ * contact page is the one place that happens: it renders whatever shortcode
+ * `blueworx_contact_form_shortcode` names (see templates/pages/contact.php).
+ * A form stripped of its CSS and JS is worse than a heavy page, so that page
+ * opts out of the sweep entirely whenever a shortcode is actually configured.
+ *
+ * Deliberately checked by TEMPLATE rather than by slug: an admin who renames
+ * the Contact page must not silently turn its form's assets off.
+ *
+ * @return bool True when the sweep must be skipped.
+ */
+function blueworx_public_page_needs_foreign_assets() {
+	$page = blueworx_public_current_page();
+
+	if ( null === $page || 'pages/contact.php' !== $page['template'] ) {
+		return false;
+	}
+
+	$shortcode = (string) apply_filters(
+		'blueworx_contact_form_shortcode',
+		(string) get_option( 'blueworx_contact_form_shortcode', '' )
+	);
+
+	return '' !== trim( $shortcode );
+}
+
+/**
+ * The handles that may load on a page this plugin renders.
+ *
+ * An ALLOWLIST, for the same reason blueworx_public_is_owned_request_path()
+ * uses one: a denylist has to name every offender up front and falls behind the
+ * moment somebody installs another plugin. The live site currently carries
+ * SureCart, UiCore, SureDash, SureRank and Elementor assets on marketing pages
+ * that use none of them — but naming those five would leave the sixth to be
+ * discovered in production. Anything not recognised here is refused by default.
+ *
+ * Prefix-matched, because a plugin registers many handles from one namespace
+ * (`blueworx-public`, `blueworx-fonts`, `blueworx-labs-translate`) and listing
+ * each one would need editing every time a stylesheet is added.
+ *
+ * @return array Allowed handle prefixes.
+ */
+function blueworx_public_allowed_asset_prefixes() {
+	$prefixes = array(
+		// This plugin, and its sister enhancement plugin — the translate widget
+		// is a deliberate part of the marketing pages, not incidental weight.
+		'blueworx',
+	);
+
+	// The admin bar is only ever shown to a logged-in user, and stripping it
+	// would break wp-admin navigation for the people editing the site. Its
+	// script depends on hoverintent-js, and it draws its icons from dashicons.
+	if ( is_admin_bar_showing() ) {
+		$prefixes[] = 'admin-bar';
+		$prefixes[] = 'dashicons';
+		$prefixes[] = 'hoverintent';
+	}
+
+	return (array) apply_filters( 'blueworx_public_allowed_asset_prefixes', $prefixes );
+}
+
+/**
+ * Removes every style and script on an owned page that this plugin did not put
+ * there.
+ *
+ * Marketing pages were shipping roughly 450KB of HTML because plugins that take
+ * no part in rendering them enqueue globally: SureCart alone inlines around a
+ * hundred block stylesheets into pages that contain no blocks, and UiCore adds a
+ * global script from the uploads directory. The plugin renders these pages in
+ * its own markup, so none of it has anything to style or wire up.
+ *
+ * Hooked at PHP_INT_MAX so it runs after every other plugin has enqueued —
+ * anything sweeping earlier only catches whoever registered before it, which
+ * looks like it works and quietly misses half the queue.
+ *
+ * Dequeue, not deregister: a handle removed from the queue can still be pulled
+ * back in as a dependency of something that legitimately needs it, which is the
+ * behaviour we want. Deregistering would make that a fatal-looking missing
+ * dependency instead.
+ *
+ * @return void
+ */
+function blueworx_public_dequeue_foreign_assets() {
+	if ( ! blueworx_public_is_owned_page() ) {
+		return;
+	}
+
+	/**
+	 * Filters whether foreign assets are swept from this page at all.
+	 *
+	 * @param bool $sweep Whether to sweep.
+	 */
+	if ( ! apply_filters( 'blueworx_public_sweep_foreign_assets', ! blueworx_public_page_needs_foreign_assets() ) ) {
+		return;
+	}
+
+	$prefixes = blueworx_public_allowed_asset_prefixes();
+
+	foreach ( array( wp_styles(), wp_scripts() ) as $collection ) {
+		$is_styles = ( $collection instanceof WP_Styles );
+
+		// Copied, because dequeueing rewrites the queue being walked.
+		foreach ( (array) $collection->queue as $handle ) {
+			$allowed = false;
+
+			foreach ( $prefixes as $prefix ) {
+				if ( 0 === strpos( (string) $handle, (string) $prefix ) ) {
+					$allowed = true;
+					break;
+				}
+			}
+
+			if ( $allowed ) {
+				continue;
+			}
+
+			if ( $is_styles ) {
+				wp_dequeue_style( $handle );
+			} else {
+				wp_dequeue_script( $handle );
+			}
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'blueworx_public_dequeue_foreign_assets', PHP_INT_MAX );

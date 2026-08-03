@@ -10,6 +10,23 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.3.0] - 2026-08-03
+
+### Changed
+
+- **Marketing pages no longer load other plugins' styles and scripts.** Every
+  page the plugin renders was carrying assets belonging to plugins that take no
+  part in rendering it — SureCart alone was inlining 110 block stylesheets into
+  pages that contain no blocks, worth 71KB on the About page, and UiCore was
+  adding a global script from the uploads folder. The About page drops from
+  126KB to roughly 55KB and makes six fewer script requests, one of which was to
+  an external domain on every page view. Nothing about how the pages look or
+  behave changes.
+- Pages the plugin does **not** render are untouched, so other plugins keep
+  working normally everywhere else on the site. The Contact page keeps its form
+  plugin's assets whenever a form shortcode is configured, so an embedded form
+  still works.
+
 ## [1.2.0] - 2026-08-03
 
 ### Added

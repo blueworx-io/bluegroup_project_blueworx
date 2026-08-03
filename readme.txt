@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.2.0
+Stable tag:        1.3.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ No. It is fully standalone. If the enhancement plugin is also active, the two in
 Set the `blueworx_contact_form_shortcode` option (or hook the filter of the same name) to any form shortcode; the contact page renders it.
 
 == Changelog ==
+
+= 1.3.0 =
+* Marketing pages no longer load styles and scripts belonging to plugins that do not render them. The About page drops from around 126KB to 55KB and makes six fewer script requests. Pages the plugin does not render are unaffected, and the Contact page keeps its form plugin's assets when a form is configured.
 
 = 1.2.0 =
 * Retired pages now redirect rather than 404: /shop goes to Pricing, /about-us to About, /features to Toolbox, and /test-page to the home page. Tracking parameters are carried across.
