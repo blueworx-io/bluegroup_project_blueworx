@@ -44,7 +44,7 @@ $blueworx_tbx_arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 						?>
 					</span>
 				</div>
-				<h4><?php echo esc_html( $blueworx_tbx_tool['name'] ); ?></h4>
+				<h3><?php echo esc_html( $blueworx_tbx_tool['name'] ); ?></h3>
 				<p><?php echo esc_html( $blueworx_tbx_tool['desc'] ); ?></p>
 			</a>
 		<?php endforeach; ?>

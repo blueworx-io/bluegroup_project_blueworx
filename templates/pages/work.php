@@ -188,6 +188,8 @@ blueworx_public_part( 'parts/nav.php' );
 		</section>
 
 		<section class="sec" style="padding-top:52px">
+			<?php // The design gives this section no visible heading, so its project cards would follow the page h1 as h3s with nothing in between — a screen reader announces a level as missing. Named here for assistive tech only; sighted layout is unchanged. ?>
+			<h2 class="bw-sr-only"><?php esc_html_e( 'Selected work', 'bluegroup-project-blueworx' ); ?></h2>
 			<div class="work-grid">
 				<?php
 				foreach ( $blueworx_work_projects as $blueworx_work_project ) {

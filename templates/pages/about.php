@@ -179,7 +179,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php foreach ( $blueworx_about_team as $blueworx_about_member ) : ?>
 					<div class="team-card">
 						<div class="team-photo"><span class="team-mono"><?php echo esc_html( $blueworx_about_member['initial'] ); ?></span></div>
-						<h4><?php echo esc_html( $blueworx_about_member['name'] ); ?></h4>
+						<h3><?php echo esc_html( $blueworx_about_member['name'] ); ?></h3>
 						<p><?php echo esc_html( $blueworx_about_member['role'] ); ?></p>
 					</div>
 				<?php endforeach; ?>

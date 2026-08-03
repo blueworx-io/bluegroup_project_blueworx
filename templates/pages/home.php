@@ -402,7 +402,7 @@ blueworx_public_part( 'parts/nav.php' );
 			<div class="af-wrap">
 				<div class="af-panel">
 					<div class="af-panel-head">
-						<h4><?php echo esc_html__( 'Quick Analytics', 'bluegroup-project-blueworx' ); ?></h4>
+						<h3><?php echo esc_html__( 'Quick Analytics', 'bluegroup-project-blueworx' ); ?></h3>
 						<span class="af-range">
 							<?php echo esc_html__( 'All time', 'bluegroup-project-blueworx' ); ?>
 							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
