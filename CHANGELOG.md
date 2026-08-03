@@ -10,6 +10,21 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.7.0] - 2026-08-03
+
+### Added
+
+- **A client dashboard, in the plugin.** `/dashboard`, with a section each for
+  subscriptions, invoices and orders. It replaces the SureDash portal, so
+  SureDash can eventually come off the site.
+- Only a signed-in client can reach any of it — a logged-out visitor is sent to
+  log in and then returned to the page they asked for. No dashboard page is
+  indexed by search engines.
+
+The three sections say plainly that there is nothing to show yet. They are
+connected to real SureCart data by the work that follows this. Existing sites
+get the new pages the first time this version loads; nothing else changes.
+
 ## [1.6.0] - 2026-08-03
 
 ### Added
