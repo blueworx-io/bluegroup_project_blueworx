@@ -2,8 +2,7 @@
 /**
  * Client dashboard — orders (#40).
  *
- * The page and its route exist from #37; the live SureCart data arrives with
- * #40.
+ * Everything the client has ordered, read live from SureCart.
  *
  * @package BlueWorxSite
  */
@@ -25,9 +24,16 @@ blueworx_public_part(
 );
 
 blueworx_public_part(
-	'parts/dash-empty.php',
+	'parts/dash-table.php',
 	array(
-		'message' => __( 'You have not placed any orders yet.', 'bluegroup-project-blueworx' ),
+		'result'  => blueworx_account_orders(),
+		'columns' => array(
+			'number' => __( 'Order', 'bluegroup-project-blueworx' ),
+			'date'   => __( 'Date', 'bluegroup-project-blueworx' ),
+			'status' => __( 'Status', 'bluegroup-project-blueworx' ),
+			'amount' => __( 'Total', 'bluegroup-project-blueworx' ),
+		),
+		'empty'   => __( 'You have not placed any orders yet.', 'bluegroup-project-blueworx' ),
 		'cta'     => __( 'See our support plans', 'bluegroup-project-blueworx' ),
 		'href'    => home_url( '/pricing' ),
 	)

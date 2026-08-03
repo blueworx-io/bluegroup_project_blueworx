@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.7.0
+Stable tag:        1.8.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.8.0 =
+* Added: the dashboard's subscriptions, invoices and orders sections now show the client's real records from SureCart, including invoice PDFs. A client only ever sees their own. If SureCart cannot be reached the page says so rather than showing an empty account.
 
 = 1.7.0 =
 * Added: a client dashboard at /dashboard, with sections for subscriptions, invoices and orders. Only signed-in clients can reach it, and it is never indexed by search engines. The sections show a plain "nothing here yet" message until each is connected to SureCart. Existing sites get the new pages automatically on update.
