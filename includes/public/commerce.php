@@ -165,8 +165,17 @@ function blueworx_commerce_price_amount( $price_id ) {
 	try {
 		$price = \SureCart\Models\Price::find( $price_id );
 
-		if ( $price && isset( $price->amount ) && is_numeric( $price->amount ) ) {
-			$amount = (int) round( ( (float) $price->amount ) / 100 );
+		// SureCart reports a failed lookup by RETURNING a WP_Error, not by
+		// throwing one, so the try/catch alone would let it through as data.
+		if ( is_wp_error( $price ) ) {
+			$price = null;
+		}
+
+		// converted_amount, not amount / 100: a zero-decimal currency has no
+		// minor unit, and dividing there would show a price a hundred times
+		// too small. SureCart's own accessor knows which is which.
+		if ( $price && is_numeric( $price->converted_amount ) ) {
+			$amount = (int) round( (float) $price->converted_amount );
 		}
 	} catch ( \Throwable $e ) {
 		// Deliberately swallowed. A pricing page is not the place to surface a

@@ -42,17 +42,25 @@ namespace SureCart\\Models {
 			$this->rows = $rows;
 		}
 
-		public function orderBy( $field ) {
-			return $this;
-		}
+		// Mirrors the real API: with() is how related records are asked for,
+		// chained before get(). There is deliberately no orderBy() — SureCart
+		// has none, and calling one recurses through its __call facade until
+		// PHP gives up.
+		public function with( $expand ) {
+			$seen   = get_option( 'bw_sc_expand', array() );
+			$seen[] = (array) $expand;
+			update_option( 'bw_sc_expand', $seen );
 
-		public function order( $direction ) {
 			return $this;
 		}
 
 		public function get() {
+			// SureCart RETURNS its failures rather than throwing them. A
+			// fixture that threw would test a path the real plugin never
+			// takes, and pass while the real one rendered a WP_Error as an
+			// empty account.
 			if ( 'fail' === get_option( 'bw_sc_mode' ) ) {
-				throw new \\Exception( 'SureCart is having a moment' );
+				return new \\WP_Error( 'surecart_down', 'SureCart is having a moment' );
 			}
 
 			return $this->rows;
@@ -74,14 +82,21 @@ namespace SureCart\\Models {
 	class Subscription extends BwFixtureModel {
 		public static function bwRows() {
 			$product = (object) array( 'name' => 'Growth Support' );
-			$price   = (object) array( 'amount' => 50000, 'currency' => 'USD', 'product' => $product );
+			// display_amount and interval_text are formatted by SureCart, and
+			// are why nothing on our side divides an amount by 100 — a
+			// zero-decimal currency has no minor unit to divide.
+			$price = (object) array(
+				'display_amount' => '$500.00',
+				'interval_text'  => '/month',
+				'product'        => $product,
+			);
 
 			return array(
 				(object) array(
-					'id'                    => 'sub_fixture1',
-					'status'                => 'active',
-					'price'                 => $price,
-					'current_period_end_at' => 1780000000,
+					'id'                         => 'sub_fixture1',
+					'status'                     => 'active',
+					'price'                      => $price,
+					'current_period_end_at_date' => '14 September 2026',
 				),
 			);
 		}
@@ -91,23 +106,24 @@ namespace SureCart\\Models {
 		public static function bwRows() {
 			return array(
 				(object) array(
-					'id'           => 'inv_fixture1',
-					'number'       => 'BW-1041',
-					'status'       => 'paid',
-					'total_amount' => 24900,
-					'currency'     => 'USD',
-					'created_at'   => 1770000000,
-					'pdf_url'      => 'https://example.invalid/invoice.pdf',
+					'id'              => 'inv_fixture1',
+					'status'          => 'paid',
+					'issue_date_date' => '2 February 2026',
+					'checkout_url'    => 'https://example.invalid/pay/1',
+					'checkout'        => (object) array(
+						'total_display_amount' => '$249.00',
+						'order'                => (object) array( 'number' => 'BW-1041' ),
+					),
 				),
 				(object) array(
-					'id'           => 'inv_fixture2',
-					'number'       => 'BW-1042',
-					'status'       => 'open',
-					'total_amount' => 50000,
-					'currency'     => 'USD',
-					'created_at'   => 1772000000,
-					// No PDF — the table must cope rather than link to nothing.
-					'pdf_url'      => '',
+					'id'              => 'inv_fixture2',
+					'status'          => 'open',
+					'issue_date_date' => '26 February 2026',
+					'checkout_url'    => 'https://example.invalid/pay/2',
+					'checkout'        => (object) array(
+						'total_display_amount' => '$500.00',
+						'order'                => (object) array( 'number' => 'BW-1042' ),
+					),
 				),
 			);
 		}
@@ -115,13 +131,13 @@ namespace SureCart\\Models {
 
 	class Order extends BwFixtureModel {
 		public static function bwRows() {
-			$checkout = (object) array( 'total_amount' => 75000, 'currency' => 'USD' );
+			$checkout = (object) array( 'total_display_amount' => '$750.00' );
 
 			return array(
 				(object) array(
 					'id'         => 'ord_fixture1',
 					'number'     => 'ORD-77',
-					'status'     => 'completed',
+					'status'     => 'paid',
 					'checkout'   => $checkout,
 					'created_at' => 1768000000,
 				),
@@ -140,6 +156,7 @@ namespace {
 		$user_id = get_current_user_id() ? get_current_user_id() : 1;
 
 		delete_option( 'bw_sc_queries' );
+		delete_option( 'bw_sc_expand' );
 
 		if ( 'off' === $mode ) {
 			delete_option( 'bw_sc_mode' );
@@ -163,7 +180,10 @@ namespace {
 			return;
 		}
 
-		wp_send_json( (array) get_option( 'bw_sc_queries', array() ) );
+		wp_send_json( array(
+			'queries' => (array) get_option( 'bw_sc_queries', array() ),
+			'expand'  => (array) get_option( 'bw_sc_expand', array() ),
+		) );
 	} );
 }
 `;
@@ -204,22 +224,39 @@ test.describe('Dashboard sections', () => {
     await page.goto('/dashboard/subscriptions/');
 
     await expect(page.locator('.dash-table tbody tr')).toHaveCount(1);
+    // The product name only resolves because the price and its product were
+    // expanded in the query — see the next spec.
     await expect(page.locator('td[data-col="name"]')).toHaveText('Growth Support');
-    // 50000 minor units shown as money, not as 50000.
-    await expect(page.locator('td[data-col="amount"]')).toHaveText('$500.00');
-    await expect(page.locator('td[data-col="renews"]')).not.toBeEmpty();
+    // SureCart formats the money itself; nothing here divides by 100.
+    await expect(page.locator('td[data-col="amount"]')).toHaveText('$500.00 /month');
+    await expect(page.locator('td[data-col="renews"]')).toHaveText('14 September 2026');
     // SureCart's own word is "active"; a client should read a word, not a flag.
     await expect(page.locator('.dash-status')).toHaveText('Active');
   });
 
-  test('invoices lists each one, with a download only where there is a PDF', async ({ page }) => {
+  // Silent when wrong: SureCart returns a related record as a bare ID unless
+  // it is expanded, so every plan would quietly render as the fallback name
+  // with nothing to say anything had gone wrong.
+  test('related records are asked for, not assumed', async ({ page }) => {
+    await setMode(page, 'records');
+    await page.goto('/dashboard/subscriptions/');
+
+    const { expand } = await (await page.request.get('/?bw_sc_queries=1')).json();
+
+    expect(expand.flat()).toEqual(expect.arrayContaining(['price', 'price.product']));
+  });
+
+  test('invoices lists each one, offering payment only on the unpaid one', async ({ page }) => {
     await setMode(page, 'records');
     await page.goto('/dashboard/invoices/');
 
     await expect(page.locator('.dash-table tbody tr')).toHaveCount(2);
     await expect(page.locator('td[data-col="number"]').first()).toHaveText('BW-1041');
-    await expect(page.locator('td[data-col="url"] a')).toHaveCount(1);
-    await expect(page.locator('td[data-col="url"] .dash-none')).toHaveCount(1);
+    await expect(page.locator('td[data-col="date"]').first()).toHaveText('2 February 2026');
+    await expect(page.locator('td[data-col="amount"]').first()).toHaveText('$249.00');
+    // Only the open invoice gets a Pay now link — offering one against an
+    // already-paid invoice is how a client pays twice.
+    await expect(page.locator('.dash-pay')).toHaveCount(1);
   });
 
   test('orders lists each order with its total', async ({ page }) => {
@@ -240,7 +277,7 @@ test.describe('Dashboard sections', () => {
       await page.goto(`/dashboard/${section}/`);
     }
 
-    const queries = await (await page.request.get('/?bw_sc_queries=1')).json();
+    const { queries } = await (await page.request.get('/?bw_sc_queries=1')).json();
     const asked = Object.values(queries);
 
     expect(asked.length).toBe(3);
@@ -277,7 +314,7 @@ test.describe('Dashboard sections', () => {
     await expect(page.locator('.dash-empty')).toHaveCount(1);
     await expect(page.locator('.dash-error')).toHaveCount(0);
 
-    const queries = await (await page.request.get('/?bw_sc_queries=1')).json();
+    const { queries } = await (await page.request.get('/?bw_sc_queries=1')).json();
     expect(Object.keys(queries)).toHaveLength(0);
   });
 });

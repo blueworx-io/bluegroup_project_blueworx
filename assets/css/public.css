@@ -917,3 +917,7 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
   .auth-card { padding: 28px 22px; }
   .auth-row { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
+.dash-pay { white-space: nowrap; }
+/* Visible to a screen reader, not to the eye. Used for the header of a column
+   whose contents already say what they are. */
+.bw-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
