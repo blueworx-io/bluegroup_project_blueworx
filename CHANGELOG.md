@@ -10,6 +10,15 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.5.2] - 2026-08-03
+
+### Added
+
+- `docs/plugin-replacement-plan.md` — a written proposal for the remaining
+  plugin replacements and the client area (#30–#43, #53–#55), based on a
+  read-only audit of the live site rather than an estimate. Documentation only;
+  the plugin itself is unchanged.
+
 ## [1.5.1] - 2026-08-03
 
 ### Fixed
