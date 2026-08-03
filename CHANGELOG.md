@@ -10,6 +10,24 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.5.3] - 2026-08-03
+
+### Fixed
+
+- **Two things this repo's own documentation said that were not true.** The
+  plugin replacement plan claimed SureCart had no products — it does; the audit
+  counted the `sc_product` post type in WordPress, which is empty because
+  SureCart keeps products in its own cloud. It also listed ACF Pro as an unknown
+  blocking the whole plan; ACF is confirmed unused and can simply be removed.
+  The plan's order and estimate are corrected to match.
+- **The plugin zip naming rule in `CLAUDE.md`,** which contradicted the shared
+  foundation and produced an unversioned artifact. Updates ship as GitHub
+  Releases; a hand-built zip is `<slug>-<version>.zip`, with the version in the
+  filename only and never in the folder inside the archive — a versioned folder
+  installs a second copy of the plugin on every update instead of replacing it.
+
+Documentation only; the plugin itself is unchanged.
+
 ## [1.5.2] - 2026-08-03
 
 ### Added

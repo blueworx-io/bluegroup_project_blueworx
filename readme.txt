@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.5.2
+Stable tag:        1.5.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ At /portal by default. Change it under Settings > BlueWorx Site — a full URL o
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
 
 == Changelog ==
+
+= 1.5.3 =
+* Documentation only: corrected the plugin replacement plan (ACF is unused and SureCart does have products) and fixed the zip naming rule to match the foundation. No change to the plugin.
 
 = 1.5.2 =
 * Documentation only: added a written proposal for the remaining plugin replacements and the client area. No change to the plugin.
