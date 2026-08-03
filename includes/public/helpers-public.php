@@ -139,11 +139,10 @@ function blueworx_blob( $style = '' ) {
  * SureDash, which is being removed (#34) — so on the day it goes, all three
  * become 404s, and three copies is three chances to miss one.
  *
- * The replacement client dashboard does not exist yet (#37), so the default is
- * unchanged and the live site behaves exactly as before. What changes is that
- * repointing it becomes a setting rather than a code change: store a URL or a
- * site-relative path in the `blueworx_client_login_url` option, or hook the
- * filter of the same name.
+ * It now points at the plugin's own sign-in page (#28, #43), which sends a
+ * client on to the dashboard — so `/portal` and SureDash are no longer in the
+ * path at all. A site that has set the option keeps whatever it set; the
+ * default is what changed.
  *
  * A stored value is passed through as-is when it is absolute, and resolved
  * against the site otherwise, so both '/dashboard' and a full URL work.
@@ -154,7 +153,7 @@ function blueworx_public_client_login_url() {
 	$configured = trim( (string) get_option( 'blueworx_client_login_url', '' ) );
 
 	if ( '' === $configured ) {
-		$url = home_url( '/portal' );
+		$url = home_url( '/login' );
 	} elseif ( wp_parse_url( $configured, PHP_URL_SCHEME ) ) {
 		$url = $configured;
 	} else {

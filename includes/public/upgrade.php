@@ -24,10 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Bumped only when stored data needs migrating, so a routine release does not
  * make every site re-run a migration it has already done. 1 = pages carry
- * BLUEWORX_PUBLIC_PAGE_META. 2 = the client-area pages exist.
+ * BLUEWORX_PUBLIC_PAGE_META. 2 = the client-area pages exist. 3 = the sign-in,
+ * sign-up and password-reset pages exist.
  */
 if ( ! defined( 'BLUEWORX_PUBLIC_DATA_VERSION' ) ) {
-	define( 'BLUEWORX_PUBLIC_DATA_VERSION', 2 );
+	define( 'BLUEWORX_PUBLIC_DATA_VERSION', 3 );
 }
 
 /**
@@ -51,12 +52,13 @@ function blueworx_public_maybe_upgrade() {
 		blueworx_public_backfill_page_meta();
 	}
 
-	if ( $stored < 2 ) {
-		// The client area (#37) adds pages to the registry. Activation creates
-		// them on a fresh install, but WordPress does not re-run activation for
-		// an in-place update — so without this, an existing site updates and
-		// the dashboard simply has no pages. install_pages() only ever creates
-		// what is missing, so this is safe on a site that already has them.
+	if ( $stored < 3 ) {
+		// The client area (#37) and the auth pages (#43) add pages to the
+		// registry. Activation creates them on a fresh install, but WordPress
+		// does not re-run activation for an in-place update — so without this,
+		// an existing site updates and the dashboard has no pages and clients
+		// have nowhere to sign in. install_pages() only ever creates what is
+		// missing, so this is safe on a site that already has them.
 		blueworx_public_install_pages();
 	}
 

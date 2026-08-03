@@ -10,6 +10,27 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.9.0] - 2026-08-03
+
+### Added
+
+- **Signing in, creating an account and resetting a password now happen on the
+  site.** Three pages the plugin renders, on brand, replacing the portal pages
+  that belonged to a plugin we are removing. A client never lands on
+  wp-login.php, including from the password-reset email.
+- Signing in returns the client to whatever they were trying to reach.
+
+### Changed
+
+- **The Client Login link now points at that sign-in page** rather than at the
+  old portal. A site that has set the link explicitly keeps what it set.
+
+New accounts follow WordPress's own "Anyone can register" setting — with it off,
+the page invites the visitor to get in touch instead. Passwords must be at least
+12 characters. Sign-in failures and reset requests deliberately give the same
+answer whether or not an account exists, so neither can be used to find out who
+has one.
+
 ## [1.8.0] - 2026-08-03
 
 ### Added

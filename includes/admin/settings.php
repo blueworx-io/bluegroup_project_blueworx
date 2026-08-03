@@ -187,9 +187,9 @@ function blueworx_site_render_shortcode_field() {
 function blueworx_site_render_login_url_field() {
 	$value = (string) get_option( 'blueworx_client_login_url', '' );
 	?>
-	<input type="text" class="regular-text" id="blueworx_client_login_url" name="blueworx_client_login_url" value="<?php echo esc_attr( $value ); ?>" placeholder="/portal" />
+	<input type="text" class="regular-text" id="blueworx_client_login_url" name="blueworx_client_login_url" value="<?php echo esc_attr( $value ); ?>" placeholder="/login" />
 	<p class="description">
-		<?php echo esc_html__( 'Where the Client Login link in the navigation points. A full URL or a path such as /dashboard. Leave it empty to use /portal.', 'bluegroup-project-blueworx' ); ?>
+		<?php echo esc_html__( 'Where the Client Login link in the navigation points. A full URL or a path such as /dashboard. Leave it empty to use the sign-in page this plugin renders.', 'bluegroup-project-blueworx' ); ?>
 	</p>
 	<?php
 }
