@@ -18,3 +18,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'blueworx_public_prior_front' );
 delete_option( 'blueworx_public_page_ids' );
+delete_option( 'blueworx_public_data_version' );
+
+// The _blueworx_public_page stamp is deliberately NOT removed. The pages stay
+// (see above), so the stamp is what lets a later reinstall recognise its own
+// leftovers and adopt them back instead of leaving the site with orphaned
+// pages it no longer renders. It only ever marks pages this plugin created, so
+// keeping it can never claim anything that is not already ours.

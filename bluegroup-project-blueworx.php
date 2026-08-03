@@ -3,7 +3,7 @@
  * Plugin Name:       BlueWorx | Marketing Site
  * Plugin URI:        https://blueworx.io/
  * Description:       The BlueWorx public marketing site, rendered by the plugin itself so it is identical wherever it is hosted. Self-contained: no theme and no dependency on other plugins.
- * Version:           1.5.3
+ * Version:           1.5.4
  * Requires at least: 5.0
  * Requires PHP:      8.0
  * Author:            BlueWorx
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BLUEWORX_SITE_VERSION' ) ) {
-	define( 'BLUEWORX_SITE_VERSION', '1.5.3' );
+	define( 'BLUEWORX_SITE_VERSION', '1.5.4' );
 }
 
 if ( ! defined( 'BLUEWORX_SITE_PATH' ) ) {
@@ -71,6 +71,14 @@ if ( is_admin() ) {
  * @return void
  */
 function blueworx_site_activate() {
+	// Before install_pages(), not after. An install upgrading from a version
+	// whose pages predate the ownership stamp must have them backfilled first,
+	// or install_pages() sees unstamped pages, refuses to re-adopt them, and
+	// the site loses the pages it already had.
+	if ( function_exists( 'blueworx_public_maybe_upgrade' ) ) {
+		blueworx_public_maybe_upgrade();
+	}
+
 	if ( function_exists( 'blueworx_public_install_pages' ) ) {
 		blueworx_public_install_pages();
 	}
