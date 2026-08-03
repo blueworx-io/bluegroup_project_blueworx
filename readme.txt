@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.3.0
+Stable tag:        1.4.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,10 +34,16 @@ No. The plugin renders its own pages and does not rely on a theme.
 = Does it require the BlueWorx enhancement plugin? =
 No. It is fully standalone. If the enhancement plugin is also active, the two integrate automatically, but it is not required.
 
+= Where does the Client Login link point? =
+At /portal by default. Set the `blueworx_client_login_url` option (or hook the filter of the same name) to a URL or a site-relative path to send it somewhere else; all three nav links follow it.
+
 = How do I add a contact form? =
 Set the `blueworx_contact_form_shortcode` option (or hook the filter of the same name) to any form shortcode; the contact page renders it.
 
 == Changelog ==
+
+= 1.4.0 =
+* The nav's Client Login link is now configurable in one place rather than hardcoded in three. It still points at /portal; set the `blueworx_client_login_url` option to repoint it when the new dashboard exists.
 
 = 1.3.0 =
 * Marketing pages no longer load styles and scripts belonging to plugins that do not render them. The About page drops from around 126KB to 55KB and makes six fewer script requests. Pages the plugin does not render are unaffected, and the Contact page keeps its form plugin's assets when a form is configured.
