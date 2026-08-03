@@ -10,6 +10,22 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.5.0] - 2026-08-03
+
+### Added
+
+- **A settings screen at Settings → BlueWorx Site.** Two things were already
+  configurable in principle — the shortcode the Contact page renders, and where
+  the nav's Client Login link points — but only through options with no screen
+  behind them, which meant "configurable" for anyone willing to run WP-CLI or
+  write a filter, and nobody else. That is why the Contact page has been showing
+  a grey placeholder on a site that already has a published contact form ready
+  to use: the only missing piece was somewhere to paste its shortcode.
+- Anything pasted into the shortcode field has its markup stripped before it is
+  stored, so the field cannot be used to put a script tag on every visitor's
+  Contact page. Only administrators can reach the screen, but an admin session
+  is exactly what a compromised account gives an attacker.
+
 ## [1.4.0] - 2026-08-03
 
 ### Changed

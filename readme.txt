@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.4.0
+Stable tag:        1.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,12 +35,15 @@ No. The plugin renders its own pages and does not rely on a theme.
 No. It is fully standalone. If the enhancement plugin is also active, the two integrate automatically, but it is not required.
 
 = Where does the Client Login link point? =
-At /portal by default. Set the `blueworx_client_login_url` option (or hook the filter of the same name) to a URL or a site-relative path to send it somewhere else; all three nav links follow it.
+At /portal by default. Change it under Settings > BlueWorx Site — a full URL or a path such as /dashboard. All three nav links follow it. Developers can also hook the `blueworx_client_login_url` filter.
 
 = How do I add a contact form? =
-Set the `blueworx_contact_form_shortcode` option (or hook the filter of the same name) to any form shortcode; the contact page renders it.
+Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
 
 == Changelog ==
+
+= 1.5.0 =
+* Added a settings screen at Settings > BlueWorx Site for the contact form shortcode and the Client Login link, so neither needs WP-CLI or a code change.
 
 = 1.4.0 =
 * The nav's Client Login link is now configurable in one place rather than hardcoded in three. It still points at /portal; set the `blueworx_client_login_url` option to repoint it when the new dashboard exists.
