@@ -10,6 +10,16 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.9.1] - 2026-08-03
+
+### Changed
+
+- The accessibility and mobile checks that already covered every marketing page
+  now cover the dashboard and the sign-in pages too — heading order, alt text,
+  form labels, keyboard access, and no sideways scrolling on a phone.
+
+Tests only. Nothing about the site changes.
+
 ## [1.9.0] - 2026-08-03
 
 ### Added
