@@ -234,13 +234,13 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>" style="gap:7px"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
 	</div>
 	<div class="nav-cta">
-		<a class="nav-sign-in" href="<?php echo esc_url( home_url( '/portal' ) ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
+		<a class="nav-sign-in" href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 		<a class="nav-btn" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>">
 			<?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
 		</a>
 	</div>
-	<a class="nav-sign-in-mobile" href="<?php echo esc_url( home_url( '/portal' ) ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
+	<a class="nav-sign-in-mobile" href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 	<button class="hamburger" aria-label="<?php echo esc_attr__( 'Toggle menu', 'bluegroup-project-blueworx' ); ?>" aria-expanded="false">
 		<span></span>
 		<span></span>
@@ -259,6 +259,6 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/about', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/work', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/work' ) ); ?>" style="font-size:13.5px;padding-left:24px"><?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
-	<a href="<?php echo esc_url( home_url( '/portal' ) ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
+	<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
 </div>

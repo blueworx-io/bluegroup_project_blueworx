@@ -10,6 +10,19 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.4.0] - 2026-08-03
+
+### Changed
+
+- **The nav's Client Login link is now set in one place instead of three.** It
+  still points at `/portal`, so nothing changes for visitors today. But `/portal`
+  belongs to SureDash, which is on its way out — and the link was written by hand
+  into the desktop nav, the mobile bar and the mobile menu, so removing SureDash
+  would have turned all three into dead links, with three chances to miss one.
+  Pointing it at the new client dashboard is now a setting
+  (`blueworx_client_login_url`, or the filter of the same name) rather than a
+  code change.
+
 ## [1.3.0] - 2026-08-03
 
 ### Changed

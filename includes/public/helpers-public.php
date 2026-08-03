@@ -130,3 +130,41 @@ function blueworx_blob( $style = '' ) {
 		'' === $style ? '' : ' style="' . esc_attr( $style ) . '"'
 	);
 }
+
+/**
+ * Where the nav's "Client Login" link should send a visitor.
+ *
+ * The nav shows this link in three places (desktop, the mobile bar, the mobile
+ * menu) and each had `/portal` written into it by hand. `/portal` belongs to
+ * SureDash, which is being removed (#34) — so on the day it goes, all three
+ * become 404s, and three copies is three chances to miss one.
+ *
+ * The replacement client dashboard does not exist yet (#37), so the default is
+ * unchanged and the live site behaves exactly as before. What changes is that
+ * repointing it becomes a setting rather than a code change: store a URL or a
+ * site-relative path in the `blueworx_client_login_url` option, or hook the
+ * filter of the same name.
+ *
+ * A stored value is passed through as-is when it is absolute, and resolved
+ * against the site otherwise, so both '/dashboard' and a full URL work.
+ *
+ * @return string Absolute URL.
+ */
+function blueworx_public_client_login_url() {
+	$configured = trim( (string) get_option( 'blueworx_client_login_url', '' ) );
+
+	if ( '' === $configured ) {
+		$url = home_url( '/portal' );
+	} elseif ( wp_parse_url( $configured, PHP_URL_SCHEME ) ) {
+		$url = $configured;
+	} else {
+		$url = home_url( '/' . ltrim( $configured, '/' ) );
+	}
+
+	/**
+	 * Filters the Client Login destination.
+	 *
+	 * @param string $url Absolute URL the link points at.
+	 */
+	return (string) apply_filters( 'blueworx_client_login_url', $url );
+}
