@@ -192,7 +192,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php foreach ( $blueworx_svc_feat_highlights as $blueworx_svc_feat ) : ?>
 					<div style="background:#FBFBFE;border:1px solid #ECECF3;border-radius:16px;padding:24px 22px">
 						<div class="fli-num" style="margin-bottom:16px"><?php blueworx_icon( $blueworx_svc_feat['icon'] ); ?></div>
-						<h4 style="font-size:17px;font-weight:600;margin-bottom:6px"><?php echo esc_html( $blueworx_svc_feat['title'] ); ?></h4>
+						<h3 style="font-size:17px;font-weight:600;margin-bottom:6px"><?php echo esc_html( $blueworx_svc_feat['title'] ); ?></h3>
 						<p style="font-size:14px;line-height:1.6;color:#667085"><?php echo esc_html( $blueworx_svc_feat['desc'] ); ?></p>
 					</div>
 				<?php endforeach; ?>

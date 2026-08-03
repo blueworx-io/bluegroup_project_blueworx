@@ -10,6 +10,29 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.5.1] - 2026-08-03
+
+### Fixed
+
+- **Heading order on every marketing page.** Card headings across the footer,
+  team, contact, services, toolbox, process and AI sections were `h4`s sitting
+  directly under an `h2`, which tells a screen reader a whole level of the page
+  is missing. They are now `h3`s, and the stylesheet follows them, so every
+  heading renders at exactly the size it did before — verified by comparing
+  computed styles on all nine page types before and after.
+- The Work and Contact pages each had a section with no heading at all, so their
+  cards followed the page title with a level missing in between. Both sections
+  are now named for screen readers only; sighted layout is unchanged.
+
+### Added
+
+- **A standards check that runs over every marketing page** — one h1, no skipped
+  heading levels, an alt attribute on every image, a name on every link and
+  button, a declared language and title, no sideways scrolling at 375px, and a
+  real focusable control as the first Tab stop. Covers the twenty pages the
+  plugin renders plus the 404, which is also checked for returning a genuine 404
+  status rather than a 200 with "not found" written on it.
+
 ## [1.5.0] - 2026-08-03
 
 ### Added

@@ -42,7 +42,7 @@ test.describe('Marketing about page', () => {
     const teamCards = page.locator('main > div .team-grid > .team-card');
     await expect(teamCards).toHaveCount(3);
     await expect(teamCards.nth(0).locator('.team-mono')).toHaveText('R');
-    await expect(teamCards.nth(0).locator('h4')).toHaveText('Ross');
+    await expect(teamCards.nth(0).locator('h3')).toHaveText('Ross');
     await expect(teamCards.nth(0).locator('p')).toHaveText('Project Manager');
 
     // Client Success Stories: three linked work-card parts.

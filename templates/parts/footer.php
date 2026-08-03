@@ -74,7 +74,7 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 			</div>
 		</div>
 		<div class="fcol">
-			<h4><?php echo esc_html__( 'Pages', 'bluegroup-project-blueworx' ); ?></h4>
+			<h3><?php echo esc_html__( 'Pages', 'bluegroup-project-blueworx' ); ?></h3>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( 'Home', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/services' ) ); ?>"><?php echo esc_html__( 'Services', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?></a>
@@ -84,14 +84,14 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 			<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 		<div class="fcol">
-			<h4><?php echo esc_html__( 'About', 'bluegroup-project-blueworx' ); ?></h4>
+			<h3><?php echo esc_html__( 'About', 'bluegroup-project-blueworx' ); ?></h3>
 			<a><?php echo esc_html__( 'Blog', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?></a>
 			<a><?php echo esc_html__( 'Resources', 'bluegroup-project-blueworx' ); ?></a>
 			<a><?php echo esc_html__( 'Careers', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 		<div class="fnews">
-			<h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:16px;"><?php echo esc_html__( 'Newsletters', 'bluegroup-project-blueworx' ); ?></h4>
+			<h3 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:16px;"><?php echo esc_html__( 'Newsletters', 'bluegroup-project-blueworx' ); ?></h3>
 			<p><?php echo esc_html__( 'Curious about new developments & updates? Sign up for our newsletter!', 'bluegroup-project-blueworx' ); ?></p>
 			<div class="fnews-in">
 				<input placeholder="<?php echo esc_attr__( 'email@.blueworx.com', 'bluegroup-project-blueworx' ); ?>" aria-label="<?php echo esc_attr__( 'Email address', 'bluegroup-project-blueworx' ); ?>" />

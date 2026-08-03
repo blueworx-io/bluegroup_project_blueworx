@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.5.0
+Stable tag:        1.5.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ At /portal by default. Change it under Settings > BlueWorx Site — a full URL o
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
 
 == Changelog ==
+
+= 1.5.1 =
+* Fixed heading order across every marketing page: card headings that jumped a level now follow the section above them, and two sections that had no heading at all are named for screen readers. Nothing looks different.
 
 = 1.5.0 =
 * Added a settings screen at Settings > BlueWorx Site for the contact form shortcode and the Client Login link, so neither needs WP-CLI or a code change.

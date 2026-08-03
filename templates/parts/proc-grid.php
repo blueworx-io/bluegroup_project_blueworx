@@ -26,7 +26,7 @@ $blueworx_proc_items = isset( $items ) && is_array( $items ) ? $items : array();
 	<?php foreach ( $blueworx_proc_items as $blueworx_proc_item ) : ?>
 		<div class="proc">
 			<b class="num"><?php echo esc_html( $blueworx_proc_item['num'] ); ?></b>
-			<h4><?php echo esc_html( $blueworx_proc_item['title'] ); ?></h4>
+			<h3><?php echo esc_html( $blueworx_proc_item['title'] ); ?></h3>
 			<p><?php echo esc_html( $blueworx_proc_item['desc'] ); ?></p>
 		</div>
 	<?php endforeach; ?>

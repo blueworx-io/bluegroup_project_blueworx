@@ -297,7 +297,7 @@ blueworx_public_part( 'parts/nav.php' );
 						<div class="<?php echo 0 === $blueworx_ai_pipe_i ? 'ai-pipe-step on' : 'ai-pipe-step'; ?>">
 							<span class="pn"><?php echo esc_html( $blueworx_ai_pipe_step['n'] ); ?></span>
 							<div class="pic"><?php blueworx_icon( $blueworx_ai_pipe_step['icon'] ); ?></div>
-							<h4><?php echo esc_html( $blueworx_ai_pipe_step['title'] ); ?></h4>
+							<h3><?php echo esc_html( $blueworx_ai_pipe_step['title'] ); ?></h3>
 							<p><?php echo esc_html( $blueworx_ai_pipe_step['desc'] ); ?></p>
 							<span class="model"><?php echo esc_html( $blueworx_ai_pipe_step['model'] ); ?></span>
 						</div>
@@ -317,7 +317,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php foreach ( $blueworx_ai_models as $blueworx_ai_model ) : ?>
 					<div class="ai-model">
 						<div class="tier"><span class="glyph"><?php blueworx_icon( $blueworx_ai_model['icon'] ); ?></span><?php echo esc_html( $blueworx_ai_model['tier'] ); ?></div>
-						<h4><?php echo esc_html( $blueworx_ai_model['title'] ); ?></h4>
+						<h3><?php echo esc_html( $blueworx_ai_model['title'] ); ?></h3>
 						<p class="role"><?php echo esc_html( $blueworx_ai_model['role'] ); ?></p>
 						<ul>
 							<?php foreach ( $blueworx_ai_model['items'] as $blueworx_ai_item ) : ?>

@@ -113,12 +113,14 @@ blueworx_public_part( 'parts/nav.php' );
 		</section>
 
 		<section class="contact-cards">
+			<?php // No visible heading in the design, so these cards would follow the page h1 as h3s with nothing in between. Named for assistive tech only; sighted layout is unchanged. ?>
+			<h2 class="bw-sr-only"><?php esc_html_e( 'Ways to reach us', 'bluegroup-project-blueworx' ); ?></h2>
 			<div class="blob" style="width:280px;height:280px;bottom:-100px;right:-80px;opacity:.14"></div>
 			<div class="cc-grid">
 				<?php foreach ( $blueworx_contact_cards as $blueworx_contact_card ) : ?>
 					<div class="cc">
 						<div class="cc-ic"><?php blueworx_icon( $blueworx_contact_card['icon'] ); ?></div>
-						<h4><?php echo esc_html( $blueworx_contact_card['title'] ); ?></h4>
+						<h3><?php echo esc_html( $blueworx_contact_card['title'] ); ?></h3>
 						<p><?php echo esc_html( $blueworx_contact_card['sub'] ); ?></p>
 						<a href="<?php echo esc_url( $blueworx_contact_card['href'] ); ?>"<?php echo 0 === strpos( $blueworx_contact_card['href'], 'https://' ) ? ' rel="noopener"' : ''; ?>><?php echo esc_html( $blueworx_contact_card['link'] ); ?></a>
 					</div>
