@@ -326,7 +326,9 @@ test('upgrading backfills the stamp so an existing install keeps its pages', asy
 
   expect(after.state[LEGACY].stamped, 'the backfill must stamp every already-mapped page').toBe(true);
   expect(after.state[LEGACY].mapped, 'and it must stay mapped').toBe(before.state[LEGACY].mapped);
-  expect(after.data_version, 'the routine is version-gated').toBe('1');
+  // Tracks BLUEWORX_PUBLIC_DATA_VERSION (includes/public/upgrade.php) — bump
+  // this alongside it. 2 added the client-area pages.
+  expect(after.data_version, 'the routine is version-gated').toBe('2');
 
   // Idempotent: running it again changes nothing and cannot claim anything new.
   const again = await control(page, 'activate');

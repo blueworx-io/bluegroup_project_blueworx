@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Bumped only when stored data needs migrating, so a routine release does not
  * make every site re-run a migration it has already done. 1 = pages carry
- * BLUEWORX_PUBLIC_PAGE_META.
+ * BLUEWORX_PUBLIC_PAGE_META. 2 = the client-area pages exist.
  */
 if ( ! defined( 'BLUEWORX_PUBLIC_DATA_VERSION' ) ) {
-	define( 'BLUEWORX_PUBLIC_DATA_VERSION', 1 );
+	define( 'BLUEWORX_PUBLIC_DATA_VERSION', 2 );
 }
 
 /**
@@ -49,6 +49,15 @@ function blueworx_public_maybe_upgrade() {
 
 	if ( $stored < 1 ) {
 		blueworx_public_backfill_page_meta();
+	}
+
+	if ( $stored < 2 ) {
+		// The client area (#37) adds pages to the registry. Activation creates
+		// them on a fresh install, but WordPress does not re-run activation for
+		// an in-place update — so without this, an existing site updates and
+		// the dashboard simply has no pages. install_pages() only ever creates
+		// what is missing, so this is safe on a site that already has them.
+		blueworx_public_install_pages();
 	}
 
 	update_option( 'blueworx_public_data_version', BLUEWORX_PUBLIC_DATA_VERSION );
