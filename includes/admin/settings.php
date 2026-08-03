@@ -236,7 +236,9 @@ function blueworx_site_render_checkout_url_field() {
 	?>
 	<input type="text" class="regular-text" id="blueworx_checkout_url" name="blueworx_checkout_url" value="<?php echo esc_attr( $value ); ?>" placeholder="/checkout" />
 	<p class="description">
-		<?php echo esc_html__( 'Where the plan buttons send a visitor to pay. Leave it empty to use /checkout.', 'bluegroup-project-blueworx' ); ?>
+		<?php echo esc_html__( 'Where the plan buttons send a visitor to pay. Leave it empty and SureCart’s own checkout page is used, which is almost always what you want.', 'bluegroup-project-blueworx' ); ?>
+		<br />
+		<?php echo esc_html__( 'To send customers to their dashboard after paying, set the success URL on the SureCart checkout form itself — that setting belongs to SureCart, not here.', 'bluegroup-project-blueworx' ); ?>
 	</p>
 	<?php
 }

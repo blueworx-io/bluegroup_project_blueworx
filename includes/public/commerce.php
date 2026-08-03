@@ -88,6 +88,22 @@ function blueworx_commerce_plan_slug( $name ) {
 function blueworx_commerce_checkout_url() {
 	$configured = (string) get_option( 'blueworx_checkout_url', '' );
 
+	// Nothing set: ask SureCart where its checkout page is rather than
+	// assuming /checkout. It creates that page itself and remembers the ID, so
+	// a site whose checkout lives at a different slug — or which has renamed
+	// it since — still gets working buy links.
+	if ( '' === $configured && class_exists( '\SureCart' ) ) {
+		try {
+			$from_surecart = \SureCart::pages()->url( 'checkout' );
+
+			if ( is_string( $from_surecart ) && '' !== $from_surecart ) {
+				$configured = $from_surecart;
+			}
+		} catch ( \Throwable $e ) {
+			$configured = '';
+		}
+	}
+
 	if ( '' === $configured ) {
 		$configured = '/checkout';
 	}

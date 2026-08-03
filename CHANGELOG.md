@@ -10,6 +10,21 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.10.0] - 2026-08-03
+
+### Changed
+
+- **The plan buttons now ask SureCart where its checkout page is** instead of
+  assuming `/checkout`, so they keep working on a site whose checkout lives
+  somewhere else or has been renamed. Setting the checkout page by hand still
+  overrides it.
+
+### Added
+
+- `docs/client-area-setup.md` — everything that has to be switched on for the
+  client area to work, in order, with what to try afterwards. None of it is a
+  release; it is all settings.
+
 ## [1.9.2] - 2026-08-03
 
 ### Fixed
