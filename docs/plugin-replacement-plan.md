@@ -16,7 +16,7 @@ doing today:
 | Plugin | What it still does | Real size of removing it |
 |---|---|---|
 | **Code Snippets** (#32) | **Nothing.** Both snippets on the site are switched off. | Near zero. Confirm the two disabled snippets are dead, then deactivate. |
-| **Advanced Custom Fields Pro** (#31) | Unknown — ACF does not expose field groups over REST, so this is the one thing the audit could not see. | Unknown until someone lists the field groups in wp-admin. Could be nothing; could be the largest item here. |
+| **Advanced Custom Fields Pro** (#31) | Nothing the site depends on — confirmed by Luke, 3 Aug 2026. | Small. Deactivate, and check nothing on a page goes blank. |
 | **UiCore** (#35) | Three plugins (Framework, Elements, Animate), two theme-builder templates, and a global script loaded on every page. | Medium. The global script is already stopped on marketing pages by 1.3.0. |
 | **Elementor + Pro** (#33) | After the four page deletions land, only `/portal-login` and `/portal-register`, plus three library templates. | **Much smaller than it looks** — see below. |
 | **SureDash** (#34) | The whole client area: `/portal`, `/customer-dashboard`, four portal spaces. | Large. This is the client dashboard programme, not a plugin swap. |
@@ -30,38 +30,37 @@ registration move into the plugin (#43). So Elementor is not a project of its
 own — it is the last step of the client-area work, and it should be scheduled
 there rather than treated as a separate migration.
 
-**SureCart has no products.** Zero. This matters because #41 (link Pricing to
-SureCart) and #42 (checkout end to end) both assume there is something to sell.
-Neither can start until somebody creates the plans in SureCart, and that is a
-commercial decision about names and prices, not a build task.
+**The SureCart products exist.** An earlier draft of this document said there
+were none. That was wrong: it counted the `sc_product` post type in WordPress,
+which is empty because SureCart keeps products in its own cloud rather than as
+WordPress posts. The lesson for #41 and #42 is worth keeping — anything that
+reads product or price data has to go through SureCart's API, and a local
+WordPress query will quietly return nothing.
 
 ## The order, and why
 
 The dependencies run one way, so the order is not really a matter of taste:
 
-1. **Audit ACF** — the only genuine unknown. One session in wp-admin listing
-   field groups and where they are used. Everything else can be estimated; this
-   cannot. Do it first so the plan stops having a hole in it.
-2. **Retire Code Snippets** (#32) — confirm the two disabled snippets are dead,
-   deactivate. Cheap, and it removes a plugin that could put site behaviour back
-   into the database at any time.
-3. **Create the SureCart products** — a commercial decision, needed before #41
-   and #42, and it blocks nothing else. Start it early so it is not the thing
-   everyone waits on.
-4. **Link Pricing to SureCart** (#41) — prices stop being hard-coded and start
-   matching what is actually sold. Then **checkout** (#42).
-5. **Build the client dashboard** (#37), then its sections: **subscriptions**
+1. **Retire ACF Pro** (#31) and **Code Snippets** (#32) — neither is holding
+   anything up. ACF is confirmed unused, and both Code Snippets entries are
+   switched off. Deactivate, check nothing goes blank, done. Cheap, reversible,
+   and it removes two plugins that could put site behaviour back into the
+   database at any time.
+2. **Link Pricing to SureCart** (#41) — prices stop being hard-coded and start
+   matching what is actually sold. Then **checkout** (#42). Both read through
+   SureCart's API, not through WordPress.
+3. **Build the client dashboard** (#37), then its sections: **subscriptions**
    (#38), **invoices** (#39), **orders** (#40). Each reads live from SureCart.
    This is the substantial build.
-6. **Login and registration in the plugin** (#43). Needs the dashboard to exist
+4. **Login and registration in the plugin** (#43). Needs the dashboard to exist
    to land in.
-7. **Repoint the Client Login link** (#28) — now a setting, not a code change.
-8. **Retire SureDash** (#34), then **Elementor and Elementor Pro** (#33), then
+5. **Repoint the Client Login link** (#28) — now a setting, not a code change.
+6. **Retire SureDash** (#34), then **Elementor and Elementor Pro** (#33), then
    **UiCore** (#35). Removal only after the replacement is live and tested,
    never before.
-9. **Apply the new visuals** (#30) — deliberately last of the build work, so the
+7. **Apply the new visuals** (#30) — deliberately last of the build work, so the
    design is applied once to finished pages rather than twice.
-10. **Test the client area** (#53, #54, #55) — these three cannot be done at all
+8. **Test the client area** (#53, #54, #55) — these three cannot be done at all
     until the pages they cover exist. They are the acceptance pass on steps 4–6.
 
 ## What is not in scope here, and should be
@@ -76,22 +75,21 @@ Three things the issues do not mention that will otherwise be discovered late:
   foundation's own rule, an approach should be proposed and approved rather than
   invented here — and then written back as the recipe, so the next project does
   not relitigate it.
-- **A dashboard holds personal and payment data.** Everything before this point
-  has been marketing pages, where the worst case is a page looking wrong. From
-  step 5 onward the worst case is customer data exposure. That deserves a
-  security review as a gate, not as a final check.
+- **A dashboard holds personal and payment data.** Everything up to step 2 has
+  been marketing pages, where the worst case is a page looking wrong. From step
+  2 onward the worst case is customer data exposure. That deserves a security
+  review as a gate, not as a final check.
 
 ## Honest estimate
 
-Steps 1–3 are days. Steps 4–6 are the real programme: a payment path and an
+Step 1 is a day. Steps 2–4 are the real programme: a payment path and an
 authenticated client area, built against a third-party API, on a live site with
-real customers. Weeks, not days, and the largest single risk is step 5.
+real customers. Weeks, not days, and the largest single risk is step 3.
 
-Steps 7–10 are only cheap *because* 4–6 were done properly.
+Steps 5–8 are only cheap *because* 2–4 were done properly.
 
 ## Recommendation
 
-Approve steps 1–3 now: they are cheap, they are reversible, and step 1 removes
-the only real unknown in this document. Bring steps 4–6 back as their own
-proposal once the ACF audit is in and the SureCart products exist — with the
-customer-migration question answered, because it changes the shape of the build.
+Do step 1 now — it is a day's work, reversible, and it takes two plugins off the
+site. Bring steps 2–4 back as their own proposal, with the customer-migration
+question answered first, because the answer changes the shape of the build.
