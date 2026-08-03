@@ -10,6 +10,22 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.8.0] - 2026-08-03
+
+### Added
+
+- **The dashboard now shows real records.** Subscriptions with what they cost
+  and when they renew, invoices with a link to the PDF, and order history — all
+  read live from SureCart rather than stored here.
+- A client only ever sees their own records. If the account cannot be
+  identified, nothing is fetched at all rather than falling back to a wider
+  query.
+- If SureCart cannot be reached, the page says so. It never shows a paying
+  client an empty account because a request failed.
+
+Changing or cancelling a plan is still done by getting in touch rather than by
+a button, and each section says so.
+
 ## [1.7.0] - 2026-08-03
 
 ### Added

@@ -2,8 +2,8 @@
 /**
  * Client dashboard — invoices (#39).
  *
- * The page and its route exist from #37; the live SureCart data arrives with
- * #39.
+ * Every invoice on the client's account, read live from SureCart, each linking
+ * to SureCart's own PDF rather than to anything this plugin generates.
  *
  * @package BlueWorxSite
  */
@@ -25,9 +25,17 @@ blueworx_public_part(
 );
 
 blueworx_public_part(
-	'parts/dash-empty.php',
+	'parts/dash-table.php',
 	array(
-		'message' => __( 'There are no invoices on your account yet.', 'bluegroup-project-blueworx' ),
+		'result'  => blueworx_account_invoices(),
+		'columns' => array(
+			'number' => __( 'Invoice', 'bluegroup-project-blueworx' ),
+			'date'   => __( 'Date', 'bluegroup-project-blueworx' ),
+			'status' => __( 'Status', 'bluegroup-project-blueworx' ),
+			'amount' => __( 'Amount', 'bluegroup-project-blueworx' ),
+			'url'    => __( 'PDF', 'bluegroup-project-blueworx' ),
+		),
+		'empty'   => __( 'There are no invoices on your account yet.', 'bluegroup-project-blueworx' ),
 	)
 );
 
