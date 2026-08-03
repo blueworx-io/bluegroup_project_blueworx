@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.9.2
+Stable tag:        1.10.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.10.0 =
+* The plan buttons now use SureCart’s own checkout page rather than assuming it lives at /checkout. Added a short setup guide covering everything that has to be switched on for the client area to work.
 
 = 1.9.2 =
 * Fixed the SureCart integration against the real SureCart plugin: plan names now resolve, amounts are formatted by SureCart rather than assumed to be cents, and a failed request is reported as a failure instead of an empty account. Invoices offer a payment link for unpaid ones rather than a PDF, which SureCart does not provide.

@@ -1,9 +1,19 @@
 # Replacing the remaining plugins, and building the client area
 
-**Status: a proposal, not approved work.** Covers issues #30–#43 and #53–#55.
-Nothing here has been built. It exists so the size and the order of the work are
-agreed before anyone starts, because most of it is irreversible on a live
-commercial site.
+**Status: mostly built, 3 August 2026.** Covers issues #30–#43 and #53–#55.
+
+Steps 2 to 5 below are done: the Pricing page reads SureCart, the client
+dashboard and its three sections exist, and login, registration and password
+reset are in the plugin. What remains is configuration and the removals —
+see `client-area-setup.md` for the settings, and steps 6 to 8 here for what
+comes after them.
+
+The customer-migration question this document raised is closed: there are no
+live clients, confirmed 3 August 2026, so the new dashboard replaces SureDash
+outright rather than needing a cutover.
+
+The rest of this document is the original proposal, kept because the reasoning
+about order still holds.
 
 Written 3 August 2026, from a read-only audit of blueworx.io. Every count below
 was read off the live site rather than assumed.
