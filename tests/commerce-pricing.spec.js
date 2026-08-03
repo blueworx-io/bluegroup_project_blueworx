@@ -43,23 +43,48 @@ const FIXTURE_PLUGIN = `<?php
 namespace SureCart\\Models {
 	class Price {
 		public $amount;
+		public $is_zero_decimal = false;
+
+		/**
+		 * SureCart's own converted_amount accessor, copied.
+		 *
+		 * The reason it exists is the reason this fixture models it: a
+		 * zero-decimal currency (yen, won) has no minor unit, so dividing its
+		 * amount by 100 shows a price a hundred times too small.
+		 */
+		public function __get( $name ) {
+			if ( 'converted_amount' !== $name ) {
+				return null;
+			}
+
+			if ( $this->is_zero_decimal || empty( $this->amount ) ) {
+				return $this->amount;
+			}
+
+			return $this->amount / 100;
+		}
 
 		public static function find( $id ) {
-			$amounts = array(
-				'price_fixtureMonthly' => 24900,
-				'price_fixtureAnnual'  => 19900,
+			$prices = array(
+				'price_fixtureMonthly'  => array( 24900, false ),
+				'price_fixtureAnnual'   => array( 19900, false ),
+				// 24900 yen is 24900, not 249.
+				'price_fixtureYen'      => array( 24900, true ),
 				// Present but with an amount SureCart could not give us — the
 				// plan should keep its built-in figure and still be buyable.
-				'price_fixtureNoAmount' => null,
+				'price_fixtureNoAmount' => array( null, false ),
 			);
 
-			if ( ! array_key_exists( $id, $amounts ) ) {
-				// What SureCart does for an ID that no longer exists.
-				throw new \\Exception( 'No such price: ' . $id );
+			if ( ! array_key_exists( $id, $prices ) ) {
+				// SureCart RETURNS its failures rather than throwing them, so
+				// a fixture that threw here would test a path the plugin never
+				// takes on a real site.
+				return new \\WP_Error( 'not_found', 'No such price: ' . $id );
 			}
 
 			$price = new self();
-			$price->amount = $amounts[ $id ];
+			$price->amount          = $prices[ $id ][0];
+			$price->is_zero_decimal = $prices[ $id ][1];
 
 			return $price;
 		}
@@ -84,6 +109,12 @@ namespace {
 			case 'missing':
 				update_option( 'blueworx_surecart_price_ids', array(
 					'growth-support' => array( 'm' => 'price_fixtureDeleted', 'a' => 'price_fixtureDeleted' ),
+				) );
+				break;
+
+			case 'zero-decimal':
+				update_option( 'blueworx_surecart_price_ids', array(
+					'growth-support' => array( 'm' => 'price_fixtureYen', 'a' => '' ),
 				) );
 				break;
 
@@ -180,6 +211,16 @@ test.describe('Pricing driven by SureCart', () => {
     // billing and being charged monthly.
     const href = await card.locator('a.plan-btn').getAttribute('href');
     expect(buyPriceId(href)).toBe('price_fixtureAnnual');
+  });
+
+  // A currency with no minor unit is not cents. Dividing by 100 here would
+  // advertise a plan at a hundredth of its price — and would look completely
+  // normal to anyone not billing in yen.
+  test('a zero-decimal currency is not divided by a hundred', async ({ page }) => {
+    await setFixture(page, 'zero-decimal');
+    await page.goto(cacheBust('/pricing/'));
+
+    await expect(planCard(page, 'Growth Support').locator('.plan-price b')).toHaveText('$24900');
   });
 
   test('an unwired plan keeps its built-in price and the contact form', async ({ page }) => {

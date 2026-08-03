@@ -50,7 +50,19 @@ else :
 			<thead>
 				<tr>
 					<?php foreach ( $blueworx_tbl_columns as $blueworx_tbl_heading ) : ?>
-						<th scope="col"><?php echo esc_html( $blueworx_tbl_heading ); ?></th>
+						<th scope="col">
+							<?php
+							// A column of links needs no visible heading, but a
+							// screen reader still announces the header cell for
+							// every cell under it — so an empty one would be
+							// announced as nothing at all.
+							if ( '' === $blueworx_tbl_heading ) {
+								echo '<span class="bw-sr-only">' . esc_html__( 'Actions', 'bluegroup-project-blueworx' ) . '</span>';
+							} else {
+								echo esc_html( $blueworx_tbl_heading );
+							}
+							?>
+						</th>
 					<?php endforeach; ?>
 				</tr>
 			</thead>
@@ -68,15 +80,16 @@ else :
 										esc_attr( sanitize_html_class( $blueworx_tbl_value ) ),
 										esc_html( blueworx_account_status_label( $blueworx_tbl_value ) )
 									);
-								} elseif ( 'url' === $blueworx_tbl_key ) {
+								} elseif ( 'pay' === $blueworx_tbl_key ) {
+									// Only an unpaid invoice has somewhere to
+									// go, so a paid one gets a blank cell
+									// rather than a disabled-looking link.
 									if ( '' !== $blueworx_tbl_value ) {
 										printf(
-											'<a href="%1$s" rel="noopener">%2$s</a>',
+											'<a class="dash-pay" href="%1$s" rel="noopener">%2$s</a>',
 											esc_url( $blueworx_tbl_value ),
-											esc_html__( 'Download', 'bluegroup-project-blueworx' )
+											esc_html__( 'Pay now', 'bluegroup-project-blueworx' )
 										);
-									} else {
-										echo '<span class="dash-none">' . esc_html__( 'Not available', 'bluegroup-project-blueworx' ) . '</span>';
 									}
 								} elseif ( '' === $blueworx_tbl_value ) {
 									echo '<span class="dash-none">&mdash;</span>';

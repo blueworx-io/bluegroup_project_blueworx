@@ -10,6 +10,27 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.9.2] - 2026-08-03
+
+### Fixed
+
+Checked the SureCart integration against the real SureCart plugin rather than
+against assumptions. Four things were wrong, and none of them would have looked
+wrong:
+
+- **Every plan would have shown as "Support plan".** SureCart returns a related
+  record as a bare reference unless you ask for it, so no plan name or price
+  came back at all.
+- **A failed request showed as an empty account.** SureCart reports failure by
+  returning an error rather than raising one, so a client whose data could not
+  be loaded was told they had none.
+- **Prices in a currency with no decimal part would have shown a hundred times
+  too small.** Amounts are now formatted by SureCart instead of assumed to be
+  in cents.
+- **The invoice PDF column would have been dead links.** SureCart has no PDF to
+  link to. Unpaid invoices now offer a payment link instead, which is what a
+  client wants from that page anyway.
+
 ## [1.9.1] - 2026-08-03
 
 ### Changed

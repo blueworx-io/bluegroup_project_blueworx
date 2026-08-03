@@ -2,8 +2,12 @@
 /**
  * Client dashboard — invoices (#39).
  *
- * Every invoice on the client's account, read live from SureCart, each linking
- * to SureCart's own PDF rather than to anything this plugin generates.
+ * Every invoice on the client's account, read live from SureCart.
+ *
+ * There is no PDF column: SureCart does not expose a PDF on an invoice, so one
+ * would have been a column of dead links. What it does have is a payment page
+ * for an unpaid invoice, which is the thing a client actually wants from this
+ * page, so that is what an open invoice offers.
  *
  * @package BlueWorxSite
  */
@@ -33,7 +37,7 @@ blueworx_public_part(
 			'date'   => __( 'Date', 'bluegroup-project-blueworx' ),
 			'status' => __( 'Status', 'bluegroup-project-blueworx' ),
 			'amount' => __( 'Amount', 'bluegroup-project-blueworx' ),
-			'url'    => __( 'PDF', 'bluegroup-project-blueworx' ),
+			'pay'    => '',
 		),
 		'empty'   => __( 'There are no invoices on your account yet.', 'bluegroup-project-blueworx' ),
 	)
