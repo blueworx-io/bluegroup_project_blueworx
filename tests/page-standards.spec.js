@@ -19,6 +19,7 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { audit, firstFocusable, horizontalOverflow, PHONE } from './standards.js';
 
 const baseURL =
   process.env.PLAYWRIGHT_BASE_URL || process.env.BASE_URL || 'https://staging.placeholder.blueworx.io';
@@ -51,66 +52,17 @@ const PAGES = [
   { path: '/toolbox/', issue: '#50 Toolbox' },
   { path: '/contact/', issue: '#52 Contact' },
   ...TOOL_SLUGS.map((slug) => ({ path: `/toolbox/${slug}/`, issue: `#51 Toolbox — ${slug}` })),
+  // #55. The signed-out half of the client area — the sign-in, sign-up and
+  // reset pages — is held to exactly the same standard as the marketing pages.
+  // The signed-in half is in dashboard-standards.spec.js, which needs a
+  // session and therefore a different `test`.
+  { path: '/login/', issue: '#55 Sign in' },
+  { path: '/register/', issue: '#55 Create an account' },
+  { path: '/reset-password/', issue: '#55 Reset your password' },
 ];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
-
-/**
- * Collects everything the assertions below need, in one pass over the document.
- *
- * One evaluate rather than a locator per rule: these run over twenty pages, and
- * the harness serves them from a single-threaded PHP server.
- */
-async function audit(page) {
-  return page.evaluate(() => {
-    // Each candidate is trimmed BEFORE it is accepted. A link wrapping only an
-    // image has a textContent of "\n\t\t" — whitespace, which is truthy, so an
-    // untrimmed `||` chain stops there and never reaches the image's alt text.
-    // That reports every logo link on the site as nameless, which is a bug in
-    // the check rather than a finding.
-    const accessibleName = (el) => {
-      const candidates = [
-        el.getAttribute('aria-label'),
-        el.getAttribute('title'),
-        el.textContent,
-        [...el.querySelectorAll('img')].map((img) => img.getAttribute('alt') || '').join(' '),
-        [...el.querySelectorAll('svg title')].map((t) => t.textContent || '').join(' '),
-      ];
-
-      for (const candidate of candidates) {
-        const name = (candidate || '').trim();
-        if (name) return name;
-      }
-
-      return '';
-    };
-
-    return {
-      lang: document.documentElement.getAttribute('lang'),
-      title: (document.title || '').trim(),
-      headings: [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].map((el) => ({
-        level: Number(el.tagName[1]),
-        text: el.textContent.trim().slice(0, 60),
-      })),
-      imagesWithoutAlt: [...document.querySelectorAll('img')]
-        .filter((img) => {
-          // alt="" is the correct, meaningful marking for a decorative image.
-          // A MISSING alt attribute is the bug: a screen reader falls back to
-          // announcing the file name.
-          if (img.getAttribute('alt') !== null) return false;
-          return img.getAttribute('aria-hidden') !== 'true' && img.getAttribute('role') !== 'presentation';
-        })
-        .map((img) => img.getAttribute('src') || '(no src)'),
-      linksWithoutName: [...document.querySelectorAll('a[href]')]
-        .filter((a) => a.getAttribute('aria-hidden') !== 'true' && !accessibleName(a))
-        .map((a) => a.getAttribute('href')),
-      buttonsWithoutName: [...document.querySelectorAll('button')]
-        .filter((b) => b.getAttribute('aria-hidden') !== 'true' && !accessibleName(b))
-        .map((b) => b.className || '(no class)'),
-    };
-  });
-}
 
 for (const { path, issue } of PAGES) {
   test.describe(`${issue} — ${path}`, () => {
@@ -152,6 +104,17 @@ for (const { path, issue } of PAGES) {
       expect(buttonsWithoutName, `${path}: buttons a screen reader would announce as blank`).toEqual([]);
     });
 
+    // An unlabelled field is a form a screen reader cannot fill in. Only the
+    // contact and sign-in pages have fields, and those are the two where being
+    // unable to fill the form in costs the visitor something.
+    test('every form field has a label', async ({ page }) => {
+      skipPlaceholder();
+      await page.goto(path);
+
+      const { fieldsWithoutLabel } = await audit(page);
+      expect(fieldsWithoutLabel, `${path}: fields with no label a screen reader can use`).toEqual([]);
+    });
+
     test('declares a language and a page title', async ({ page }) => {
       skipPlaceholder();
       await page.goto(path);
@@ -163,18 +126,10 @@ for (const { path, issue } of PAGES) {
 
     test('does not scroll sideways on a phone', async ({ page }) => {
       skipPlaceholder();
-      // iPhone SE, the narrowest screen still in common use.
-      await page.setViewportSize({ width: 375, height: 667 });
+      await page.setViewportSize(PHONE);
       await page.goto(path);
 
-      const overflow = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
-        widest: [...document.querySelectorAll('body *')]
-          .filter((el) => el.getBoundingClientRect().right > document.documentElement.clientWidth + 1)
-          .slice(0, 5)
-          .map((el) => `${el.tagName.toLowerCase()}.${el.className || '(no class)'}`.slice(0, 80)),
-      }));
+      const overflow = await horizontalOverflow(page);
 
       expect(
         overflow.scrollWidth,
@@ -186,31 +141,7 @@ for (const { path, issue } of PAGES) {
       skipPlaceholder();
       await page.goto(path);
 
-      await page.keyboard.press('Tab');
-
-      const focused = await page.evaluate(() => {
-        const el = document.activeElement;
-        if (!el || el === document.body) return null;
-        const rect = el.getBoundingClientRect();
-
-        // Same trim-before-accept rule as audit()'s accessibleName: the first
-        // focusable control on every page is the logo, which is an image inside
-        // a link, so its name comes from the image's alt text.
-        const name =
-          [
-            el.getAttribute('aria-label'),
-            el.textContent,
-            [...el.querySelectorAll('img')].map((img) => img.getAttribute('alt') || '').join(' '),
-          ]
-            .map((candidate) => (candidate || '').trim())
-            .find(Boolean) || '';
-
-        return {
-          tag: el.tagName.toLowerCase(),
-          name: name.slice(0, 40),
-          hasSize: rect.width > 0 && rect.height > 0,
-        };
-      });
+      const focused = await firstFocusable(page);
 
       expect(focused, `${path}: pressing Tab from the top moves focus nowhere`).not.toBeNull();
       expect(['a', 'button', 'input', 'select', 'textarea']).toContain(focused.tag);

@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.9.0
+Stable tag:        1.9.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.9.1 =
+* The accessibility and mobile checks that already ran on every marketing page now run on the dashboard and sign-in pages too. No change to the site.
 
 = 1.9.0 =
 * Added: clients now sign in, create an account and reset a password on the site itself, instead of on pages belonging to a plugin we are removing. The Client Login link in the navigation points there by default. New accounts follow the WordPress "Anyone can register" setting.
