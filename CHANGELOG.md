@@ -10,6 +10,26 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.5.4] - 2026-08-03
+
+### Fixed
+
+- **The plugin claimed pages it did not create, and stripped their styling.**
+  Ownership was decided by slug, so a site with its own page named "home",
+  "about" or "pricing" had that page treated as the plugin's — and the asset
+  sweep then removed its theme and page-builder CSS, leaving the page with no
+  layout at all. Seen on a live client site. A page now belongs to this plugin
+  only if this plugin created it, which is recorded when the page is made.
+  Nothing changes for the plugin's own pages.
+- **The front page could be repointed by the same slug collision.** Taking over
+  the homepage now requires a home page the plugin actually created.
+- **Site Protection no longer exempts a page the plugin does not own** at a path
+  matching one of its own — the two ownership checks agree again.
+
+Existing sites are upgraded automatically the first time this version loads;
+their pages stay exactly as they are. Uninstall leaves the ownership marker in
+place so a reinstall recognises its own pages.
+
 ## [1.5.3] - 2026-08-03
 
 ### Fixed

@@ -11,6 +11,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Post meta stamped onto every page this plugin creates.
+ *
+ * Ownership used to be inferred from the slug, which is not the plugin's to
+ * claim: a site with its own page slugged "home", "about" or "pricing" had it
+ * adopted into blueworx_public_page_ids on activation, reported as owned, and
+ * then stripped of every non-blueworx style and script by the sweep in
+ * assets.php — the page rendered with no theme or builder CSS at all. A slug is
+ * a coincidence; this stamp is a fact, and it is the only thing that makes a
+ * page ours.
+ */
+if ( ! defined( 'BLUEWORX_PUBLIC_PAGE_META' ) ) {
+	define( 'BLUEWORX_PUBLIC_PAGE_META', '_blueworx_public_page' );
+}
+
+/**
+ * Whether a page was created by this plugin.
+ *
+ * The single ownership test. Everything that decides whether the plugin may
+ * render, sweep or repoint a page goes through here or through the ID map,
+ * which only ever contains stamped pages.
+ *
+ * @param int $post_id Page ID.
+ * @return bool True when this plugin created the page.
+ */
+function blueworx_public_page_is_ours( $post_id ) {
+	$post_id = (int) $post_id;
+
+	if ( $post_id <= 0 ) {
+		return false;
+	}
+
+	return '' !== (string) get_post_meta( $post_id, BLUEWORX_PUBLIC_PAGE_META, true );
+}
+
+/**
  * The pages this plugin owns and renders.
  *
  * Real WordPress Pages are created for these so menus, SEO plugins and later
@@ -120,7 +155,19 @@ function blueworx_public_install_pages() {
 		$existing = get_page_by_path( $slug );
 
 		if ( $existing instanceof WP_Post ) {
-			$map[ $slug ] = $existing->ID;
+			// Only re-adopt a page this plugin created. A slug collision with
+			// the site's own content is not ownership: adopting it here put a
+			// foreign page in the map, which made the asset sweep strip that
+			// page's theme and builder CSS on the live site. An unstamped page
+			// keeps its slug and this registry entry simply stays unmapped —
+			// never rendered, never swept, never repointed. `continue` either
+			// way, deliberately: falling through to wp_insert_post() would let
+			// WordPress suffix the slug and leave a confusing duplicate
+			// ("home-2") next to the site's real page.
+			if ( blueworx_public_page_is_ours( $existing->ID ) ) {
+				$map[ $slug ] = $existing->ID;
+			}
+
 			continue;
 		}
 
@@ -132,6 +179,13 @@ function blueworx_public_install_pages() {
 				'post_name'    => $blueworx_post_name,
 				'post_parent'  => $blueworx_post_parent,
 				'post_content' => '',
+				// Stamped at creation, so ownership is recorded by the only
+				// event that confers it. Set via meta_input rather than a
+				// follow-up update_post_meta() so a page can never exist,
+				// even briefly, without its stamp.
+				'meta_input'   => array(
+					BLUEWORX_PUBLIC_PAGE_META => 1,
+				),
 			)
 		);
 
@@ -145,12 +199,19 @@ function blueworx_public_install_pages() {
 	// "/" only becomes an owned page once the front page is actually pointed
 	// at the plugin's home page — see blueworx_public_is_owned_request_path()
 	// for why that condition matters at init time as well.
-	if ( ! isset( $map['home'] ) ) {
+	// Both halves matter. The entry must exist, and the page behind it must
+	// carry the stamp: the map only ever holds stamped pages now, but the front
+	// page is the most destructive thing here to get wrong — a slug collision
+	// on "home" would otherwise repoint a client's real homepage at a page the
+	// plugin does not own. Checked explicitly rather than trusted transitively.
+	if ( ! isset( $map['home'] ) || ! blueworx_public_page_is_ours( (int) $map['home'] ) ) {
 		return;
 	}
 
 	$existing_front_id   = (int) get_option( 'page_on_front' );
-	$owns_existing_front = $existing_front_id && in_array( $existing_front_id, array_map( 'intval', $map ), true );
+	$owns_existing_front = $existing_front_id
+		&& in_array( $existing_front_id, array_map( 'intval', $map ), true )
+		&& blueworx_public_page_is_ours( $existing_front_id );
 
 	// Never overwrite a homepage the site owner (or another plugin) already
 	// has configured. This only takes over the front page when it is unset,
@@ -254,9 +315,10 @@ function blueworx_public_is_owned_page() {
  * - Bases are resolved from the stored ID map via get_page_uri() (the full
  *   hierarchical path, e.g. "toolbox/surecart" for a nested tool page, or
  *   just "about" for a top-level one), so a page the admin has renamed —
- *   or moved — is still recognised, falling back to the registry KEY itself
- *   (already the full path) only for a page not yet in the map (fresh
- *   install, before activation has run).
+ *   or moved — is still recognised. A registry entry with no map entry
+ *   contributes NO base: the map is the sole record of what this plugin
+ *   created, so an unmapped key is either a page that does not exist yet or
+ *   somebody else's page sitting at that slug.
  *
  * An owned marketing page is always a clean-path request — it never
  * legitimately carries any query var beyond harmless tracking/analytics
@@ -327,10 +389,15 @@ function blueworx_public_is_owned_request_path() {
 	}
 
 	foreach ( array_keys( blueworx_public_pages() ) as $slug ) {
-		// The registry key IS the full path already ("toolbox/surecart" or
-		// "about"), so it is the correct fallback base as-is for a page not
-		// yet in the map (fresh install, before activation).
-		$current_path = $slug;
+		// Mapped pages only — the registry key is NOT a fallback base. Treating
+		// an unmapped key as owned exempted the site's own page at that path
+		// from Site Protection and disagreed with
+		// blueworx_public_current_page(), which answers from the map alone. An
+		// unmapped entry has no page behind it (fresh install) or belongs to
+		// somebody else (slug collision); neither is a path this plugin owns.
+		if ( ! isset( $map[ $slug ] ) ) {
+			continue;
+		}
 
 		// get_page_uri() is a direct get_post() lookup that walks the parent
 		// chain, safe at `init` (unlike is_page(), it is not a query
@@ -341,12 +408,10 @@ function blueworx_public_is_owned_request_path() {
 		// nested tool page. Resolving through the map means a rename (or a
 		// move) is still recognised, matching
 		// blueworx_public_current_template()'s query-time resolution.
-		if ( isset( $map[ $slug ] ) ) {
-			$actual_path = get_page_uri( (int) $map[ $slug ] );
+		$current_path = get_page_uri( (int) $map[ $slug ] );
 
-			if ( $actual_path ) {
-				$current_path = $actual_path;
-			}
+		if ( ! $current_path ) {
+			continue;
 		}
 
 		$bases[] = $home_path . '/' . $current_path;
@@ -393,28 +458,19 @@ function blueworx_public_current_page() {
 
 	$pages = blueworx_public_pages();
 	$map   = (array) get_option( 'blueworx_public_page_ids', array() );
-	$slug  = array_search( $post->ID, $map, true );
+	$slug  = array_search( (int) $post->ID, array_map( 'intval', $map ), true );
 
-	// Fall back to the slug so a fresh install works before the option is
-	// written, and so a manually created page still resolves — but only when
-	// that slug has no entry in the map at all. A slug the map already claims
-	// belongs exclusively to the mapped ID: if an admin renames that page away
-	// and a different, unrelated page later takes the freed slug, the new
-	// page's ID will not be in the map (so array_search fails) but its slug
-	// still collides with the map entry. Falling through to the static
-	// registry in that case would render the plugin's template over a page
-	// it does not own. This holds unchanged for a nested entry: the registry
-	// key is the full path ("toolbox/surecart"), so an unrelated top-level
-	// page whose own (bare) post_name happens to read "surecart" never
-	// matches that key and correctly falls through to null below.
+	// The map is the whole answer. There is deliberately no fallback to
+	// $post->post_name here: matching on the slug claimed any page whose slug
+	// happened to collide with a registry key — the site's own "home", "about"
+	// or "pricing" — even when the map itself was clean, and the asset sweep
+	// then stripped that page's theme and builder CSS. A page not in the map
+	// was not created by this plugin, and a page this plugin created is always
+	// in the map, so a miss is simply not ours. That covers the old
+	// renamed-page guard too: an unrelated page that takes a freed slug still
+	// resolves to null, now for the general reason rather than a special case.
 	if ( false === $slug ) {
-		$candidate_slug = $post->post_name;
-
-		if ( isset( $map[ $candidate_slug ] ) && (int) $map[ $candidate_slug ] !== (int) $post->ID ) {
-			return null;
-		}
-
-		$slug = $candidate_slug;
+		return null;
 	}
 
 	return isset( $pages[ $slug ] ) ? $pages[ $slug ] : null;
