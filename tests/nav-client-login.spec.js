@@ -80,13 +80,16 @@ test('every Client Login link in the nav agrees on one destination', async ({ pa
   expect(new Set(hrefs).size, `the three links disagree: ${hrefs.join(', ')}`).toBe(1);
 });
 
-test('Client Login defaults to /portal until the new dashboard exists', async ({ page }) => {
+// It pointed at SureDash's /portal until there was somewhere of our own to
+// send people (#28). Now it goes to the plugin's sign-in page, which hands the
+// client on to their dashboard.
+test('Client Login points at the plugin’s own sign-in page', async ({ page }) => {
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
 
   await page.goto('/about/');
 
   const href = (await clientLoginHrefs(page))[0];
-  expect(new URL(href, baseURL).pathname.replace(/\/$/, '')).toBe('/portal');
+  expect(new URL(href, baseURL).pathname.replace(/\/$/, '')).toBe('/login');
 });
 
 test('the Client Login destination can be repointed without touching the nav', async ({ page }) => {

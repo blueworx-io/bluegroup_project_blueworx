@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.8.0
+Stable tag:        1.9.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ No. The plugin renders its own pages and does not rely on a theme.
 No. It is fully standalone. If the enhancement plugin is also active, the two integrate automatically, but it is not required.
 
 = Where does the Client Login link point? =
-At /portal by default. Change it under Settings > BlueWorx Site — a full URL or a path such as /dashboard. All three nav links follow it. Developers can also hook the `blueworx_client_login_url` filter.
+At the plugin's own sign-in page (/login) by default, which sends the client on to their dashboard. Change it under Settings > BlueWorx Site — a full URL or a path such as /dashboard. All three nav links follow it. Developers can also hook the `blueworx_client_login_url` filter.
 
 = How do I add a contact form? =
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.9.0 =
+* Added: clients now sign in, create an account and reset a password on the site itself, instead of on pages belonging to a plugin we are removing. The Client Login link in the navigation points there by default. New accounts follow the WordPress "Anyone can register" setting.
 
 = 1.8.0 =
 * Added: the dashboard's subscriptions, invoices and orders sections now show the client's real records from SureCart, including invoice PDFs. A client only ever sees their own. If SureCart cannot be reached the page says so rather than showing an empty account.
