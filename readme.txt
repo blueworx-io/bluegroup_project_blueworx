@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.1.4
+Stable tag:        1.2.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ No. It is fully standalone. If the enhancement plugin is also active, the two in
 Set the `blueworx_contact_form_shortcode` option (or hook the filter of the same name) to any form shortcode; the contact page renders it.
 
 == Changelog ==
+
+= 1.2.0 =
+* Retired pages now redirect rather than 404: /shop goes to Pricing, /about-us to About, /features to Toolbox, and /test-page to the home page. Tracking parameters are carried across.
 
 = 1.0.0 =
 * Initial release: the BlueWorx marketing site as a self-contained, always-on WordPress plugin, decoupled from the enhancement plugin.

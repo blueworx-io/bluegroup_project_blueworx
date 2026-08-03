@@ -19,3 +19,4 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/content.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/pages.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/render.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/assets.php';
+require_once BLUEWORX_SITE_PATH . 'includes/public/redirects.php';

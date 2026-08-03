@@ -10,6 +10,20 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.2.0] - 2026-08-03
+
+### Added
+
+- **Four retired pages now redirect instead of disappearing.** `/shop`,
+  `/about-us`, `/features` and `/test-page` were all published and turning up in
+  search results, and all four are being removed: `/shop` showed the home page
+  for a site with nothing to sell from a storefront, `/about-us` and `/features`
+  duplicated pages the plugin already renders, and `/test-page` was never meant
+  to be public. Anyone following an old link or search result now lands on the
+  page that replaced it — Pricing, About, Toolbox and the home page respectively
+  — instead of a 404. Tracking parameters survive the redirect, so campaign
+  reporting is unaffected.
+
 ## [1.1.4] - 2026-08-01
 
 ### Changed
