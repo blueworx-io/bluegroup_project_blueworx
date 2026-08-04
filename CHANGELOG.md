@@ -10,6 +10,16 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.5] - 2026-08-04
+
+### Added
+
+- **A BlueWorx page for a bad address.** Anyone who followed a rotted link got
+  a bare "Not Found" heading on a white page from the fallback theme — no
+  branding, no menu, no footer and no way back into the site. It now looks like
+  the rest of the site, says plainly what happened, and offers Home, Services,
+  Toolbox, Pricing and Contact.
+
 ## [1.12.4] - 2026-08-04
 
 ### Removed
