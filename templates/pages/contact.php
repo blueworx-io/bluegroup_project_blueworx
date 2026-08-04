@@ -69,7 +69,7 @@ $blueworx_contact_form_shortcode = (string) apply_filters(
 blueworx_public_document_open( array( 'body_class' => 'bw-contact' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<?php
 		blueworx_public_part(

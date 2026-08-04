@@ -163,7 +163,7 @@ $blueworx_home_collab_items = array(
 blueworx_public_document_open( array( 'body_class' => 'bw-home' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<section class="home-hero">
 			<div class="hh-inner">

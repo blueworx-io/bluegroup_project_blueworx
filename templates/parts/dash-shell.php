@@ -99,7 +99,7 @@ blueworx_public_document_open( array( 'body_class' => 'bw-dashboard' ) );
 		</div>
 	</aside>
 
-	<main class="dash-main">
+	<main class="dash-main" id="content" tabindex="-1">
 		<header class="dash-top">
 			<div>
 				<h1 class="dash-title"><?php echo esc_html( $blueworx_dash_heading ); ?></h1>

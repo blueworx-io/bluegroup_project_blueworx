@@ -26,7 +26,7 @@ $blueworx_auth_all     = blueworx_auth_messages();
 blueworx_public_document_open( array( 'body_class' => 'bw-auth' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main class="auth">
+<main class="auth" id="content" tabindex="-1">
 	<div class="auth-card">
 		<h1 class="h2 auth-title"><?php echo esc_html( $blueworx_auth_heading ); ?></h1>
 		<?php if ( '' !== $blueworx_auth_blurb ) : ?>

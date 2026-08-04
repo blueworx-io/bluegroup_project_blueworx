@@ -70,7 +70,7 @@ blueworx_public_part( 'parts/nav.php' );
 // nav/footer still render; there is simply no main content to show.
 if ( null !== $blueworx_st_tool ) :
 	?>
-	<main>
+	<main id="content" tabindex="-1">
 		<div>
 			<section class="tech-hero" style="padding-bottom:88px">
 				<div class="tech-inner tech-2col">

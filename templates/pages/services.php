@@ -102,7 +102,7 @@ $blueworx_svc_glass_tools = array(
 blueworx_public_document_open( array( 'body_class' => 'bw-services' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<section class="tech-hero">
 			<div class="tech-inner tech-2col">

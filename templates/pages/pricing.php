@@ -75,7 +75,7 @@ $blueworx_pricing_qmark = '<svg class="qmark" viewBox="0 0 24 24" fill="none" st
 blueworx_public_document_open( array( 'body_class' => 'bw-pricing' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<section class="tech-hero pb-tall" style="text-align:center">
 			<div class="tech-inner" style="max-width:780px;margin:0 auto">
