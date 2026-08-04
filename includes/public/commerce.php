@@ -135,9 +135,13 @@ function blueworx_commerce_buy_url( $price_id ) {
 	// add_query_arg() encodes both the key and the value, so the brackets
 	// arrive percent-encoded and the ID must NOT be pre-encoded here — doing
 	// both would send SureCart an ID with %-escapes in it.
+	//
+	// The key is `price_id`, not `price`. SureCart ignores a line item it does
+	// not recognise rather than complaining about it, so the wrong key produced
+	// a checkout that loaded perfectly well with an empty basket.
 	return add_query_arg(
 		array(
-			'line_items[0][price]'    => (string) $price_id,
+			'line_items[0][price_id]' => (string) $price_id,
 			'line_items[0][quantity]' => 1,
 		),
 		blueworx_commerce_checkout_url()

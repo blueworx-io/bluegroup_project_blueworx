@@ -198,16 +198,27 @@ function blueworx_site_render_login_url_field() {
  * Sanitises the SureCart price-ID map.
  *
  * Rebuilt from the known plans rather than from whatever was posted, so a
- * crafted request cannot add keys, and only IDs matching SureCart's own format
- * are stored. Anything else is dropped to empty, which falls back to the
- * hardcoded price — the same as never having filled the field in.
+ * crafted request cannot add keys.
+ *
+ * On the shape of an ID: SureCart's own REST routes accept any id segment, and
+ * a real price ID is a UUID — `c9e06c21-7772-4d19-821a-93edc6326d54`. An earlier
+ * version of this function demanded a `price_` prefix, which no SureCart ID has,
+ * so every ID pasted into these fields was thrown away on save. The check here
+ * is therefore about what an ID may safely contain, not about what it must look
+ * like: letters, digits, hyphens and underscores, and nothing that could travel
+ * into a URL as anything other than an ID.
+ *
+ * A rejected ID is reported rather than silently blanked. Silently blanking is
+ * what made the prefix bug so expensive to find — the field simply emptied
+ * itself and the pricing page carried on looking plausible.
  *
  * @param mixed $value Raw submitted value.
  * @return array Map of plan slug => array( 'm' => id, 'a' => id ).
  */
 function blueworx_site_sanitize_price_ids( $value ) {
-	$value = is_array( $value ) ? $value : array();
-	$clean = array();
+	$value    = is_array( $value ) ? $value : array();
+	$clean    = array();
+	$rejected = array();
 
 	foreach ( blueworx_content_retainer_plans() as $plan ) {
 		if ( empty( $plan['name'] ) ) {
@@ -219,8 +230,27 @@ function blueworx_site_sanitize_price_ids( $value ) {
 		foreach ( array( 'm', 'a' ) as $interval ) {
 			$raw = isset( $value[ $slug ][ $interval ] ) ? trim( (string) $value[ $slug ][ $interval ] ) : '';
 
-			$clean[ $slug ][ $interval ] = preg_match( '/^price_[A-Za-z0-9]+$/', $raw ) ? $raw : '';
+			if ( '' === $raw || preg_match( '/^[A-Za-z0-9_-]{6,64}$/', $raw ) ) {
+				$clean[ $slug ][ $interval ] = $raw;
+				continue;
+			}
+
+			$clean[ $slug ][ $interval ] = '';
+			$rejected[]                  = $plan['name'];
 		}
+	}
+
+	if ( $rejected ) {
+		add_settings_error(
+			'blueworx_surecart_price_ids',
+			'blueworx_price_id_rejected',
+			sprintf(
+				/* translators: %s: comma-separated list of plan names. */
+				__( 'These price IDs did not look like SureCart IDs and were not saved: %s. Copy the ID from the price in SureCart — it looks like c9e06c21-7772-4d19-821a-93edc6326d54.', 'bluegroup-project-blueworx' ),
+				implode( ', ', array_unique( $rejected ) )
+			),
+			'error'
+		);
 	}
 
 	return $clean;

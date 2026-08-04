@@ -66,13 +66,13 @@ namespace SureCart\\Models {
 
 		public static function find( $id ) {
 			$prices = array(
-				'price_fixtureMonthly'  => array( 24900, false ),
-				'price_fixtureAnnual'   => array( 19900, false ),
+				'c9e06c21-7772-4d19-821a-93edc6326d54'  => array( 24900, false ),
+				'7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9'   => array( 19900, false ),
 				// 24900 yen is 24900, not 249.
-				'price_fixtureYen'      => array( 24900, true ),
+				'3f5a91c2-8e47-4b63-b0d1-6a2f7c94e830'      => array( 24900, true ),
 				// Present but with an amount SureCart could not give us — the
 				// plan should keep its built-in figure and still be buyable.
-				'price_fixtureNoAmount' => array( null, false ),
+				'd20b6e84-9153-4c72-8a3f-5e0947bd1c66' => array( null, false ),
 			);
 
 			if ( ! array_key_exists( $id, $prices ) ) {
@@ -102,25 +102,25 @@ namespace {
 		switch ( $_GET['bw_price_fixture'] ) {
 			case 'wired':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'price_fixtureMonthly', 'a' => 'price_fixtureAnnual' ),
+					'growth-support' => array( 'm' => 'c9e06c21-7772-4d19-821a-93edc6326d54', 'a' => '7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9' ),
 				) );
 				break;
 
 			case 'missing':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'price_fixtureDeleted', 'a' => 'price_fixtureDeleted' ),
+					'growth-support' => array( 'm' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4', 'a' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4' ),
 				) );
 				break;
 
 			case 'zero-decimal':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'price_fixtureYen', 'a' => '' ),
+					'growth-support' => array( 'm' => '3f5a91c2-8e47-4b63-b0d1-6a2f7c94e830', 'a' => '' ),
 				) );
 				break;
 
 			case 'no-amount':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'price_fixtureNoAmount', 'a' => '' ),
+					'growth-support' => array( 'm' => 'd20b6e84-9153-4c72-8a3f-5e0947bd1c66', 'a' => '' ),
 				) );
 				break;
 
@@ -143,11 +143,15 @@ const planCard = (page, name) =>
  * The price ID a buy link starts checkout with.
  *
  * Read through URLSearchParams rather than by matching the raw href: the
- * brackets in `line_items[0][price]` are percent-encoded in the URL, so a
+ * brackets in `line_items[0][price_id]` are percent-encoded in the URL, so a
  * substring check on the readable form silently never matches.
+ *
+ * The key is `price_id`. This helper used to read `price`, matching what the
+ * plugin wrote, so the specs agreed with the code and both were wrong — the
+ * checkout SureCart actually received had no line items on it.
  */
 function buyPriceId(href) {
-  return new URL(href, 'http://localhost').searchParams.get('line_items[0][price]');
+  return new URL(href, 'http://localhost').searchParams.get('line_items[0][price_id]');
 }
 
 /** Puts the fixture into one of its states. */
@@ -195,7 +199,7 @@ test.describe('Pricing driven by SureCart', () => {
 
     const href = await card.locator('a.plan-btn').getAttribute('href');
     expect(new URL(href).pathname.replace(/\/$/, '')).toBe('/checkout');
-    expect(buyPriceId(href)).toBe('price_fixtureMonthly');
+    expect(buyPriceId(href)).toBe('c9e06c21-7772-4d19-821a-93edc6326d54');
   });
 
   test('the billing toggle moves the checkout link as well as the price', async ({ page }) => {
@@ -210,7 +214,7 @@ test.describe('Pricing driven by SureCart', () => {
     // The failure this guards against is silent and expensive: choosing annual
     // billing and being charged monthly.
     const href = await card.locator('a.plan-btn').getAttribute('href');
-    expect(buyPriceId(href)).toBe('price_fixtureAnnual');
+    expect(buyPriceId(href)).toBe('7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9');
   });
 
   // A currency with no minor unit is not cents. Dividing by 100 here would
@@ -253,7 +257,7 @@ test.describe('Pricing driven by SureCart', () => {
 
     await expect(card.locator('.plan-price b')).toHaveText('$500');
     expect(buyPriceId(await card.locator('a.plan-btn').getAttribute('href'))).toBe(
-      'price_fixtureNoAmount'
+      'd20b6e84-9153-4c72-8a3f-5e0947bd1c66'
     );
   });
 
@@ -304,5 +308,32 @@ test.describe('Pricing settings', () => {
     await page.waitForLoadState('domcontentloaded');
 
     await expect(page.locator('#blueworx_price_growth-support_m')).toHaveValue('');
+  });
+
+  // The counterpart to the test above, and the one that was missing. Every
+  // other spec here writes the option straight into the database, so nothing
+  // ever put a real SureCart ID through the settings form — which is where the
+  // ID was being thrown away. A real price ID is a UUID, and the field used to
+  // demand a `price_` prefix that no SureCart ID has.
+  test('a real SureCart price ID survives being saved', async ({ page }) => {
+    const priceId = 'c9e06c21-7772-4d19-821a-93edc6326d54';
+
+    await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
+    await page.fill('#blueworx_price_growth-support_m', priceId);
+    await page.click('#submit');
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.locator('#blueworx_price_growth-support_m')).toHaveValue(priceId);
+  });
+
+  // Losing the ID was survivable; losing it without a word is what cost the
+  // time. The page must say which plan it rejected.
+  test('a rejected price ID is reported rather than silently blanked', async ({ page }) => {
+    await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
+    await page.fill('#blueworx_price_growth-support_m', 'javascript:alert(1)');
+    await page.click('#submit');
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.locator('.notice-error')).toContainText('Growth Support');
   });
 });
