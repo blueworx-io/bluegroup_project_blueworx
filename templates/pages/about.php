@@ -124,7 +124,7 @@ $blueworx_about_stories = array(
 blueworx_public_document_open( array( 'body_class' => 'bw-about' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<?php
 		blueworx_public_part(

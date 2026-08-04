@@ -153,7 +153,7 @@ $blueworx_ai_offerings = array(
 blueworx_public_document_open( array( 'body_class' => 'bw-ai' ) );
 blueworx_public_part( 'parts/nav.php' );
 ?>
-<main>
+<main id="content" tabindex="-1">
 	<div>
 		<section class="tech-hero ai-hero">
 			<div class="tech-inner">

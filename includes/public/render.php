@@ -33,6 +33,7 @@ function blueworx_public_document_open( $args = array() ) {
 </head>
 <body <?php body_class( 'bw-page ' . $body_class ); ?>>
 	<?php wp_body_open(); ?>
+	<a class="screen-reader-text" href="#content"><?php echo esc_html__( 'Skip to the content', 'bluegroup-project-blueworx' ); ?></a>
 	<?php
 }
 

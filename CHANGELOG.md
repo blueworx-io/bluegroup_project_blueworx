@@ -10,6 +10,20 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.3] - 2026-08-04
+
+### Fixed
+
+- **"Skip to the content" was printed on every page of the site** as ordinary
+  blue underlined text in the top-left corner, and following it did nothing.
+  The link is meant to be invisible until somebody reaches it with the
+  keyboard, but the rule that hides it comes from the theme's stylesheet, which
+  the plugin removes from the pages it renders — and it pointed at a part of
+  the page that did not exist.
+- The link is now the plugin's own, so it works whatever theme the site has, it
+  stays hidden until it is focused, and following it puts the keyboard at the
+  start of the content.
+
 ## [1.12.2] - 2026-08-04
 
 ### Changed
