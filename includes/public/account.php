@@ -49,18 +49,24 @@ function blueworx_account_sections() {
 		'subscriptions' => array(
 			'label'    => __( 'Subscriptions', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Subscriptions', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'icon'     => 'clock',
 			'template' => 'pages/dashboard-subscriptions.php',
 			'blurb'    => __( 'Your active plans, what they cost, and when they renew.', 'bluegroup-project-blueworx' ),
 		),
 		'invoices'      => array(
 			'label'    => __( 'Invoices', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Invoices', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'icon'     => 'doc',
 			'template' => 'pages/dashboard-invoices.php',
-			'blurb'    => __( 'Every invoice on your account, ready to download.', 'bluegroup-project-blueworx' ),
+			'blurb'    => __( 'Every invoice on your account.', 'bluegroup-project-blueworx' ),
 		),
 		'orders'        => array(
 			'label'    => __( 'Orders', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Orders', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'icon'     => 'cart',
 			'template' => 'pages/dashboard-orders.php',
 			'blurb'    => __( 'Everything you have ordered from us.', 'bluegroup-project-blueworx' ),
 		),
@@ -223,4 +229,35 @@ function blueworx_account_display_name() {
 	}
 
 	return '';
+}
+
+/**
+ * The client's initials, for the sidebar avatar.
+ *
+ * Falls back to a single letter rather than to empty: an avatar circle with
+ * nothing in it reads as a rendering fault.
+ *
+ * @return string One or two uppercase letters.
+ */
+function blueworx_account_initials() {
+	$user = wp_get_current_user();
+
+	if ( ! $user || ! $user->exists() ) {
+		return '?';
+	}
+
+	$source = trim( (string) $user->display_name );
+
+	if ( '' === $source ) {
+		$source = (string) $user->user_email;
+	}
+
+	$parts    = preg_split( '/[\s@._-]+/', $source, -1, PREG_SPLIT_NO_EMPTY );
+	$initials = '';
+
+	foreach ( array_slice( (array) $parts, 0, 2 ) as $part ) {
+		$initials .= mb_strtoupper( mb_substr( $part, 0, 1 ) );
+	}
+
+	return '' === $initials ? '?' : $initials;
 }

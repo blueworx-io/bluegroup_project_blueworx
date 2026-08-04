@@ -25,7 +25,7 @@ blueworx_public_part(
 	array(
 		'section' => 'subscriptions',
 		'heading' => $blueworx_dash_sections['subscriptions']['title'],
-		'blurb'   => $blueworx_dash_sections['subscriptions']['blurb'],
+		'kicker'  => $blueworx_dash_sections['subscriptions']['kicker'],
 	)
 );
 

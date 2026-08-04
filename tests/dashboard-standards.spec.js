@@ -93,8 +93,8 @@ for (const { path, name } of PAGES) {
     test('the section tabs are reachable from here', async ({ page }) => {
       await page.goto(path);
 
-      await expect(page.locator('.dash-tabs a')).toHaveCount(4);
-      await expect(page.locator('.dash-tab[aria-current="page"]')).toHaveCount(1);
+      await expect(page.locator('.dash-nav a')).toHaveCount(4);
+      await expect(page.locator('.dash-navlink[aria-current="page"]')).toHaveCount(1);
     });
   });
 }
