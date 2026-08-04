@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.12.9
+Stable tag:        1.12.10
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.12.10 =
+* Fixes the critical error in 1.12.9. Pages missing after an update were created too early in the WordPress start-up, before WordPress was ready to build their addresses.
 
 = 1.12.9 =
 * Marketing pages can now be cached and served instantly to repeat visitors instead of being rebuilt for every one. The client area and the sign-in pages are explicitly never cached.

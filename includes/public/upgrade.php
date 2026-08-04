@@ -80,6 +80,19 @@ add_action( 'plugins_loaded', 'blueworx_public_maybe_upgrade' );
  * any nested page whose parent has moved. install_pages() is idempotent, so a
  * site that is already correct is left exactly as it was.
  *
+ * ON `init`, NOT `plugins_loaded`. This took the live site down. Creating a
+ * page means wp_insert_post(), which builds the page's permalink through
+ * $wp_rewrite — and WordPress does not create $wp_rewrite until after
+ * plugins_loaded has finished. Reading it there is reading a property on null.
+ *
+ * It never showed up in testing because it only fires when a page is actually
+ * MISSING: a site that already has all its pages never reaches wp_insert_post()
+ * at all, and every test WordPress is provisioned with them already there. The
+ * one install where a page was missing was the live one.
+ *
+ * Priority 5, so the pages exist before anything at the default priority goes
+ * looking for them.
+ *
  * @return void
  */
 function blueworx_public_maybe_install_pages() {
@@ -91,7 +104,7 @@ function blueworx_public_maybe_install_pages() {
 
 	update_option( 'blueworx_public_installed_version', BLUEWORX_SITE_VERSION );
 }
-add_action( 'plugins_loaded', 'blueworx_public_maybe_install_pages', 11 );
+add_action( 'init', 'blueworx_public_maybe_install_pages', 5 );
 
 /**
  * Stamps BLUEWORX_PUBLIC_PAGE_META onto every page already in

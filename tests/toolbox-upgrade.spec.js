@@ -133,6 +133,23 @@ add_action( 'wp_loaded', function () {
 			update_option( 'blueworx_public_page_ids', $map );
 			break;
 
+		case 'arm_real_update':
+			// Everything an in-place update leaves behind, and nothing else:
+			// the pages are gone and the stored version no longer matches. The
+			// installer is NOT called here — the next ordinary page request has
+			// to run it through the real WordPress lifecycle, which is the
+			// whole point (see the spec below).
+			foreach ( bw_test_tool_keys() as $key ) {
+				if ( isset( $map[ $key ] ) ) {
+					wp_delete_post( (int) $map[ $key ], true );
+					unset( $map[ $key ] );
+				}
+			}
+
+			update_option( 'blueworx_public_page_ids', $map );
+			delete_option( 'blueworx_public_installed_version' );
+			break;
+
 		case 'update_in_place':
 			// Exactly what WordPress does for a plugin update: the files
 			// change, and no activation hook runs. The stored version no
@@ -283,6 +300,43 @@ test('trashing and remaking the Toolbox page does not break its children', async
   await control(page, 'reparent_toolbox');
 
   const after = await control(page, 'update_in_place');
+
+  await expectEveryToolResolves(page, after.tools);
+});
+
+/**
+ * The one that would have caught the outage.
+ *
+ * Every other case here calls the installer from the fixture, on `wp_loaded` —
+ * by which time WordPress has everything the installer needs, so it works
+ * wherever it is actually hooked. Shipping it on `plugins_loaded` therefore
+ * passed every test and took the live site down on the first request: creating
+ * a page reads $wp_rewrite, and WordPress has not created it that early.
+ *
+ * So this one calls nothing. It sets up exactly what an in-place update leaves
+ * behind and then asks for an ordinary page, the way a visitor would.
+ */
+test('an ordinary request after an update creates the pages, and does not error', async ({
+  page,
+}) => {
+  skipUnlessLocal();
+
+  await control(page, 'begin');
+  await control(page, 'arm_real_update');
+
+  // A plain visitor request. Nothing in the fixture runs.
+  const response = await page.goto('/');
+
+  expect(response.status(), 'the front page errored after an update').toBe(200);
+
+  const body = await page.content();
+
+  expect(
+    /(Fatal error|Warning:|Uncaught|on null)/.test(body),
+    'the page came back carrying a PHP error'
+  ).toBe(false);
+
+  const after = await control(page, 'report');
 
   await expectEveryToolResolves(page, after.tools);
 });

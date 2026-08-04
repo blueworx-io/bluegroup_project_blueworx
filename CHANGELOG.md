@@ -10,6 +10,19 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.10] - 2026-08-04
+
+### Fixed
+
+- **1.12.9 took the site down with a critical error.** The new "create any page
+  that is missing after an update" step ran too early in WordPress's start-up —
+  before WordPress had built the machinery a page needs to have an address — so
+  the first request after updating failed.
+- It never showed up in testing because the step only does anything when a page
+  is actually missing, and a WordPress built for testing always has them all
+  already. There is now a test that removes the pages and then asks for the site
+  the way a visitor would, which fails without this fix.
+
 ## [1.12.9] - 2026-08-04
 
 ### Fixed
