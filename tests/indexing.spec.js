@@ -43,6 +43,27 @@ add_action( 'wp_loaded', function () {
 		return;
 	}
 
+	$action = sanitize_key( wp_unslash( $_GET['bw_index'] ) );
+
+	// A test WordPress is installed with "discourage search engines" on. That
+	// noindexes every page of the site and switches the sitemap off entirely,
+	// so nothing this spec is about can be observed — a public page and a
+	// sign-in page look identical, and there is no sitemap to inspect. The
+	// site is made public for the duration and put back afterwards.
+	if ( 'begin' === $action ) {
+		add_option( 'bw_test_blog_public_backup', (string) get_option( 'blog_public' ) );
+		update_option( 'blog_public', 1 );
+	}
+
+	if ( 'cleanup' === $action ) {
+		$backup = get_option( 'bw_test_blog_public_backup', null );
+
+		if ( null !== $backup ) {
+			update_option( 'blog_public', (int) $backup );
+			delete_option( 'bw_test_blog_public_backup' );
+		}
+	}
+
 	$provider = wp_sitemaps_get_server()->registry->get_provider( 'posts' );
 	$urls     = $provider ? (array) $provider->get_url_list( 1, 'page' ) : array();
 
@@ -56,21 +77,38 @@ add_action( 'wp_loaded', function () {
 	}
 
 	wp_send_json( array(
-		'sitemap' => wp_list_pluck( $urls, 'loc' ),
-		'private' => $private,
+		'action'      => $action,
+		'blog_public' => (int) get_option( 'blog_public' ),
+		'sitemap'     => wp_list_pluck( $urls, 'loc' ),
+		'private'     => $private,
 	) );
 } );
 `;
 
-test.beforeAll(() => {
+test.beforeAll(async ({ playwright }) => {
   if (isPlaceholder || !canInstallFixture) {
     return;
   }
+
   mkdirSync(MU_DIR, { recursive: true });
   writeFileSync(FIXTURE, FIXTURE_PLUGIN);
+
+  const request = await playwright.request.newContext({ baseURL });
+  await request.get('/?bw_index=begin').catch(() => {});
+  await request.dispose();
 });
 
-test.afterAll(() => {
+test.afterAll(async ({ playwright }) => {
+  if (isPlaceholder || !canInstallFixture) {
+    return;
+  }
+
+  // Put the site's own "discourage search engines" setting back BEFORE the
+  // fixture goes, since the cleanup endpoint lives in it.
+  const request = await playwright.request.newContext({ baseURL });
+  await request.get('/?bw_index=cleanup').catch(() => {});
+  await request.dispose();
+
   if (existsSync(FIXTURE)) {
     rmSync(FIXTURE);
   }
