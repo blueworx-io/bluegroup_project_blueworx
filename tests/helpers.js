@@ -5,9 +5,55 @@
  * condition, and a login that actually logs in.
  */
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { test as base } from '@playwright/test';
 
 export { expect } from '@playwright/test';
+
+/**
+ * The Toolbox tools, read from the plugin's own registry.
+ *
+ * Every test that walks the tool pages used to carry its own copy of the twelve
+ * slugs. That is why all twelve could be broken on the live site with the suite
+ * green: a copied list can only ever test the tools somebody remembered to add
+ * to it, and it agrees with itself whatever the plugin actually does. This
+ * parses includes/public/content.php — the one place tools are declared — so a
+ * tool added, renamed or removed there is covered without anyone touching a
+ * test, and a test can never assert about a tool the plugin does not have.
+ *
+ * A regex rather than a PHP parse on purpose: the entries are a flat, literal
+ * array and this needs no interpreter to be right. It asserts it found twelve-
+ * ish entries below, so a change in the file's shape fails loudly here rather
+ * than quietly reducing coverage to nothing.
+ *
+ * @return {Array<{slug: string, name: string}>} Registry entries, in order.
+ */
+export function toolRegistry() {
+  const source = readFileSync(
+    fileURLToPath(new URL('../includes/public/content.php', import.meta.url)),
+    'utf8'
+  );
+
+  const tools = [];
+  const entry = /'slug'\s*=>\s*'([^']+)',\s*'name'\s*=>\s*'([^']+)'/g;
+
+  for (const match of source.matchAll(entry)) {
+    tools.push({ slug: match[1], name: match[2] });
+  }
+
+  if (tools.length < 2) {
+    throw new Error(
+      `Could not read the tool registry from includes/public/content.php (found ${tools.length} tools). ` +
+        'If the array format changed, update toolRegistry() in tests/helpers.js.'
+    );
+  }
+
+  return tools;
+}
+
+/** Just the slugs, for the many callers that only need those. */
+export const TOOL_SLUGS = toolRegistry().map((tool) => tool.slug);
 
 /**
  * The `test` every spec must import — from here, NOT from '@playwright/test'.

@@ -19,6 +19,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 delete_option( 'blueworx_public_prior_front' );
 delete_option( 'blueworx_public_page_ids' );
 delete_option( 'blueworx_public_data_version' );
+delete_option( 'blueworx_public_installed_version' );
 
 // The _blueworx_public_page stamp is deliberately NOT removed. The pages stay
 // (see above), so the stamp is what lets a later reinstall recognise its own

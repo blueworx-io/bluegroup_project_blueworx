@@ -29,100 +29,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /*
- * TEMPORARY: hardcoded Toolbox tool list for the mega panel.
+ * The Toolbox tools, from the plugin's own registry.
  *
- * Mirrors TOOLBOX_TOOLS in the front-end repo's lib/data.ts — name, slug,
- * description, favicon domain and the "popular" flag on SureCart only; this
- * plugin has no page/tool data layer yet. Plan 2 replaces this array with
- * real, admin-managed data; it is kept isolated here so that swap is a
- * single, obvious change.
+ * This list used to be hand-transcribed here — the same twelve tools, written
+ * out a second time. Two copies of the same list drift, and the copy the menu
+ * reads is not the copy the pages are created from, so the menu can link to a
+ * tool that has no page (or miss one that does). blueworx_content_tools() is
+ * the single source of truth for both.
  */
-$blueworx_nav_tools = array(
-	array(
-		'slug'    => 'sureforms',
-		'name'    => __( 'SureForms', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Flexible form builder with smart, multi-step flows.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'sureforms.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'surerank',
-		'name'    => __( 'SureRank', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'SEO insights to improve search visibility.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'surerank.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'suremail',
-		'name'    => __( 'SureMail', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Reliable delivery for transactional and automated emails.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'suremails.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'surewriter',
-		'name'    => __( 'SureWriter', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'AI-assisted website and marketing copy.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'surewriter.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'surecart',
-		'name'    => __( 'SureCart', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Modern checkout, subscriptions, and digital sales.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'surecart.com',
-		'popular' => true,
-	),
-	array(
-		'slug'    => 'zipwp',
-		'name'    => __( 'ZipWP', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'AI-generated WordPress websites in minutes.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'zipwp.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'ottokit',
-		'name'    => __( 'OttoKit', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Automated workflows connecting sites and tools.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'ottokit.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'ally',
-		'name'    => __( 'Ally', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Improves website accessibility and usability.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'useally.io',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'sweet-ai',
-		'name'    => __( 'Sweet AI', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'AI support for improving site content.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'sweetai.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'elementor-ai-planner',
-		'name'    => __( 'Elementor AI Planner', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'AI-guided website structure and planning.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'elementor.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'elementor',
-		'name'    => __( 'Elementor', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Visual page building without code.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'elementor.com',
-		'popular' => false,
-	),
-	array(
-		'slug'    => 'equalize-a11y-checker',
-		'name'    => __( 'Equalize A11y Checker', 'bluegroup-project-blueworx' ),
-		'desc'    => __( 'Real-time WCAG accessibility checks.', 'bluegroup-project-blueworx' ),
-		'domain'  => 'equalizedigital.com',
-		'popular' => false,
-	),
-);
+$blueworx_nav_tools = blueworx_content_tools();
 
 // Resolve the current request path once, relative to the site root, so every
 // active-state check below compares against the same value. blueworx_public_pages()
