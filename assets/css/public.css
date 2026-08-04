@@ -1035,3 +1035,14 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
   .dash-top { flex-direction: column; align-items: flex-start; }
   .dash-cta { width: 100%; justify-content: center; margin-left: 0; }
 }
+
+/* ── Not found (#78) ──────────────────────────────────────────────────────
+   The 404 borrows the marketing hero wholesale and adds one thing of its
+   own: a plain list of where to go instead. Cards rather than a bare list,
+   because a visitor who has just hit a dead end reads a row of destinations
+   faster than a paragraph of links. */
+.nf-links { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; max-width: 1200px; margin: 0 auto; }
+.nf-link { display: block; padding: 22px 24px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-decoration: none; box-shadow: var(--sh-1); transition: border-color .18s, box-shadow .18s, transform .18s; }
+.nf-link:hover, .nf-link:focus-visible { border-color: rgba(79,70,229,.35); box-shadow: var(--sh-2); transform: translateY(-2px); }
+.nf-link-label { display: block; font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.nf-link-desc { display: block; font-size: 14.5px; line-height: 1.55; color: var(--muted); }

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function blueworx_enqueue_public_assets() {
-	if ( ! blueworx_public_is_owned_page() ) {
+	if ( ! blueworx_public_renders_request() ) {
 		return;
 	}
 
@@ -79,7 +79,7 @@ add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
  * @return void
  */
 function blueworx_public_dequeue_theme_styles() {
-	if ( ! blueworx_public_is_owned_page() ) {
+	if ( ! blueworx_public_renders_request() ) {
 		return;
 	}
 
@@ -185,7 +185,7 @@ function blueworx_public_allowed_asset_prefixes() {
  * @return void
  */
 function blueworx_public_dequeue_foreign_assets() {
-	if ( ! blueworx_public_is_owned_page() ) {
+	if ( ! blueworx_public_renders_request() ) {
 		return;
 	}
 

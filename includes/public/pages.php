@@ -307,6 +307,30 @@ function blueworx_public_is_owned_page() {
 }
 
 /**
+ * Whether this plugin is rendering the current request at all.
+ *
+ * Broader than blueworx_public_is_owned_page() by exactly one case: the 404,
+ * which the plugin renders (#78) without owning a Page for it. Everything that
+ * follows from "this document is ours" — the stylesheet, the nav script, the
+ * theme-stylesheet removal — has to be true there too, or the not-found page
+ * renders as unstyled markup, which is a worse version of the bug it fixes.
+ *
+ * Ownership itself is deliberately NOT widened to include it: a 404 has no
+ * post, so nothing about it can be owned, swept or repointed.
+ *
+ * QUERY-TIME ONLY, for the same reason as blueworx_public_is_owned_page().
+ *
+ * @return bool True when the plugin renders this request.
+ */
+function blueworx_public_renders_request() {
+	if ( blueworx_public_is_owned_page() ) {
+		return true;
+	}
+
+	return is_404() && ! is_admin() && ! is_feed() && ! is_robots();
+}
+
+/**
  * Whether the current request path is one of this plugin's owned pages.
  *
  * INIT-TIME SAFE. Unlike blueworx_public_is_owned_page(), this never touches
@@ -535,6 +559,25 @@ add_filter( 'blueworx_site_protection_applies', 'blueworx_public_exempt_from_sit
 function blueworx_public_template( $template ) {
 	$own = blueworx_public_current_template();
 
-	return null === $own ? $template : $own;
+	if ( null !== $own ) {
+		return $own;
+	}
+
+	// The 404 is the one page the plugin renders that it does not own a Page
+	// for. Left to the theme it was a bare "Not Found" heading on a white page
+	// — no nav, no footer, no way back into the site — which is what a visitor
+	// got for any rotted link, and the one moment they are least sure the site
+	// works at all. Only claimed on the front end, and only for a genuine 404:
+	// a feed, a REST response or an admin screen must be left exactly as they
+	// are.
+	if ( blueworx_public_renders_request() ) {
+		$not_found = BLUEWORX_SITE_PATH . 'templates/pages/404.php';
+
+		if ( file_exists( $not_found ) ) {
+			return $not_found;
+		}
+	}
+
+	return $template;
 }
 add_filter( 'template_include', 'blueworx_public_template' );
