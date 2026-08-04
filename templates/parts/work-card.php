@@ -10,7 +10,10 @@
  * rather than inventing a destination).
  *
  * $vars:
- * - img_url   (string, required) Absolute image URL.
+ * - img       (string, required) Path under assets/, e.g.
+ *              'img/feature-image-1.jpg'. Relative rather than a full URL so
+ *              blueworx_public_image() can read the file's own dimensions and
+ *              serve its WebP twin.
  * - alt       (string, required) Image alt text.
  * - tags      (array, required)  List of tag label strings.
  * - name      (string, required) Card heading.
@@ -29,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$blueworx_wc_img_url   = isset( $img_url ) ? (string) $img_url : '';
+$blueworx_wc_img       = isset( $img ) ? (string) $img : '';
 $blueworx_wc_alt       = isset( $alt ) ? (string) $alt : '';
 $blueworx_wc_tags      = isset( $tags ) && is_array( $tags ) ? $tags : array();
 $blueworx_wc_name      = isset( $name ) ? (string) $name : '';
@@ -40,7 +43,7 @@ $blueworx_wc_href      = isset( $href ) ? (string) $href : '';
 
 ob_start();
 ?>
-<div class="work-img"><img src="<?php echo esc_url( $blueworx_wc_img_url ); ?>" alt="<?php echo esc_attr( $blueworx_wc_alt ); ?>" /></div>
+<div class="work-img"><?php blueworx_public_image( $blueworx_wc_img, $blueworx_wc_alt ); ?></div>
 <div class="work-meta">
 	<div class="work-tags">
 		<?php foreach ( $blueworx_wc_tags as $blueworx_wc_tag ) : ?>

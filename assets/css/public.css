@@ -40,7 +40,13 @@
 	letter-spacing: -.01em;
 	text-rendering: optimizeLegibility;
 }
-.bw-page img { display: block; max-width: 100%; }
+/* height:auto so an image's own width/height attributes (added for #82, so the
+   browser can reserve space and the page stops jumping) size it by aspect ratio
+   rather than pinning it to the file's pixel height. display:contents on
+   <picture> takes the wrapper out of the box tree entirely, so the <img> stays
+   the flex or grid child every layout rule below already expects. */
+.bw-page img { display: block; max-width: 100%; height: auto; }
+.bw-page picture { display: contents; }
 .bw-page button { font-family: inherit; }
 .wrap { max-width: 1440px; margin: 0 auto; }
 
@@ -56,7 +62,7 @@
 nav.nav-hidden { transform: translateY(-100%); }
 nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rgba(10,12,41,.09); }
 .nav-logo { display: flex; align-items: center; cursor: pointer; }
-.nav-logo img { height: 30px; }
+.nav-logo img { height: 30px; width: auto; }
 .nav-links { flex: 1; display: flex; justify-content: center; gap: 6px; }
 .nav-links a { font-family: var(--font-sora), sans-serif; font-size: 15px; color: #0A0C29; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 9px 15px; border-radius: 10px; transition: color .18s ease, background .18s ease; white-space: nowrap; }
 .nav-links a:hover { color: #4F46E5; background: rgba(79,70,229,.07); }
@@ -427,7 +433,7 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 /* footer */
 .bw-page footer { background: #0A0C29; padding: 72px var(--gut) 40px; }
 .ft { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 44px; margin-bottom: 48px; }
-.fb img { height: 26px; margin-bottom: 18px; filter: brightness(0) invert(1); }
+.fb img { height: 26px; width: auto; margin-bottom: 18px; filter: brightness(0) invert(1); }
 .fb p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.5); max-width: 240px; margin-bottom: 20px; }
 .fcol h3 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 16px; }
 .fcol a { display: block; font-size: 14px; color: rgba(255,255,255,.5); text-decoration: none; margin-bottom: 11px; cursor: pointer; transition: color .18s; }
@@ -474,8 +480,18 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 .agree { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; }
 .agree input { width: 18px; height: 18px; margin-top: 2px; accent-color: #4F46E5; cursor: pointer; }
 .agree label { font-size: 14px; color: #4C4C4C; }
-.contact-illus { display: flex; align-items: center; justify-content: center; padding: 20px; }
-.contact-illus img { max-height: 560px; width: auto; }
+/* The illustration is a background, not an <img>, because the rule further
+   down hides it below 900px and a hidden <img> is downloaded anyway. WebP where
+   the browser reads it, the JPEG where it does not. */
+.contact-illus {
+  padding: 20px;
+  min-height: 560px;
+  background-image: url(../img/contact-illustration.jpg);
+  background-image: image-set(url(../img/contact-illustration.webp) type("image/webp"), url(../img/contact-illustration.jpg) type("image/jpeg"));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
 .form-success { text-align: center; padding: 60px 20px; }
 .form-success .ok { width: 64px; height: 64px; border-radius: 50%; background: #E8E7F7; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
 .form-success .ok svg { width: 32px; height: 32px; color: #01824C; }

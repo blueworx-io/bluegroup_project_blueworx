@@ -165,7 +165,7 @@ blueworx_public_part( 'parts/nav.php' );
 							<?php $blueworx_sv_price = isset( $blueworx_sv_prices[ $blueworx_sv_tool['slug'] ] ) ? (int) $blueworx_sv_prices[ $blueworx_sv_tool['slug'] ] : 0; ?>
 							<div class="sv-row" data-slug="<?php echo esc_attr( $blueworx_sv_tool['slug'] ); ?>" data-price="<?php echo esc_attr( (string) $blueworx_sv_price ); ?>" data-on="1" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F0F0F5">
 								<div style="width:32px;height:32px;border-radius:9px;background:#F5F6FB;border:1px solid #EEEEF5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-									<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/tools/' . $blueworx_sv_tool['slug'] . '.png' ); ?>" alt="<?php echo esc_attr( $blueworx_sv_tool['name'] ); ?>" style="width:17px;height:17px;object-fit:contain" loading="lazy" />
+									<?php blueworx_public_image( 'img/tools/' . $blueworx_sv_tool['slug'] . '.png', $blueworx_sv_tool['name'], array( 'style' => 'width:17px;height:17px;object-fit:contain' ) ); ?>
 								</div>
 								<div style="flex:1;min-width:0">
 									<div style="font-size:14px;font-weight:600;color:#0A0C29"><?php echo esc_html( $blueworx_sv_tool['name'] ); ?></div>

@@ -79,7 +79,7 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 <nav>
 	<a class="nav-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 		<?php if ( file_exists( $blueworx_nav_logo_path ) ) : ?>
-			<img src="<?php echo esc_url( $blueworx_nav_logo_url ); ?>" alt="<?php echo esc_attr__( 'BlueWorx', 'bluegroup-project-blueworx' ); ?>" />
+			<?php blueworx_public_image( 'img/logo.png', __( 'BlueWorx', 'bluegroup-project-blueworx' ), array( 'above_fold' => true ) ); ?>
 		<?php else : ?>
 			<span class="bw-nav-logo-text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 		<?php endif; ?>
@@ -101,11 +101,20 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 						style="display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;"
 					>
 						<div style="width:38px;height:38px;border-radius:10px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
-							<img
-								src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/tools/' . $blueworx_nav_tool['slug'] . '.png' ); ?>"
-								alt="<?php echo esc_attr( $blueworx_nav_tool['name'] ); ?>"
-								style="width:22px;height:22px;object-fit:contain"
-							/>
+							<?php
+							// Eager, not lazy: the menu is in the document from
+							// the start but hidden, so a lazy icon only begins
+							// loading once the panel opens — the one moment the
+							// visitor is looking straight at it.
+							blueworx_public_image(
+								'img/tools/' . $blueworx_nav_tool['slug'] . '.png',
+								$blueworx_nav_tool['name'],
+								array(
+									'eager' => true,
+									'style' => 'width:22px;height:22px;object-fit:contain',
+								)
+							);
+							?>
 						</div>
 						<div>
 							<div style="font-size:14.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:7px">

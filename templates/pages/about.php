@@ -93,7 +93,7 @@ $blueworx_about_team = array(
 
 $blueworx_about_stories = array(
 	array(
-		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-1.jpg',
+		'img'       => 'img/feature-image-1.jpg',
 		'alt'       => __( 'Hirasté website', 'bluegroup-project-blueworx' ),
 		'tags'      => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'Hirasté',
@@ -102,7 +102,7 @@ $blueworx_about_stories = array(
 		'res_text'  => __( 'group bookings', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-3.jpg',
+		'img'       => 'img/feature-image-3.jpg',
 		'alt'       => __( 'Padel365 website', 'bluegroup-project-blueworx' ),
 		'tags'      => array( __( 'E-commerce', 'bluegroup-project-blueworx' ), __( 'Court Booking', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'Padel365',
@@ -111,7 +111,7 @@ $blueworx_about_stories = array(
 		'res_text'  => __( 'launch weekend', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-4.jpg',
+		'img'       => 'img/feature-image-4.jpg',
 		'alt'       => __( 'QURE website', 'bluegroup-project-blueworx' ),
 		'tags'      => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
 		'name'      => 'QURE',

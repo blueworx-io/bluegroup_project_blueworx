@@ -36,7 +36,7 @@ $blueworx_tbx_arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 		<?php foreach ( $blueworx_tbx_tools as $blueworx_tbx_tool ) : ?>
 			<a href="<?php echo esc_url( home_url( '/toolbox/' . $blueworx_tbx_tool['slug'] ) ); ?>" class="tbx-card" style="text-decoration:none">
 				<div class="tbx-top">
-					<div class="tbx-logo"><img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/tools/' . $blueworx_tbx_tool['slug'] . '.png' ); ?>" alt="<?php echo esc_attr( $blueworx_tbx_tool['name'] ); ?>" loading="lazy" /></div>
+					<div class="tbx-logo"><?php blueworx_public_image( 'img/tools/' . $blueworx_tbx_tool['slug'] . '.png', $blueworx_tbx_tool['name'] ); ?></div>
 					<span class="tbx-arrow">
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted arrow glyph.

@@ -30,6 +30,9 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/seo-copy.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/indexing.php';
 // After pages.php — the backfill calls blueworx_public_page_is_ours().
 require_once BLUEWORX_SITE_PATH . 'includes/public/upgrade.php';
+// After pages.php — blueworx_public_drop_global_styles() asks it whether the
+// plugin is rendering this request.
+require_once BLUEWORX_SITE_PATH . 'includes/public/images.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/render.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/assets.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/redirects.php';

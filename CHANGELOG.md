@@ -10,6 +10,28 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.8] - 2026-08-04
+
+### Fixed
+
+- **Pages jumped about while they loaded.** No image on the site declared its
+  size, so the browser could not leave a space for it and everything below
+  moved as each one arrived. Every image now says how big it is, and the fonts
+  the top of the page is set in are fetched first — between them that was most
+  of the movement.
+- Images below the fold now wait until they are needed, and the ones at the top
+  no longer do. The menu's tool icons used to start loading only when somebody
+  opened the menu, which is the one moment they are being looked at.
+- **Photographs are served in a smaller modern format** where the browser
+  supports it, with the original as a fallback: the biggest images on the site
+  are roughly a third to a quarter of their old size. The logo was a 33KB file
+  shown at 150 pixels wide; it is now 10KB.
+- The illustration on the Contact page is hidden on phones but was downloaded
+  anyway — 140KB fetched to show nothing. It is not fetched there at all now.
+- **15KB of WordPress block styling was inlined into every page**, for blocks
+  this site never renders. It survived the existing clean-up because WordPress
+  adds it twice, the second time too late to catch.
+
 ## [1.12.7] - 2026-08-04
 
 ### Added

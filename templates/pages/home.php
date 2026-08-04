@@ -302,7 +302,7 @@ blueworx_public_part( 'parts/nav.php' );
 				blueworx_public_part(
 					'parts/work-card.php',
 					array(
-						'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-1.jpg',
+						'img'       => 'img/feature-image-1.jpg',
 						'alt'       => __( 'Hirasté website', 'bluegroup-project-blueworx' ),
 						'tags'      => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
 						'name'      => 'Hirasté',
@@ -314,7 +314,7 @@ blueworx_public_part( 'parts/nav.php' );
 				blueworx_public_part(
 					'parts/work-card.php',
 					array(
-						'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-3.jpg',
+						'img'       => 'img/feature-image-3.jpg',
 						'alt'       => __( 'Padel365 website', 'bluegroup-project-blueworx' ),
 						'tags'      => array( __( 'E-commerce', 'bluegroup-project-blueworx' ), __( 'Court Booking', 'bluegroup-project-blueworx' ) ),
 						'name'      => 'Padel365',
@@ -326,7 +326,7 @@ blueworx_public_part( 'parts/nav.php' );
 				blueworx_public_part(
 					'parts/work-card.php',
 					array(
-						'img_url'   => BLUEWORX_SITE_URL . 'assets/img/feature-image-4.jpg',
+						'img'       => 'img/feature-image-4.jpg',
 						'alt'       => __( 'QURE website', 'bluegroup-project-blueworx' ),
 						'tags'      => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
 						'name'      => 'QURE',
@@ -507,7 +507,7 @@ blueworx_public_part( 'parts/nav.php' );
 				</div>
 			</div>
 			<div class="collab-visual">
-				<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/fig-collab.jpg' ); ?>" alt="<?php echo esc_attr__( 'BlueWorx collaboration tools', 'bluegroup-project-blueworx' ); ?>" />
+				<?php blueworx_public_image( 'img/fig-collab.jpg', __( 'BlueWorx collaboration tools', 'bluegroup-project-blueworx' ) ); ?>
 				<div class="collab-chip" style="top:26px;left:-14px">
 					<div class="ci" style="background:#E8E7F7"><span style="width:20px;height:20px;color:#4F46E5"><?php blueworx_icon( 'chart' ); ?></span></div>
 					<div><small><?php echo esc_html__( 'Conversion', 'bluegroup-project-blueworx' ); ?></small><b><?php echo esc_html__( '+38.6%', 'bluegroup-project-blueworx' ); ?></b></div>
