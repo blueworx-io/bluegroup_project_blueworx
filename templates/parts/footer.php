@@ -6,12 +6,13 @@
  * outside <main>, immediately before the footer — that is the source's
  * layout, not a stylistic choice, so callers should not move it inside main.
  *
- * Fidelity notes carried over verbatim from the source rather than
- * "improved": the three social links and the Blog/Resources/Careers links
- * have no href in the design — they render as plain, non-interactive <a>
- * tags rather than inventing destinations. The newsletter form is inert:
- * markup only, no handler or action — a form plugin shortcode replaces it
- * later.
+ * The design's social icons, its Blog/Resources/Careers links and its
+ * newsletter box were all ported as markup with nothing behind them — no
+ * href, no form, no handler. On a live site that is worse than leaving them
+ * out: they look like working controls, and a visitor who clicks one learns
+ * the site is broken. All four are removed until there is something real to
+ * point them at (#77). Nothing is styled to look interactive here unless it
+ * is.
  *
  * The source's <img src="/assets/logo.png"> is bundled by the plugin itself
  * at assets/img/logo.png, matching what the front-end design ships. This
@@ -61,17 +62,6 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 				<span class="bw-footer-logo-text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 			<?php endif; ?>
 			<p><?php echo esc_html__( 'BlueWorx supports growing businesses worldwide with premium tools, hosting, and expert support.', 'bluegroup-project-blueworx' ); ?></p>
-			<div class="fsocial">
-				<a aria-label="<?php echo esc_attr__( 'Facebook', 'bluegroup-project-blueworx' ); ?>">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 10h3l.5-3H13V5.5c0-.8.3-1.5 1.5-1.5H16.5V1.4C16.2 1.3 15 1.2 13.8 1.2c-2.5 0-4.3 1.5-4.3 4.3V7H6.7v3H9.5v8h3.5v-8z" /></svg>
-				</a>
-				<a aria-label="<?php echo esc_attr__( 'LinkedIn', 'bluegroup-project-blueworx' ); ?>">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 8.9h4v12H3v-12zM9.5 8.9h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v6.35h-4v-5.63c0-1.34-.02-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.73h-4v-12z" /></svg>
-				</a>
-				<a aria-label="<?php echo esc_attr__( 'Twitter', 'bluegroup-project-blueworx' ); ?>">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.5-2.3.6.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 00-7 3.7A11.6 11.6 0 013.2 4.5a4.1 4.1 0 001.3 5.5c-.7 0-1.3-.2-1.8-.5v.05a4.1 4.1 0 003.3 4 4.1 4.1 0 01-1.8.07 4.1 4.1 0 003.8 2.85A8.2 8.2 0 012 18.1a11.6 11.6 0 006.3 1.85c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.15z" /></svg>
-				</a>
-			</div>
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'Pages', 'bluegroup-project-blueworx' ); ?></h3>
@@ -85,23 +75,8 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'About', 'bluegroup-project-blueworx' ); ?></h3>
-			<a><?php echo esc_html__( 'Blog', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?></a>
-			<a><?php echo esc_html__( 'Resources', 'bluegroup-project-blueworx' ); ?></a>
-			<a><?php echo esc_html__( 'Careers', 'bluegroup-project-blueworx' ); ?></a>
-		</div>
-		<div class="fnews">
-			<h3 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:16px;"><?php echo esc_html__( 'Newsletters', 'bluegroup-project-blueworx' ); ?></h3>
-			<p><?php echo esc_html__( 'Curious about new developments & updates? Sign up for our newsletter!', 'bluegroup-project-blueworx' ); ?></p>
-			<div class="fnews-in">
-				<input placeholder="<?php echo esc_attr__( 'email@.blueworx.com', 'bluegroup-project-blueworx' ); ?>" aria-label="<?php echo esc_attr__( 'Email address', 'bluegroup-project-blueworx' ); ?>" />
-				<button aria-label="<?php echo esc_attr__( 'Subscribe', 'bluegroup-project-blueworx' ); ?>">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<line x1="5" y1="12" x2="19" y2="12" />
-						<polyline points="12 5 19 12 12 19" />
-					</svg>
-				</button>
-			</div>
+			<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 	</div>
 	<div class="fbot">

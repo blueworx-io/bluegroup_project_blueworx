@@ -10,6 +10,18 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.4] - 2026-08-04
+
+### Removed
+
+- **The footer's dead links and its newsletter box.** Blog, Resources and
+  Careers had nowhere to go, the three social icons had no profiles behind
+  them, and the newsletter field and button were markup with no form attached —
+  typing an address and pressing the button did nothing at all. All of it
+  looked like working controls on every page of the site. They come back when
+  there is something real to point them at.
+- The About column now lists Contact and Client Login, both of which work.
+
 ## [1.12.3] - 2026-08-04
 
 ### Fixed
