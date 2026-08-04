@@ -215,6 +215,12 @@ function blueworx_public_install_pages() {
 		blueworx_public_mark_private_pages();
 	}
 
+	// The title and description each page ships with, written only where the
+	// site has none of its own — see blueworx_public_apply_seo_copy().
+	if ( function_exists( 'blueworx_public_apply_seo_copy' ) ) {
+		blueworx_public_apply_seo_copy();
+	}
+
 	// "/" only becomes an owned page once the front page is actually pointed
 	// at the plugin's home page — see blueworx_public_is_owned_request_path()
 	// for why that condition matters at init time as well.
