@@ -10,6 +10,24 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.0] - 2026-08-04
+
+### Added
+
+- **The Toolbox tools have a screen of their own in the admin menu.** It lists
+  every tool with its category, address and a link to view it on the site, and
+  says plainly that tools are part of the plugin — adding one or rewording it is
+  a change that ships with a release.
+
+### Changed
+
+- The twelve tool pages no longer clutter the Pages list. They were pages that
+  could not usefully be edited, sitting in the one screen somebody opens to find
+  a page they can change. Only those twelve are hidden, and only from that list:
+  Home, Pricing, Contact and the client area stay where they are, and the pages
+  themselves are untouched everywhere else — navigation, permalinks and the site
+  itself are unaffected.
+
 ## [1.11.1] - 2026-08-04
 
 ### Fixed
