@@ -26,6 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * make every site re-run a migration it has already done. 1 = pages carry
  * BLUEWORX_PUBLIC_PAGE_META. 2 = the client-area pages exist. 3 = the sign-in,
  * sign-up and password-reset pages exist.
+ *
+ * 2 and 3 no longer have a branch here. Both existed only to create pages a
+ * release had added, and that is now blueworx_public_maybe_install_pages()'s
+ * job on every version change — which is where it belonged, since a page being
+ * missing is not a migration and forgetting the bump silently shipped a dead
+ * link. This constant is back to meaning what it says: stored data that needs
+ * rewriting.
  */
 if ( ! defined( 'BLUEWORX_PUBLIC_DATA_VERSION' ) ) {
 	define( 'BLUEWORX_PUBLIC_DATA_VERSION', 3 );
@@ -52,19 +59,39 @@ function blueworx_public_maybe_upgrade() {
 		blueworx_public_backfill_page_meta();
 	}
 
-	if ( $stored < 3 ) {
-		// The client area (#37) and the auth pages (#43) add pages to the
-		// registry. Activation creates them on a fresh install, but WordPress
-		// does not re-run activation for an in-place update — so without this,
-		// an existing site updates and the dashboard has no pages and clients
-		// have nowhere to sign in. install_pages() only ever creates what is
-		// missing, so this is safe on a site that already has them.
-		blueworx_public_install_pages();
-	}
-
 	update_option( 'blueworx_public_data_version', BLUEWORX_PUBLIC_DATA_VERSION );
 }
 add_action( 'plugins_loaded', 'blueworx_public_maybe_upgrade' );
+
+/**
+ * Re-runs page installation whenever the plugin's own version changes.
+ *
+ * Every page the site has is created from the registry in
+ * blueworx_public_pages(), and until now the only two things that ran that
+ * installer were activation and a data-version bump. Neither fires on an
+ * ordinary in-place update, so a release that added a page — a new Toolbox
+ * tool, say — shipped the link, the template and the nav entry, and no page.
+ * The result is a dead link on a live site that no amount of front-end work
+ * explains, and a data-version bump every single release to work around it.
+ *
+ * Keying off the plugin version instead makes it automatic and self-healing:
+ * one autoloaded option read on a normal request, and on the first request
+ * after an update the installer runs, creating what is missing and repairing
+ * any nested page whose parent has moved. install_pages() is idempotent, so a
+ * site that is already correct is left exactly as it was.
+ *
+ * @return void
+ */
+function blueworx_public_maybe_install_pages() {
+	if ( get_option( 'blueworx_public_installed_version' ) === BLUEWORX_SITE_VERSION ) {
+		return;
+	}
+
+	blueworx_public_install_pages();
+
+	update_option( 'blueworx_public_installed_version', BLUEWORX_SITE_VERSION );
+}
+add_action( 'plugins_loaded', 'blueworx_public_maybe_install_pages', 11 );
 
 /**
  * Stamps BLUEWORX_PUBLIC_PAGE_META onto every page already in

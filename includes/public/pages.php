@@ -131,6 +131,18 @@ function blueworx_public_install_pages() {
 		$blueworx_post_name   = isset( $page['slug'] ) ? $page['slug'] : $slug;
 		$blueworx_post_parent = ( isset( $page['parent'] ) && isset( $map[ $page['parent'] ] ) ) ? (int) $map[ $page['parent'] ] : 0;
 
+		// A nested entry whose parent did not get mapped has nowhere to live.
+		// Creating it anyway is what broke all twelve Toolbox tool pages on the
+		// live site: the site already had its own, unstamped "toolbox" page, so
+		// the parent was skipped as not-ours, every child fell back to
+		// post_parent 0, and the twelve pages were created at the site root
+		// (/surecart, /sureforms, …). Every /toolbox/<slug> link in the nav then
+		// pointed at a page that did not exist. Skipping is the honest outcome:
+		// no page, rather than a page at an address nothing links to.
+		if ( isset( $page['parent'] ) && ! $blueworx_post_parent ) {
+			continue;
+		}
+
 		if ( isset( $map[ $slug ] ) && 'page' === get_post_type( $map[ $slug ] ) && 'trash' !== get_post_status( $map[ $slug ] ) ) {
 			// Repair a nested page whose parent link has gone stale — e.g. the
 			// Toolbox parent was trashed and recreated with a new ID on a later

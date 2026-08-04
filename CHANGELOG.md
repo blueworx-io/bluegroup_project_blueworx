@@ -10,6 +10,23 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.1] - 2026-08-04
+
+### Fixed
+
+- **Every Toolbox tool page was a dead link.** All twelve are linked from the
+  desktop menu, the mobile menu and the Toolbox page, and none of them worked.
+  The pages were only ever created when the plugin was activated, so a site that
+  updated in place — which is every update — never got them, and a site that
+  already had a page called Toolbox got the twelve tool pages dumped at the top
+  level of the site instead, at addresses nothing links to.
+- Pages are now created and repaired on the first visit after any update, so a
+  tool added in a future release brings its page with it, and a site that is
+  already in the broken state fixes itself rather than needing the database
+  edited by hand.
+- The menu now reads its tool list from the plugin's own registry instead of a
+  second copy written out by hand, so the menu and the pages cannot disagree.
+
 ## [1.12.0] - 2026-08-04
 
 ### Added
