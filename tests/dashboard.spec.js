@@ -32,8 +32,8 @@ test.describe('Client dashboard — logged out', () => {
       await page.goto(cacheBust(path));
 
       expect(new URL(page.url()).pathname.replace(/\/$/, '')).not.toBe(path.replace(/\/$/, ''));
-      await expect(page.locator('.dash-panel')).toHaveCount(0);
-      await expect(page.locator('.dash-tabs')).toHaveCount(0);
+      await expect(page.locator('.dash-card')).toHaveCount(0);
+      await expect(page.locator('.dash-nav')).toHaveCount(0);
     });
   }
 
@@ -55,9 +55,9 @@ test.describe('Client dashboard — signed in', () => {
   test('the overview shows the account and a way into each section', async ({ page }) => {
     await page.goto('/dashboard/');
 
-    await expect(page.locator('.dash-panel')).toHaveCount(2);
+    await expect(page.locator('.dash-card')).toHaveCount(1);
     await expect(page.locator('.dash-facts dd').first()).not.toBeEmpty();
-    await expect(page.locator('.dash-cards .dash-card')).toHaveCount(3);
+    await expect(page.locator('.dash-tiles .dash-tile')).toHaveCount(3);
     await expect(page.locator('.dash-signout')).toHaveCount(1);
   });
 
@@ -65,8 +65,8 @@ test.describe('Client dashboard — signed in', () => {
     for (const section of ['subscriptions', 'invoices', 'orders']) {
       await page.goto(`/dashboard/${section}/`);
 
-      await expect(page.locator('.dash-tab[aria-current="page"]')).toHaveCount(1);
-      await expect(page.locator('.dash-tab[aria-current="page"]')).toHaveText(
+      await expect(page.locator('.dash-navlink[aria-current="page"]')).toHaveCount(1);
+      await expect(page.locator('.dash-navlink[aria-current="page"]')).toHaveText(
         new RegExp(section, 'i')
       );
       // Nothing is wired to SureCart yet (#38-#40), so each section says so
@@ -79,7 +79,7 @@ test.describe('Client dashboard — signed in', () => {
     await page.goto('/dashboard/');
 
     const hrefs = await page
-      .locator('.dash-tabs a')
+      .locator('.dash-nav a')
       .evaluateAll((els) => els.map((el) => new URL(el.href).pathname.replace(/\/$/, '')));
 
     expect(hrefs).toEqual([
@@ -112,6 +112,6 @@ test.describe('Client dashboard — signed in', () => {
     await page.goto('/dashboard/');
 
     await expect(page.locator('body.bw-page.bw-dashboard')).toHaveCount(1);
-    await expect(page.locator('nav .nav-links')).toHaveCount(1);
+    await expect(page.locator('.dash-side .dash-nav')).toHaveCount(1);
   });
 });

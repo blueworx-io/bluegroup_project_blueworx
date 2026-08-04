@@ -10,6 +10,31 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.11.0] - 2026-08-04
+
+### Changed
+
+- **The client area now looks like the approved portal design.** It reads as an
+  application rather than a web page: a dark sidebar carrying the navigation
+  and the signed-in client, a header strip with the page name and a "New
+  request" button, and cards and record tables to match.
+- On a phone the sidebar becomes a row of links above the content rather than
+  a drawer, and record tables scroll inside themselves rather than dragging the
+  page sideways.
+
+### Fixed
+
+- **The marketing site's header styling was leaking into the portal sidebar** —
+  it applied to any navigation on a plugin-rendered page, which gave the
+  sidebar a translucent white background and centred its links.
+- The WordPress admin bar is now accounted for, so the bottom of the sidebar is
+  no longer pushed below the fold for anyone signed in.
+
+Parts of the design are deliberately not built: websites, support, partner and
+contacts, and the figures on the overview for uptime, visits and tools in use.
+Every one of them needs a source of truth this site does not have, and a
+client's own account is the worst possible place to show invented numbers.
+
 ## [1.10.0] - 2026-08-03
 
 ### Changed

@@ -19,7 +19,7 @@ blueworx_public_part(
 	array(
 		'section' => 'orders',
 		'heading' => $blueworx_dash_sections['orders']['title'],
-		'blurb'   => $blueworx_dash_sections['orders']['blurb'],
+		'kicker'  => $blueworx_dash_sections['orders']['kicker'],
 	)
 );
 

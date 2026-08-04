@@ -142,7 +142,7 @@ test.describe('Signing in', () => {
     await page.click('.auth-submit');
 
     expect(path(page.url())).toBe('/dashboard');
-    await expect(page.locator('.dash-panel')).toHaveCount(2);
+    await expect(page.locator('.dash-card')).toHaveCount(1);
   });
 
   test('signing in returns them to the page they were heading for', async ({ page }) => {
@@ -247,7 +247,7 @@ test.describe('Creating an account', () => {
     await page.click('.auth-submit');
 
     expect(path(page.url())).toBe('/dashboard');
-    await expect(page.locator('.dash-hello')).toContainText('Fixture Client');
+    await expect(page.locator('.dash-h1')).toContainText('Fixture Client');
   });
 
   test('a short password is refused', async ({ page }) => {

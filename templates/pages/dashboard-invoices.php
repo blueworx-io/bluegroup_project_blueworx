@@ -24,7 +24,7 @@ blueworx_public_part(
 	array(
 		'section' => 'invoices',
 		'heading' => $blueworx_dash_sections['invoices']['title'],
-		'blurb'   => $blueworx_dash_sections['invoices']['blurb'],
+		'kicker'  => $blueworx_dash_sections['invoices']['kicker'],
 	)
 );
 
