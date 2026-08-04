@@ -193,17 +193,18 @@ function blueworx_account_require_login() {
 }
 add_action( 'template_redirect', 'blueworx_account_require_login', 1 );
 
-/**
- * Keeps the client area out of search results.
+/*
+ * Keeping the client area out of search results used to be an echo straight
+ * into wp_head from here. It is now in includes/public/indexing.php, and it
+ * covers the sign-in pages as well as the dashboard.
  *
- * @return void
+ * The echo was the reason a dashboard page carried two robots tags saying
+ * opposite things: SureRank prints its own tag from a per-post setting and
+ * removes WordPress's, but it cannot remove markup somebody else echoed. The
+ * page said "noindex, nofollow" and "index, follow" at once, and the crawler
+ * picked one. Writing the setting SureRank reads says it once, and drops the
+ * page from the sitemap in the same move.
  */
-function blueworx_account_noindex() {
-	if ( blueworx_account_is_account_request() ) {
-		echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
-	}
-}
-add_action( 'wp_head', 'blueworx_account_noindex', 1 );
 
 /**
  * The name to greet the logged-in client by.
