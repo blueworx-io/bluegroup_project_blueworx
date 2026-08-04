@@ -208,6 +208,13 @@ function blueworx_public_install_pages() {
 
 	update_option( 'blueworx_public_page_ids', $map );
 
+	// The client area and the sign-in pages must never reach a search result.
+	// Done here rather than at creation because it has to hold for pages that
+	// already exist too — the live site's were created before this mattered.
+	if ( function_exists( 'blueworx_public_mark_private_pages' ) ) {
+		blueworx_public_mark_private_pages();
+	}
+
 	// "/" only becomes an owned page once the front page is actually pointed
 	// at the plugin's home page — see blueworx_public_is_owned_request_path()
 	// for why that condition matters at init time as well.

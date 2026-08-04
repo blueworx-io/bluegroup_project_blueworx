@@ -43,6 +43,16 @@ function blueworx_public_legacy_redirects() {
 			'about-us'  => 'about',
 			'features'  => 'toolbox',
 			'test-page' => '',
+
+			// Leftovers found in the live sitemap (#80). /feature and /portal
+			// were listed and returned 404 — an address Google was being asked
+			// to index that had nothing behind it. /form and the five
+			// /products/… paths already bounced somewhere via a rule nobody
+			// could review; they are named here so the destination is written
+			// down and behaves the same on every environment.
+			'feature'   => 'toolbox',
+			'portal'    => 'login',
+			'form'      => 'contact',
 		)
 	);
 }

@@ -10,6 +10,23 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.6] - 2026-08-04
+
+### Fixed
+
+- **The sitemap was inviting Google to index the client area.** Sign in, sign
+  up, reset a password, the dashboard and its three sections were all listed,
+  and all told search engines to index them. They are now marked private, in
+  the way the site's SEO plugin actually reads, which both keeps them out of
+  search results and drops them from the sitemap.
+- **Dashboard pages carried two contradictory instructions at once** — one
+  saying do not index, one saying index — because the plugin printed its own
+  tag next to the SEO plugin's rather than instead of it. There is now exactly
+  one, on every page.
+- `/feature`, `/portal` and `/form` were listed in the sitemap and returned an
+  error. They now send visitors to the Toolbox, the sign-in page and the
+  contact page respectively.
+
 ## [1.12.5] - 2026-08-04
 
 ### Added
