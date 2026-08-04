@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.11.0
+Stable tag:        1.11.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.11.1 =
+* Fixed pricing not connecting to SureCart. The settings screen silently discarded every price ID it was given, and the plan buttons sent SureCart a checkout with nothing in it. Both are fixed, and an ID that is refused now says so.
 
 = 1.11.0 =
 * The client area is restyled to the approved portal design: a dark sidebar, a header strip, and card and table styles to match. Sections the design shows but we have no data for — websites, support tickets, uptime figures — are deliberately left out rather than filled with invented numbers.

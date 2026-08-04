@@ -10,6 +10,27 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.11.1] - 2026-08-04
+
+### Fixed
+
+- **Pricing can now actually be connected to SureCart.** The settings screen
+  threw away every price ID it was given: it insisted an ID begin with `price_`,
+  and no SureCart ID does — they are UUIDs. The field emptied itself on save
+  without saying anything, so the pricing page kept showing its built-in figures
+  and kept sending "Get started" to the contact form, exactly as if nothing had
+  been configured.
+- **The plan buttons sent SureCart a checkout with nothing in it.** The link
+  named the price under the wrong key, and SureCart drops a line item it does
+  not recognise rather than objecting, so the checkout opened normally and
+  empty.
+- A price ID that is refused now says which plan it was refused for, instead of
+  the box quietly going blank.
+
+The tests agreed with the code on both counts, which is why neither showed up:
+they wrote invented `price_`-style IDs straight into the database and never put
+a real one through the settings form. They now use real UUIDs and cover the save.
+
 ## [1.11.0] - 2026-08-04
 
 ### Changed
