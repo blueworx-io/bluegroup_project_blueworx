@@ -14,7 +14,7 @@
  * navigation and permalinks.
  */
 
-import { test, expect, login, cacheBust, isPlaceholder } from './helpers.js';
+import { test, expect, login, cacheBust, isPlaceholder, toolRegistry } from './helpers.js';
 
 const TOOLBOX_SCREEN = '/wp-admin/admin.php?page=blueworx-toolbox';
 const PAGES_SCREEN = '/wp-admin/edit.php?post_type=page';
@@ -40,21 +40,13 @@ const pagesSearch = (term) => `${PAGES_SCREEN}&s=${encodeURIComponent(term)}`;
  */
 const rowTitle = (name) => new RegExp(`^(—\\s*)*${name}$`);
 
-/** Every tool in the registry, and the page each one is expected to render. */
-const TOOLS = [
-  ['sureforms', 'SureForms'],
-  ['surerank', 'SureRank'],
-  ['suremail', 'SureMail'],
-  ['surewriter', 'SureWriter'],
-  ['surecart', 'SureCart'],
-  ['zipwp', 'ZipWP'],
-  ['ottokit', 'OttoKit'],
-  ['ally', 'Ally'],
-  ['sweet-ai', 'Sweet AI'],
-  ['elementor-ai-planner', 'Elementor AI Planner'],
-  ['elementor', 'Elementor'],
-  ['equalize-a11y-checker', 'Equalize A11y Checker'],
-];
+/**
+ * Every tool, read from the plugin's registry rather than copied here.
+ *
+ * A copied list agrees with itself no matter what the plugin does, which is how
+ * all twelve tool pages were broken in production with this spec green (#83).
+ */
+const TOOLS = toolRegistry().map(({ slug, name }) => [slug, name]);
 
 test.describe('Toolbox admin menu', () => {
   test.beforeEach(async ({ page }) => {

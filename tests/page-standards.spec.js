@@ -20,25 +20,12 @@
 
 import { test, expect } from '@playwright/test';
 import { audit, firstFocusable, horizontalOverflow, PHONE } from './standards.js';
+// Read from the plugin's registry, not copied — see toolRegistry() (#83).
+import { TOOL_SLUGS } from './helpers.js';
 
 const baseURL =
   process.env.PLAYWRIGHT_BASE_URL || process.env.BASE_URL || 'https://staging.placeholder.blueworx.io';
 const isPlaceholder = /placeholder/i.test(baseURL);
-
-const TOOL_SLUGS = [
-  'sureforms',
-  'surerank',
-  'suremail',
-  'surewriter',
-  'surecart',
-  'zipwp',
-  'ottokit',
-  'ally',
-  'sweet-ai',
-  'elementor-ai-planner',
-  'elementor',
-  'equalize-a11y-checker',
-];
 
 // #44 home, #45 about, #46 services, #47 work, #48 ai, #49 pricing, #50 toolbox,
 // #52 contact, and #51 the twelve tool pages.
