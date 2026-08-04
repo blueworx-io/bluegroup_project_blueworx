@@ -10,6 +10,22 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.9] - 2026-08-04
+
+### Fixed
+
+- **Every visitor waited for the site to be rebuilt from scratch.** The pages
+  carried no caching instruction at all, so the cache in front of the site
+  stored nothing — which is why the server took two to three and a half seconds
+  to start answering. Marketing pages are identical for everyone who is not
+  signed in, and now say so, so they can be handed over instantly and rebuilt
+  quietly in the background.
+- **The client area and the sign-in pages now say explicitly that they must
+  never be cached.** Saying nothing was the actual danger: a cache decides for
+  itself, and the live sign-in page was being served four hours out of date,
+  which makes signing in fail at random. A signed-in visitor is never cached on
+  any page.
+
 ## [1.12.8] - 2026-08-04
 
 ### Fixed

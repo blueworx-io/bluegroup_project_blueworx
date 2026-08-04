@@ -36,3 +36,6 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/images.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/render.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/assets.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/redirects.php';
+// After pages.php and indexing.php — it asks both whether this response is the
+// same for every visitor before it may be cached.
+require_once BLUEWORX_SITE_PATH . 'includes/public/cache.php';
