@@ -1,0 +1,45 @@
+# The site itself, after a release.
+#
+# CI runs the suite against a WordPress provisioned from scratch on the runner.
+# That is the right target for almost everything, and it is exactly why all
+# twelve Toolbox tool pages could be broken on blueworx.io with every check
+# green (#75, #83): a brand-new install is the one state that was never broken.
+# Nothing in the pipeline had ever looked at the real site.
+#
+# This does. It runs the read-only public specs against blueworx.io once a
+# release has gone out, so a release that leaves the live site with dead links
+# says so within a couple of minutes rather than at the next audit. GETs only —
+# it never signs in and never writes anything.
+name: Live smoke
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Site to check
+        required: false
+        default: https://blueworx.io
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - run: npm install --no-audit --no-fund
+
+      - run: npx playwright install --with-deps chromium
+
+      # Only the specs that are safe to point at a live, public site: they make
+      # read-only requests to pages any visitor can reach. The admin, auth and
+      # fixture specs are deliberately not here — they sign in and write.
+      - name: Check the live site
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.url || 'https://blueworx.io' }}
+        run: npx playwright test tests/smoke.spec.js tests/toolbox-tool-pages.spec.js --workers=1

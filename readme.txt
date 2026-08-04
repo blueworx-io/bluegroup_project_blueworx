@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.12.1
+Stable tag:        1.12.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.12.2 =
+* Tests now cover updating an existing site rather than only a brand-new one, and the live site is checked automatically after each release. No change to the site itself.
 
 = 1.12.1 =
 * Fixed every Toolbox tool page being a dead link. The pages are now created — and repaired if they have drifted — on the first visit after any update, instead of only when the plugin is activated.

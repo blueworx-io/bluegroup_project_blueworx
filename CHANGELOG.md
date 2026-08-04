@@ -10,6 +10,21 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.2] - 2026-08-04
+
+### Changed
+
+- **The tests now cover the way the site actually gets updated.** Every check
+  ran against a WordPress built from scratch seconds earlier, which is the one
+  state the Toolbox tool pages were never broken in — so all twelve could be
+  dead on the live site with every check green. There are now tests for a site
+  that updates in place, a site whose tool pages have drifted out of place, and
+  a Toolbox page that has been deleted and made again.
+- Tests read the list of tools from the plugin itself instead of a copy written
+  into each test file, so a tool cannot be added without being tested.
+- After a release goes out, the public pages of blueworx.io are checked
+  automatically. Nothing in the pipeline had ever looked at the real site.
+
 ## [1.12.1] - 2026-08-04
 
 ### Fixed
