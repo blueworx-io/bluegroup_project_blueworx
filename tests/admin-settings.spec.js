@@ -154,7 +154,7 @@ test.describe('BlueWorx site settings', () => {
         .map((el) => el.getAttribute('href'))
     );
 
-    expect(hrefs).toHaveLength(3);
+    expect(hrefs).toHaveLength(4);
     for (const href of hrefs) {
       expect(new URL(href, baseURL).pathname.replace(/\/$/, '')).toBe('/dashboard');
     }
