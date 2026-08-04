@@ -26,6 +26,7 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/account-data.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/auth.php';
 // After account.php and auth.php — it reads the `account`/`auth` flags those
 // files add to the page registry to decide what must never be indexed.
+require_once BLUEWORX_SITE_PATH . 'includes/public/seo-copy.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/indexing.php';
 // After pages.php — the backfill calls blueworx_public_page_is_ours().
 require_once BLUEWORX_SITE_PATH . 'includes/public/upgrade.php';

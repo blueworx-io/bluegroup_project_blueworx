@@ -10,6 +10,22 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.12.7] - 2026-08-04
+
+### Added
+
+- **A written title and description for every page.** Five of the nine main
+  pages had no description at all, and the ones that did had a sentence
+  scraped from the middle of the page and cut off partway through — which is
+  what Google was showing under the site's name in the results. Titles were the
+  nav label and the site name, which says what a page is called rather than
+  what it is for.
+- All twenty pages, including the twelve tool pages, now ship with wording
+  written for the search result. Open Graph and Twitter repeat the same text,
+  so a link shared on social reads the same as a search result.
+- These are defaults, not settings: anything written by hand in the SEO editor
+  wins and is left alone by every later update.
+
 ## [1.12.6] - 2026-08-04
 
 ### Fixed
