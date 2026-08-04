@@ -74,10 +74,11 @@ test('every Client Login link in the nav agrees on one destination', async ({ pa
 
   const hrefs = await clientLoginHrefs(page);
 
-  // Desktop, mobile bar, mobile menu. If a fourth is ever added, this fails and
-  // asks whether it was wired to the same place — which is the point.
-  expect(hrefs).toHaveLength(3);
-  expect(new Set(hrefs).size, `the three links disagree: ${hrefs.join(', ')}`).toBe(1);
+  // Desktop, mobile bar, mobile menu and the footer. If a fifth is ever added,
+  // this fails and asks whether it was wired to the same place — which is the
+  // point.
+  expect(hrefs).toHaveLength(4);
+  expect(new Set(hrefs).size, `the links disagree: ${hrefs.join(', ')}`).toBe(1);
 });
 
 // It pointed at SureDash's /portal until there was somewhere of our own to
@@ -103,7 +104,7 @@ test('the Client Login destination can be repointed without touching the nav', a
 
   const hrefs = await clientLoginHrefs(page);
 
-  expect(hrefs).toHaveLength(3);
+  expect(hrefs).toHaveLength(4);
   for (const href of hrefs) {
     expect(href).toBe('https://dashboard.fixture.invalid/here');
   }
