@@ -196,7 +196,7 @@ blueworx_public_part( 'parts/nav.php' );
 					blueworx_public_part(
 						'parts/work-card.php',
 						array(
-							'img_url'   => BLUEWORX_SITE_URL . 'assets/img/' . $blueworx_work_project['image'],
+							'img'       => 'img/' . $blueworx_work_project['image'],
 							'alt'       => $blueworx_work_project['alt'],
 							'tags'      => $blueworx_work_project['tags'],
 							'name'      => $blueworx_work_project['name'],

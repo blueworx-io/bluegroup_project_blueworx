@@ -318,7 +318,7 @@ blueworx_public_part( 'parts/nav.php' );
 					<div class="gc-metric" style="padding:12px 0">
 						<div style="display:flex;align-items:center;gap:12px">
 							<div style="width:34px;height:34px;border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-								<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/tools/' . $blueworx_svc_tool['slug'] . '.png' ); ?>" alt="<?php echo esc_attr( $blueworx_svc_tool['name'] ); ?>" style="width:20px;height:20px;object-fit:contain" />
+								<?php blueworx_public_image( 'img/tools/' . $blueworx_svc_tool['slug'] . '.png', $blueworx_svc_tool['name'], array( 'style' => 'width:20px;height:20px;object-fit:contain' ) ); ?>
 							</div>
 							<div>
 								<div style="font-size:14.5px;font-weight:600;color:#fff"><?php echo esc_html( $blueworx_svc_tool['name'] ); ?></div>

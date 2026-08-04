@@ -97,7 +97,7 @@ if ( null !== $blueworx_st_tool ) :
 							<div class="gc-scan"></div>
 							<div style="position:relative;display:flex;align-items:center;gap:16px">
 								<div style="width:58px;height:58px;border-radius:15px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.28);flex-shrink:0">
-									<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/tools/' . $blueworx_st_tool['slug'] . '.png' ); ?>" alt="<?php echo esc_attr( $blueworx_st_tool['name'] ); ?>" style="width:32px;height:32px;object-fit:contain" />
+									<?php blueworx_public_image( 'img/tools/' . $blueworx_st_tool['slug'] . '.png', $blueworx_st_tool['name'], array( 'above_fold' => true, 'style' => 'width:32px;height:32px;object-fit:contain' ) ); ?>
 								</div>
 								<div style="flex:1;min-width:0">
 									<div style="display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600;color:#fff">

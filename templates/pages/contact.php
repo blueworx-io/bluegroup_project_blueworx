@@ -106,9 +106,16 @@ blueworx_public_part( 'parts/nav.php' );
 					}
 					?>
 				</div>
-				<div class="contact-illus">
-					<img src="<?php echo esc_url( BLUEWORX_SITE_URL . 'assets/img/contact-illustration.jpg' ); ?>" alt="<?php esc_attr_e( 'Get in touch', 'bluegroup-project-blueworx' ); ?>" />
-				</div>
+				<?php
+				// A background image rather than an <img>, deliberately. The
+				// design hides this illustration entirely below 900px, and a
+				// hidden <img> is still downloaded — 140KB fetched on a phone to
+				// render nothing. A background on a display:none element is not
+				// fetched at all. It is decorative, so nothing is lost by it
+				// having no alt text; the panel is marked presentational so a
+				// screen reader does not announce an empty region.
+				?>
+				<div class="contact-illus" role="presentation"></div>
 			</div>
 		</section>
 

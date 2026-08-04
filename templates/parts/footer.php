@@ -53,11 +53,13 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 	<div class="ft">
 		<div class="fb">
 			<?php if ( file_exists( $blueworx_footer_logo_path ) ) : ?>
-				<img
-					src="<?php echo esc_url( $blueworx_footer_logo_url ); ?>"
-					alt="<?php echo esc_attr__( 'BlueWorx', 'bluegroup-project-blueworx' ); ?>"
-					style="filter:brightness(0) invert(1)"
-				/>
+				<?php
+				blueworx_public_image(
+					'img/logo.png',
+					__( 'BlueWorx', 'bluegroup-project-blueworx' ),
+					array( 'style' => 'filter:brightness(0) invert(1)' )
+				);
+				?>
 			<?php else : ?>
 				<span class="bw-footer-logo-text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 			<?php endif; ?>
