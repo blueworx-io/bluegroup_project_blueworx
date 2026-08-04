@@ -119,6 +119,22 @@ function blueworx_public_pages() {
  * @return void
  */
 function blueworx_public_install_pages() {
+	// NEVER before `init`. Creating a page goes through wp_insert_post(), which
+	// builds its permalink from $wp_rewrite — and WordPress does not create
+	// $wp_rewrite until after plugins_loaded. Called any earlier this reads a
+	// property on null and takes the site down, which is exactly what shipping
+	// the installer on plugins_loaded did (v1.12.9, live).
+	//
+	// A guard rather than a comment because the failure is invisible until the
+	// one moment it matters: a site whose pages all exist never reaches
+	// wp_insert_post(), so calling this too early looks completely fine right up
+	// until the first install that is actually missing a page.
+	if ( ! did_action( 'init' ) ) {
+		add_action( 'init', 'blueworx_public_install_pages', 5 );
+
+		return;
+	}
+
 	$map = (array) get_option( 'blueworx_public_page_ids', array() );
 
 	foreach ( blueworx_public_pages() as $slug => $page ) {
