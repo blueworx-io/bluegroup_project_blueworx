@@ -383,7 +383,199 @@
 		loop();
 	}
 
+	/**
+	 * The 404's "Go back" button (#96).
+	 *
+	 * Back is a browser action, so there is no URL that means it and the
+	 * control has to be a real button. A visitor who landed on a dead link
+	 * straight from a search result has no history to go back to, which is
+	 * why the fallback destination is on the element rather than assumed.
+	 */
+	function initBackButtons() {
+		var btns = document.querySelectorAll( '[data-bw-back]' );
+
+		for ( var i = 0; i < btns.length; i++ ) {
+			btns[ i ].addEventListener( 'click', function ( e ) {
+				var fallback = e.currentTarget.getAttribute( 'data-bw-back-fallback' ) || '/';
+
+				if ( window.history.length > 1 ) {
+					window.history.back();
+					return;
+				}
+
+				window.location.href = fallback;
+			} );
+		}
+	}
+
+	/**
+	 * The journal's category pills (#94).
+	 *
+	 * Every card is already in the document; this only hides the ones that do
+	 * not match, so the page is complete and readable with JS off — it simply
+	 * shows everything, which is the correct unfiltered state rather than a
+	 * degraded one.
+	 *
+	 * The featured card is dropped out of view while a category is selected,
+	 * matching the design: it is the journal's front page, not a member of the
+	 * filtered set, and leaving it up makes the count disagree with the grid.
+	 */
+	function initJournalFilter() {
+		var root = document.querySelector( '[data-widget="journal-filter"]' );
+		if ( ! root ) {
+			return;
+		}
+
+		var pills = root.querySelectorAll( '[data-jr-filter]' );
+		var count = root.querySelector( '[data-jr-count]' );
+		var featured = document.querySelector( '[data-jr-featured]' );
+		var empty = document.querySelector( '[data-jr-empty]' );
+		var cards = document.querySelectorAll( '.jr-grid .jr-card' );
+
+		function apply( cat ) {
+			var shown = 0;
+
+			for ( var i = 0; i < cards.length; i++ ) {
+				var match = ! cat || cards[ i ].getAttribute( 'data-jr-cat' ) === cat;
+				cards[ i ].hidden = ! match;
+				if ( match ) {
+					shown++;
+				}
+			}
+
+			if ( featured ) {
+				featured.hidden = !! cat;
+				if ( ! cat ) {
+					shown++;
+				}
+			}
+
+			for ( var j = 0; j < pills.length; j++ ) {
+				var on = pills[ j ].getAttribute( 'data-jr-filter' ) === cat;
+				pills[ j ].className = on ? 'jr-pill on' : 'jr-pill';
+				pills[ j ].setAttribute( 'aria-pressed', on ? 'true' : 'false' );
+			}
+
+			if ( count ) {
+				var template = 1 === shown
+					? count.getAttribute( 'data-jr-one' )
+					: count.getAttribute( 'data-jr-many' );
+
+				count.textContent = ( template || '%d' ).replace( '%d', shown );
+			}
+
+			if ( empty ) {
+				empty.hidden = shown > 0;
+			}
+		}
+
+		for ( var k = 0; k < pills.length; k++ ) {
+			pills[ k ].addEventListener( 'click', function ( e ) {
+				apply( e.currentTarget.getAttribute( 'data-jr-filter' ) );
+			} );
+		}
+	}
+
+	/**
+	 * An article's "On this page" list (#95).
+	 *
+	 * Built from the headings the article actually has, because the body is
+	 * whatever the author published — there is no fixed set of sections to
+	 * hard-code. Anchors are added here too: the editor does not give headings
+	 * ids, so without this every contents link would point at nothing.
+	 *
+	 * Stays hidden on an article with fewer than two headings. A contents list
+	 * with one entry is furniture, not navigation.
+	 */
+	function initArticleToc() {
+		var body = document.querySelector( '[data-jp-body]' );
+		var toc = document.querySelector( '[data-jp-toc]' );
+		var list = document.querySelector( '[data-jp-toc-list]' );
+
+		if ( ! body || ! toc || ! list ) {
+			return;
+		}
+
+		var heads = body.querySelectorAll( 'h2' );
+		if ( heads.length < 2 ) {
+			return;
+		}
+
+		var used = {};
+
+		for ( var i = 0; i < heads.length; i++ ) {
+			var head = heads[ i ];
+			var id = head.getAttribute( 'id' );
+
+			if ( ! id ) {
+				id = ( head.textContent || '' )
+					.toLowerCase()
+					.replace( /[^a-z0-9]+/g, '-' )
+					.replace( /^-+|-+$/g, '' ) || 'section';
+
+				// A duplicated id makes every later link jump to the first
+				// heading that used it, which looks like the list is broken.
+				if ( used[ id ] ) {
+					used[ id ]++;
+					id = id + '-' + used[ id ];
+				} else {
+					used[ id ] = 1;
+				}
+
+				head.setAttribute( 'id', id );
+			}
+
+			var item = document.createElement( 'li' );
+			var link = document.createElement( 'a' );
+
+			link.setAttribute( 'href', '#' + id );
+			link.textContent = head.textContent || '';
+			item.appendChild( link );
+			list.appendChild( item );
+		}
+
+		toc.hidden = false;
+	}
+
+	/**
+	 * The article's copy-link button (#95).
+	 *
+	 * Removed outright where the browser has no clipboard API — an insecure
+	 * origin, or an older browser. A button that silently does nothing is the
+	 * exact thing #77 was about, and the two share links beside it still work.
+	 */
+	function initCopyLink() {
+		var btns = document.querySelectorAll( '[data-jp-copy]' );
+		var note = document.querySelector( '[data-jp-copied]' );
+
+		for ( var i = 0; i < btns.length; i++ ) {
+			if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
+				btns[ i ].parentNode.removeChild( btns[ i ] );
+				continue;
+			}
+
+			btns[ i ].addEventListener( 'click', function ( e ) {
+				var url = e.currentTarget.getAttribute( 'data-jp-copy' ) || window.location.href;
+
+				navigator.clipboard.writeText( url ).then( function () {
+					if ( ! note ) {
+						return;
+					}
+
+					note.textContent = note.getAttribute( 'data-jp-copied-label' ) || 'Link copied';
+					setTimeout( function () {
+						note.textContent = '';
+					}, 2200 );
+				} ).catch( function () {} );
+			} );
+		}
+	}
+
 	function init() {
+		initBackButtons();
+		initJournalFilter();
+		initArticleToc();
+		initCopyLink();
 		initBillingToggle();
 		initPricingCalc();
 		initSavingsCalc();

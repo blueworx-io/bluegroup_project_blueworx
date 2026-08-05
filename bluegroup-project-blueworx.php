@@ -3,7 +3,7 @@
  * Plugin Name:       BlueWorx | Marketing Site
  * Plugin URI:        https://blueworx.io/
  * Description:       The BlueWorx public marketing site, rendered by the plugin itself so it is identical wherever it is hosted. Self-contained: no theme and no dependency on other plugins.
- * Version:           1.12.10
+ * Version:           1.13.0
  * Requires at least: 5.0
  * Requires PHP:      8.0
  * Author:            BlueWorx
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BLUEWORX_SITE_VERSION' ) ) {
-	define( 'BLUEWORX_SITE_VERSION', '1.12.10' );
+	define( 'BLUEWORX_SITE_VERSION', '1.13.0' );
 }
 
 if ( ! defined( 'BLUEWORX_SITE_PATH' ) ) {

@@ -10,6 +10,25 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.13.0] - 2026-08-05
+
+### Added
+
+- **A journal at /blog.** A listing page for your articles, with a featured
+  piece at the top, a grid of the rest, and topic buttons that filter the list
+  without reloading the page. It shows your real posts — or says plainly that
+  nothing is published yet, rather than filling the page with examples.
+- **A proper page for reading an article.** Cover image, author, date and how
+  long it takes to read; a contents list down the side built from the article's
+  own headings; buttons to share it or copy the link; and three more articles to
+  read at the end. Links to the journal are now in the menu and the footer.
+
+### Changed
+
+- **The "page not found" screen is now the new design.** One clean page with the
+  address you asked for, a way to the home page and a way back, instead of the
+  previous list of five suggestions.
+
 ## [1.12.10] - 2026-08-04
 
 ### Fixed

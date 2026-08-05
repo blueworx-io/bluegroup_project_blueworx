@@ -74,6 +74,8 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 			<a href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php echo esc_html__( 'Toolbox', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
+			<?php // Resolved through the page map rather than home_url('/blog'), so the link survives a rename (#94). ?>
+			<a href="<?php echo esc_url( blueworx_public_journal_url() ); ?>"><?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'About', 'bluegroup-project-blueworx' ); ?></h3>

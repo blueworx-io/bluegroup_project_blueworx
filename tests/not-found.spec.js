@@ -1,15 +1,16 @@
 /**
- * The 404 page (#78).
+ * The 404 page (#78, redesigned in #96).
  *
- * The plugin renders every page it owns and, until now, nothing else — so a
+ * The plugin renders every page it owns and, before #78, nothing else — so a
  * bad URL fell through to the site's fallback theme: a bare "Not Found"
- * heading on a white page, with no nav, no footer, and no way back into the
- * site. That is what a visitor got for any rotted link, including the twelve
- * broken Toolbox addresses in #75.
+ * heading on a white page with no way back into the site.
  *
- * page-standards.spec.js already covers the two things a 404 must do at all
- * (say 404, and offer a way out). This covers the rest: that it is the
- * BlueWorx page and not the theme's, and that it names the places worth going.
+ * #96 replaced the first version's nav/hero/link-list with the Claude Design's
+ * single panel: the code ghosted behind the copy, and two things to do. So the
+ * checks here changed shape too — what has to stay true is that it is the
+ * BlueWorx document, that it says which address missed, and that both ways out
+ * work. page-standards.spec.js covers the two universal rules (answer 404, and
+ * offer at least one way out).
  */
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
@@ -32,16 +33,6 @@ test.describe('#78 The 404 page', () => {
     await expect(page.locator('body.bw-404')).toHaveCount(1);
   });
 
-  test('has the site nav and the site footer', async ({ page }) => {
-    skipPlaceholder();
-
-    await page.goto(cacheBust(MISSING));
-
-    await expect(page.locator('nav .nav-logo')).toHaveCount(1);
-    await expect(page.locator('nav .nav-links a', { hasText: 'Services' }).first()).toBeVisible();
-    await expect(page.locator('footer')).toHaveCount(1);
-  });
-
   test('is styled — the plugin stylesheet loads here too', async ({ page }) => {
     skipPlaceholder();
 
@@ -57,26 +48,78 @@ test.describe('#78 The 404 page', () => {
     ).toBe(true);
   });
 
-  test('offers the main pages, and every one of them answers', async ({ page }) => {
+  test('shows the address that missed', async ({ page }) => {
     skipPlaceholder();
 
     await page.goto(cacheBust(MISSING));
 
-    for (const label of ['Home', 'Services', 'Toolbox', 'Pricing', 'Contact']) {
-      await expect(
-        page.locator('.nf-link', { hasText: label }),
-        `the 404 does not offer ${label}`
-      ).toHaveCount(1);
-    }
+    await expect(page.locator('.nf-path-value')).toContainText('this-page-does-not-exist-7c1b04');
+  });
 
-    const hrefs = await page
-      .locator('.nf-link')
-      .evaluateAll((links) => links.map((a) => a.getAttribute('href')));
+  test('does not let a long or hostile path stretch the page', async ({ page }) => {
+    skipPlaceholder();
 
-    for (const href of hrefs) {
-      const response = await page.request.get(href);
-      expect(response.status(), `404 page link ${href}`).toBe(200);
-    }
+    // The requested path is attacker-controlled text echoed onto a page that
+    // renders for any URL at all. It must be escaped, truncated, and unable to
+    // push the document wider than the viewport.
+    const nasty = `/${'a'.repeat(400)}-<script>alert(1)</script>/`;
+
+    await page.goto(cacheBust(nasty));
+
+    const injected = await page.evaluate(() => document.querySelectorAll('.nf-path-value script').length);
+    expect(injected, 'the requested path was rendered as markup').toBe(0);
+
+    const overflow = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+
+    expect(overflow.scrollWidth, 'a long 404 path widened the document').toBeLessThanOrEqual(
+      overflow.clientWidth + 1
+    );
+  });
+
+  test('offers a way home and a way back, and home answers', async ({ page }) => {
+    skipPlaceholder();
+
+    await page.goto(cacheBust(MISSING));
+
+    const home = page.locator('.nf-actions a');
+    await expect(home).toHaveCount(1);
+
+    const href = await home.getAttribute('href');
+    const response = await page.request.get(href);
+    expect(response.status(), `404 page home link ${href}`).toBe(200);
+
+    // Back is a browser action, so it has to be a real button — and one that
+    // actually does something, which is the #77 rule.
+    const back = page.locator('.nf-actions button[data-bw-back]');
+    await expect(back).toHaveCount(1);
+    await expect(back).toBeVisible();
+  });
+
+  test('the back button returns to the previous page', async ({ page }) => {
+    skipPlaceholder();
+
+    await page.goto(cacheBust('/'));
+    await page.goto(cacheBust(MISSING));
+
+    await page.locator('.nf-actions button[data-bw-back]').click();
+    await page.waitForLoadState('domcontentloaded');
+
+    await expect(page.locator('body.bw-404')).toHaveCount(0);
+  });
+
+  test('nothing on it looks like a control and isn’t', async ({ page }) => {
+    skipPlaceholder();
+
+    await page.goto(cacheBust(MISSING));
+
+    const dead = await page.evaluate(() =>
+      [...document.querySelectorAll('a:not([href])')].map((a) => a.className || '(no class)')
+    );
+
+    expect(dead, `anchors that go nowhere:\n${dead.join('\n')}`).toEqual([]);
   });
 
   test('has one h1 and a working skip link, like every other page', async ({ page }) => {

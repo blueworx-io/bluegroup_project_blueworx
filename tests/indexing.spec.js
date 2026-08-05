@@ -210,7 +210,7 @@ test.describe('#80 What may be indexed', () => {
     const state = await (await page.request.get('/?bw_index=1')).json();
     const paths = state.sitemap.map((loc) => new URL(loc).pathname);
 
-    for (const expected of ['/about/', '/services/', '/contact/', '/work/', '/ai/', '/pricing/', '/toolbox/']) {
+    for (const expected of ['/about/', '/services/', '/contact/', '/work/', '/ai/', '/pricing/', '/toolbox/', '/blog/']) {
       expect(paths, `${expected} is missing from the sitemap`).toContain(expected);
     }
 
