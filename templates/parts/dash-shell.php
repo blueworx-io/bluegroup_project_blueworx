@@ -8,15 +8,18 @@
  * primary action. This part is that frame; each page renders its own content
  * into the scrolling column and closes with parts/dash-end.php.
  *
- * Two deliberate departures from the design, both because the data does not
- * exist rather than because the design is wrong:
+ * Two deliberate departures from the design remain, both because the data does
+ * not exist rather than because the design is wrong:
  *
  * - **The site switcher is not here.** It picks between a client's websites,
- *   and nothing on this site records a client's websites.
- * - **Several sidebar sections are not here** — Websites, Toolbox, Partner,
- *   Support, Contacts. Each would need a data source we do not have, and a
- *   portal that shows a client invented figures about their own account is
- *   worse than one that shows fewer, true things.
+ *   and nothing on this site records a client's websites (#101).
+ * - **Websites and Partner are not here.** The first needs a register of client
+ *   sites and a monitoring feed (#101); the second needs referral records
+ *   nothing holds (#100). A portal that shows a client invented figures about
+ *   their own account is worse than one that shows fewer, true things.
+ *
+ * Toolbox, Your details and Support have since been built (#99, #97, #98) —
+ * each of those could be answered truthfully from WordPress or SureCart.
  *
  * The sidebar is a real <nav> with an aria-current link rather than the
  * design's buttons: these are page navigations, and a button that navigates is
@@ -65,10 +68,23 @@ blueworx_public_document_open( array( 'body_class' => 'bw-dashboard' ) );
 				<span><?php esc_html_e( 'Overview', 'bluegroup-project-blueworx' ); ?></span>
 			</a>
 
-			<div class="dash-navlabel"><?php esc_html_e( 'Billing', 'bluegroup-project-blueworx' ); ?></div>
+			<?php
+			// Group headings come from the registry rather than being written
+			// out here: the sidebar had one hard-coded "Billing" label, which
+			// silently filed Toolbox, Your details and Support under it the
+			// moment those sections existed (#97, #98, #99).
+			$blueworx_dash_group = '';
+			?>
 
 			<?php foreach ( $blueworx_dash_sections as $blueworx_dash_slug => $blueworx_dash_item ) : ?>
 				<?php $blueworx_dash_on = ( $blueworx_dash_slug === $blueworx_dash_section ); ?>
+				<?php $blueworx_dash_this_group = isset( $blueworx_dash_item['group'] ) ? (string) $blueworx_dash_item['group'] : ''; ?>
+
+				<?php if ( '' !== $blueworx_dash_this_group && $blueworx_dash_this_group !== $blueworx_dash_group ) : ?>
+					<div class="dash-navlabel"><?php echo esc_html( $blueworx_dash_this_group ); ?></div>
+					<?php $blueworx_dash_group = $blueworx_dash_this_group; ?>
+				<?php endif; ?>
+
 				<a class="dash-navlink<?php echo $blueworx_dash_on ? ' on' : ''; ?>"
 					<?php
 					if ( $blueworx_dash_on ) {
@@ -107,7 +123,12 @@ blueworx_public_document_open( array( 'body_class' => 'bw-dashboard' ) );
 					<div class="dash-kicker"><?php echo esc_html( $blueworx_dash_kicker ); ?></div>
 				<?php endif; ?>
 			</div>
-			<a class="dash-cta" href="<?php echo esc_url( home_url( '/contact' ) ); ?>">
+			<?php
+			// Points at the portal's own request form now that there is one
+			// (#98). It used to leave the client area for the public contact
+			// page, which asked a signed-in client for details we already hold.
+			?>
+			<a class="dash-cta" href="<?php echo esc_url( blueworx_account_url( 'support' ) ); ?>">
 				<?php blueworx_icon( 'chat', 'dash-navicon' ); ?>
 				<?php esc_html_e( 'New request', 'bluegroup-project-blueworx' ); ?>
 			</a>

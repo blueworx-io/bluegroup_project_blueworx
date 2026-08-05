@@ -1220,3 +1220,63 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
   .jr-count { margin-left: 0; width: 100%; }
   .bw-post-body p, .bw-post-body li { font-size: 16.5px; }
 }
+
+/* â”€â”€ Portal: details, support and toolbox (#97, #98, #99) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   .dash-card already exists as a bare panel with its own head strip; these
+   sections have no head strip, so they carry their padding themselves rather
+   than the existing rule being changed under the pages already using it. */
+.dash-card-title { margin: 0; padding: 22px 22px 0; font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-size: 17px; font-weight: 650; letter-spacing: -.3px; color: var(--ink); }
+.dash-card-sub { margin: 6px 0 0; padding: 0 22px; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.dash-card-sub + .btn, .dash-card-title + .btn { margin: 16px 22px 22px; }
+.dash-stack { display: flex; flex-direction: column; gap: 20px; }
+
+.dash-notice { margin-bottom: 20px; padding: 14px 18px; border-radius: 12px; font-size: 14.5px; line-height: 1.5; border: 1px solid transparent; }
+.dash-notice-success { background: #ECFDF3; border-color: #A6E9C5; color: #01824C; }
+.dash-notice-error { background: #FEF3F2; border-color: #F3C4C0; color: #A93226; }
+
+.dash-form { display: flex; flex-direction: column; gap: 16px; padding: 18px 22px 22px; }
+.dash-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dash-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.dash-field label { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.dash-field input, .dash-field textarea { width: 100%; font-family: inherit; font-size: 15px; color: var(--ink); background: #fff; border: 1px solid #E5E6EB; border-radius: 10px; padding: 11px 13px; transition: border-color .18s ease, box-shadow .18s ease; }
+.dash-field textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+.dash-field input:focus-visible, .dash-field textarea:focus-visible { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(79,70,229,.14); }
+.dash-hint { margin: 0; font-size: 12.5px; line-height: 1.5; color: #8A8D99; }
+.dash-form .btn { align-self: flex-start; }
+
+.dash-fieldset { border: none; display: flex; flex-direction: column; gap: 8px; }
+.dash-fieldset legend { padding: 0; font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.dash-radio { display: flex; align-items: flex-start; gap: 11px; padding: 13px 15px; border: 1px solid #E5E6EB; border-radius: 12px; cursor: pointer; transition: border-color .18s ease, background .18s ease; }
+.dash-radio:hover { border-color: #C9CBFF; background: #FBFBFF; }
+/* :has so the whole row shows the selection, not just the dot. Browsers
+   without it simply get the unstyled row, which is still perfectly usable. */
+.dash-radio:has(input:checked) { border-color: var(--brand); background: #F7F8FF; }
+.dash-radio:has(input:focus-visible) { box-shadow: 0 0 0 3px rgba(79,70,229,.14); }
+.dash-radio input { margin: 3px 0 0; flex-shrink: 0; accent-color: var(--brand); }
+.dash-radio-label { display: block; font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.dash-radio-hint { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.5; color: #8A8D99; }
+
+.dash-contact { margin: 14px 22px 0; font-size: 16px; font-weight: 600; }
+.dash-contact a { color: var(--brand-dk); word-break: break-word; }
+.dash-quiet-link { display: inline-block; margin: 10px 22px 22px; font-size: 13.5px; color: #8A8D99; }
+.dash-quiet-link:hover { color: var(--brand-dk); }
+
+.dash-tb-state { padding-bottom: 4px; margin-bottom: 20px; }
+.dash-tb-state .dash-card-sub { padding-bottom: 22px; }
+.dash-tb-state .dash-card-sub + .btn { margin-top: 0; }
+
+.dash-tools { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 14px; }
+.dash-tool { min-width: 0; }
+.dash-tool-link { display: flex; align-items: center; gap: 13px; padding: 15px 16px; background: #fff; border: 1px solid var(--dash-line); border-radius: 14px; text-decoration: none; color: inherit; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.dash-tool-link:hover { border-color: #C9CBFF; box-shadow: var(--sh-2); transform: translateY(-2px); }
+.dash-tool-logo { width: 40px; height: 40px; border-radius: 11px; background: #F5F6FB; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.dash-tool-logo img { width: 24px; height: 24px; object-fit: contain; }
+.dash-tool-text { min-width: 0; flex: 1; }
+.dash-tool-name { display: block; font-size: 14.5px; font-weight: 650; color: var(--ink); }
+.dash-tool-desc { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.45; color: #8A8D99; }
+.dash-tool-state { flex-shrink: 0; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8A8D99; background: #F5F6FB; border-radius: 100px; padding: 5px 10px; }
+.dash-tool-state.on { color: #01824C; background: #ECFDF3; }
+
+@media (max-width: 900px) {
+  .dash-field-row { grid-template-columns: 1fr; }
+}

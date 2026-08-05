@@ -10,6 +10,33 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.14.0] - 2026-08-05
+
+### Added
+
+- **Your details, in the portal.** Clients can change their own name, company
+  and email, and set a new password, without going near wp-admin. Changing a
+  password signs out everywhere else but keeps them signed in here, and the
+  current password is asked for so an unattended screen is not an open door.
+- **Support, in the portal.** A request form that goes straight to us by email,
+  with the urgent cases named separately and the address to use instead when a
+  site is actually down. No ticket number, because there is no ticket system —
+  a person replies by email.
+- **Your toolbox, in the portal.** All twelve tools, marked included or not
+  depending on whether there is an active plan on the account, each linking to
+  its own page.
+
+### Changed
+
+- The portal's "New request" button opens the portal's own support form instead
+  of sending a signed-in client out to the public contact page.
+
+### Not built
+
+- **Websites and Partner** are still missing from the portal. Both need data
+  nothing on the site records — a register of client websites and a monitoring
+  feed for one, referral records for the other. See #101 and #100.
+
 ## [1.13.0] - 2026-08-05
 
 ### Added

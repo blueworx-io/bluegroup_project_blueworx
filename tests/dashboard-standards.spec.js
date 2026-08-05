@@ -17,6 +17,12 @@ const PAGES = [
   { path: '/dashboard/subscriptions/', name: 'Subscriptions' },
   { path: '/dashboard/invoices/', name: 'Invoices' },
   { path: '/dashboard/orders/', name: 'Orders' },
+  // #99, #97, #98. The three sections added later, held to the same standard —
+  // and the first two in the client area with forms in them, which is what the
+  // shared audit's unlabelled-field check exists for.
+  { path: '/dashboard/toolbox/', name: 'Toolbox' },
+  { path: '/dashboard/details/', name: 'Your details' },
+  { path: '/dashboard/support/', name: 'Support' },
 ];
 
 for (const { path, name } of PAGES) {
@@ -93,7 +99,10 @@ for (const { path, name } of PAGES) {
     test('the section tabs are reachable from here', async ({ page }) => {
       await page.goto(path);
 
-      await expect(page.locator('.dash-nav a')).toHaveCount(4);
+      // One link per page in PAGES — derived rather than a fixed number, so a
+      // section added later is covered instead of failing a test that is about
+      // reachability rather than about there being four of anything.
+      await expect(page.locator('.dash-nav a')).toHaveCount(PAGES.length);
       await expect(page.locator('.dash-navlink[aria-current="page"]')).toHaveCount(1);
     });
   });

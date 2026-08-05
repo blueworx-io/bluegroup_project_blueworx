@@ -15,6 +15,9 @@ const PATHS = [
   '/dashboard/subscriptions/',
   '/dashboard/invoices/',
   '/dashboard/orders/',
+  '/dashboard/toolbox/',
+  '/dashboard/details/',
+  '/dashboard/support/',
 ];
 
 test.describe('Client dashboard — logged out', () => {
@@ -57,11 +60,17 @@ test.describe('Client dashboard — signed in', () => {
 
     await expect(page.locator('.dash-card')).toHaveCount(1);
     await expect(page.locator('.dash-facts dd').first()).not.toBeEmpty();
-    await expect(page.locator('.dash-tiles .dash-tile')).toHaveCount(3);
+    // Derived, not a fixed number: the overview offers one tile per section, so
+    // hard-coding the count means every section added later fails a test that
+    // is about the overview being complete rather than about there being three
+    // of anything.
+    await expect(page.locator('.dash-tiles .dash-tile')).toHaveCount(PATHS.length - 1);
     await expect(page.locator('.dash-signout')).toHaveCount(1);
   });
 
-  test('every section is reachable and marks itself as the current tab', async ({ page }) => {
+  test('every billing section is reachable and marks itself as the current tab', async ({
+    page,
+  }) => {
     for (const section of ['subscriptions', 'invoices', 'orders']) {
       await page.goto(`/dashboard/${section}/`);
 
@@ -69,13 +78,13 @@ test.describe('Client dashboard — signed in', () => {
       await expect(page.locator('.dash-navlink[aria-current="page"]')).toHaveText(
         new RegExp(section, 'i')
       );
-      // Nothing is wired to SureCart yet (#38-#40), so each section says so
-      // rather than showing an empty table.
+      // A test account has no SureCart records behind it, so each section says
+      // so rather than showing an empty table.
       await expect(page.locator('.dash-empty')).toHaveCount(1);
     }
   });
 
-  test('the tabs link to all four pages', async ({ page }) => {
+  test('the tabs link to every section, in order', async ({ page }) => {
     await page.goto('/dashboard/');
 
     const hrefs = await page
@@ -87,7 +96,24 @@ test.describe('Client dashboard — signed in', () => {
       '/dashboard/subscriptions',
       '/dashboard/invoices',
       '/dashboard/orders',
+      '/dashboard/toolbox',
+      '/dashboard/details',
+      '/dashboard/support',
     ]);
+  });
+
+  // #97, #98, #99. The sidebar groups its sections, and every one of those
+  // headings must be a real one — the label was hard-coded to "Billing" while
+  // every section was a billing section, which would have quietly filed
+  // Toolbox, Your details and Support under it.
+  test('the sidebar files each section under the right heading', async ({ page }) => {
+    await page.goto('/dashboard/');
+
+    const labels = await page
+      .locator('.dash-navlabel')
+      .evaluateAll((els) => els.map((el) => el.textContent.trim()));
+
+    expect(labels).toEqual(['Billing', 'Your plan', 'Account']);
   });
 
   // A search engine should not hold a copy of a customer's dashboard. Counted

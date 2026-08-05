@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.13.0
+Stable tag:        1.14.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,10 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.14.0 =
+* The client portal gains three sections: your details (name, company, email and password), support (a request form that emails us, plus who to contact urgently), and your toolbox (the twelve tools, marked included or not by whether you have an active plan).
+* The "New request" button in the portal now opens the portal's own form instead of sending you out to the public contact page.
 
 = 1.13.0 =
 * Adds a journal at /blog listing your published posts, with a featured article and topic filters, plus a full page for reading an article — contents list, share buttons and related reading. Links to it are in the menu and footer.
