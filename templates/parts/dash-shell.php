@@ -44,7 +44,7 @@ $blueworx_dash_heading  = isset( $heading ) ? (string) $heading : '';
 $blueworx_dash_kicker   = isset( $kicker ) ? (string) $kicker : '';
 $blueworx_dash_user     = wp_get_current_user();
 $blueworx_dash_name     = blueworx_account_display_name();
-$blueworx_dash_sections = blueworx_account_sections();
+$blueworx_dash_sections = blueworx_account_visible_sections();
 
 blueworx_public_document_open( array( 'body_class' => 'bw-dashboard' ) );
 ?>

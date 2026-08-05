@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.14.0
+Stable tag:        1.15.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,10 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.15.0 =
+* Client websites and referrals are now recorded in wp-admin (two new menu items) and shown to the client in their portal. The Partner tab only appears for people who actually have referrals.
+* Uptime and traffic figures are still not shown per site — nothing measures them yet, and the page says so rather than showing a number nobody took.
 
 = 1.14.0 =
 * The client portal gains three sections: your details (name, company, email and password), support (a request form that emails us, plus who to contact urgently), and your toolbox (the twelve tools, marked included or not by whether you have an active plan).

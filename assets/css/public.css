@@ -1280,3 +1280,18 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
 @media (max-width: 900px) {
   .dash-field-row { grid-template-columns: 1fr; }
 }
+
+/* â”€â”€ Portal: the website register (#101) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Cards rather than the shared table: a site has a name, an address and a
+   hosting line of quite different lengths, and a four-column table of those
+   wraps badly the moment a real domain is longer than "Status". */
+.dash-sites { list-style: none; margin: 0 0 20px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 14px; }
+.dash-site { min-width: 0; background: #fff; border: 1px solid var(--dash-line); border-radius: 14px; padding: 16px 18px; }
+.dash-site-head { display: flex; align-items: center; gap: 10px; }
+.dash-site-name { font-size: 15px; font-weight: 650; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+.dash-site-status { margin-left: auto; flex-shrink: 0; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; border-radius: 100px; padding: 5px 10px; color: #8A8D99; background: #F5F6FB; }
+.dash-site-live { color: #01824C; background: #ECFDF3; }
+.dash-site-building { color: #92400E; background: #FEF6E7; }
+.dash-site-url { display: inline-block; margin-top: 8px; font-size: 13.5px; color: var(--brand-dk); overflow-wrap: anywhere; }
+.dash-site-host { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+.dash-site-label { display: block; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8A8D99; margin-bottom: 2px; }
