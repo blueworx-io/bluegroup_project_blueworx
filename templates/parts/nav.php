@@ -152,6 +152,18 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 				>
 					<?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?>
 				</a>
+				<?php
+				// The journal sits under About Us beside Work, which is where
+				// the design puts it (#94). The top row is already six items
+				// wide and a seventh wraps it onto two lines at laptop widths.
+				?>
+				<a
+					class="<?php echo esc_attr( blueworx_public_nav_active_class( '/blog', $blueworx_nav_path ) ); ?>"
+					href="<?php echo esc_url( blueworx_public_journal_url() ); ?>"
+					style="display:block;padding:10px 14px;color:#fff;font-size:14.5px;font-weight:500;border-radius:8px;text-decoration:none"
+				>
+					<?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?>
+				</a>
 			</div>
 		</div>
 
@@ -182,6 +194,7 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/pricing', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/about', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/work', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/work' ) ); ?>" style="font-size:13.5px;padding-left:24px"><?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?></a>
+	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/blog', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( blueworx_public_journal_url() ); ?>" style="font-size:13.5px;padding-left:24px"><?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
 	<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>

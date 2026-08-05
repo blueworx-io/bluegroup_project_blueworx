@@ -67,6 +67,10 @@ function blueworx_public_seo_copy() {
 			'title'       => __( 'Talk to Us About Your Website', 'bluegroup-project-blueworx' ),
 			'description' => __( 'Tell us where your website is holding the business back and we will show you what to fix. A reply within one business day, no obligation and no sales script.', 'bluegroup-project-blueworx' ),
 		),
+		'blog'     => array(
+			'title'       => __( 'The BlueWorx Journal — Notes on Running a Site', 'bluegroup-project-blueworx' ),
+			'description' => __( 'What we learn running websites, stores and campaigns for clients: speed, checkout, SEO, automation and accessibility, written plainly enough to act on.', 'bluegroup-project-blueworx' ),
+		),
 	);
 
 	// The twelve tool pages. Written out here rather than generated from the

@@ -41,6 +41,13 @@ function blueworx_icon_paths() {
 		'workflow' => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h3A2.5 2.5 0 0 1 15.5 9v5"/>',
 		'gauge'    => '<path d="M12 14l4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
 		'shield'   => '<path d="M20 13c0 5-3.5 7.5-8 8.5-4.5-1-8-3.5-8-8.5V6.5l8-3 8 3z"/><path d="m9 12 2 2 4-4"/>',
+		// Article sharing (#95). Drawn in the same single-weight stroke style
+		// as the set above rather than dropped in as the platforms' own filled
+		// marks: these sit in a row of identical outline buttons, and two
+		// filled glyphs among them read as a rendering fault.
+		'linkedin' => '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+		'x'        => '<path d="M17.5 3h3.2l-7 8 8.3 10h-6.5l-4.6-6-5.3 6H2.4l7.5-8.6L2 3h6.7l4.2 5.5z"/>',
+		'link'     => '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
 	);
 }
 
@@ -166,4 +173,143 @@ function blueworx_public_client_login_url() {
 	 * @param string $url Absolute URL the link points at.
 	 */
 	return (string) apply_filters( 'blueworx_client_login_url', $url );
+}
+
+/**
+ * How long an article takes to read, in whole minutes (#94, #95).
+ *
+ * 200 words a minute is the conventional figure for adult reading of ordinary
+ * prose, and it is the one every publisher's "N min read" label uses. Rounded
+ * up rather than to nearest, and floored at one: a 40-word note that claims
+ * "0 min read" reads as a bug, not as brevity.
+ *
+ * Counted on the stripped content so markup, shortcodes and block comments do
+ * not inflate the figure.
+ *
+ * @param WP_Post|int|null $post Post or ID. Defaults to the current post.
+ * @return int Minutes, at least 1.
+ */
+function blueworx_public_read_minutes( $post = null ) {
+	$post = get_post( $post );
+
+	if ( ! $post instanceof WP_Post ) {
+		return 1;
+	}
+
+	$text  = wp_strip_all_tags( strip_shortcodes( (string) $post->post_content ) );
+	$words = preg_match_all( '/\S+/u', $text );
+
+	return max( 1, (int) ceil( $words / 200 ) );
+}
+
+/**
+ * The "6 min read" label for an article.
+ *
+ * @param WP_Post|int|null $post Post or ID. Defaults to the current post.
+ * @return string Translated label.
+ */
+function blueworx_public_read_label( $post = null ) {
+	$minutes = blueworx_public_read_minutes( $post );
+
+	return sprintf(
+		/* translators: %d: number of minutes. */
+		_n( '%d min read', '%d min read', $minutes, 'bluegroup-project-blueworx' ),
+		$minutes
+	);
+}
+
+/**
+ * Initials for the avatar chip beside an author's name (#94, #95).
+ *
+ * Deliberately not an image: the design's avatar is a solid disc with initials
+ * in it, and reaching for get_avatar() would hand a client's face to Gravatar
+ * on every article view — a third-party request, and one the author never
+ * agreed to. Two letters at most, because three-part names overflow the disc.
+ *
+ * @param string $name Display name.
+ * @return string One or two uppercase letters, or '' when there is no name.
+ */
+function blueworx_public_initials( $name ) {
+	$name  = trim( (string) $name );
+	$parts = preg_split( '/\s+/u', $name, -1, PREG_SPLIT_NO_EMPTY );
+
+	if ( ! $parts ) {
+		return '';
+	}
+
+	$first = function_exists( 'mb_substr' ) ? mb_substr( $parts[0], 0, 1 ) : substr( $parts[0], 0, 1 );
+	$last  = '';
+
+	if ( count( $parts ) > 1 ) {
+		$tail = $parts[ count( $parts ) - 1 ];
+		$last = function_exists( 'mb_substr' ) ? mb_substr( $tail, 0, 1 ) : substr( $tail, 0, 1 );
+	}
+
+	return function_exists( 'mb_strtoupper' ) ? mb_strtoupper( $first . $last ) : strtoupper( $first . $last );
+}
+
+/**
+ * The one category an article is filed under, for its card label (#94).
+ *
+ * A post can carry several; the card and the breadcrumb each have room for one.
+ * The lowest term ID wins rather than the alphabetically first, so the same
+ * post always shows the same label wherever it appears — an unstable label is
+ * how a filter and a card end up disagreeing about the same article.
+ *
+ * Uncategorised posts return null rather than the "Uncategorized" default,
+ * which is a WordPress implementation detail and not a thing to show a reader.
+ *
+ * @param WP_Post|int|null $post Post or ID. Defaults to the current post.
+ * @return WP_Term|null The term, or null.
+ */
+function blueworx_public_post_category( $post = null ) {
+	$post = get_post( $post );
+
+	if ( ! $post instanceof WP_Post ) {
+		return null;
+	}
+
+	$terms = get_the_category( $post->ID );
+
+	if ( ! is_array( $terms ) || ! $terms ) {
+		return null;
+	}
+
+	usort(
+		$terms,
+		static function ( $a, $b ) {
+			return (int) $a->term_id - (int) $b->term_id;
+		}
+	);
+
+	foreach ( $terms as $term ) {
+		if ( 'uncategorized' !== $term->slug ) {
+			return $term;
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Where the journal lives (#94).
+ *
+ * Resolved through the page ID map rather than hard-coding "/blog", so the
+ * link still works after an admin renames the page — the same rule every other
+ * cross-page link in the public layer follows.
+ *
+ * @return string Absolute URL.
+ */
+function blueworx_public_journal_url() {
+	$map = (array) get_option( 'blueworx_public_page_ids', array() );
+
+	if ( isset( $map['blog'] ) && blueworx_public_page_is_ours( (int) $map['blog'] ) ) {
+		$permalink = get_permalink( (int) $map['blog'] );
+
+		if ( $permalink ) {
+			return (string) $permalink;
+		}
+	}
+
+	return home_url( '/blog' );
 }

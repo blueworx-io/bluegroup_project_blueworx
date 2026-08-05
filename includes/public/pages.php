@@ -88,6 +88,10 @@ function blueworx_public_pages() {
 			'title'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/toolbox.php',
 		),
+		'blog'     => array(
+			'title'    => __( 'Journal', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/blog.php',
+		),
 	);
 
 	// One entry per Toolbox tool, keyed by its FULL hierarchical path
@@ -336,23 +340,51 @@ function blueworx_public_is_owned_page() {
 }
 
 /**
+ * Whether the current request is a journal article this plugin renders (#95).
+ *
+ * A post is not an owned Page and never can be — the client writes it, the
+ * plugin only dresses it. So it is handled the same way as the 404: rendered
+ * and styled, but never stamped, swept into the ID map, or repointed.
+ *
+ * Filterable because this is the one place the public layer reaches beyond
+ * pages it created. A site that wants its posts rendered by its theme after
+ * all can turn this off without turning the whole public layer off.
+ *
+ * QUERY-TIME ONLY, for the same reason as blueworx_public_is_owned_page().
+ *
+ * @return bool True when the plugin renders this post.
+ */
+function blueworx_public_renders_post() {
+	$renders = is_singular( 'post' ) && ! is_admin() && ! is_feed() && ! is_robots();
+
+	/**
+	 * Filters whether the plugin renders single posts.
+	 *
+	 * @param bool $renders Whether to render.
+	 */
+	return (bool) apply_filters( 'blueworx_public_renders_post', $renders );
+}
+
+/**
  * Whether this plugin is rendering the current request at all.
  *
- * Broader than blueworx_public_is_owned_page() by exactly one case: the 404,
- * which the plugin renders (#78) without owning a Page for it. Everything that
- * follows from "this document is ours" — the stylesheet, the nav script, the
- * theme-stylesheet removal — has to be true there too, or the not-found page
- * renders as unstyled markup, which is a worse version of the bug it fixes.
+ * Broader than blueworx_public_is_owned_page() by exactly two cases: the 404,
+ * which the plugin renders (#78) without owning a Page for it, and a single
+ * journal post (#95), which belongs to the client rather than the plugin.
+ * Everything that follows from "this document is ours" — the stylesheet, the
+ * nav script, the theme-stylesheet removal — has to be true there too, or those
+ * pages render as unstyled markup, which is a worse version of the bug it
+ * fixes.
  *
- * Ownership itself is deliberately NOT widened to include it: a 404 has no
- * post, so nothing about it can be owned, swept or repointed.
+ * Ownership itself is deliberately NOT widened to include either: a 404 has no
+ * post at all, and a journal post is somebody else's content.
  *
  * QUERY-TIME ONLY, for the same reason as blueworx_public_is_owned_page().
  *
  * @return bool True when the plugin renders this request.
  */
 function blueworx_public_renders_request() {
-	if ( blueworx_public_is_owned_page() ) {
+	if ( blueworx_public_is_owned_page() || blueworx_public_renders_post() ) {
 		return true;
 	}
 
@@ -590,6 +622,17 @@ function blueworx_public_template( $template ) {
 
 	if ( null !== $own ) {
 		return $own;
+	}
+
+	// A journal article (#95). The post is the client's, not the plugin's, so
+	// this only supplies the document around the_content() — checked before the
+	// 404 branch because a post is never a 404 and the two must not compete.
+	if ( blueworx_public_renders_post() ) {
+		$single_post = BLUEWORX_SITE_PATH . 'templates/pages/single-post.php';
+
+		if ( file_exists( $single_post ) ) {
+			return $single_post;
+		}
 	}
 
 	// The 404 is the one page the plugin renders that it does not own a Page

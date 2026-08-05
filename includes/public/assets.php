@@ -151,6 +151,19 @@ function blueworx_public_allowed_asset_prefixes() {
 		'blueworx',
 	);
 
+	// A journal article is editor content, not a designed template (#95): its
+	// paragraphs, images, galleries and embeds are core blocks, and core ships
+	// their CSS under these handles. Sweeping them leaves a post rendered with
+	// the plugin's typography but none of the block layout the author saw in
+	// the editor — columns stacked, galleries as a vertical list of images.
+	// Marketing pages contain no blocks, so this is added only where it applies.
+	if ( function_exists( 'blueworx_public_renders_post' ) && blueworx_public_renders_post() ) {
+		$prefixes[] = 'wp-block';
+		$prefixes[] = 'global-styles';
+		$prefixes[] = 'core-block-supports';
+		$prefixes[] = 'classic-theme-styles';
+	}
+
 	// The admin bar is only ever shown to a logged-in user, and stripping it
 	// would break wp-admin navigation for the people editing the site. Its
 	// script depends on hoverintent-js, and it draws its icons from dashicons.

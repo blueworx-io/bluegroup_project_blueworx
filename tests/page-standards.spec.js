@@ -38,6 +38,11 @@ const PAGES = [
   { path: '/pricing/', issue: '#49 Pricing' },
   { path: '/toolbox/', issue: '#50 Toolbox' },
   { path: '/contact/', issue: '#52 Contact' },
+  // #94. The journal is held to the same standard as the pages above, and it
+  // is the one page whose content is the client's rather than ours — so an
+  // unlabelled control or a heading level skipped by a card is exactly the
+  // kind of thing that would otherwise only show up once posts exist.
+  { path: '/blog/', issue: '#94 Journal' },
   ...TOOL_SLUGS.map((slug) => ({ path: `/toolbox/${slug}/`, issue: `#51 Toolbox — ${slug}` })),
   // #55. The signed-out half of the client area — the sign-in, sign-up and
   // reset pages — is held to exactly the same standard as the marketing pages.

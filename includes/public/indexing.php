@@ -337,6 +337,24 @@ function blueworx_public_print_seo_meta() {
 
 	$copy = blueworx_public_current_seo_copy();
 
+	// A journal article has no hand-written entry and never will — the copy
+	// registry covers pages this plugin ships, and posts are the client's
+	// (#95). Its own excerpt is the description a search result should show,
+	// and it is the same text the article leads with, so it is never a
+	// fragment scraped from the middle of a sentence — which is the fault #79
+	// existed to fix. Only reached when there is no SEO plugin installed;
+	// SureRank handles posts itself.
+	if ( null === $copy && blueworx_public_renders_post() ) {
+		$excerpt = trim( (string) get_the_excerpt( get_queried_object_id() ) );
+
+		if ( '' !== $excerpt ) {
+			$copy = array(
+				'title'       => '',
+				'description' => $excerpt,
+			);
+		}
+	}
+
 	if ( null === $copy ) {
 		return;
 	}
@@ -352,7 +370,7 @@ function blueworx_public_print_seo_meta() {
 
 	printf( '<meta property="og:title" content="%s" />' . "\n", esc_attr( $title ) );
 	printf( '<meta name="twitter:title" content="%s" />' . "\n", esc_attr( $title ) );
-	printf( '<meta property="og:type" content="website" />' . "\n" );
+	printf( '<meta property="og:type" content="%s" />' . "\n", blueworx_public_renders_post() ? 'article' : 'website' );
 	printf( '<meta property="og:url" content="%s" />' . "\n", esc_url( home_url( add_query_arg( array() ) ) ) );
 	printf( '<meta name="twitter:card" content="summary_large_image" />' . "\n" );
 }
