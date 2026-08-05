@@ -22,6 +22,9 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/pages.php';
 // After pages.php — the client area registers its pages on that file's filter.
 require_once BLUEWORX_SITE_PATH . 'includes/public/account.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/account-data.php';
+// After account.php — its handlers run on the pages that file registers, and
+// they redirect through blueworx_account_url().
+require_once BLUEWORX_SITE_PATH . 'includes/public/account-forms.php';
 // After account.php — the auth pages are where its gate sends people.
 require_once BLUEWORX_SITE_PATH . 'includes/public/auth.php';
 // After account.php and auth.php — it reads the `account`/`auth` flags those

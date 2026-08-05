@@ -42,7 +42,11 @@ const BLUEWORX_ACCOUNT_ROOT = 'dashboard';
  * Keyed by the child slug under the dashboard root. The overview is the root
  * itself and so is not listed here.
  *
- * @return array Slug => array( label, title, template, blurb ).
+ * `group` is the sidebar heading a section sits under. It used to be a single
+ * hard-coded "Billing" label in dash-shell.php, which only worked while every
+ * section was a billing one (#97, #98, #99).
+ *
+ * @return array Slug => array( label, title, kicker, group, icon, template, blurb ).
  */
 function blueworx_account_sections() {
 	$sections = array(
@@ -50,6 +54,7 @@ function blueworx_account_sections() {
 			'label'    => __( 'Subscriptions', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Subscriptions', 'bluegroup-project-blueworx' ),
 			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Billing', 'bluegroup-project-blueworx' ),
 			'icon'     => 'clock',
 			'template' => 'pages/dashboard-subscriptions.php',
 			'blurb'    => __( 'Your active plans, what they cost, and when they renew.', 'bluegroup-project-blueworx' ),
@@ -58,6 +63,7 @@ function blueworx_account_sections() {
 			'label'    => __( 'Invoices', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Invoices', 'bluegroup-project-blueworx' ),
 			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Billing', 'bluegroup-project-blueworx' ),
 			'icon'     => 'doc',
 			'template' => 'pages/dashboard-invoices.php',
 			'blurb'    => __( 'Every invoice on your account.', 'bluegroup-project-blueworx' ),
@@ -66,9 +72,37 @@ function blueworx_account_sections() {
 			'label'    => __( 'Orders', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Orders', 'bluegroup-project-blueworx' ),
 			'kicker'   => __( 'Billing', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Billing', 'bluegroup-project-blueworx' ),
 			'icon'     => 'cart',
 			'template' => 'pages/dashboard-orders.php',
 			'blurb'    => __( 'Everything you have ordered from us.', 'bluegroup-project-blueworx' ),
+		),
+		'toolbox'       => array(
+			'label'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
+			'title'    => __( 'Your Toolbox', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Your plan', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Your plan', 'bluegroup-project-blueworx' ),
+			'icon'     => 'plug',
+			'template' => 'pages/dashboard-toolbox.php',
+			'blurb'    => __( 'The premium tools included with your plan.', 'bluegroup-project-blueworx' ),
+		),
+		'details'       => array(
+			'label'    => __( 'Your details', 'bluegroup-project-blueworx' ),
+			'title'    => __( 'Your details', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Account', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Account', 'bluegroup-project-blueworx' ),
+			'icon'     => 'users',
+			'template' => 'pages/dashboard-details.php',
+			'blurb'    => __( 'Your name, company and email, and your password.', 'bluegroup-project-blueworx' ),
+		),
+		'support'       => array(
+			'label'    => __( 'Support', 'bluegroup-project-blueworx' ),
+			'title'    => __( 'Support', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Account', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Account', 'bluegroup-project-blueworx' ),
+			'icon'     => 'chat',
+			'template' => 'pages/dashboard-support.php',
+			'blurb'    => __( 'Ask us for help, and see who to contact.', 'bluegroup-project-blueworx' ),
 		),
 	);
 
