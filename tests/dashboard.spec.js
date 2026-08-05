@@ -10,15 +10,24 @@
 
 import { test, expect, login, cacheBust, isPlaceholder, baseURL } from './helpers.js';
 
+// The sections offered to an ordinary client — the sidebar tabs and the
+// overview's tiles are both exactly this list.
 const PATHS = [
   '/dashboard/',
   '/dashboard/subscriptions/',
   '/dashboard/invoices/',
   '/dashboard/orders/',
+  '/dashboard/websites/',
   '/dashboard/toolbox/',
   '/dashboard/details/',
   '/dashboard/support/',
 ];
+
+// Every gated address, including Partner — which is hidden from the sidebar
+// unless the client has referrals (#100) but is still a real page holding
+// somebody's commission figures. A page kept out of the navigation is exactly
+// the one a gate check must not skip.
+const GATED = [...PATHS, '/dashboard/partner/'];
 
 test.describe('Client dashboard — logged out', () => {
   test.beforeEach(() => {
@@ -27,7 +36,7 @@ test.describe('Client dashboard — logged out', () => {
 
   // Deliberately every path, not a sample: the gate is the security control and
   // a section that slipped past it would look exactly like a passing suite.
-  for (const path of PATHS) {
+  for (const path of GATED) {
     // No status assertion on the destination: the Client Login setting still
     // points at SureDash's /portal (#28), which does not exist on a bare test
     // install. What matters is that the request left the dashboard.
@@ -91,15 +100,14 @@ test.describe('Client dashboard — signed in', () => {
       .locator('.dash-nav a')
       .evaluateAll((els) => els.map((el) => new URL(el.href).pathname.replace(/\/$/, '')));
 
-    expect(hrefs).toEqual([
-      '/dashboard',
-      '/dashboard/subscriptions',
-      '/dashboard/invoices',
-      '/dashboard/orders',
-      '/dashboard/toolbox',
-      '/dashboard/details',
-      '/dashboard/support',
-    ]);
+    // Derived from PATHS so the two cannot drift, and asserted in order
+    // because the sidebar's group headings only make sense if the sections
+    // under them are contiguous.
+    expect(hrefs).toEqual(PATHS.map((path) => path.replace(/\/$/, '')));
+
+    // Partner is a real page but must not be offered to a client with no
+    // referrals (#100).
+    expect(hrefs).not.toContain('/dashboard/partner');
   });
 
   // #97, #98, #99. The sidebar groups its sections, and every one of those
@@ -113,6 +121,9 @@ test.describe('Client dashboard — signed in', () => {
       .locator('.dash-navlabel')
       .evaluateAll((els) => els.map((el) => el.textContent.trim()));
 
+    // No "Partner" heading for a client with no referrals, and no heading
+    // printed twice — which is what happens if a section is filed out of order
+    // in the registry, since headings are emitted when the group changes.
     expect(labels).toEqual(['Billing', 'Your plan', 'Account']);
   });
 
@@ -120,7 +131,7 @@ test.describe('Client dashboard — signed in', () => {
   // rather than matched exactly: a site with "discourage search engines" on
   // emits its own robots tag as well, and both saying noindex is fine.
   test('no dashboard page is indexable', async ({ page }) => {
-    for (const path of PATHS) {
+    for (const path of GATED) {
       await page.goto(path);
 
       const tags = await page

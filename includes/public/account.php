@@ -77,6 +77,15 @@ function blueworx_account_sections() {
 			'template' => 'pages/dashboard-orders.php',
 			'blurb'    => __( 'Everything you have ordered from us.', 'bluegroup-project-blueworx' ),
 		),
+		'websites'      => array(
+			'label'    => __( 'Websites', 'bluegroup-project-blueworx' ),
+			'title'    => __( 'Your websites', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Your plan', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Your plan', 'bluegroup-project-blueworx' ),
+			'icon'     => 'server',
+			'template' => 'pages/dashboard-websites.php',
+			'blurb'    => __( 'The sites we look after for you, and where each one is.', 'bluegroup-project-blueworx' ),
+		),
 		'toolbox'       => array(
 			'label'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
 			'title'    => __( 'Your Toolbox', 'bluegroup-project-blueworx' ),
@@ -85,6 +94,22 @@ function blueworx_account_sections() {
 			'icon'     => 'plug',
 			'template' => 'pages/dashboard-toolbox.php',
 			'blurb'    => __( 'The premium tools included with your plan.', 'bluegroup-project-blueworx' ),
+		),
+		// Grouped headings are emitted when the group CHANGES, so every section
+		// in a group must sit together in this array. Partner between details
+		// and support would print "Account" twice.
+		'partner'       => array(
+			'label'    => __( 'Partner', 'bluegroup-project-blueworx' ),
+			'title'    => __( 'Your referrals', 'bluegroup-project-blueworx' ),
+			'kicker'   => __( 'Partner', 'bluegroup-project-blueworx' ),
+			'group'    => __( 'Partner', 'bluegroup-project-blueworx' ),
+			'icon'     => 'users',
+			'template' => 'pages/dashboard-partner.php',
+			'blurb'    => __( 'Businesses you have sent us, and what has been paid.', 'bluegroup-project-blueworx' ),
+			// Only shown to somebody who actually has referrals. Every client
+			// would otherwise carry a Partner tab into an empty page about a
+			// scheme they are not on.
+			'only_if'  => 'blueworx_is_partner',
 		),
 		'details'       => array(
 			'label'    => __( 'Your details', 'bluegroup-project-blueworx' ),
@@ -112,6 +137,31 @@ function blueworx_account_sections() {
 	 * @param array $sections Section definitions keyed by child slug.
 	 */
 	return (array) apply_filters( 'blueworx_account_sections', $sections );
+}
+
+/**
+ * The sections to show the current client in the sidebar and on the overview.
+ *
+ * Deliberately NOT the same list blueworx_account_register_pages() uses. Every
+ * section keeps its page — created, owned, gated and never indexed like the
+ * rest — because hiding a tab must not mean the address stops existing: a
+ * partner whose referrals are entered next week would otherwise be linked to a
+ * page that 404s. This only decides what is offered.
+ *
+ * @return array Slug => section, filtered to the ones this client should see.
+ */
+function blueworx_account_visible_sections() {
+	$visible = array();
+
+	foreach ( blueworx_account_sections() as $slug => $section ) {
+		if ( isset( $section['only_if'] ) && is_callable( $section['only_if'] ) && ! call_user_func( $section['only_if'] ) ) {
+			continue;
+		}
+
+		$visible[ $slug ] = $section;
+	}
+
+	return $visible;
 }
 
 /**

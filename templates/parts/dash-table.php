@@ -75,10 +75,21 @@ else :
 								$blueworx_tbl_value = isset( $blueworx_tbl_row[ $blueworx_tbl_key ] ) ? $blueworx_tbl_row[ $blueworx_tbl_key ] : '';
 
 								if ( 'status' === $blueworx_tbl_key ) {
+									// A row may carry its own wording. The
+									// mapping below is SureCart's vocabulary,
+									// and the referral register (#100) has its
+									// own — "Became a client" is not a status
+									// SureCart has ever heard of, and running
+									// it through that map turns it into
+									// something else.
+									$blueworx_tbl_label = isset( $blueworx_tbl_row['status_label'] ) && '' !== $blueworx_tbl_row['status_label']
+										? $blueworx_tbl_row['status_label']
+										: blueworx_account_status_label( $blueworx_tbl_value );
+
 									printf(
 										'<span class="dash-status dash-status-%1$s">%2$s</span>',
 										esc_attr( sanitize_html_class( $blueworx_tbl_value ) ),
-										esc_html( blueworx_account_status_label( $blueworx_tbl_value ) )
+										esc_html( $blueworx_tbl_label )
 									);
 								} elseif ( 'pay' === $blueworx_tbl_key ) {
 									// Only an unpaid invoice has somewhere to

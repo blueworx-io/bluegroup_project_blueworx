@@ -101,6 +101,30 @@ blueworx_public_part(
 				<dt><?php esc_html_e( 'Email', 'bluegroup-project-blueworx' ); ?></dt>
 				<dd><?php echo esc_html( $blueworx_dash_user->user_email ); ?></dd>
 			</div>
+			<?php
+			// The design's overview leads on "live websites". That figure is
+			// now real (#101) — it counts the register, not a monitoring feed —
+			// so it is shown, and only when there is something to count. The
+			// visits and uptime cards beside it in the design still are not,
+			// and still are not here.
+			$blueworx_dash_sites = blueworx_client_sites();
+			?>
+			<?php if ( $blueworx_dash_sites ) : ?>
+				<div>
+					<dt><?php esc_html_e( 'Websites', 'bluegroup-project-blueworx' ); ?></dt>
+					<dd>
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %d: number of websites on the account. */
+								_n( '%d site we look after', '%d sites we look after', count( $blueworx_dash_sites ), 'bluegroup-project-blueworx' ),
+								count( $blueworx_dash_sites )
+							)
+						);
+						?>
+					</dd>
+				</div>
+			<?php endif; ?>
 		</dl>
 		<p class="dash-note">
 			<?php esc_html_e( 'Need something changed on your account? Tell us and we will sort it.', 'bluegroup-project-blueworx' ); ?>
@@ -137,7 +161,7 @@ blueworx_public_part(
 </div>
 
 <div class="dash-tiles">
-	<?php foreach ( blueworx_account_sections() as $blueworx_dash_slug => $blueworx_dash_section ) : ?>
+	<?php foreach ( blueworx_account_visible_sections() as $blueworx_dash_slug => $blueworx_dash_section ) : ?>
 		<a class="dash-tile" href="<?php echo esc_url( blueworx_account_url( $blueworx_dash_slug ) ); ?>">
 			<span class="dash-tile-icon"><?php blueworx_icon( isset( $blueworx_dash_section['icon'] ) ? $blueworx_dash_section['icon'] : 'doc' ); ?></span>
 			<span class="dash-tile-text">

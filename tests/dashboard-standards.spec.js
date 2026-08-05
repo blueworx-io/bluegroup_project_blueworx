@@ -20,6 +20,7 @@ const PAGES = [
   // #99, #97, #98. The three sections added later, held to the same standard —
   // and the first two in the client area with forms in them, which is what the
   // shared audit's unlabelled-field check exists for.
+  { path: '/dashboard/websites/', name: 'Websites' },
   { path: '/dashboard/toolbox/', name: 'Toolbox' },
   { path: '/dashboard/details/', name: 'Your details' },
   { path: '/dashboard/support/', name: 'Support' },

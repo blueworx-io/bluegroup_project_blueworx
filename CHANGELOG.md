@@ -10,6 +10,30 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.15.0] - 2026-08-05
+
+### Added
+
+- **A register of client websites, and the portal section that shows it.**
+  Websites are recorded in wp-admin against the client they belong to — name,
+  address, hosting and whether the site is live — and each client sees their own
+  in the portal. The overview now counts them.
+- **A referral register, and the Partner section.** Referrals are recorded
+  against the partner who sent them, with their status and the commission paid.
+  The Partner tab only appears for somebody who actually has referrals, so it
+  does not clutter every other client's portal.
+
+### Not built, deliberately
+
+- **Uptime, monthly visits and core web vitals.** The design shows all three per
+  site. Each is a live measurement and no monitoring service is connected, so
+  the Websites page says plainly that those figures are not shown rather than
+  displaying numbers nobody measured. The register holds each site's real
+  address, so a monitor can be wired up against it later.
+- **The site switcher.** It scopes the portal to one website, and everything
+  else in the portal — subscriptions, invoices, orders — is account-wide. A
+  switcher that changed nothing on the page would be a control that lies.
+
 ## [1.14.0] - 2026-08-05
 
 ### Added
