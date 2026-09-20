@@ -1,6 +1,6 @@
 <?php
 /**
- * Plan cards grid (`.plans`), used by the Pricing and Toolbox pages.
+ * Plan cards grid (`.plans`), used by the Support and Toolbox pages.
  *
  * Ported from the PlanCards component in components/Plans.tsx. The source swaps
  * the displayed price between monthly and annual via React state shared with a

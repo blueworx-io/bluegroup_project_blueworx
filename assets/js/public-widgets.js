@@ -41,7 +41,6 @@
 		}
 		return cur.symbol + Math.round( value ).toLocaleString( 'en-GB' );
 	}
-	window.blueworxMoney = money;
 
 	/**
 	 * Repaints every element carrying a base GBP amount.

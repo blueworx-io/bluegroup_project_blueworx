@@ -46,4 +46,23 @@ test.describe('Currency switcher', () => {
     const first = await page.locator('.plans .plan-price b').first().textContent();
     expect(first.startsWith('$')).toBe(true);
   });
+
+  test('the menu closes after choosing a currency, on Escape, and on an outside click', async ({ page }) => {
+    await page.goto(cacheBust('/hosting/'));
+    const menu = page.locator('nav .bw-cur-menu');
+
+    await page.locator('nav .bw-cur-btn').click();
+    await page.locator('nav .bw-cur-menu button[data-cur="USD"]').click();
+    await expect(menu).toBeHidden();
+
+    await page.locator('nav .bw-cur-btn').click();
+    await expect(menu).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+
+    await page.locator('nav .bw-cur-btn').click();
+    await expect(menu).toBeVisible();
+    await page.locator('body').click({ position: { x: 10, y: 10 } });
+    await expect(menu).toBeHidden();
+  });
 });

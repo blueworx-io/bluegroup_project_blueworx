@@ -104,20 +104,6 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .tag-dark::before { background: #6D6AF0; box-shadow: 0 0 6px rgba(109,106,240,.95); }
 .mobile-menu .tag-light { margin-left: 8px; vertical-align: 2px; }
 
-/* Toolbox mega panel + About Us dropdown (Nav.tsx). Unlike the React source,
-   which mounts these only while open, templates/parts/nav.php renders both
-   unconditionally and assets/js/public-nav.js toggles ".open" — so the panel
-   has to be hidden by CSS rather than by not existing. ":focus-within" on
-   the shared ".nav-drop" wrapper reveals the panel for keyboard users too —
-   Tab onto the trigger link, or onto any link already inside the panel,
-   keeps it open without depending on public-nav.js's focusin/focusout
-   handlers having already run. */
-.nav-drop { position: relative; }
-.mega-panel { display: none; position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%); width: 760px; background: #0A0C29; border-radius: 20px; box-shadow: 0 30px 70px rgba(10,12,41,.35); padding: 28px; grid-template-columns: 1fr 1fr; gap: 6px 18px; z-index: 60; }
-.mega-panel.open, .nav-drop:focus-within .mega-panel { display: grid; }
-.about-panel { display: none; position: absolute; top: calc(100% + 10px); left: 0; min-width: 160px; background: #0A0C29; border-radius: 14px; box-shadow: 0 20px 50px rgba(10,12,41,.3); padding: 8px; z-index: 60; }
-.about-panel.open, .nav-drop:focus-within .about-panel { display: block; }
-
 /* ===== buttons ===== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: none; cursor: pointer; font-family: var(--font-sora), sans-serif; font-weight: 600; letter-spacing: -.01em; border-radius: 13px; transition: background .22s ease, color .22s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }
 .btn:hover { transform: translateY(-2px); }
@@ -390,6 +376,7 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .calc-field { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #F0F0F5; }
 .calc-field:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .calc-field > label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
+.bw-calc-label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
 .opt-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .opt { padding: 11px 18px; border-radius: 10px; background: #fff; border: 1px solid #E6E6E6; font-size: 14px; font-weight: 500; color: #4C4C4C; cursor: pointer; transition: .18s; }
 .opt:hover { border-color: #A5A7FF; }
@@ -877,13 +864,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .ai-pipe, .ai-models { grid-template-columns: 1fr; }
 }
 
-/* mega menu item hover (ported from inline style-hover in the design export) */
-.mega-item:hover { background: rgba(255,255,255,.07); }
-/* mega items live inside .nav-links, whose anchors are nowrap for the top-level
-   labels — without this the descriptions can't wrap and the grid overflows its
-   fixed-width panel */
-.nav-links a.mega-item { white-space: normal; }
-
 /* portal toolbox / learning card hover (ported from inline style-hover in the design export) */
 .pt-tool-link:hover { border-color: #C7C9F5 !important; box-shadow: 0 8px 22px rgba(10,12,41,.07); }
 
@@ -1349,7 +1329,6 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
 .bw-calc-name { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 600; color: #0A0C29; }
 .bw-calc-blurb { font-size: 14.5px; color: #667085; margin: 6px 0 0; line-height: 1.55; }
 .bw-calc-rate { font-family: 'Sora', sans-serif; font-size: 18px; color: #0A0C29; }
-.tech-status .bw-plain::before { display: none; }
 
 /* ClubHouse: the hero headline is set so the accent phrase holds one line in
    the 560px column; the demo band is a wide slot beside a stacked pair. */
@@ -1372,7 +1351,7 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
 .bw-cur-btn svg { width: 14px; height: 14px; transition: transform .2s ease; }
 .bw-cur.open .bw-cur-btn svg { transform: rotate(180deg); }
 .bw-cur-menu { display: none; position: absolute; top: calc(100% + 10px); right: 0; min-width: 150px; background: #0A0C29; border-radius: 14px; box-shadow: 0 30px 70px rgba(10,12,41,.34); padding: 8px; z-index: 260; }
-.bw-cur.open .bw-cur-menu, .bw-cur:focus-within .bw-cur-menu { display: block; }
+.bw-cur.open .bw-cur-menu { display: block; }
 .bw-cur-menu button { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 500; color: #fff; cursor: pointer; transition: background .18s ease; }
 .bw-cur-menu button:hover { background: rgba(255,255,255,.08); }
 .bw-cur-menu button.on { background: rgba(139,142,255,.18); color: #C9CBFF; }

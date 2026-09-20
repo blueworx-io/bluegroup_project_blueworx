@@ -26,7 +26,7 @@
  * - max_width        (int, optional) Centered mode only. Inner max width in px.
  *                     Default 820 (About). Contact uses 780.
  * - extra_class      (string, optional) Centered mode only. Extra class(es) on
- *                     the `<section>`, e.g. "pb-tall" for Pricing's taller hero.
+ *                     the `<section>`, e.g. "pb-tall" for Support's taller hero.
  * - cta              (array, optional) List of array( label, href, class,
  *                     external ) rendered as buttons after the lead. `external`
  *                     (bool, optional) appends target="_blank" rel="noopener".

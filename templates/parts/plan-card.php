@@ -13,7 +13,10 @@
  *     buyM, buyA   (string, optional) SureCart checkout links per interval.
  *     currency     (string, optional) 'GBP' renders "£" and marks the amount
  *                  with data-bw-gbp so public-widgets.js can convert it.
- *                  Absent: "$" and no conversion (the Toolbox plans).
+ *                  Absent: "$" and no conversion (the Toolbox plans). When a
+ *                  live SureCart amount has replaced priceM, the data-bw-gbp
+ *                  conversion still assumes the SureCart store itself is
+ *                  priced in GBP.
  *     subM, subA   (string, optional) Period labels. Defaults: "per month" /
  *                  "per month, billed yearly".
  *     lbl          (string, optional) Feature-list label. Default "FEATURES".

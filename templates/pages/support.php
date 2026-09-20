@@ -103,12 +103,12 @@ blueworx_public_part( 'parts/nav.php' );
 						<div class="bw-range-ends"><span>2 hrs</span><span>50 hrs</span></div>
 					</div>
 					<div class="calc-field">
-						<label><?php esc_html_e( 'Package', 'bluegroup-project-blueworx' ); ?></label>
+						<div class="bw-calc-label"><?php esc_html_e( 'Package', 'bluegroup-project-blueworx' ); ?></div>
 						<div class="bw-calc-name" data-testid="support-calc-name"><?php echo esc_html( $blueworx_s_growth['name'] ); ?></div>
 						<p class="bw-calc-blurb" data-testid="support-calc-blurb"><?php echo esc_html( $blueworx_s_growth['blurb'] ); ?></p>
 					</div>
 					<div class="calc-field" style="display:flex;align-items:center;justify-content:space-between;gap:16px">
-						<label style="margin:0"><?php esc_html_e( 'Effective hourly rate', 'bluegroup-project-blueworx' ); ?></label>
+						<div class="bw-calc-label" style="margin:0"><?php esc_html_e( 'Effective hourly rate', 'bluegroup-project-blueworx' ); ?></div>
 						<?php
 						$blueworx_s_growth_rate = $blueworx_s_growth['priceM'] * 12 / $blueworx_s_growth['hours'];
 						?>

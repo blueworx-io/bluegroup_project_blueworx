@@ -14,7 +14,7 @@
  *   status pills on the left, a bespoke `.glass-card` (58px bundled favicon
  *   tile, name + optional "Popular" pill, domain, and the 6 features as
  *   green-check rows) on the right. tech-hero.php has no breadcrumb slot (see
- *   that part's doc comment), so — like services.php's two-column hero — this
+ *   that part's doc comment), so — like the Work page's two-column hero — this
  *   is composed inline rather than through that part; the `.glass-card`
  *   itself is also hand-built here rather than via glass-card.php, which
  *   always renders a `.gc-head` (dots + tag) this page's design does not use.

@@ -2,11 +2,11 @@
 /**
  * Public front-end layer — commerce.
  *
- * The Pricing page's plan names, prices and buttons were all written into the
- * plugin (see blueworx_content_retainer_plans()). That is fine until somebody
- * changes a price in SureCart, at which point the site advertises one figure
- * and charges another — and the "Get started" buttons went to the contact form,
- * so nobody could buy a plan from the pricing page at all (#41).
+ * The Support, Hosting and ClubHouse pages' plan names, prices and buttons
+ * were all written into the plugin (see blueworx_content_retainer_plans()).
+ * That is fine until somebody changes a price in SureCart, at which point
+ * the site advertises one figure and charges another — and the "Get started"
+ * buttons went to the contact form, so nobody could buy a plan at all (#41).
  *
  * This file is the seam between the two. Given a SureCart price ID per plan per
  * billing interval, it reads the real amount from SureCart and points the
@@ -233,8 +233,9 @@ add_action( 'add_option_blueworx_surecart_price_ids', 'blueworx_commerce_flush_p
 /**
  * Overlays live SureCart prices and buy links onto the retainer plans.
  *
- * Runs on the same filter the content file exposes, so the Pricing and Toolbox
- * pages both get it without either template changing how it asks for plans.
+ * Runs on the same filter the content file exposes, so the Support, Hosting
+ * and ClubHouse pages all get it without any template changing how it asks
+ * for plans.
  *
  * A plan is only ever partly overlaid: a monthly price that resolves and an
  * annual one that does not leaves the annual figure hardcoded. That is
