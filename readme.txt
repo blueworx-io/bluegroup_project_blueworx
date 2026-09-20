@@ -40,10 +40,17 @@ At the plugin's own sign-in page (/login) by default, which sends the client on 
 = How do I add a contact form? =
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
 
-= How do I show real SureCart prices on the Pricing page? =
-Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. That plan then shows SureCart's price and its button goes to checkout. Leave a plan blank to keep the price built into the plugin.
+= How do I show real SureCart prices? =
+Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.16.0 =
+* Added three product pages: ClubHouse (the club website platform), Hosting (managed WordPress hosting) and Integrated Support (nine support packages with a slider and a comparison table).
+* The menu is now Home, ClubHouse, Hosting, Support, Work and AI Powered, with Contact as the header button.
+* Added a currency switcher so prices can show in GBP, EUR or USD, at fixed rates.
+* Pricing and Services now redirect to Support; the old pages are moved to the bin rather than deleted.
+* Fixed FAQ answers collapsing to nothing when opened, and the "Popular" plan badge being white on white.
 
 = 1.15.0 =
 * Client websites and referrals are now recorded in wp-admin (two new menu items) and shown to the client in their portal. The Partner tab only appears for people who actually have referrals.
