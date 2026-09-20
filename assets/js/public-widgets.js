@@ -9,12 +9,28 @@
 ( function () {
 	'use strict';
 
-	// GBP is the base; the other two are fixed rates agreed for the site.
+	// GBP is the base. The rates are the ECB's, handed over by the server in
+	// window.blueworxCurrency (includes/public/currency.php); the figures here
+	// only apply if that is missing, so a broken inline script cannot leave
+	// the switcher painting nothing.
 	var CURRENCIES = {
 		GBP: { symbol: '£', rate: 1 },
 		EUR: { symbol: '€', rate: 1.17 },
 		USD: { symbol: '$', rate: 1.27 }
 	};
+
+	( function () {
+		var cfg = window.blueworxCurrency;
+		if ( ! cfg || ! cfg.rates ) {
+			return;
+		}
+		for ( var code in CURRENCIES ) {
+			var rate = Number( cfg.rates[ code ] );
+			if ( isFinite( rate ) && rate > 0 ) {
+				CURRENCIES[ code ].rate = rate;
+			}
+		}
+	} )();
 
 	function currentCurrency() {
 		var code = 'GBP';

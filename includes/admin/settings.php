@@ -113,6 +113,14 @@ function blueworx_site_register_settings() {
 		BLUEWORX_SITE_SETTINGS_SLUG,
 		'blueworx_site_main'
 	);
+
+	add_settings_field(
+		'blueworx_currency_rates',
+		__( 'Exchange rates', 'bluegroup-project-blueworx' ),
+		'blueworx_site_render_currency_rates_field',
+		BLUEWORX_SITE_SETTINGS_SLUG,
+		'blueworx_site_main'
+	);
 }
 add_action( 'admin_init', 'blueworx_site_register_settings' );
 
@@ -332,6 +340,52 @@ function blueworx_site_render_price_ids_field() {
 		<?php echo esc_html__( 'Find these in SureCart under each product. A plan left empty keeps the price built into the plugin and sends its button to the contact form.', 'bluegroup-project-blueworx' ); ?>
 		<?php if ( ! blueworx_commerce_ready() ) : ?>
 			<br /><strong><?php echo esc_html__( 'SureCart is not active, so these are stored but not used yet.', 'bluegroup-project-blueworx' ); ?></strong>
+		<?php endif; ?>
+	</p>
+	<?php
+}
+
+/**
+ * Shows the exchange rates the currency switcher is using right now.
+ *
+ * Read-only: the figures come from the European Central Bank twice a day
+ * (includes/public/currency.php) and there is nothing to type in. It is here
+ * so someone checking a euro or dollar price on the site can see where the
+ * number came from, and whether the live feed is working.
+ *
+ * @return void
+ */
+function blueworx_site_render_currency_rates_field() {
+	$current = blueworx_currency_rates();
+	$rates   = isset( $current['rates'] ) ? (array) $current['rates'] : array();
+	$eur     = isset( $rates['EUR'] ) ? number_format_i18n( (float) $rates['EUR'], 4 ) : '—';
+	$usd     = isset( $rates['USD'] ) ? number_format_i18n( (float) $rates['USD'], 4 ) : '—';
+	?>
+	<p id="blueworx_currency_rates">
+		<?php
+		echo esc_html(
+			sprintf(
+				/* translators: 1: euros per pound, 2: dollars per pound. */
+				__( '£1 = €%1$s = $%2$s', 'bluegroup-project-blueworx' ),
+				$eur,
+				$usd
+			)
+		);
+		?>
+	</p>
+	<p class="description">
+		<?php if ( 'live' === $current['source'] ) : ?>
+			<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %s: date the rates are for. */
+					__( 'European Central Bank reference rates for %s, refreshed twice a day.', 'bluegroup-project-blueworx' ),
+					$current['date']
+				)
+			);
+			?>
+		<?php else : ?>
+			<strong><?php echo esc_html__( 'The live rate feed has not been reached yet, so the fixed launch rates are in use.', 'bluegroup-project-blueworx' ); ?></strong>
 		<?php endif; ?>
 	</p>
 	<?php

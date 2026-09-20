@@ -103,6 +103,10 @@ function blueworx_site_deactivate() {
 	if ( function_exists( 'blueworx_public_restore_prior_front' ) ) {
 		blueworx_public_restore_prior_front();
 	}
+
+	if ( function_exists( 'blueworx_currency_unschedule_refresh' ) ) {
+		blueworx_currency_unschedule_refresh();
+	}
 }
 
 register_activation_hook( __FILE__, 'blueworx_site_activate' );

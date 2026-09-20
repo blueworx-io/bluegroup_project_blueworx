@@ -37,6 +37,8 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/upgrade.php';
 // plugin is rendering this request.
 require_once BLUEWORX_SITE_PATH . 'includes/public/images.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/render.php';
+// Before assets.php — the widgets script is handed the rates this file keeps.
+require_once BLUEWORX_SITE_PATH . 'includes/public/currency.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/assets.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/redirects.php';
 // After pages.php and indexing.php — it asks both whether this response is the

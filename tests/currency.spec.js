@@ -1,8 +1,28 @@
 // The site-wide currency switcher (design pass, 2026-09). GBP is the base;
-// EUR and USD are fixed rates. Only elements marked data-bw-gbp convert, so
-// the Toolbox's dollar prices are untouched.
+// EUR and USD rates come from the ECB via includes/public/currency.php and are
+// handed to the page as window.blueworxCurrency — so the expected figures here
+// are worked out from whatever rates the page was served with, not typed in.
+// Only elements marked data-bw-gbp convert, so the Toolbox's dollar prices are
+// untouched. The feed itself is covered by tests/currency-rates.spec.js.
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
+
+const SYMBOLS = { GBP: '£', EUR: '€', USD: '$' };
+
+/** The rates the page was served with. */
+async function pageRates(page) {
+  const rates = await page.evaluate(() => window.blueworxCurrency && window.blueworxCurrency.rates);
+  expect(rates, 'window.blueworxCurrency.rates is inlined on every owned page').toBeTruthy();
+  expect(rates.EUR).toBeGreaterThan(0);
+  expect(rates.USD).toBeGreaterThan(0);
+  return rates;
+}
+
+/** Mirrors money() in assets/js/public-widgets.js. */
+function money(gbp, rate, code, dp = 0) {
+  const value = gbp * rate;
+  return SYMBOLS[code] + (dp ? value.toFixed(dp) : Math.round(value).toLocaleString('en-GB'));
+}
 
 test.describe('Currency switcher', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
@@ -15,28 +35,30 @@ test.describe('Currency switcher', () => {
     await expect(page.locator('nav .bw-cur-menu button.on')).toHaveAttribute('data-cur', 'GBP');
   });
 
-  test('switching to USD converts marked prices at ×1.27 and persists across pages', async ({ page }) => {
+  test('switching to USD converts marked prices at the served rate and persists across pages', async ({ page }) => {
     await page.goto(cacheBust('/hosting/'));
+    const { USD } = await pageRates(page);
     await expect(page.locator('#hosting-plans .plan-price b')).toHaveText('£20');
     await page.locator('nav .bw-cur-btn').click();
     await page.locator('nav .bw-cur-menu button[data-cur="USD"]').click();
     await expect(page.locator('nav .bw-cur-btn [data-cur-label]')).toHaveText('$ USD');
-    await expect(page.locator('#hosting-plans .plan-price b')).toHaveText('$25');
+    await expect(page.locator('#hosting-plans .plan-price b')).toHaveText(money(20, USD, 'USD'));
     await page.locator('#hosting-plans .bill-toggle button').nth(1).click();
-    await expect(page.locator('#hosting-plans .plan-price b')).toHaveText('$254');
+    await expect(page.locator('#hosting-plans .plan-price b')).toHaveText(money(200, USD, 'USD'));
 
     await page.goto(cacheBust('/support/'));
     await expect(page.locator('nav .bw-cur-btn [data-cur-label]')).toHaveText('$ USD');
-    await expect(page.locator('.plans .plan-card.feat .plan-price b')).toHaveText('$635');
+    await expect(page.locator('.plans .plan-card.feat .plan-price b')).toHaveText(money(500, USD, 'USD'));
   });
 
-  test('EUR uses ×1.17 and the effective rate keeps two decimals', async ({ page }) => {
+  test('EUR converts at the served rate and the effective rate keeps two decimals', async ({ page }) => {
     await page.goto(cacheBust('/support/'));
+    const { EUR } = await pageRates(page);
     await page.locator('nav .bw-cur-btn').click();
     await page.locator('nav .bw-cur-menu button[data-cur="EUR"]').click();
-    // Growth: £500 × 1.17 = €585; rate (500×12)/120 = £50.00 → €58.50
-    await expect(page.locator('.plans .plan-card.feat .plan-price b')).toHaveText('€585');
-    await expect(page.locator('[data-testid="support-calc-rate"]')).toHaveText('€58.50 / hr');
+    // Growth: £500/month; rate (500×12)/120 hrs = £50.00/hr.
+    await expect(page.locator('.plans .plan-card.feat .plan-price b')).toHaveText(money(500, EUR, 'EUR'));
+    await expect(page.locator('[data-testid="support-calc-rate"]')).toHaveText(`${money(50, EUR, 'EUR', 2)} / hr`);
   });
 
   test('the Toolbox dollar prices are not converted', async ({ page }) => {
