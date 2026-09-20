@@ -35,6 +35,15 @@ const canInstallFixture = existsSync(join(WP_ROOT, 'wp-settings.php'));
 
 const TOOLS = toolRegistry();
 
+// Slugs for the two throwaway pages the retired-page trash pass test seeds
+// under the 'pricing' and 'services' registry keys — the pair
+// blueworx_public_retire_removed_pages() (includes/public/upgrade.php) trims
+// on a version change. Their IDs are tracked in a test-only option so the
+// shared 'cleanup' action (driven from afterAll) can delete them by ID
+// regardless of what state the trash pass left them in.
+const RETIRED_PRICING_SLUG = 'bw-test-retired-pricing';
+const RETIRED_SERVICES_SLUG = 'bw-test-retired-services';
+
 const FIXTURE_PLUGIN = `<?php
 /**
  * Test fixture for tests/toolbox-upgrade.spec.js. Puts the site into each of
@@ -65,6 +74,30 @@ function bw_test_tool_state() {
 		$state[ $key ] = array(
 			'mapped' => $id,
 			'uri'    => $id ? (string) get_page_uri( $id ) : '',
+		);
+	}
+
+	return $state;
+}
+
+/**
+ * Reports the two 'pricing'/'services' test pages the retired-page trash pass
+ * spec seeds: whether each is still in the ID map, and its current post
+ * status. IDs are tracked in 'bw_test_retired_ids' rather than looked up by
+ * slug, since a trashed page's slug is not guaranteed to still resolve.
+ */
+function bw_test_retired_state() {
+	$map   = (array) get_option( 'blueworx_public_page_ids', array() );
+	$ids   = (array) get_option( 'bw_test_retired_ids', array() );
+	$state = array();
+
+	foreach ( array( 'pricing', 'services' ) as $key ) {
+		$id = isset( $ids[ $key ] ) ? (int) $ids[ $key ] : 0;
+
+		$state[ $key ] = array(
+			'mapped' => isset( $map[ $key ] ) ? (int) $map[ $key ] : 0,
+			'id'     => $id,
+			'status' => $id ? (string) get_post_status( $id ) : '',
 		);
 	}
 
@@ -158,11 +191,54 @@ add_action( 'wp_loaded', function () {
 			blueworx_public_maybe_install_pages();
 			break;
 
+		case 'seed_retired':
+			// A stamped page under the retired 'pricing' key, and an
+			// unstamped one under 'services' — the pair
+			// blueworx_public_retire_removed_pages() has to tell apart: only
+			// the stamped one is ours to trash.
+			$pricing_id = wp_insert_post( array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => 'BW Test Retired Pricing',
+				'post_name'   => '${RETIRED_PRICING_SLUG}',
+				'meta_input'  => array( '_blueworx_public_page' => 1 ),
+			) );
+
+			$services_id = wp_insert_post( array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => 'BW Test Retired Services',
+				'post_name'   => '${RETIRED_SERVICES_SLUG}',
+			) );
+
+			update_option( 'bw_test_retired_ids', array(
+				'pricing'  => (int) $pricing_id,
+				'services' => (int) $services_id,
+			) );
+
+			$map['pricing']  = (int) $pricing_id;
+			$map['services'] = (int) $services_id;
+			update_option( 'blueworx_public_page_ids', $map );
+			break;
+
 		case 'cleanup':
 			// Put every tool page back where it belongs, then restore the
 			// stored version. Running the installer first means a page the
 			// spec deleted is recreated rather than left missing.
 			blueworx_public_install_pages();
+
+			// The retired-page trash pass test's two pages, deleted by ID
+			// regardless of whether the trash pass left them trashed or
+			// published.
+			$retired_ids = (array) get_option( 'bw_test_retired_ids', array() );
+
+			foreach ( $retired_ids as $retired_id ) {
+				if ( $retired_id ) {
+					wp_delete_post( (int) $retired_id, true );
+				}
+			}
+
+			delete_option( 'bw_test_retired_ids' );
 
 			$version_backup = (string) get_option( 'bw_test_toolbox_version_backup', '' );
 
@@ -181,6 +257,7 @@ add_action( 'wp_loaded', function () {
 		'action'  => $action,
 		'version' => (string) get_option( 'blueworx_public_installed_version', '' ),
 		'tools'   => bw_test_tool_state(),
+		'retired' => bw_test_retired_state(),
 	) );
 } );
 `;
@@ -354,4 +431,29 @@ test('a site already in the right state is left alone by an update', async ({ pa
   );
 
   await expectEveryToolResolves(page, after.tools);
+});
+
+// blueworx_public_retire_removed_pages() (includes/public/upgrade.php) runs
+// on the same version-change path as the tool-page install above. It only
+// trashes a mapped page that carries the plugin's own stamp — a page under a
+// retired slug that the site itself created is not the plugin's to touch —
+// but it drops the map entry either way, so a retired key never points at
+// anything again.
+test('the retired-page trash pass trashes a stamped page, leaves an unstamped one alone, and clears both map keys', async ({
+  page,
+}) => {
+  skipUnlessLocal();
+
+  await control(page, 'begin');
+  const seeded = await control(page, 'seed_retired');
+
+  expect(seeded.retired.pricing.mapped, 'the stamped page should be seeded into the map').toBeGreaterThan(0);
+  expect(seeded.retired.services.mapped, 'the unstamped page should be seeded into the map').toBeGreaterThan(0);
+
+  const after = await control(page, 'update_in_place');
+
+  expect(after.retired.pricing.status, 'a stamped retired page is trashed').toBe('trash');
+  expect(after.retired.services.status, 'an unstamped page is left published').toBe('publish');
+  expect(after.retired.pricing.mapped, 'the pricing key must not remain in the map').toBe(0);
+  expect(after.retired.services.mapped, 'the services key must not remain in the map').toBe(0);
 });

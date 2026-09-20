@@ -78,6 +78,11 @@ namespace SureCart\\Models {
 				// Present but with an amount SureCart could not give us — the
 				// plan should keep its built-in figure and still be buyable.
 				'd20b6e84-9153-4c72-8a3f-5e0947bd1c66' => array( null, false ),
+				// Hosting and ClubHouse, monthly and annual.
+				'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d' => array( 2500, false ),
+				'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d' => array( 24000, false ),
+				'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d' => array( 3000, false ),
+				'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d' => array( 30000, false ),
 			);
 
 			if ( ! array_key_exists( $id, $prices ) ) {
@@ -126,6 +131,13 @@ namespace {
 			case 'no-amount':
 				update_option( 'blueworx_surecart_price_ids', array(
 					'growth' => array( 'm' => 'd20b6e84-9153-4c72-8a3f-5e0947bd1c66', 'a' => '' ),
+				) );
+				break;
+
+			case 'hosting-clubhouse-wired':
+				update_option( 'blueworx_surecart_price_ids', array(
+					'managed-hosting' => array( 'm' => 'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d', 'a' => 'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d' ),
+					'clubhouse'       => array( 'm' => 'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d', 'a' => 'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d' ),
 				) );
 				break;
 
@@ -262,6 +274,73 @@ test.describe('Support packages driven by SureCart', () => {
 
     expect(hrefs).toHaveLength(3);
     expect(hrefs.every((href) => /\/contact/.test(href))).toBe(true);
+  });
+});
+
+// Hosting and ClubHouse each show a single plan card (parts/plan-card.php),
+// wired through the same blueworx_commerce_apply_live_single_plan() filter
+// that overlays SureCart prices onto it — the single-plan counterpart to the
+// nine-package grid above.
+test.describe('Hosting and ClubHouse plans driven by SureCart', () => {
+  test.beforeEach(() => {
+    test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
+    test.skip(!canInstallFixture, 'Needs the local WordPress harness.');
+  });
+
+  test.afterEach(async ({ page }) => {
+    await restoreAll([['clear the commerce options', async () => setFixture(page, 'off')]]);
+  });
+
+  for (const { path, name, monthlyId, annualId, monthlyGbp } of [
+    {
+      path: '/hosting/',
+      name: 'Managed Hosting',
+      monthlyId: 'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d',
+      annualId: 'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d',
+      monthlyGbp: '£25',
+    },
+    {
+      path: '/clubhouse/',
+      name: 'ClubHouse',
+      monthlyId: 'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d',
+      annualId: 'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d',
+      monthlyGbp: '£30',
+    },
+  ]) {
+    test(`${name}: wired shows SureCart's price and the annual toggle swaps the checkout link`, async ({
+      page,
+    }) => {
+      await setFixture(page, 'hosting-clubhouse-wired');
+      await page.goto(cacheBust(path));
+
+      const card = page.locator('.bw-plan-grid .plan-card').filter({
+        has: page.locator('.plan-name span', { hasText: name }),
+      });
+
+      // 2500 / 3000 minor units read from the fixture, not the £20 built in.
+      await expect(card.locator('.plan-price b')).toHaveText(monthlyGbp);
+
+      const link = card.locator('a.plan-btn');
+      await expect(link).toHaveAttribute('data-buy-m', new RegExp(monthlyId));
+      await expect(link).toHaveAttribute('data-buy-a', new RegExp(annualId));
+      expect(buyPriceId(await link.getAttribute('href'))).toBe(monthlyId);
+
+      await page.locator('.bill-toggle button').nth(1).click();
+      expect(buyPriceId(await link.getAttribute('href'))).toBe(annualId);
+    });
+  }
+
+  test('with nothing configured Hosting and ClubHouse keep £20 and a contact button', async ({
+    page,
+  }) => {
+    await setFixture(page, 'off');
+
+    for (const path of ['/hosting/', '/clubhouse/']) {
+      await page.goto(cacheBust(path));
+      const card = page.locator('.bw-plan-grid .plan-card').first();
+      await expect(card.locator('.plan-price b')).toHaveText('£20');
+      expect(await card.locator('a.plan-btn').getAttribute('href')).toContain('/contact');
+    }
   });
 });
 
