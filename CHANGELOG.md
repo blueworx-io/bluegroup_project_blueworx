@@ -10,6 +10,35 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.16.0] - 2026-09-20
+
+### Added
+
+- **Three product pages: ClubHouse, Hosting and Integrated Support.** ClubHouse
+  is the club website platform (nine modules, live demo, £20 a month). Hosting is
+  managed WordPress hosting at £20 a month per site with free migration.
+  Integrated Support replaces the old three retainer plans with nine packages
+  from £100 a month, a slider that recommends one from the hours you use, and
+  a full comparison table.
+- **A currency switcher in the header.** Prices show in GBP, EUR or USD; the
+  choice is remembered across pages. Rates are fixed for now.
+
+### Changed
+
+- **The menu.** Home · ClubHouse · Hosting · Support · Work · AI Powered, with
+  Contact as the header button. About and the Journal moved to the footer;
+  Toolbox left the menu (its page is still live).
+- Pricing and Services now redirect to Support. The old pages are moved to the
+  bin, not deleted.
+- The "Get a Quote" buttons go to the contact form.
+- The nav's Toolbox mega menu and About dropdown are gone with the new menu;
+  Toolbox tool pages are still reachable from the Toolbox page.
+
+### Fixed
+
+- FAQ answers on every page were collapsed to nothing when opened.
+- The "Popular" badge on the highlighted plan was white on white.
+
 ## [1.15.0] - 2026-08-05
 
 ### Added
