@@ -356,6 +356,9 @@
 			if ( cta && cta.firstChild ) {
 				cta.firstChild.nodeValue = tab.getAttribute( 'data-cta' ) + ' ';
 			}
+			if ( cta && tab.getAttribute( 'data-href' ) ) {
+				cta.setAttribute( 'href', tab.getAttribute( 'data-href' ) );
+			}
 		}
 
 		var t;

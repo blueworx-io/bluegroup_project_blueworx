@@ -64,9 +64,11 @@ test.describe('Showcase — feature tabs', () => {
 
     await root.locator('.tab-bar .tab', { hasText: 'Toolbox' }).click();
     await expect(root.locator('.af-text h2')).toHaveText('Digital Toolbox');
+    await expect(root.locator('.af-text a')).toHaveAttribute('href', /\/toolbox/);
 
     await root.locator('.tab-bar .tab', { hasText: 'Hosting' }).click();
     await expect(root.locator('.af-text h2')).toHaveText('Website Hosting');
+    await expect(root.locator('.af-text a')).toHaveAttribute('href', /\/hosting/);
   });
 });
 

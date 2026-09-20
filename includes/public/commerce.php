@@ -191,7 +191,7 @@ function blueworx_commerce_price( $price_id ) {
 	if ( array_key_exists( $price_id, $cache ) ) {
 		$cached = $cache[ $price_id ];
 
-		// Before 1.16.1 the cache held bare amounts. One of those is still a
+		// Before 1.16.0 the cache held bare amounts. One of those is still a
 		// good answer for up to fifteen minutes after an update.
 		if ( is_int( $cached ) ) {
 			return array(

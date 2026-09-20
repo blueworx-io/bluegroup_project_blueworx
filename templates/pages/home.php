@@ -354,6 +354,7 @@ blueworx_public_part( 'parts/nav.php' );
 				'heading' => __( 'Support Guides', 'bluegroup-project-blueworx' ),
 				'desc'    => __( 'Get ahead by accessing our dedicated support guides, designed to give you an edge.', 'bluegroup-project-blueworx' ),
 				'cta'     => __( 'View Guides', 'bluegroup-project-blueworx' ),
+				'href'    => home_url( '/support' ),
 				'color'   => '#4F46E5',
 				'pts'     => '150 118 138 82 110 64 96 74 88',
 				'value'   => '120,456',
@@ -363,6 +364,7 @@ blueworx_public_part( 'parts/nav.php' );
 				'heading' => __( 'Digital Toolbox', 'bluegroup-project-blueworx' ),
 				'desc'    => __( 'Access a curated set of tools that power your website, automations, and integrations, all set up, managed, and maintained for you.', 'bluegroup-project-blueworx' ),
 				'cta'     => __( 'View Toolbox', 'bluegroup-project-blueworx' ),
+				'href'    => home_url( '/toolbox' ),
 				'color'   => '#A5A7FF',
 				'pts'     => '120 96 112 60 84 46 72 54 62',
 				'value'   => '245,877',
@@ -372,6 +374,7 @@ blueworx_public_part( 'parts/nav.php' );
 				'heading' => __( 'Website Hosting', 'bluegroup-project-blueworx' ),
 				'desc'    => __( 'Remove the headache of WordPress hosting with our high-performance hosting supported by integrated growth & security functionality.', 'bluegroup-project-blueworx' ),
 				'cta'     => __( 'View Hosting', 'bluegroup-project-blueworx' ),
+				'href'    => home_url( '/hosting' ),
 				'color'   => '#3686F7',
 				'pts'     => '168 150 158 128 146 120 136 126 142',
 				'value'   => '78,987',
@@ -393,6 +396,7 @@ blueworx_public_part( 'parts/nav.php' );
 						data-heading="<?php echo esc_attr( $blueworx_home_ft_tab['heading'] ); ?>"
 						data-desc="<?php echo esc_attr( $blueworx_home_ft_tab['desc'] ); ?>"
 						data-cta="<?php echo esc_attr( $blueworx_home_ft_tab['cta'] ); ?>"
+						data-href="<?php echo esc_url( $blueworx_home_ft_tab['href'] ); ?>"
 						data-color="<?php echo esc_attr( $blueworx_home_ft_tab['color'] ); ?>"
 						data-value="<?php echo esc_attr( $blueworx_home_ft_tab['value'] ); ?>"
 						data-pts="<?php echo esc_attr( $blueworx_home_ft_tab['pts'] ); ?>"
@@ -437,7 +441,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<div class="af-text">
 					<h2 class="h2" style="font-size:34px;margin-bottom:14px;color:#fff"><?php echo esc_html( $blueworx_home_feature_tabs[0]['heading'] ); ?></h2>
 					<p class="lead" style="font-size:17px;margin-bottom:28px;color:rgba(255,255,255,.66)"><?php echo esc_html( $blueworx_home_feature_tabs[0]['desc'] ); ?></p>
-					<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php echo esc_html( $blueworx_home_feature_tabs[0]['cta'] ); ?>
+					<a class="btn btn-brand btn-md" href="<?php echo esc_url( $blueworx_home_feature_tabs[0]['href'] ); ?>"><?php echo esc_html( $blueworx_home_feature_tabs[0]['cta'] ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.
 						echo $blueworx_home_arrow;
