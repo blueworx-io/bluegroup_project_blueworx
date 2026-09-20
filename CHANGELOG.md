@@ -21,7 +21,11 @@ headlessly from Netlify.
   from £100 a month, a slider that recommends one from the hours you use, and
   a full comparison table.
 - **A currency switcher in the header.** Prices show in GBP, EUR or USD; the
-  choice is remembered across pages. Rates are fixed for now.
+  choice is remembered across pages. Rates are the European Central Bank's,
+  refreshed twice a day; if the feed cannot be reached the last good figures
+  stay in use. The settings screen shows the rates in use.
+- **SureCart prices keep their own currency.** A store priced in dollars or
+  euros shows that sign and is never converted as though it were pounds.
 
 ### Changed
 
@@ -38,6 +42,7 @@ headlessly from Netlify.
 
 - FAQ answers on every page were collapsed to nothing when opened.
 - The "Popular" badge on the highlighted plan was white on white.
+- The home page's "View Toolbox" and "View Hosting" buttons went to Support.
 
 ## [1.15.0] - 2026-08-05
 
