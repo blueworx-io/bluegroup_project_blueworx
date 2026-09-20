@@ -53,7 +53,7 @@ blueworx_public_part(
 	<?php else : ?>
 		<p class="dash-card-title"><?php esc_html_e( 'These tools come with every plan.', 'bluegroup-project-blueworx' ); ?></p>
 		<p class="dash-card-sub"><?php esc_html_e( 'There is no active plan on your account at the moment, so they are not licensed to you yet.', 'bluegroup-project-blueworx' ); ?></p>
-		<a class="btn btn-brand btn-sm" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php esc_html_e( 'See the plans', 'bluegroup-project-blueworx' ); ?></a>
+		<a class="btn btn-brand btn-sm" href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php esc_html_e( 'See the plans', 'bluegroup-project-blueworx' ); ?></a>
 	<?php endif; ?>
 </div>
 

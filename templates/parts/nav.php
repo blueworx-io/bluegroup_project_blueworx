@@ -11,9 +11,9 @@
  * renders it unconditionally and relies on assets/js/public-nav.js to toggle
  * an ".open" class, matched by the ".mobile-menu" rule in assets/css/public.css.
  *
- * Every internal href is built with home_url( '/services' ) etc. (matching
- * templates/parts/footer.php), not a bare "/services" — the source's own
- * <Link href="/services"> paths assume a root-domain deployment, but on a
+ * Every internal href is built with home_url( '/support' ) etc. (matching
+ * templates/parts/footer.php), not a bare "/support" — the source's own
+ * <Link href="/support"> paths assume a root-domain deployment, but on a
  * subdirectory WordPress install (example.com/blog/) a bare root-relative
  * href points outside the site entirely. blueworx_public_nav_active_class()
  * still compares against the home-relative $blueworx_nav_path built below,
@@ -49,8 +49,8 @@ if ( ! function_exists( 'blueworx_public_nav_active_class' ) ) {
 	 * Exact match for "/", prefix match otherwise — ports Nav.tsx's
 	 * `href === "/" ? pathname === "/" : pathname.startsWith(href)` verbatim.
 	 *
-	 * @param string $href         Root-relative href, e.g. '/services'.
-	 * @param string $current_path Current request path, e.g. '/services/seo'.
+	 * @param string $href         Root-relative href, e.g. '/support'.
+	 * @param string $current_path Current request path, e.g. '/support/seo'.
 	 * @return string 'active' or ''.
 	 */
 	function blueworx_public_nav_active_class( $href, $current_path ) {

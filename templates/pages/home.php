@@ -176,7 +176,7 @@ blueworx_public_part( 'parts/nav.php' );
 					</h1>
 					<p class="lead"><?php echo esc_html__( 'BlueWorx is the agency behind high-performing digital solutions: websites, platforms, and automations. Strategy, design, build, hosting, and ongoing support from one dedicated team.', 'bluegroup-project-blueworx' ); ?></p>
 					<div class="hh-cta">
-						<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>" class="btn btn-white btn-lg"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
+						<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-white btn-lg"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
 						<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline-w btn-lg">
 							<?php
 							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.
@@ -437,7 +437,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<div class="af-text">
 					<h2 class="h2" style="font-size:34px;margin-bottom:14px;color:#fff"><?php echo esc_html( $blueworx_home_feature_tabs[0]['heading'] ); ?></h2>
 					<p class="lead" style="font-size:17px;margin-bottom:28px;color:rgba(255,255,255,.66)"><?php echo esc_html( $blueworx_home_feature_tabs[0]['desc'] ); ?></p>
-					<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php echo esc_html( $blueworx_home_feature_tabs[0]['cta'] ); ?>
+					<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php echo esc_html( $blueworx_home_feature_tabs[0]['cta'] ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.
 						echo $blueworx_home_arrow;
@@ -497,7 +497,7 @@ blueworx_public_part( 'parts/nav.php' );
 					<?php endforeach; ?>
 				</div>
 				<div style="margin-top:30px">
-					<a href="<?php echo esc_url( home_url( '/services' ) ); ?>" class="btn btn-outline btn-md">
+					<a href="<?php echo esc_url( home_url( '/support' ) ); ?>" class="btn btn-outline btn-md">
 						<?php echo esc_html__( 'Find Out More', 'bluegroup-project-blueworx' ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.

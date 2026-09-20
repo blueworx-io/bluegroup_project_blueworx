@@ -143,7 +143,7 @@ blueworx_public_part( 'parts/nav.php' );
 								),
 								array(
 									'label' => __( 'Our Services', 'bluegroup-project-blueworx' ),
-									'href'  => home_url( '/services' ),
+									'href'  => home_url( '/support' ),
 									'class' => 'btn btn-outline-w btn-lg',
 								),
 							),
