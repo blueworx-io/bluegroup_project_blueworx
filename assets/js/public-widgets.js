@@ -111,7 +111,7 @@
 						b.setAttribute( 'data-bw-gbp', amount );
 						b.textContent = money( amount, 0 );
 					} else {
-						b.textContent = '$' + amount;
+						b.textContent = ( prices[ i ].getAttribute( 'data-symbol' ) || '$' ) + amount;
 					}
 				}
 				if ( em ) {

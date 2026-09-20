@@ -30,7 +30,6 @@ $blueworx_ch_demo = 'https://demo.305media.co.uk/';
 $blueworx_ch_arrow  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>';
 $blueworx_ch_ic_up  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
 $blueworx_ch_ic_shr = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="13" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><path d="M12 22a9 9 0 0 1 0-18"></path></svg>';
-$blueworx_ch_chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
 
 blueworx_public_document_open( array( 'body_class' => 'bw-clubhouse' ) );
 blueworx_public_part( 'parts/nav.php' );
@@ -245,26 +244,16 @@ blueworx_public_part( 'parts/nav.php' );
 			</div>
 		</section>
 
-		<section class="sec bw-divided">
-			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about running your club on ClubHouse.', 'bluegroup-project-blueworx' ); ?></p>
-			</div>
-			<div class="faq-list">
-				<?php foreach ( $blueworx_ch['faqs'] as $blueworx_ch_faq ) : ?>
-					<details class="faq-item">
-						<summary class="faq-q">
-							<?php echo esc_html( $blueworx_ch_faq['q'] ); ?>
-							<?php
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_ch_chevron above.
-							echo $blueworx_ch_chevron;
-							?>
-						</summary>
-						<div class="faq-a"><p><?php echo esc_html( $blueworx_ch_faq['a'] ); ?></p></div>
-					</details>
-				<?php endforeach; ?>
-			</div>
-		</section>
+		<?php
+		blueworx_public_part(
+			'parts/faq-section.php',
+			array(
+				'class' => 'bw-divided',
+				'lead'  => __( 'Everything you need to know about running your club on ClubHouse.', 'bluegroup-project-blueworx' ),
+				'faqs'  => $blueworx_ch['faqs'],
+			)
+		);
+		?>
 	</div>
 </main>
 <?php

@@ -49,6 +49,7 @@ namespace SureCart\\Models {
 	class Price {
 		public $amount;
 		public $is_zero_decimal = false;
+		public $currency        = 'gbp';
 
 		/**
 		 * SureCart's own converted_amount accessor, copied.
@@ -78,6 +79,8 @@ namespace SureCart\\Models {
 				// Present but with an amount SureCart could not give us — the
 				// plan should keep its built-in figure and still be buyable.
 				'd20b6e84-9153-4c72-8a3f-5e0947bd1c66' => array( null, false ),
+				// A store priced in dollars: the amount is $249, not £249.
+				'f4c1d2e3-5a6b-4c7d-8e9f-0a1b2c3d4e5f' => array( 24900, false, 'usd' ),
 				// Hosting and ClubHouse, monthly and annual.
 				'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d' => array( 2500, false ),
 				'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d' => array( 24000, false ),
@@ -95,6 +98,7 @@ namespace SureCart\\Models {
 			$price = new self();
 			$price->amount          = $prices[ $id ][0];
 			$price->is_zero_decimal = $prices[ $id ][1];
+			$price->currency        = isset( $prices[ $id ][2] ) ? $prices[ $id ][2] : 'gbp';
 
 			return $price;
 		}
@@ -131,6 +135,12 @@ namespace {
 			case 'no-amount':
 				update_option( 'blueworx_surecart_price_ids', array(
 					'growth' => array( 'm' => 'd20b6e84-9153-4c72-8a3f-5e0947bd1c66', 'a' => '' ),
+				) );
+				break;
+
+			case 'usd':
+				update_option( 'blueworx_surecart_price_ids', array(
+					'growth' => array( 'm' => 'f4c1d2e3-5a6b-4c7d-8e9f-0a1b2c3d4e5f', 'a' => '' ),
 				) );
 				break;
 
@@ -260,6 +270,22 @@ test.describe('Support packages driven by SureCart', () => {
     expect(buyPriceId(await card.locator('a.plan-btn').getAttribute('href'))).toBe(
       'd20b6e84-9153-4c72-8a3f-5e0947bd1c66'
     );
+  });
+
+  // A SureCart store priced in dollars must show dollars — and must not then
+  // be run through the pound-to-dollar conversion as though it were pounds.
+  test('a price in another currency keeps its own sign and is never converted', async ({ page }) => {
+    await setFixture(page, 'usd');
+    await page.goto(cacheBust('/support/'));
+
+    const price = planCard(page, 'Growth').locator('.plan-price b');
+
+    await expect(price).toHaveText('$249');
+    await expect(price).not.toHaveAttribute('data-bw-gbp', /.*/);
+
+    await page.locator('nav .bw-cur-btn').click();
+    await page.locator('nav .bw-cur-menu button[data-cur="EUR"]').click();
+    await expect(price).toHaveText('$249');
   });
 
   test('with nothing configured the page is exactly as it was', async ({ page }) => {

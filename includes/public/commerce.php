@@ -166,10 +166,16 @@ function blueworx_commerce_buy_url( $price_id ) {
  * pricing page renders whole units, so the value is divided and rounded here
  * rather than in the template.
  *
+ * The currency comes back with the amount, because a SureCart store can be
+ * priced in dollars or euros while the plugin's own figures are in pounds —
+ * and a dollar amount shown with a pound sign, then converted as though it
+ * were pounds, is wrong twice over. blueworx_commerce_price_amount() keeps
+ * its old shape; this is the fuller answer it reads from.
+ *
  * @param string $price_id SureCart price ID.
- * @return int|null Amount in whole currency units, or null.
+ * @return array|null array( 'amount' => int, 'currency' => 'GBP' ), or null.
  */
-function blueworx_commerce_price_amount( $price_id ) {
+function blueworx_commerce_price( $price_id ) {
 	$price_id = (string) $price_id;
 
 	if ( '' === $price_id || ! blueworx_commerce_ready() ) {
@@ -183,10 +189,21 @@ function blueworx_commerce_price_amount( $price_id ) {
 	// repeating a failing API call once per visitor is how a slow API becomes a
 	// slow site. array_key_exists(), not isset(), so null is seen as cached.
 	if ( array_key_exists( $price_id, $cache ) ) {
-		return $cache[ $price_id ];
+		$cached = $cache[ $price_id ];
+
+		// Before 1.16.1 the cache held bare amounts. One of those is still a
+		// good answer for up to fifteen minutes after an update.
+		if ( is_int( $cached ) ) {
+			return array(
+				'amount'   => $cached,
+				'currency' => 'GBP',
+			);
+		}
+
+		return is_array( $cached ) ? $cached : null;
 	}
 
-	$amount = null;
+	$result = null;
 
 	try {
 		$price = \SureCart\Models\Price::find( $price_id );
@@ -201,18 +218,37 @@ function blueworx_commerce_price_amount( $price_id ) {
 		// minor unit, and dividing there would show a price a hundred times
 		// too small. SureCart's own accessor knows which is which.
 		if ( $price && is_numeric( $price->converted_amount ) ) {
-			$amount = (int) round( (float) $price->converted_amount );
+			$currency = isset( $price->currency ) ? strtoupper( (string) $price->currency ) : '';
+
+			$result = array(
+				'amount'   => (int) round( (float) $price->converted_amount ),
+				// This site's SureCart store is priced in pounds; a price
+				// that does not say is treated the same way.
+				'currency' => preg_match( '/^[A-Z]{3}$/', $currency ) ? $currency : 'GBP',
+			);
 		}
 	} catch ( \Throwable $e ) {
 		// Deliberately swallowed. A pricing page is not the place to surface a
-		// billing API's error, and $amount stays null, which falls back.
-		$amount = null;
+		// billing API's error, and $result stays null, which falls back.
+		$result = null;
 	}
 
-	$cache[ $price_id ] = $amount;
+	$cache[ $price_id ] = $result;
 	set_transient( BLUEWORX_COMMERCE_PRICE_CACHE, $cache, BLUEWORX_COMMERCE_PRICE_TTL );
 
-	return $amount;
+	return $result;
+}
+
+/**
+ * The amount SureCart holds for a price, in whole currency units.
+ *
+ * @param string $price_id SureCart price ID.
+ * @return int|null Amount in whole currency units, or null.
+ */
+function blueworx_commerce_price_amount( $price_id ) {
+	$price = blueworx_commerce_price( $price_id );
+
+	return null === $price ? null : $price['amount'];
 }
 
 /**
@@ -277,10 +313,11 @@ function blueworx_commerce_apply_live_plans( $plans ) {
 				continue;
 			}
 
-			$amount = blueworx_commerce_price_amount( $price_id );
+			$live = blueworx_commerce_price( $price_id );
 
-			if ( null !== $amount ) {
-				$plans[ $index ][ $key ] = $amount;
+			if ( null !== $live ) {
+				$plans[ $index ][ $key ]      = $live['amount'];
+				$plans[ $index ]['currency'] = $live['currency'];
 			}
 
 			// The buy link is set from a configured ID whether or not the

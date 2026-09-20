@@ -24,7 +24,6 @@ $blueworx_h = blueworx_content_hosting();
 // Static, trusted SVGs ported verbatim from the design. See clubhouse.php's
 // $blueworx_ch_arrow for why these are not routed through blueworx_icon().
 $blueworx_h_arrow    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>';
-$blueworx_h_chevron  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
 $blueworx_h_ic_check = '<svg viewBox="0 0 24 24" fill="none" stroke="#01824C" stroke-width="2.4" style="width:20px;height:20px"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 $blueworx_h_ic_clock = '<svg viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>';
 
@@ -257,26 +256,16 @@ blueworx_public_part( 'parts/nav.php' );
 			</div>
 		</section>
 
-		<section class="sec bw-divided">
-			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about hosting with BlueWorx.', 'bluegroup-project-blueworx' ); ?></p>
-			</div>
-			<div class="faq-list">
-				<?php foreach ( $blueworx_h['faqs'] as $blueworx_h_faq ) : ?>
-					<details class="faq-item">
-						<summary class="faq-q">
-							<?php echo esc_html( $blueworx_h_faq['q'] ); ?>
-							<?php
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_h_chevron above.
-							echo $blueworx_h_chevron;
-							?>
-						</summary>
-						<div class="faq-a"><p><?php echo esc_html( $blueworx_h_faq['a'] ); ?></p></div>
-					</details>
-				<?php endforeach; ?>
-			</div>
-		</section>
+		<?php
+		blueworx_public_part(
+			'parts/faq-section.php',
+			array(
+				'class' => 'bw-divided',
+				'lead'  => __( 'Everything you need to know about hosting with BlueWorx.', 'bluegroup-project-blueworx' ),
+				'faqs'  => $blueworx_h['faqs'],
+			)
+		);
+		?>
 	</div>
 </main>
 <?php

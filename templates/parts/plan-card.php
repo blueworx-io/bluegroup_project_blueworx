@@ -11,12 +11,12 @@
  *     name, desc, priceM (int), priceA (int), feat (bool), pop (bool|string),
  *     features (string[]),
  *     buyM, buyA   (string, optional) SureCart checkout links per interval.
- *     currency     (string, optional) 'GBP' renders "£" and marks the amount
- *                  with data-bw-gbp so public-widgets.js can convert it.
- *                  Absent: "$" and no conversion (the Toolbox plans). When a
- *                  live SureCart amount has replaced priceM, the data-bw-gbp
- *                  conversion still assumes the SureCart store itself is
- *                  priced in GBP.
+ *     currency     (string, optional) ISO code. 'GBP' renders "£" and marks
+ *                  the amount with data-bw-gbp so public-widgets.js can
+ *                  convert it; any other code renders that currency's sign
+ *                  and is never converted. Absent: "$" and no conversion
+ *                  (the Toolbox plans). A live SureCart amount brings its
+ *                  own currency with it (includes/public/commerce.php).
  *     subM, subA   (string, optional) Period labels. Defaults: "per month" /
  *                  "per month, billed yearly".
  *     lbl          (string, optional) Feature-list label. Default "FEATURES".
@@ -38,8 +38,14 @@ if ( empty( $blueworx_pc_plan['name'] ) ) {
 
 $blueworx_pc_feat   = ! empty( $blueworx_pc_plan['feat'] );
 $blueworx_pc_pop    = isset( $blueworx_pc_plan['pop'] ) ? $blueworx_pc_plan['pop'] : false;
-$blueworx_pc_gbp    = isset( $blueworx_pc_plan['currency'] ) && 'GBP' === $blueworx_pc_plan['currency'];
-$blueworx_pc_symbol = $blueworx_pc_gbp ? '£' : '$';
+$blueworx_pc_cur    = isset( $blueworx_pc_plan['currency'] ) ? strtoupper( (string) $blueworx_pc_plan['currency'] ) : 'USD';
+$blueworx_pc_gbp    = 'GBP' === $blueworx_pc_cur;
+$blueworx_pc_signs  = array(
+	'GBP' => '£',
+	'EUR' => '€',
+	'USD' => '$',
+);
+$blueworx_pc_symbol = isset( $blueworx_pc_signs[ $blueworx_pc_cur ] ) ? $blueworx_pc_signs[ $blueworx_pc_cur ] : $blueworx_pc_cur . ' ';
 $blueworx_pc_btn    = $blueworx_pc_feat ? 'plan-btn dark' : 'plan-btn out';
 $blueworx_pc_sub_m  = isset( $blueworx_pc_plan['subM'] ) ? (string) $blueworx_pc_plan['subM'] : __( 'per month', 'bluegroup-project-blueworx' );
 $blueworx_pc_sub_a  = isset( $blueworx_pc_plan['subA'] ) ? (string) $blueworx_pc_plan['subA'] : __( 'per month, billed yearly', 'bluegroup-project-blueworx' );
@@ -60,7 +66,7 @@ $blueworx_pc_check = '<svg class="ck" viewBox="0 0 24 24" fill="currentColor"><p
 			<?php endif; ?>
 		</div>
 		<div class="plan-desc"><?php echo esc_html( $blueworx_pc_plan['desc'] ); ?></div>
-		<div class="plan-price"<?php echo $blueworx_pc_gbp ? ' data-cur="GBP"' : ''; ?> data-price-m="<?php echo esc_attr( (string) $blueworx_pc_plan['priceM'] ); ?>" data-price-a="<?php echo esc_attr( (string) $blueworx_pc_plan['priceA'] ); ?>">
+		<div class="plan-price"<?php echo $blueworx_pc_gbp ? ' data-cur="GBP"' : ''; ?> data-symbol="<?php echo esc_attr( $blueworx_pc_symbol ); ?>" data-price-m="<?php echo esc_attr( (string) $blueworx_pc_plan['priceM'] ); ?>" data-price-a="<?php echo esc_attr( (string) $blueworx_pc_plan['priceA'] ); ?>">
 			<b<?php echo $blueworx_pc_gbp ? ' data-bw-gbp="' . esc_attr( (string) $blueworx_pc_plan['priceM'] ) . '"' : ''; ?>><?php echo esc_html( $blueworx_pc_symbol . number_format( (float) $blueworx_pc_plan['priceM'], 0, '.', ',' ) ); ?></b>
 			<em data-sub-m="<?php echo esc_attr( $blueworx_pc_sub_m ); ?>" data-sub-a="<?php echo esc_attr( $blueworx_pc_sub_a ); ?>"><?php echo esc_html( $blueworx_pc_sub_m ); ?></em>
 		</div>

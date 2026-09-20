@@ -44,9 +44,19 @@ foreach ( $blueworx_s_featured as $blueworx_s_i => $blueworx_s_plan ) {
 	$blueworx_s_featured[ $blueworx_s_i ]['subA'] = $blueworx_s_period;
 }
 
-// The Growth package (index 4) is the calculator and the "Package" field's
-// starting point, matching the slider's default value of 4.
-$blueworx_s_growth = $blueworx_s_packages[4];
+// The Growth package is where the calculator starts, so the slider's default
+// position is wherever Growth sits in the table, and its ends are the
+// smallest and largest packages' monthly hours.
+$blueworx_s_growth_at = 0;
+foreach ( $blueworx_s_packages as $blueworx_s_i => $blueworx_s_plan ) {
+	if ( 'growth' === blueworx_commerce_plan_slug( $blueworx_s_plan['name'] ) ) {
+		$blueworx_s_growth_at = $blueworx_s_i;
+		break;
+	}
+}
+$blueworx_s_growth = $blueworx_s_packages[ $blueworx_s_growth_at ];
+$blueworx_s_first  = reset( $blueworx_s_packages );
+$blueworx_s_last   = end( $blueworx_s_packages );
 
 // The calculator's package table, read client-side from a data attribute
 // rather than duplicated in JS — see assets/js/public-widgets.js's
@@ -62,8 +72,6 @@ $blueworx_s_calc_packages = array_map(
 	},
 	$blueworx_s_packages
 );
-
-$blueworx_s_chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
 
 blueworx_public_document_open( array( 'body_class' => 'bw-support' ) );
 blueworx_public_part( 'parts/nav.php' );
@@ -99,8 +107,22 @@ blueworx_public_part( 'parts/nav.php' );
 							<b data-testid="support-calc-hours"><?php echo esc_html( (string) ( $blueworx_s_growth['hours'] / 12 ) ); ?></b>
 							<span><?php esc_html_e( 'hours', 'bluegroup-project-blueworx' ); ?> · <span data-testid="support-calc-annual"><?php echo esc_html( (string) $blueworx_s_growth['hours'] ); ?></span> <?php esc_html_e( 'hours a year', 'bluegroup-project-blueworx' ); ?></span>
 						</div>
-						<input class="bw-range" id="bw-support-hours" name="hours" type="range" min="0" max="8" step="1" value="4" aria-label="<?php esc_attr_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?>" />
-						<div class="bw-range-ends"><span>2 hrs</span><span>50 hrs</span></div>
+						<input class="bw-range" id="bw-support-hours" name="hours" type="range" min="0" max="<?php echo esc_attr( (string) ( count( $blueworx_s_packages ) - 1 ) ); ?>" step="1" value="<?php echo esc_attr( (string) $blueworx_s_growth_at ); ?>" aria-label="<?php esc_attr_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?>" />
+						<div class="bw-range-ends">
+							<?php foreach ( array( $blueworx_s_first, $blueworx_s_last ) as $blueworx_s_end ) : ?>
+								<span>
+									<?php
+									echo esc_html(
+										sprintf(
+											/* translators: %d: hours a month. */
+											__( '%d hrs', 'bluegroup-project-blueworx' ),
+											(int) ( $blueworx_s_end['hours'] / 12 )
+										)
+									);
+									?>
+								</span>
+							<?php endforeach; ?>
+						</div>
 					</div>
 					<div class="calc-field">
 						<div class="bw-calc-label"><?php esc_html_e( 'Package', 'bluegroup-project-blueworx' ); ?></div>
@@ -241,26 +263,16 @@ blueworx_public_part( 'parts/nav.php' );
 			?>
 		</section>
 
-		<section class="sec bw-divided">
-			<div class="center-head" style="margin-bottom:40px">
-				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about Integrated Support and billing.', 'bluegroup-project-blueworx' ); ?></p>
-			</div>
-			<div class="faq-list">
-				<?php foreach ( blueworx_content_support_faqs() as $blueworx_s_faq ) : ?>
-					<details class="faq-item">
-						<summary class="faq-q">
-							<?php echo esc_html( $blueworx_s_faq['q'] ); ?>
-							<?php
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_s_chevron above.
-							echo $blueworx_s_chevron;
-							?>
-						</summary>
-						<div class="faq-a"><p><?php echo esc_html( $blueworx_s_faq['a'] ); ?></p></div>
-					</details>
-				<?php endforeach; ?>
-			</div>
-		</section>
+		<?php
+		blueworx_public_part(
+			'parts/faq-section.php',
+			array(
+				'class' => 'bw-divided',
+				'lead'  => __( 'Everything you need to know about Integrated Support and billing.', 'bluegroup-project-blueworx' ),
+				'faqs'  => blueworx_content_support_faqs(),
+			)
+		);
+		?>
 	</div>
 </main>
 <?php
