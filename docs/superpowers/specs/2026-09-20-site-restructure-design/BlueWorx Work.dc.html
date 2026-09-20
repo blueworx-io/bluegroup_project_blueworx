@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="description" content="Selected work from BlueWorx — projects, partners and the results they produced" />
+<link rel="stylesheet" href="assets/css/blueworx-fonts.css" />
+<link rel="stylesheet" href="assets/css/public.css" />
+<style>
+body { margin: 0; background: #fff; }
+a { color: #4F46E5; }
+a:hover { color: #4338CA; }
+/* section rhythm: every light section keeps the same 116px padding and is
+   separated by a hairline, so the vertical grid reads consistently */
+main > div > .sec + .sec { border-top: 1px solid #EFEFF0; }
+/* deterministic card grids — auto-fit left orphan rows (3 + 1) */
+.bw-g2, .bw-g3, .bw-g4 { display: grid; gap: 20px; }
+.bw-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bw-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bw-g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .bw-g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .bw-g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .bw-g2, .bw-g3, .bw-g4 { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</helmet>
+<div class="bw-page">
+<dc-import name="Site Nav" active="work" hint-size="100%,96px"></dc-import>
+<main id="content" tabindex="-1">
+	<div>
+		<section class="tech-hero">
+			<div class="tech-inner tech-2col">
+				<div class="tc-copy">
+					<div class="tech-badge"><span class="dot"></span>Selected Work</div>
+					<h1 class="h1" style="margin:22px 0 0">Work That Moves <span class="tech-grad">the Needle</span></h1>
+					<p class="lead" style="max-width:520px;margin:22px 0 34px">Digital solutions we've designed, built, and grown alongside our partners, with the outcomes to show for it.</p>
+					<div style="display:flex;gap:14px;flex-wrap:wrap">
+						<a href="BlueWorx%20Contact.dc.html" class="btn btn-white btn-lg">Start a Project</a>
+						<a href="BlueWorx%20Support.dc.html" class="btn btn-outline-w btn-lg">Our Services</a>
+					</div>
+					<div class="tech-status">
+						<span>82+ projects</span>
+						<span>4.9 rating</span>
+						<span>99.9% uptime</span>
+					</div>
+				</div>
+				<div class="glass-wrap">
+					<div class="glass-card" style="padding:28px">
+						<div class="gc-scan"></div>
+						<div class="gc-head">
+							<div class="gc-dots"><i></i><i></i><i></i></div>
+							<div class="gc-tag">results.log</div>
+						</div>
+						<div class="gc-metric"><small>Hirasté — booking enquiries</small><b>+64%</b><span class="up">▲</span></div>
+						<div class="gc-metric"><small>QURE — conversion rate</small><b>+38%</b><span class="up">▲</span></div>
+						<div class="gc-metric" style="border-bottom:none"><small>Reid — organic traffic</small><b>3×</b><span class="up">▲</span></div>
+						<div class="gc-spark">
+							<i style="height:30%"></i><i style="height:44%"></i><i style="height:58%"></i><i style="height:52%"></i><i style="height:70%"></i><i class="hi" style="height:96%"></i><i style="height:78%"></i><i style="height:88%"></i>
+						</div>
+					</div>
+					<div class="tech-float" style="bottom:-22px;left:-26px;animation-delay:.6s">
+						<div class="tf-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg></div>
+						<div><small>Avg. lift</small><b>+41%</b></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<h2 class="bw-sr-only">Selected work</h2>
+			<div class="work-grid">
+				<sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+					<div class="work-card">
+						<div class="work-img"><img src="{{ p.img }}" alt="{{ p.alt }}" /></div>
+						<div class="work-meta">
+							<div class="work-tags">
+								<sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="2">
+									<span class="work-tag">{{ tag }}</span>
+								</sc-for>
+							</div>
+							<h3>{{ p.name }}</h3>
+							<div class="res"><b>{{ p.res }}</b> {{ p.resText }}</div>
+						</div>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+
+		<section class="stats-band">
+			<div class="blob" style="width:320px;height:320px;top:-60px;right:-100px;opacity:.16"></div>
+			<div class="stats-grid">
+				<h2 class="h2">Outcomes, not just outputs.</h2>
+				<div class="stats-copy">
+					<p>Every engagement is measured against the goals we set together: traffic, conversions, and revenue. Not vanity metrics.</p>
+					<div class="stat-nums">
+						<div class="stat"><b>5.0<svg width="26" height="26" viewBox="0 0 24 24" fill="#FFC107"><path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.7L12 17l-6.2 3.6 1.6-6.7L2.2 8.9l6.9-.6z"></path></svg></b><span>Google Rating</span></div>
+						<div class="stat"><b>82+</b><span>Projects Completed</span></div>
+						<div class="stat"><b>100k +</b><span>Revenue Handled</span></div>
+						<div class="stat"><b>2K +</b><span>Toolbox Value</span></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<div class="eyebrow" style="margin-bottom:20px">What Our Clients Say</div>
+				<h2 class="h2">Partners Who'd Recommend Us</h2>
+			</div>
+			<div class="tg">
+				<sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+					<div class="tc">
+						<div class="tstars">★★★★★</div>
+						<p class="ttext">{{ t.text }}</p>
+						<div class="tauthor">
+							<div class="tavatar">{{ t.initials }}</div>
+							<div><div class="tname">{{ t.name }}</div><div class="trole">{{ t.role }}</div></div>
+						</div>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+	</div>
+</main>
+<div class="cta-soft">
+	<div class="cta-inner">
+		<div class="blob" style="width:220px;height:220px;bottom:-80px;left:-40px;opacity:.4"></div>
+		<div class="blob" style="width:180px;height:180px;top:-60px;right:-20px;opacity:.35"></div>
+		<h2 class="h2">Could Your Project Be Next?</h2>
+		<p>Book a free strategy call. We'll review your current setup and show you exactly where the opportunities are.</p>
+		<div class="cta-actions">
+			<a href="BlueWorx%20Contact.dc.html" class="btn btn-brand btn-md">Start a Project</a>
+			<a href="BlueWorx%20ClubHouse.dc.html" class="btn btn-outline-w btn-md">See ClubHouse</a>
+		</div>
+	</div>
+</div>
+<dc-import name="Site Footer" hint-size="100%,360px"></dc-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PROJECTS = [
+  { img: 'assets/img/feature-image-1.jpg', alt: 'Hirasté website', tags: ['Web Design', 'Booking Platform'], name: 'Hirasté', res: '+64%', resText: 'group booking enquiries' },
+  { img: 'assets/img/feature-image-3.jpg', alt: 'Padel365 website', tags: ['E-commerce', 'Court Booking'], name: 'Padel365', res: 'Sold-out', resText: 'launch season' },
+  { img: 'assets/img/feature-image-4.jpg', alt: 'QURE website', tags: ['Brand', 'Web Build'], name: 'QURE', res: '+38%', resText: 'conversion rate' },
+  { img: 'assets/img/fig-collab.jpg', alt: 'Bloom & Co. website', tags: ['Migration', 'Managed Hosting'], name: 'Bloom & Co.', res: 'Zero-downtime', resText: 'platform migration' },
+  { img: 'assets/img/hero-image.webp', alt: 'chromaesthesia website', tags: ['Web Design', 'CMS'], name: 'chromaesthesia', res: '2× faster', resText: 'publishing workflow' },
+  { img: 'assets/img/feature-image-2.jpg', alt: 'Reid Consulting website', tags: ['SEO', 'Growth Retainer'], name: 'Reid Consulting', res: '3×', resText: 'organic traffic in 12 months' }
+];
+
+const TESTIMONIALS = [
+  { text: '"BlueWorx has completely transformed how we manage our website. The tools are powerful and the support team is incredibly responsive."', initials: 'SJ', name: 'Sarah Johnson', role: 'Owner, Fresh Bakery Co.' },
+  { text: '"The live chat and booking system have increased our conversion rate significantly. Worth every penny — and then some."', initials: 'MR', name: 'Marcus Reid', role: 'Director, Reid Consulting' },
+  { text: '"Finally, one platform that does it all. We cancelled three separate subscriptions when we switched to BlueWorx."', initials: 'AL', name: 'Amy Leung', role: 'Founder, Leung Law Group' }
+];
+
+class Component extends DCLogic {
+  renderVals() { return { projects: PROJECTS, testimonials: TESTIMONIALS }; }
+}
+
+</script>
+</body>
+</html>

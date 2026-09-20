@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="description" content="Integrated Support — monthly support packages from BlueWorx" />
+<link rel="stylesheet" href="assets/css/blueworx-fonts.css" />
+<link rel="stylesheet" href="assets/css/public.css" />
+<style>
+body { margin: 0; background: #fff; }
+a { color: #4F46E5; }
+a:hover { color: #4338CA; }
+/* section rhythm: every light section keeps the same 116px padding and is
+   separated by a hairline, so the vertical grid reads consistently */
+main > div > .sec + .sec { border-top: 1px solid #EFEFF0; }
+/* deterministic card grids — auto-fit left orphan rows (3 + 1) */
+.bw-g2, .bw-g3, .bw-g4 { display: grid; gap: 20px; }
+.bw-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bw-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bw-g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .bw-g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .bw-g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .bw-g2, .bw-g3, .bw-g4 { grid-template-columns: minmax(0, 1fr); } }
+.tech-status span span::before { display: none; }
+details.faq-item { border-bottom: 1px solid #EFEFF0; }
+details.faq-item .faq-q { list-style: none; }
+details.faq-item .faq-q::-webkit-details-marker { display: none; }
+details.faq-item .faq-a { max-height: none; overflow: visible; transition: none; padding: 0 8px 26px; }
+details.faq-item[open] .faq-q svg { transform: rotate(180deg); }
+input[type="range"].bw-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 99px; background: #E8E7F7; outline: none; }
+input[type="range"].bw-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(10,12,41,.25); cursor: pointer; }
+input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; cursor: pointer; }
+</style>
+</helmet>
+<div class="bw-page">
+<dc-import name="Site Nav" active="support" hint-size="100%,96px"></dc-import>
+<main id="content" tabindex="-1">
+	<div>
+		<section class="tech-hero pb-tall" style="text-align:center">
+			<div class="tech-inner" style="max-width:820px;margin:0 auto">
+				<div class="tech-badge" style="margin-bottom:22px"><span class="dot"></span>Integrated Support</div>
+				<h1 class="h1">Your Design &amp; Development Team, <span class="tech-grad">On Retainer</span></h1>
+				<p class="lead">Buy a block of hours each month and use them however your business needs: design, development, fixes, content, SEO, or a new landing page. All of the team, none of the admin.</p>
+				<div class="tech-status" style="justify-content:center">
+					<span>from <b style="font:inherit">{{ fromPrice }}</b> per month</span>
+					<span>hours pooled annually</span>
+					<span>cancel any time</span>
+				</div>
+			</div>
+		</section>
+
+		<div class="plan-cards-wrap" style="margin:-190px var(--gut) 0;position:relative;z-index:3">
+			<div class="plans">
+				<sc-for list="{{ featured }}" as="plan" hint-placeholder-count="3">
+					<div class="{{ plan.cardClass }}">
+						<div class="plan-top">
+							<div class="plan-name">
+								<span>{{ plan.name }}</span>
+								<sc-if value="{{ plan.pop }}" hint-placeholder-val="{{ false }}"><span class="pop" style="color:#4338CA;font-size:12px;letter-spacing:0">Popular</span></sc-if>
+							</div>
+							<div class="plan-desc">{{ plan.desc }}</div>
+							<div class="plan-price"><b>{{ plan.price }}</b><em>per month · {{ plan.perMonth }} hrs a month</em></div>
+							<a href="BlueWorx%20Contact.dc.html" class="{{ plan.btnClass }}" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Get started</a>
+						</div>
+						<div class="plan-feats">
+							<div class="lbl">FEATURES</div>
+							<sc-for list="{{ plan.features }}" as="feat" hint-placeholder-count="5">
+								<div class="pf">
+									<svg class="ck" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14.4l-4.2-4.2 1.5-1.5 2.7 2.7 5-5 1.5 1.5z"></path></svg>
+									{{ feat }}
+								</div>
+							</sc-for>
+						</div>
+					</div>
+				</sc-for>
+			</div>
+		</div>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<div class="eyebrow" style="margin-bottom:20px">Find Your Level</div>
+				<h2 class="h2">How Many Hours Do You Need?</h2>
+				<p class="lead">Slide to the support you use each month. We'll show the package that covers it.</p>
+			</div>
+			<div class="calc">
+				<div class="calc-panel">
+					<div class="calc-field">
+						<label>Support hours per month</label>
+						<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+							<b style="font-family:'Sora',sans-serif;font-size:40px;letter-spacing:-1px;color:#0A0C29">{{ calcHours }}</b>
+							<span style="font-size:15px;color:#667085">hours · {{ calcAnnual }} hours a year</span>
+						</div>
+						<input class="bw-range" type="range" min="0" max="8" step="1" value="{{ calcIndex }}" onChange="{{ onSlide }}" aria-label="Support hours per month" />
+						<div style="display:flex;justify-content:space-between;font-size:12.5px;color:#A0AFC0;margin-top:8px">
+							<span>2 hrs</span><span>50 hrs</span>
+						</div>
+					</div>
+					<div class="calc-field">
+						<label>Package</label>
+						<div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:600;color:#0A0C29">{{ calcName }}</div>
+						<p style="font-size:14.5px;color:#667085;margin:6px 0 0;line-height:1.55">{{ calcBlurb }}</p>
+					</div>
+					<div class="calc-field" style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+						<label style="margin:0">Effective hourly rate</label>
+						<b style="font-family:'Sora',sans-serif;font-size:18px;color:#0A0C29">{{ calcRate }}</b>
+					</div>
+				</div>
+				<div class="calc-out">
+					<div class="cl">Your package</div>
+					<div class="cv">{{ calcPrice }}</div>
+					<div class="cp">per month</div>
+					<a href="BlueWorx%20Contact.dc.html" class="btn btn-brand btn-md" style="width:100%;text-decoration:none">Get this plan</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<div class="eyebrow" style="margin-bottom:20px">All Packages</div>
+				<h2 class="h2">Nine Levels of Integrated Support</h2>
+				<p class="lead">Hours are an annual allowance, drawn down whenever you need them. Move up or down a level as your workload changes.</p>
+			</div>
+			<div class="cmp-scroll">
+				<table class="cmp">
+					<thead>
+						<tr>
+							<th>Package</th>
+							<th>Hours a year</th>
+							<th>Hours a month</th>
+							<th>Effective rate</th>
+							<th>Monthly price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<sc-for list="{{ packages }}" as="pkg" hint-placeholder-count="9">
+							<tr>
+								<td style="font-weight:600;color:#0A0C29">{{ pkg.name }}</td>
+								<td>{{ pkg.hours }}</td>
+								<td>{{ pkg.perMonth }}</td>
+								<td>{{ pkg.rate }}</td>
+								<td style="font-weight:600;color:#0A0C29">{{ pkg.price }}</td>
+							</tr>
+						</sc-for>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="features-dark">
+			<div class="blob" style="width:360px;height:360px;top:-120px;right:-120px;opacity:.14"></div>
+			<div class="fd-header">
+				<h2 class="h2">What You Can Spend Your Hours On</h2>
+				<p class="fd-sub">Anything we do, you can draw from the same allowance. No separate quotes for small jobs, no surprise invoices.</p>
+			</div>
+			<div class="bw-g3">
+				<sc-for list="{{ uses }}" as="use" hint-placeholder-count="6">
+					<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px 22px">
+						<h3 style="font-size:18px;color:#fff;margin:0 0 8px;letter-spacing:-.3px">{{ use.name }}</h3>
+						<p style="font-size:14.5px;color:rgba(255,255,255,.66);margin:0;line-height:1.6">{{ use.desc }}</p>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<div class="eyebrow" style="margin-bottom:20px">How It Works</div>
+				<h2 class="h2">Support Without the Ticket Queue</h2>
+			</div>
+			<div class="proc-grid">
+				<div class="proc"><b class="num">01</b><h3>Pick a level</h3><p>Choose the package that matches how much you typically need each month. Start lower if you are unsure.</p></div>
+				<div class="proc"><b class="num">02</b><h3>Ask us anything</h3><p>Send requests by email or from your client dashboard. No forms to fill in, no tickets to chase.</p></div>
+				<div class="proc"><b class="num">03</b><h3>We draw down hours</h3><p>Every job is logged against your allowance so you can see exactly where the time went.</p></div>
+				<div class="proc"><b class="num">04</b><h3>Review and adjust</h3><p>Running hot or barely touching it? Move up or down a package at any point in the year.</p></div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<h2 class="h2">Frequently asked questions</h2>
+				<p class="lead">Everything you need to know about Integrated Support and billing.</p>
+			</div>
+			<div class="faq-list">
+				<sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="5">
+					<details class="faq-item">
+						<summary class="faq-q">{{ faq.q }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></summary>
+						<div class="faq-a"><p>{{ faq.a }}</p></div>
+					</details>
+				</sc-for>
+			</div>
+		</section>
+	</div>
+</main>
+<div class="cta-soft">
+	<div class="cta-inner">
+		<div class="blob" style="width:220px;height:220px;bottom:-80px;left:-40px;opacity:.4"></div>
+		<div class="blob" style="width:180px;height:180px;top:-60px;right:-20px;opacity:.35"></div>
+		<h2 class="h2">Not Sure Which Level Fits?</h2>
+		<p>Tell us what you have been asking your last developer for. We'll tell you honestly which package covers it.</p>
+		<div class="cta-actions">
+			<a href="BlueWorx%20Contact.dc.html" class="btn btn-brand btn-md">Talk to Us</a>
+			<a href="BlueWorx%20Hosting.dc.html" class="btn btn-outline-w btn-md">See Hosting</a>
+		</div>
+	</div>
+</div>
+<dc-import name="Site Footer" hint-size="100%,360px"></dc-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RATES = { GBP: { s: '£', r: 1 }, EUR: { s: '€', r: 1.17 }, USD: { s: '$', r: 1.27 } };
+
+// The nine Integrated Support packages. Hours are the annual allowance;
+// the monthly price is what the client pays every month.
+const PACKAGES = [
+  { name: 'Starter', hours: 24, gbp: 100, blurb: 'Keeping a simple site current — small edits, updates and the odd fix.' },
+  { name: 'Launch', hours: 48, gbp: 200, blurb: 'A day a month of design and development time for a growing site.' },
+  { name: 'Scale', hours: 72, gbp: 300, blurb: 'Steady improvement work alongside the everyday maintenance.' },
+  { name: 'Enhance', hours: 96, gbp: 400, blurb: 'Regular new pages, campaigns and feature work on top of upkeep.' },
+  { name: 'Growth', hours: 120, gbp: 500, blurb: 'A consistent programme of design, build and optimisation each month.' },
+  { name: 'Enterprise', hours: 240, gbp: 750, blurb: 'A standing slice of the team for multi-site or multi-brand operations.' },
+  { name: 'Enterprise\u00A0+', hours: 360, gbp: 1000, blurb: 'Larger roadmaps with parallel workstreams and priority turnaround.' },
+  { name: 'Advantage', hours: 480, gbp: 1250, blurb: 'A near-full-time partner embedded in your product and marketing.' },
+  { name: 'Advantage\u00A0+', hours: 600, gbp: 1500, blurb: 'Our deepest engagement — the whole team, on call, all year.' }
+];
+
+const FEATURES = {
+  Starter: ['24 hours a year (2 a month)', 'Content and small design edits', 'Core, plugin and theme updates', 'Email support, 2 business days', 'Monthly summary of hours used'],
+  Growth: ['120 hours a year (10 a month)', 'Design and development time', 'New pages, campaigns and fixes', 'Priority response, 1 business day', 'Quarterly review and roadmap'],
+  'Enterprise\u00A0+': ['360 hours a year (30 a month)', 'Parallel design and build workstreams', 'Multi-site and multi-brand cover', 'Same-day response on urgent work', 'Named lead and monthly reporting']
+};
+
+const USES = [
+  { name: 'Design work', desc: 'New pages, landing pages, campaign creative and refinements to what is already live.' },
+  { name: 'Development', desc: 'Features, integrations, fixes and the technical jobs nobody in-house wants to own.' },
+  { name: 'Content', desc: 'Copy edits, product and service pages, image work and publishing the things you keep putting off.' },
+  { name: 'SEO & growth', desc: 'Technical SEO, page-speed work, tracking and conversion improvements.' },
+  { name: 'Maintenance', desc: 'Updates, compatibility checks and the routine housekeeping a site needs to stay healthy.' },
+  { name: 'Advice', desc: 'Strategy calls, scoping and second opinions before you commit budget elsewhere.' }
+];
+
+const FAQS = [
+  { q: 'Do unused hours roll over?', a: 'Your allowance is annual, so a quiet month simply leaves more in the pot for a busy one. Hours do not carry past the end of your support year.' },
+  { q: 'What if we go over our hours?', a: 'We tell you before you get there, not after. You can either move up a package or approve extra hours at your package rate for that piece of work.' },
+  { q: 'How quickly do you respond?', a: 'Two business days on the smaller packages, one business day from Growth upwards, and same-day on Enterprise + and above. Anything that takes a site offline is treated as urgent on every package.' },
+  { q: 'Can we change package mid-year?', a: 'Yes. Move up at any time and the new allowance applies from that month. Moving down takes effect at your next renewal.' },
+  { q: 'Is hosting included?', a: 'Hosting is separate at £20 a month or £200 a year per site, so you only pay for it on the sites we host. Support packages work with sites hosted anywhere.' }
+];
+
+class Component extends DCLogic {
+  state = { cur: 'GBP', idx: 4 };
+  componentDidMount() {
+    let cur = 'GBP';
+    try { cur = localStorage.getItem('bw-currency') || 'GBP'; } catch (e) {}
+    if (cur !== this.state.cur) this.setState({ cur });
+    this._onCur = (e) => this.setState({ cur: e.detail });
+    window.addEventListener('bw:currency', this._onCur);
+  }
+  componentWillUnmount() { window.removeEventListener('bw:currency', this._onCur); }
+  money(gbp, dp) {
+    const c = RATES[this.state.cur] || RATES.GBP;
+    const v = gbp * c.r;
+    return c.s + (dp ? v.toFixed(2) : Math.round(v).toLocaleString('en-GB'));
+  }
+  renderVals() {
+    const pick = PACKAGES[this.state.idx];
+    const rate = (pkg) => this.money((pkg.gbp * 12) / pkg.hours, true);
+    const rows = PACKAGES.map((p) => ({
+      name: p.name,
+      hours: p.hours + ' hrs',
+      perMonth: (p.hours / 12) + ' hrs',
+      rate: rate(p) + ' / hr',
+      price: this.money(p.gbp)
+    }));
+    const featured = ['Starter', 'Growth', 'Enterprise\u00A0+'].map((name) => {
+      const p = PACKAGES.find((x) => x.name === name);
+      const feat = name === 'Growth';
+      return {
+        name: p.name,
+        desc: p.blurb,
+        price: this.money(p.gbp),
+        perMonth: p.hours / 12,
+        features: FEATURES[name],
+        pop: feat,
+        cardClass: feat ? 'plan-card feat' : 'plan-card',
+        btnClass: feat ? 'plan-btn dark' : 'plan-btn out'
+      };
+    });
+    return {
+      packages: rows,
+      featured,
+      uses: USES,
+      faqs: FAQS,
+      fromPrice: this.money(100),
+      fromLine: 'from ' + this.money(100) + ' per month',
+      calcIndex: this.state.idx,
+      calcHours: pick.hours / 12,
+      calcAnnual: pick.hours,
+      calcName: pick.name,
+      calcBlurb: pick.blurb,
+      calcRate: rate(pick) + ' / hr',
+      calcPrice: this.money(pick.gbp),
+      onSlide: (e) => this.setState({ idx: Number(e.target.value) })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

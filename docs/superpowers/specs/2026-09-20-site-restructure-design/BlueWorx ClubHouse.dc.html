@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="description" content="ClubHouse — the complete website platform for sports clubs and membership organisations" />
+<link rel="stylesheet" href="assets/css/blueworx-fonts.css" />
+<link rel="stylesheet" href="assets/css/public.css" />
+<script src="./image-slot.js"></script>
+<style>
+body { margin: 0; background: #fff; }
+a { color: #4F46E5; }
+a:hover { color: #4338CA; }
+/* section rhythm: every light section keeps the same 116px padding and is
+   separated by a hairline, so the vertical grid reads consistently */
+main > div > .sec + .sec { border-top: 1px solid #EFEFF0; }
+/* headline set so the accent phrase holds one line in the 560px copy column */
+.tech-hero .h1 { font-size: 56px; letter-spacing: -1.9px; }
+.tech-hero .h1 .tech-grad { white-space: nowrap; }
+@media (max-width: 1100px) { .tech-hero .h1 { font-size: 44px; letter-spacing: -1.2px; } }
+@media (max-width: 700px) { .tech-hero .h1 { font-size: 36px; letter-spacing: -.9px; } }
+/* deterministic card grids — auto-fit left orphan rows (3 + 1) */
+.bw-g2, .bw-g3, .bw-g4 { display: grid; gap: 20px; }
+.bw-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bw-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bw-g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .bw-g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .bw-g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .bw-g2, .bw-g3, .bw-g4 { grid-template-columns: minmax(0, 1fr); } }
+/* demo band: a wide slot beside a stacked pair — its own tracks rather than a
+   span inside .bw-g3, which left an empty half-row once that grid dropped to 2 */
+.bw-demo { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: stretch; grid-auto-rows: 392px; }
+@media (max-width: 900px) { .bw-demo { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; } }
+@media (max-width: 900px) { .bw-demo { grid-template-columns: minmax(0, 1fr); } }
+details.faq-item { border-bottom: 1px solid #EFEFF0; }
+details.faq-item .faq-q { list-style: none; }
+details.faq-item .faq-q::-webkit-details-marker { display: none; }
+details.faq-item .faq-a { max-height: none; overflow: visible; transition: none; padding: 0 8px 26px; }
+details.faq-item[open] .faq-q svg { transform: rotate(180deg); }
+</style>
+</helmet>
+<div class="bw-page">
+<dc-import name="Site Nav" active="clubhouse" hint-size="100%,96px"></dc-import>
+<main id="content" tabindex="-1">
+	<div>
+		<section class="tech-hero">
+			<div class="tech-inner tech-2col">
+				<div class="tc-copy">
+					<div class="tech-badge"><span class="dot"></span>ClubHouse · Club Website Platform</div>
+					<h1 class="h1" style="margin:22px 0 0">Every Sport. Every Member. <span class="tech-grad">One Club Website.</span></h1>
+					<p class="lead" style="max-width:520px;margin:22px 0 34px">ClubHouse is a ready-made website platform for sports clubs and membership organisations. Teams, fixtures, memberships, bookings, events and a club shop, all running on managed hosting from day one.</p>
+					<div style="display:flex;gap:14px;flex-wrap:wrap">
+						<a href="https://demo.305media.co.uk/" target="_blank" rel="noopener" class="btn btn-white btn-lg">View Live Demo</a>
+						<a href="BlueWorx%20Contact.dc.html" class="btn btn-outline-w btn-lg">Talk to Us</a>
+					</div>
+					<div class="tech-status">
+						<span>live in 2 weeks</span>
+						<span>hosting included</span>
+						<span>no setup fee</span>
+					</div>
+				</div>
+				<div class="glass-wrap">
+					<div class="glass-card" style="padding:28px">
+						<div class="gc-scan"></div>
+						<div class="gc-head">
+							<div class="gc-dots"><i></i><i></i><i></i></div>
+							<div class="gc-tag">clubhouse · season 26/27</div>
+						</div>
+						<div class="gc-metric"><small>Members renewed</small><b>412</b><span class="up">▲</span></div>
+						<div class="gc-metric"><small>Fixtures published</small><b>96</b><span class="up">▲</span></div>
+						<div class="gc-metric" style="border-bottom:none"><small>Subs collected online</small><b>94%</b><span class="up">▲</span></div>
+						<div class="gc-spark">
+							<i style="height:34%"></i><i style="height:48%"></i><i style="height:42%"></i><i style="height:62%"></i><i style="height:74%"></i><i class="hi" style="height:96%"></i><i style="height:82%"></i><i style="height:90%"></i>
+						</div>
+					</div>
+					<div class="tech-float" style="top:-22px;right:-26px;animation-delay:.4s">
+						<div class="tf-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path></svg></div>
+						<div><small>Active members</small><b>1,240</b></div>
+					</div>
+					<div class="tech-float" style="bottom:-22px;left:-26px;animation-delay:1.1s">
+						<div class="tf-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+						<div><small>Next fixture</small><b>Sat · 14:00</b></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:44px">
+				<div class="eyebrow" style="margin-bottom:20px">What's Included</div>
+				<h2 class="h2">Every Part of Club Life, Already Built</h2>
+				<p class="lead">Nine modules that cover how a club actually runs. Switch on what you need, leave the rest.</p>
+			</div>
+			<div class="bw-g3">
+				<sc-for list="{{ modules }}" as="mod" hint-placeholder-count="9">
+					<div style="background:#fff;border:1px solid #EFEFF0;border-radius:16px;padding:28px 26px;box-shadow:0 1px 2px rgba(10,12,41,.04)">
+						<div class="svc-ic" style="margin-bottom:18px">{{ mod.glyph }}</div>
+						<h3 style="font-size:19px;letter-spacing:-.3px;margin:0 0 8px">{{ mod.name }}</h3>
+						<p style="font-size:15px;margin:0;color:#4C4C4C;line-height:1.55">{{ mod.desc }}</p>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:32px">
+				<div>
+					<div class="eyebrow" style="margin-bottom:20px">See It Live</div>
+					<h2 class="h2" style="max-width:560px">A Full Club Site, Running Today</h2>
+				</div>
+				<a href="https://demo.305media.co.uk/" target="_blank" rel="noopener" class="btn btn-outline btn-md">Open the Demo
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+				</a>
+			</div>
+			<div class="bw-demo">
+				<div style="min-width:0">
+					<image-slot id="ch-demo-home" shape="rounded" radius="16" style="width:100%;height:100%" placeholder="Drop a screenshot of the ClubHouse home page"></image-slot>
+				</div>
+				<div style="display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:20px;min-width:0;min-height:0;height:100%">
+					<image-slot id="ch-demo-teams" shape="rounded" radius="16" style="width:100%;height:100%" placeholder="Teams page"></image-slot>
+					<image-slot id="ch-demo-membership" shape="rounded" radius="16" style="width:100%;height:100%" placeholder="Membership page"></image-slot>
+				</div>
+			</div>
+		</section>
+
+		<section class="features-dark">
+			<div class="blob" style="width:360px;height:360px;top:-120px;right:-120px;opacity:.14"></div>
+			<div class="fd-header">
+				<h2 class="h2">Members Do It Themselves. Committees Get Their Evenings Back.</h2>
+				<p class="fd-sub">Joining, renewing, paying subs, booking a court, buying kit — all self-service, all online, all reconciled in one place.</p>
+			</div>
+			<div class="bw-g4">
+				<sc-for list="{{ selfServe }}" as="item" hint-placeholder-count="4">
+					<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:26px 24px">
+						<div style="font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#A5A7FF;margin-bottom:14px">{{ item.tag }}</div>
+						<h3 style="font-size:19px;color:#fff;margin:0 0 8px;letter-spacing:-.3px">{{ item.name }}</h3>
+						<p style="font-size:14.5px;color:rgba(255,255,255,.66);margin:0;line-height:1.6">{{ item.desc }}</p>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:36px">
+				<div class="eyebrow" style="margin-bottom:20px">Pricing</div>
+				<h2 class="h2">One Price. The Whole Platform.</h2>
+				<p class="lead">Hosting, updates, and every ClubHouse module included. Cancel any time.</p>
+			</div>
+			<div style="display:flex;justify-content:center;margin-bottom:34px">
+				<div class="bill-toggle">
+					<button type="button" class="{{ monthlyClass }}" onClick="{{ setMonthly }}">Monthly billing</button>
+					<button type="button" class="{{ annualClass }}" onClick="{{ setAnnual }}">Annual billing</button>
+				</div>
+			</div>
+			<div class="bw-g2" style="gap:22px;max-width:960px;margin:0 auto">
+				<div class="plan-card feat">
+					<div class="plan-top">
+						<div class="plan-name"><span>ClubHouse</span><span class="pop" style="color:#4338CA;font-size:12px;letter-spacing:0">Popular</span></div>
+						<div class="plan-desc">The complete club website platform, hosted and maintained by us.</div>
+						<div class="plan-price"><b>{{ price }}</b><em>{{ per }}</em></div>
+						<a href="BlueWorx%20Contact.dc.html" class="plan-btn dark" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Get Started</a>
+					</div>
+					<div class="plan-feats">
+						<div class="lbl">INCLUDED</div>
+						<sc-for list="{{ included }}" as="feat" hint-placeholder-count="7">
+							<div class="pf">
+								<svg class="ck" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-1 14.4l-4.2-4.2 1.5-1.5 2.7 2.7 5-5 1.5 1.5z"></path></svg>
+								{{ feat }}
+							</div>
+						</sc-for>
+					</div>
+				</div>
+				<div style="background:#F5F6FF;border-radius:16px;padding:34px 32px;display:flex;flex-direction:column;gap:18px">
+					<h3 style="font-size:22px;letter-spacing:-.4px;margin:0">Need it tailored?</h3>
+					<p style="font-size:15.5px;margin:0;color:#4C4C4C;line-height:1.6">Bigger clubs run bigger operations. We migrate your member data, brand the site to your colours, and bolt on custom modules — quoted as a one-off project on top of the monthly platform fee.</p>
+					<div class="collab-list" style="margin:0">
+						<div class="fli" style="border-bottom:none;padding:8px 0"><div class="fli-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></div><span style="font-size:16px">Member data migration</span></div>
+						<div class="fli" style="border-bottom:none;padding:8px 0"><div class="fli-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="13" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><path d="M12 22a9 9 0 0 1 0-18"></path></svg></div><span style="font-size:16px">Club branding &amp; kit colours</span></div>
+						<div class="fli" style="border-bottom:none;padding:8px 0"><div class="fli-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div><span style="font-size:16px">Custom modules &amp; integrations</span></div>
+					</div>
+					<a href="BlueWorx%20Contact.dc.html" class="btn btn-outline btn-md" style="align-self:flex-start">Get a Quote
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<div class="eyebrow" style="margin-bottom:20px">Who It's For</div>
+				<h2 class="h2">Built for Clubs. Works for Any Membership Organisation.</h2>
+			</div>
+			<div class="bw-g4">
+				<sc-for list="{{ audiences }}" as="aud" hint-placeholder-count="4">
+					<div style="border:1px solid #EFEFF0;border-radius:16px;padding:26px 24px;background:#fff">
+						<h3 style="font-size:18px;margin:0 0 8px;letter-spacing:-.3px">{{ aud.name }}</h3>
+						<p style="font-size:14.5px;color:#667085;margin:0;line-height:1.6">{{ aud.desc }}</p>
+					</div>
+				</sc-for>
+			</div>
+		</section>
+
+		<section class="sec">
+			<div class="center-head" style="margin-bottom:40px">
+				<h2 class="h2">Frequently asked questions</h2>
+				<p class="lead">Everything you need to know about running your club on ClubHouse.</p>
+			</div>
+			<div class="faq-list">
+				<sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="5">
+					<details class="faq-item">
+						<summary class="faq-q">{{ faq.q }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></summary>
+						<div class="faq-a"><p>{{ faq.a }}</p></div>
+					</details>
+				</sc-for>
+			</div>
+		</section>
+	</div>
+</main>
+<div class="cta-soft">
+	<div class="cta-inner">
+		<div class="blob" style="width:220px;height:220px;bottom:-80px;left:-40px;opacity:.4"></div>
+		<div class="blob" style="width:180px;height:180px;top:-60px;right:-20px;opacity:.35"></div>
+		<h2 class="h2">Ready to Move Your Club Online?</h2>
+		<p>Tour the demo, then tell us about your club. We'll have you live inside a fortnight.</p>
+		<div class="cta-actions">
+			<a href="https://demo.305media.co.uk/" target="_blank" rel="noopener" class="btn btn-brand btn-md">View Live Demo</a>
+			<a href="BlueWorx%20Contact.dc.html" class="btn btn-outline-w btn-md">Talk to Us</a>
+		</div>
+	</div>
+</div>
+<dc-import name="Site Footer" hint-size="100%,360px"></dc-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RATES = { GBP: { s: '£', r: 1 }, EUR: { s: '€', r: 1.17 }, USD: { s: '$', r: 1.27 } };
+const ic = (d) => React.createElement('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { width: '100%', height: '100%' } }, d.map((p, i) => React.createElement('path', { key: i, d: p })));
+
+const MODULES = [
+  { name: 'Memberships', desc: 'Tiers, joining flows, renewals and subs collected by direct debit or card.', d: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8', 'M22 21v-2a4 4 0 0 0-3-3.87'] },
+  { name: 'Teams & squads', desc: 'A page per team with squad lists, coaches, league tables and results.', d: ['M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6Z'] },
+  { name: 'Fixtures & results', desc: 'Season fixtures, scores and reports, published once and shown everywhere.', d: ['M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z'] },
+  { name: 'Bookings', desc: 'Courts, pitches, lanes and function rooms, bookable by members online.', d: ['M12 6v6l4 2', 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20'] },
+  { name: 'Events & socials', desc: 'Open days, camps, awards nights — with tickets and capacity limits.', d: ['M21 11.5a8.4 8.4 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20 8.4 8.4 0 0 1 8.7 19L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 4Z'] },
+  { name: 'Club shop', desc: 'Kit, merchandise and match-day extras, with member-only pricing.', d: ['M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z', 'M3 6h18', 'M16 10a4 4 0 0 1-8 0'] },
+  { name: 'News & notices', desc: 'Match reports, committee notices and a ticker for anything urgent.', d: ['M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z', 'M8 7h8', 'M8 12h4'] },
+  { name: 'Sponsors', desc: 'Partner tiers, logo boards and a sponsorship enquiry route that converts.', d: ['M12 2 15 8.3l6.9.6-5.2 4.5 1.6 6.7L12 17l-6.3 3.1 1.6-6.7L2.1 8.9l6.9-.6Z'] },
+  { name: 'Calendar', desc: 'Everything the club is doing this month, in one subscribable feed.', d: ['M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'M9 16h6'] }
+];
+
+const SELF_SERVE = [
+  { tag: 'Join', name: 'Sign-up in minutes', desc: 'A member joins, picks a tier, pays, and lands in the club directory without a committee member touching a spreadsheet.' },
+  { tag: 'Renew', name: 'Renewals that chase themselves', desc: 'Automatic reminders, card retries and a renewal page every member can reach from their phone.' },
+  { tag: 'Book', name: 'Courts and pitches online', desc: 'Availability, rules and member-only slots, with the bar and grounds team seeing the same diary.' },
+  { tag: 'Buy', name: 'Kit and tickets in one basket', desc: 'Shop and event ticketing share a checkout, so one order covers the kit bag and the awards night.' }
+];
+
+const AUDIENCES = [
+  { name: 'Multi-sport clubs', desc: 'Rugby, cricket, hockey, netball and tennis under one roof, each section with its own space.' },
+  { name: 'Single-sport clubs', desc: 'Juniors through to first team, with squads, fixtures and subs handled in one place.' },
+  { name: 'Societies & associations', desc: 'Membership tiers, an events calendar and a members-only area, without the sport.' },
+  { name: 'Gyms & studios', desc: 'Class booking, recurring memberships and a shop, on hosting that stays up at 6am.' }
+];
+
+const FAQS = [
+  { q: 'Can we keep our existing domain?', a: 'Yes. We point your current domain at the new site and handle the DNS and SSL for you, with no downtime on the day of the switch.' },
+  { q: 'What happens to our current member list?', a: 'We import it. Send us whatever you have — a spreadsheet, an export from your old system — and we map it into membership tiers before you go live.' },
+  { q: 'Is hosting really included?', a: 'It is. Managed hosting, backups, SSL, updates and monitoring are part of the monthly fee, so there is no separate hosting bill.' },
+  { q: 'Who updates the site day to day?', a: 'Your committee does, through a simple editor. Fixtures, news and events take a couple of minutes each, and we are on the end of an email when something bigger is needed.' },
+  { q: 'Can we take payments through the site?', a: 'Yes — memberships, subs, event tickets and shop orders all run through the same checkout, with money landing in the club account.' }
+];
+
+const INCLUDED = [
+  'All nine ClubHouse modules',
+  'Managed hosting, SSL and daily backups',
+  'Online payments for subs, tickets and kit',
+  'Unlimited teams, fixtures and members',
+  'Mobile-first club site, branded to you',
+  'Platform updates and security patches',
+  'Email support from the BlueWorx team'
+];
+
+class Component extends DCLogic {
+  state = { cur: 'GBP', annual: false };
+  componentDidMount() {
+    let cur = 'GBP';
+    try { cur = localStorage.getItem('bw-currency') || 'GBP'; } catch (e) {}
+    if (cur !== this.state.cur) this.setState({ cur });
+    this._onCur = (e) => this.setState({ cur: e.detail });
+    window.addEventListener('bw:currency', this._onCur);
+  }
+  componentWillUnmount() { window.removeEventListener('bw:currency', this._onCur); }
+  money(gbp) {
+    const c = RATES[this.state.cur] || RATES.GBP;
+    return c.s + Math.round(gbp * c.r).toLocaleString('en-GB');
+  }
+  renderVals() {
+    const annual = this.state.annual;
+    return {
+      modules: MODULES.map((m) => ({ ...m, glyph: ic(m.d) })),
+      selfServe: SELF_SERVE,
+      audiences: AUDIENCES,
+      faqs: FAQS,
+      included: INCLUDED,
+      price: annual ? this.money(200) : this.money(20),
+      per: annual ? 'per year, billed annually' : 'per month',
+      monthlyClass: annual ? '' : 'on',
+      annualClass: annual ? 'on' : '',
+      setMonthly: () => this.setState({ annual: false }),
+      setAnnual: () => this.setState({ annual: true })
+    };
+  }
+}
+
+</script>
+</body>
+</html>
