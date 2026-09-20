@@ -27,8 +27,9 @@
  *                     Default 820 (About). Contact uses 780.
  * - extra_class      (string, optional) Centered mode only. Extra class(es) on
  *                     the `<section>`, e.g. "pb-tall" for Pricing's taller hero.
- * - cta              (array, optional) List of array( label, href, class )
- *                     rendered as buttons after the lead.
+ * - cta              (array, optional) List of array( label, href, class,
+ *                     external ) rendered as buttons after the lead. `external`
+ *                     (bool, optional) appends target="_blank" rel="noopener".
  * - meta             (array, optional) List of plain label strings rendered
  *                     as `.tech-status` pills after the CTA row.
  *
@@ -85,7 +86,7 @@ if ( $blueworx_th_centered ) :
 			<?php if ( ! empty( $blueworx_th_cta ) ) : ?>
 				<div style="display:flex;gap:14px;flex-wrap:wrap">
 					<?php foreach ( $blueworx_th_cta as $blueworx_th_button ) : ?>
-						<a href="<?php echo esc_url( $blueworx_th_button['href'] ); ?>" class="<?php echo esc_attr( $blueworx_th_button['class'] ); ?>"><?php echo esc_html( $blueworx_th_button['label'] ); ?></a>
+						<a href="<?php echo esc_url( $blueworx_th_button['href'] ); ?>" class="<?php echo esc_attr( $blueworx_th_button['class'] ); ?>"<?php echo ! empty( $blueworx_th_button['external'] ) ? ' target="_blank" rel="noopener"' : ''; ?>><?php echo esc_html( $blueworx_th_button['label'] ); ?></a>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>

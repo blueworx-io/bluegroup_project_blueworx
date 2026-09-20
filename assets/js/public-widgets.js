@@ -196,6 +196,65 @@
 		render();
 	}
 
+	/**
+	 * The Support page's hours slider (2026-09 restructure).
+	 *
+	 * The slider indexes the nine packages, whose numbers the template
+	 * writes into data-packages so this never carries a second copy of the
+	 * price list. Prices go through the painter's data-bw-gbp contract so a
+	 * currency change repaints them like every other price on the page.
+	 */
+	function initSupportCalc() {
+		var root = document.querySelector( '[data-widget="support-calc"]' );
+		if ( ! root ) {
+			return;
+		}
+		var packages;
+		try {
+			packages = JSON.parse( root.getAttribute( 'data-packages' ) || '[]' );
+		} catch ( e ) {
+			return;
+		}
+		var range = root.querySelector( 'input[type="range"]' );
+		var hours = root.querySelector( '[data-testid="support-calc-hours"]' );
+		var annual = root.querySelector( '[data-testid="support-calc-annual"]' );
+		var name = root.querySelector( '[data-testid="support-calc-name"]' );
+		var blurb = root.querySelector( '[data-testid="support-calc-blurb"]' );
+		var rate = root.querySelector( '[data-testid="support-calc-rate"]' );
+		var price = root.querySelector( '[data-testid="support-calc-price"]' );
+		if ( ! range || ! packages.length ) {
+			return;
+		}
+
+		function apply() {
+			var pkg = packages[ Math.min( packages.length - 1, Math.max( 0, parseInt( range.value, 10 ) || 0 ) ) ];
+			var perHour = ( pkg.gbp * 12 ) / pkg.hours;
+			if ( hours ) {
+				hours.textContent = String( pkg.hours / 12 );
+			}
+			if ( annual ) {
+				annual.textContent = String( pkg.hours );
+			}
+			if ( name ) {
+				name.textContent = pkg.name;
+			}
+			if ( blurb ) {
+				blurb.textContent = pkg.blurb;
+			}
+			if ( rate ) {
+				rate.setAttribute( 'data-bw-gbp', perHour.toFixed( 2 ) );
+			}
+			if ( price ) {
+				price.setAttribute( 'data-bw-gbp', String( pkg.gbp ) );
+			}
+			paintPrices();
+		}
+
+		range.addEventListener( 'input', apply );
+		range.addEventListener( 'change', apply );
+		apply();
+	}
+
 	function initSavingsCalc() {
 		var root = document.querySelector( '[data-widget="savings-calc"]' );
 		if ( ! root ) {
@@ -646,6 +705,7 @@
 		initCopyLink();
 		initBillingToggle();
 		initPricingCalc();
+		initSupportCalc();
 		initSavingsCalc();
 		initFaqAccordion();
 		initAiPipeline();
