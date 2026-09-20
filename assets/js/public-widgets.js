@@ -9,6 +9,65 @@
 ( function () {
 	'use strict';
 
+	// GBP is the base; the other two are fixed rates agreed for the site.
+	var CURRENCIES = {
+		GBP: { symbol: '£', rate: 1 },
+		EUR: { symbol: '€', rate: 1.17 },
+		USD: { symbol: '$', rate: 1.27 }
+	};
+
+	function currentCurrency() {
+		var code = 'GBP';
+		try {
+			code = localStorage.getItem( 'bw-currency' ) || 'GBP';
+		} catch {
+			code = 'GBP';
+		}
+		return CURRENCIES[ code ] ? code : 'GBP';
+	}
+
+	/**
+	 * Formats a GBP amount in the visitor's chosen currency.
+	 *
+	 * @param {number} gbp Amount in pounds.
+	 * @param {number} dp  Decimal places (0 or 2).
+	 * @return {string} e.g. "£20", "€58.50".
+	 */
+	function money( gbp, dp ) {
+		var cur = CURRENCIES[ currentCurrency() ];
+		var value = Number( gbp ) * cur.rate;
+		if ( dp ) {
+			return cur.symbol + value.toFixed( dp );
+		}
+		return cur.symbol + Math.round( value ).toLocaleString( 'en-GB' );
+	}
+	window.blueworxMoney = money;
+
+	/**
+	 * Repaints every element carrying a base GBP amount.
+	 *
+	 * Templates render the pound figure, so the page is correct with JS off
+	 * and only ever changes when the visitor picks another currency.
+	 */
+	function paintPrices() {
+		var els = document.querySelectorAll( '[data-bw-gbp]' );
+		for ( var i = 0; i < els.length; i++ ) {
+			var el = els[ i ];
+			var dp = parseInt( el.getAttribute( 'data-bw-dp' ) || '0', 10 );
+			el.textContent = ( el.getAttribute( 'data-bw-prefix' ) || '' )
+				+ money( el.getAttribute( 'data-bw-gbp' ), dp )
+				+ ( el.getAttribute( 'data-bw-suffix' ) || '' );
+		}
+	}
+
+	function initCurrencyPrices() {
+		if ( ! document.querySelector( '[data-bw-gbp]' ) ) {
+			return;
+		}
+		paintPrices();
+		window.addEventListener( 'bw:currency', paintPrices );
+	}
+
 	function initBillingToggle() {
 		var toggle = document.querySelector( '[data-widget="billing-toggle"]' );
 		if ( ! toggle ) {
@@ -30,7 +89,15 @@
 				var b = prices[ i ].querySelector( 'b' );
 				var em = prices[ i ].querySelector( 'em' );
 				if ( b ) {
-					b.textContent = '$' + ( annual ? prices[ i ].getAttribute( 'data-price-a' ) : prices[ i ].getAttribute( 'data-price-m' ) );
+					var amount = annual ? prices[ i ].getAttribute( 'data-price-a' ) : prices[ i ].getAttribute( 'data-price-m' );
+					if ( b.hasAttribute( 'data-bw-gbp' ) ) {
+						// A pound price: store the new base and let the painter
+						// render it in whatever currency is selected.
+						b.setAttribute( 'data-bw-gbp', amount );
+						b.textContent = money( amount, 0 );
+					} else {
+						b.textContent = '$' + amount;
+					}
 				}
 				if ( em ) {
 					em.textContent = annual ? em.getAttribute( 'data-sub-a' ) : em.getAttribute( 'data-sub-m' );
@@ -572,6 +639,7 @@
 	}
 
 	function init() {
+		initCurrencyPrices();
 		initBackButtons();
 		initJournalFilter();
 		initArticleToc();

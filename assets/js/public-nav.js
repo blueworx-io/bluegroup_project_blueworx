@@ -180,6 +180,101 @@
 		);
 	}
 
+	/**
+	 * The site-wide currency switcher.
+	 *
+	 * Currency is a visitor preference, not page state: it is stored once in
+	 * localStorage and announced as a "bw:currency" event so any page holding
+	 * prices (public-widgets.js) can repaint. The nav and the mobile menu each
+	 * carry a copy of the control; both are kept in step.
+	 */
+	function initCurrencySwitcher() {
+		var drops = document.querySelectorAll( '.bw-cur' );
+		if ( ! drops.length ) {
+			return;
+		}
+
+		var LABEL = { GBP: '£ GBP', EUR: '€ EUR', USD: '$ USD' };
+		var current = 'GBP';
+
+		try {
+			current = localStorage.getItem( 'bw-currency' ) || 'GBP';
+		} catch {
+			current = 'GBP';
+		}
+		if ( ! LABEL[ current ] ) {
+			current = 'GBP';
+		}
+
+		function paint( code ) {
+			var labels = document.querySelectorAll( '[data-cur-label]' );
+			for ( var i = 0; i < labels.length; i++ ) {
+				labels[ i ].textContent = LABEL[ code ];
+			}
+			var options = document.querySelectorAll( '.bw-cur-menu button' );
+			for ( var j = 0; j < options.length; j++ ) {
+				var on = options[ j ].getAttribute( 'data-cur' ) === code;
+				options[ j ].classList.toggle( 'on', on );
+				options[ j ].setAttribute( 'aria-selected', on ? 'true' : 'false' );
+			}
+		}
+
+		function closeAll() {
+			for ( var i = 0; i < drops.length; i++ ) {
+				drops[ i ].classList.remove( 'open' );
+				var btn = drops[ i ].querySelector( '.bw-cur-btn' );
+				if ( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+				}
+			}
+		}
+
+		paint( current );
+
+		Array.prototype.forEach.call( drops, function ( drop ) {
+			var toggle = drop.querySelector( '.bw-cur-btn' );
+			if ( ! toggle ) {
+				return;
+			}
+
+			toggle.addEventListener( 'click', function ( event ) {
+				event.stopPropagation();
+				var willOpen = ! drop.classList.contains( 'open' );
+				closeAll();
+				if ( willOpen ) {
+					drop.classList.add( 'open' );
+					toggle.setAttribute( 'aria-expanded', 'true' );
+				}
+			} );
+
+			var options = drop.querySelectorAll( '.bw-cur-menu button' );
+			Array.prototype.forEach.call( options, function ( option ) {
+				option.addEventListener( 'click', function ( event ) {
+					event.stopPropagation();
+					var code = option.getAttribute( 'data-cur' );
+					if ( ! LABEL[ code ] ) {
+						return;
+					}
+					try {
+						localStorage.setItem( 'bw-currency', code );
+					} catch {
+						// Private mode: the choice still applies to this page.
+					}
+					paint( code );
+					closeAll();
+					window.dispatchEvent( new CustomEvent( 'bw:currency', { detail: code } ) );
+				} );
+			} );
+		} );
+
+		document.addEventListener( 'click', closeAll );
+		document.addEventListener( 'keydown', function ( event ) {
+			if ( 'Escape' === event.key ) {
+				closeAll();
+			}
+		} );
+	}
+
 	ready( function () {
 		var nav = document.querySelector( 'nav' );
 
@@ -191,6 +286,7 @@
 
 		initDropdowns( nav );
 		initMobileMenu( nav, state );
+		initCurrencySwitcher();
 		initScroll( nav, state );
 	} );
 }() );
