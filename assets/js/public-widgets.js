@@ -143,7 +143,7 @@
 		var packages;
 		try {
 			packages = JSON.parse( root.getAttribute( 'data-packages' ) || '[]' );
-		} catch ( e ) {
+		} catch {
 			return;
 		}
 		var range = root.querySelector( 'input[type="range"]' );
