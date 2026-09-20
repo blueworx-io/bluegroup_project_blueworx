@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Keys and values are both site-root-relative paths without a leading or
  * trailing slash ('' meaning the site root). Targets were chosen to preserve
  * intent rather than to dump everything on the home page: someone who followed
- * a link to /shop wanted to buy something, so Pricing is the honest destination.
+ * a link to /shop wanted to buy something, so Support is the honest destination.
  *
  * @return array Retired path => replacement path.
  */

@@ -45,7 +45,7 @@ function blueworx_public_seo_copy() {
 		),
 		'hosting'   => array(
 			'title'       => __( 'Managed WordPress Hosting, One Price Per Site', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Fast managed WordPress hosting with daily backups, free SSL, a firewall, staging and monitoring handled for you. £20 a month per site, and we move you across for free.', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Fast managed WordPress hosting with daily backups, free SSL, a firewall, staging and monitoring handled for you. £20 a month per site, and we move you for free.', 'bluegroup-project-blueworx' ),
 		),
 		'support'   => array(
 			'title'       => __( 'Integrated Support — Design and Development on Retainer', 'bluegroup-project-blueworx' ),

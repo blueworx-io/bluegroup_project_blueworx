@@ -199,13 +199,24 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php blueworx_public_part( 'parts/plan-card.php', array( 'plan' => $blueworx_h['plan'] ) ); ?>
 				<div class="bw-plan-aside">
 					<h3><?php esc_html_e( 'Hosting is better with support', 'bluegroup-project-blueworx' ); ?></h3>
-					<p><?php esc_html_e( 'Hosting keeps the site running. Integrated Support keeps it improving — design and development hours you can spend on anything, from ', 'bluegroup-project-blueworx' ); ?><span data-bw-gbp="100">£100</span><?php esc_html_e( ' a month.', 'bluegroup-project-blueworx' ); ?></p>
+					<p>
+						<?php
+						echo wp_kses(
+							sprintf(
+								/* translators: %s: the "£100" figure, wrapped in a currency-converting span. */
+								__( 'Hosting keeps the site running. Integrated Support keeps it improving — design and development hours you can spend on anything, from %s a month.', 'bluegroup-project-blueworx' ),
+								'<span data-bw-gbp="100">£100</span>'
+							),
+							array( 'span' => array( 'data-bw-gbp' => true ) )
+						);
+						?>
+					</p>
 					<div style="display:flex;flex-direction:column;gap:10px">
-						<div class="pf"><?php esc_html_e( 'Hours pooled across the year', 'bluegroup-project-blueworx' ); ?></div>
-						<div class="pf"><?php esc_html_e( 'Priority response on hosted sites', 'bluegroup-project-blueworx' ); ?></div>
-						<div class="pf"><?php esc_html_e( 'One invoice for the lot', 'bluegroup-project-blueworx' ); ?></div>
+						<div class="pf" style="font-size:15px"><?php esc_html_e( 'Hours pooled across the year', 'bluegroup-project-blueworx' ); ?></div>
+						<div class="pf" style="font-size:15px"><?php esc_html_e( 'Priority response on hosted sites', 'bluegroup-project-blueworx' ); ?></div>
+						<div class="pf" style="font-size:15px"><?php esc_html_e( 'One invoice for the lot', 'bluegroup-project-blueworx' ); ?></div>
 					</div>
-					<a href="<?php echo esc_url( home_url( '/support/' ) ); ?>" class="btn btn-outline btn-md">
+					<a href="<?php echo esc_url( home_url( '/support' ) ); ?>" class="btn btn-outline btn-md">
 						<?php esc_html_e( 'View Integrated Support', 'bluegroup-project-blueworx' ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_h_arrow above.

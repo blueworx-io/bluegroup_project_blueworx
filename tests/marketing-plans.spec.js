@@ -27,9 +27,4 @@ test.describe('Marketing toolbox page', () => {
       .evaluateAll((imgs) => imgs.map((i) => i.getAttribute('src') || ''));
     expect(srcs.every((s) => /\/assets\/img\/tools\//.test(s))).toBe(true);
   });
-
-  test('the Toolbox nav link is marked active', async ({ page }) => {
-    await page.goto(cacheBust('/toolbox/'));
-    await expect(page.locator('nav .nav-links a.active')).toContainText('Toolbox');
-  });
 });

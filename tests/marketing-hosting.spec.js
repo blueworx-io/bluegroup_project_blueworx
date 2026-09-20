@@ -13,7 +13,7 @@ test.describe('Marketing Hosting page', () => {
     await expect(page.locator('section.split .collab-list .fli')).toHaveCount(4);
     await expect(page.locator('#hosting-plans.sec.bw-divided')).toHaveCount(1);
     await expect(page.locator('#hosting-plans .plan-card.feat .pop')).toHaveText('Per site');
-    await expect(page.locator('#hosting-plans .bw-plan-aside a[href$="/support/"]')).toHaveCount(1);
+    await expect(page.locator('#hosting-plans .bw-plan-aside a[href*="/support"]')).toHaveCount(1);
     await expect(page.locator('table.cmp tbody tr')).toHaveCount(8);
     await expect(page.locator('.faq-list details.faq-item')).toHaveCount(5);
   });

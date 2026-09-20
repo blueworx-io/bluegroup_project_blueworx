@@ -145,7 +145,7 @@ blueworx_public_part( 'parts/nav.php' );
 						<?php foreach ( $blueworx_s_packages as $blueworx_s_pkg ) : ?>
 							<?php $blueworx_s_rate = $blueworx_s_pkg['priceM'] * 12 / $blueworx_s_pkg['hours']; ?>
 							<tr>
-								<td><?php echo esc_html( $blueworx_s_pkg['name'] ); ?></td>
+								<td style="font-weight:600;color:#0A0C29"><?php echo esc_html( $blueworx_s_pkg['name'] ); ?></td>
 								<td><?php echo esc_html( $blueworx_s_pkg['hours'] . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
 								<td><?php echo esc_html( ( $blueworx_s_pkg['hours'] / 12 ) . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
 								<td>
