@@ -109,7 +109,7 @@ test.describe('Toolbox admin menu', () => {
   // The guard against a rule that hides too much. These are the pages somebody
   // opens the Pages list to find.
   test('the site’s own pages are still in the Pages list', async ({ page }) => {
-    for (const name of ['Home', 'Pricing', 'Contact', 'Toolbox']) {
+    for (const name of ['Home', 'Support', 'Contact', 'Toolbox']) {
       await page.goto(pagesSearch(name));
 
       await expect(
