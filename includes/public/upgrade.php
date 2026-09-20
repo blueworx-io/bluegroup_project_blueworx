@@ -100,11 +100,51 @@ function blueworx_public_maybe_install_pages() {
 		return;
 	}
 
+	blueworx_public_retire_removed_pages();
 	blueworx_public_install_pages();
 
 	update_option( 'blueworx_public_installed_version', BLUEWORX_SITE_VERSION );
 }
 add_action( 'init', 'blueworx_public_maybe_install_pages', 5 );
+
+/**
+ * Trashes the pages a release removed from the registry.
+ *
+ * A registry entry that disappears leaves its page behind: published, in the
+ * ID map, and — because the template is gone — rendered by the theme as an
+ * empty page. Trashed (not deleted) so it can be restored from wp-admin, and
+ * only when the page carries the plugin's own stamp: a page the site created
+ * under the same slug is not ours to touch. The legacy redirect for each path
+ * (includes/public/redirects.php) is what visitors actually meet.
+ *
+ * Idempotent: a slug no longer in the map is skipped.
+ *
+ * @return void
+ */
+function blueworx_public_retire_removed_pages() {
+	$map     = (array) get_option( 'blueworx_public_page_ids', array() );
+	$retired = array( 'pricing', 'services' );
+	$changed = false;
+
+	foreach ( $retired as $slug ) {
+		if ( empty( $map[ $slug ] ) ) {
+			continue;
+		}
+
+		$page_id = (int) $map[ $slug ];
+
+		if ( 'page' === get_post_type( $page_id ) && blueworx_public_page_is_ours( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
+			wp_trash_post( $page_id );
+		}
+
+		unset( $map[ $slug ] );
+		$changed = true;
+	}
+
+	if ( $changed ) {
+		update_option( 'blueworx_public_page_ids', $map );
+	}
+}
 
 /**
  * Stamps BLUEWORX_PUBLIC_PAGE_META onto every page already in

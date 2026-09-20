@@ -64,9 +64,17 @@ function blueworx_public_pages() {
 			'title'    => __( 'About', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/about.php',
 		),
-		'services' => array(
-			'title'    => __( 'Services', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/services.php',
+		'clubhouse' => array(
+			'title'    => __( 'ClubHouse', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/clubhouse.php',
+		),
+		'hosting'   => array(
+			'title'    => __( 'Hosting', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/hosting.php',
+		),
+		'support'   => array(
+			'title'    => __( 'Integrated Support', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/support.php',
 		),
 		'contact'  => array(
 			'title'    => __( 'Contact', 'bluegroup-project-blueworx' ),
@@ -79,10 +87,6 @@ function blueworx_public_pages() {
 		'ai'       => array(
 			'title'    => __( 'AI Powered', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/ai.php',
-		),
-		'pricing'  => array(
-			'title'    => __( 'Pricing', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/pricing.php',
 		),
 		'toolbox'  => array(
 			'title'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),

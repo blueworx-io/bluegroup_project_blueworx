@@ -32,10 +32,11 @@ const isPlaceholder = /placeholder/i.test(baseURL);
 const PAGES = [
   { path: '/', issue: '#44 Home' },
   { path: '/about/', issue: '#45 About' },
-  { path: '/services/', issue: '#46 Services' },
+  { path: '/clubhouse/', issue: 'ClubHouse' },
+  { path: '/hosting/', issue: 'Hosting' },
+  { path: '/support/', issue: 'Integrated Support' },
   { path: '/work/', issue: '#47 Work' },
   { path: '/ai/', issue: '#48 AI Powered' },
-  { path: '/pricing/', issue: '#49 Pricing' },
   { path: '/toolbox/', issue: '#50 Toolbox' },
   { path: '/contact/', issue: '#52 Contact' },
   // #94. The journal is held to the same standard as the pages above, and it

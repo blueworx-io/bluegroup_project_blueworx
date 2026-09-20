@@ -39,17 +39,21 @@ function blueworx_public_seo_copy() {
 			'title'       => __( 'Websites, Hosting and 12 Premium Tools in One Plan', 'bluegroup-project-blueworx' ),
 			'description' => __( 'BlueWorx builds and looks after business websites, with hosting, support and twelve premium WordPress tools included in one straightforward monthly plan.', 'bluegroup-project-blueworx' ),
 		),
-		'services' => array(
-			'title'       => __( 'Web Design, Managed Hosting and Ongoing Support', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Website design and build, managed hosting and ongoing support from one team. See exactly what each BlueWorx service covers and how a project actually runs.', 'bluegroup-project-blueworx' ),
+		'clubhouse' => array(
+			'title'       => __( 'ClubHouse — The Website Platform for Sports Clubs', 'bluegroup-project-blueworx' ),
+			'description' => __( 'A ready-made club website with memberships, teams, fixtures, bookings, events and a shop, on managed hosting from day one. £20 a month, live in two weeks.', 'bluegroup-project-blueworx' ),
+		),
+		'hosting'   => array(
+			'title'       => __( 'Managed WordPress Hosting, One Price Per Site', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Fast managed WordPress hosting with daily backups, free SSL, a firewall, staging and monitoring handled for you. £20 a month per site, and we move you across for free.', 'bluegroup-project-blueworx' ),
+		),
+		'support'   => array(
+			'title'       => __( 'Integrated Support — Design and Development on Retainer', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Nine support packages from £100 a month. Buy a block of hours and spend them on design, development, content, SEO or fixes, with the whole BlueWorx team behind them.', 'bluegroup-project-blueworx' ),
 		),
 		'toolbox'  => array(
 			'title'       => __( 'Twelve Premium WordPress Tools, One Subscription', 'bluegroup-project-blueworx' ),
 			'description' => __( 'Twelve premium WordPress tools for forms, SEO, email, checkout, accessibility and AI, bundled into one subscription instead of twelve separate licences.', 'bluegroup-project-blueworx' ),
-		),
-		'pricing'  => array(
-			'title'       => __( 'Plans and Pricing for Websites, Hosting and Tools', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Straightforward monthly plans covering your website, its hosting, your support and all twelve premium tools. Compare what each plan includes and what it costs.', 'bluegroup-project-blueworx' ),
 		),
 		'about'    => array(
 			'title'       => __( 'Who We Are and How We Work With Clients', 'bluegroup-project-blueworx' ),

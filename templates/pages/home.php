@@ -258,7 +258,7 @@ blueworx_public_part( 'parts/nav.php' );
 							__( 'Reporting', 'bluegroup-project-blueworx' ),
 						),
 						'link_text' => __( 'Explore Integrated Support', 'bluegroup-project-blueworx' ),
-						'href'      => home_url( '/services' ),
+						'href'      => home_url( '/support' ),
 					)
 				);
 				blueworx_public_part(

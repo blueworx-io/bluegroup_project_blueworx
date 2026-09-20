@@ -4,10 +4,14 @@
  * Four pages were removed from the live site because they duplicated pages the
  * plugin already owns, or never should have been published at all:
  *
- *   /shop      → /pricing   (#22 — rendered the home page; the site has no shop)
+ *   /shop      → /support   (#22 — rendered the home page; the site has no shop)
  *   /about-us  → /about     (#23 — duplicate of the plugin's own About page)
  *   /features  → /toolbox   (#24 — overlapped Toolbox and Services)
  *   /test-page → /          (#25 — a test page that was publicly reachable)
+ *
+ * The 2026-09 restructure retired two more: Pricing became Integrated Support
+ * and Services was folded into the three product pages (ClubHouse, Hosting,
+ * Support), so /pricing and /services also redirect to /support now.
  *
  * Deleting a published, indexable page without a redirect turns every inbound
  * link and every search result for it into a 404, so the redirect is the part
@@ -27,10 +31,14 @@ const baseURL =
 const isPlaceholder = /placeholder/i.test(baseURL);
 
 const REDIRECTS = [
-  { from: '/shop', to: '/pricing' },
+  { from: '/shop', to: '/support' },
   { from: '/about-us', to: '/about' },
   { from: '/features', to: '/toolbox' },
   { from: '/test-page', to: '/' },
+  // 2026-09 restructure: Pricing became Integrated Support; Services was
+  // folded into the three product pages.
+  { from: '/pricing', to: '/support' },
+  { from: '/services', to: '/support' },
 ];
 
 for (const { from, to } of REDIRECTS) {
@@ -83,7 +91,7 @@ test('a redirect preserves the query string', async ({ request }) => {
 test('pages the plugin owns are not redirected', async ({ request }) => {
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
 
-  for (const path of ['/about/', '/toolbox/', '/pricing/', '/toolbox/surecart/', '/']) {
+  for (const path of ['/about/', '/toolbox/', '/support/', '/toolbox/surecart/', '/']) {
     const response = await request.get(path, { maxRedirects: 0 });
     expect(response.status(), `expected ${path} to render, not redirect`).toBe(200);
   }

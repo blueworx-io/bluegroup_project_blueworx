@@ -29,7 +29,7 @@ test.describe('Marketing home page', () => {
     const svcCards = svc2.locator('> a.svc');
     await expect(svcCards).toHaveCount(2);
     await expect(svcCards.nth(0)).toContainText('Integrated Support');
-    await expect(svcCards.nth(0)).toHaveAttribute('href', /\/services\/?$/);
+    await expect(svcCards.nth(0)).toHaveAttribute('href', /\/support\/?$/);
     await expect(svcCards.nth(1)).toContainText('Digital Toolbox');
     await expect(svcCards.nth(1)).toHaveAttribute('href', /\/toolbox\/?$/);
 

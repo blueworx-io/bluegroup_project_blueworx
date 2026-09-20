@@ -74,7 +74,7 @@ test.describe('#75 Toolbox tool pages', () => {
   test('each tool page is published and indexable, so the sitemap includes it', async ({ page }) => {
     skipPlaceholder();
 
-    // Compared against Pricing rather than asserted outright: a test WordPress
+    // Compared against Support rather than asserted outright: a test WordPress
     // is installed with "discourage search engines" on, which puts noindex on
     // every page of the site. Asking whether the tool pages agree with an
     // ordinary marketing page answers the question that matters — does the
@@ -91,7 +91,7 @@ test.describe('#75 Toolbox tool pages', () => {
       );
     };
 
-    const baseline = await robotsFor('/pricing/');
+    const baseline = await robotsFor('/support/');
 
     for (const { slug } of TOOLS) {
       expect(await robotsFor(`/toolbox/${slug}/`), `/toolbox/${slug}/ robots`).toBe(baseline);

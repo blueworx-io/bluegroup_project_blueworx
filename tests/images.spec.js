@@ -11,7 +11,7 @@
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/work/', '/about/', '/toolbox/surecart/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/toolbox/', '/work/', '/about/', '/toolbox/surecart/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
@@ -128,7 +128,7 @@ test.describe('#82 Images', () => {
     expect(blockCss, `block CSS still on the page: ${blockCss.join(', ')}`).toEqual([]);
   });
 
-  for (const path of ['/', '/services/', '/toolbox/']) {
+  for (const path of ['/', '/hosting/', '/toolbox/']) {
     test(`${path} does not shift about as it loads`, async ({ page }) => {
       skipPlaceholder();
 

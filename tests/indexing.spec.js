@@ -30,7 +30,7 @@ const FIXTURE = join(MU_DIR, 'bw-test-indexing.php');
 const canInstallFixture = existsSync(join(WP_ROOT, 'wp-settings.php'));
 
 const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
-const PUBLIC_PATHS = ['/', '/services/', '/toolbox/', '/pricing/'];
+const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/'];
 
 const FIXTURE_PLUGIN = `<?php
 /**
@@ -210,7 +210,7 @@ test.describe('#80 What may be indexed', () => {
     const state = await (await page.request.get('/?bw_index=1')).json();
     const paths = state.sitemap.map((loc) => new URL(loc).pathname);
 
-    for (const expected of ['/about/', '/services/', '/contact/', '/work/', '/ai/', '/pricing/', '/toolbox/', '/blog/']) {
+    for (const expected of ['/about/', '/clubhouse/', '/hosting/', '/support/', '/contact/', '/work/', '/ai/', '/toolbox/', '/blog/']) {
       expect(paths, `${expected} is missing from the sitemap`).toContain(expected);
     }
 

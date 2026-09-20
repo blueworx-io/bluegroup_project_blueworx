@@ -39,7 +39,7 @@ function blueworx_public_legacy_redirects() {
 	return (array) apply_filters(
 		'blueworx_public_legacy_redirects',
 		array(
-			'shop'      => 'pricing',
+			'shop'      => 'support',
 			'about-us'  => 'about',
 			'features'  => 'toolbox',
 			'test-page' => '',
@@ -53,6 +53,12 @@ function blueworx_public_legacy_redirects() {
 			'feature'   => 'toolbox',
 			'portal'    => 'login',
 			'form'      => 'contact',
+
+			// 2026-09 restructure. Pricing became Integrated Support and
+			// Services was folded into the three product pages. Both were
+			// indexed for years, so they redirect rather than 404.
+			'pricing'   => 'support',
+			'services'  => 'support',
 		)
 	);
 }

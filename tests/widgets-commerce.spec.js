@@ -6,10 +6,11 @@ const BASE = process.env.PLAYWRIGHT_BASE_URL || '';
 test.describe('Commerce widgets — billing toggle', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
 
-  for (const page of [
-    { path: '/pricing', plan: 'Growth Support', m: '$500', a: '$400' },
-    { path: '/toolbox', plan: 'Business', m: '$60', a: '$50' },
-  ]) {
+  // Pricing was retired in the 2026-09 restructure and no longer has a
+  // billing toggle — its replacement, Integrated Support, shows three fixed
+  // packages with no monthly/annual switch (tests/marketing-support.spec.js).
+  // Toolbox is unaffected and still has one.
+  for (const page of [{ path: '/toolbox', plan: 'Business', m: '$60', a: '$50' }]) {
     test(`toggle swaps monthly/annual prices on ${page.path}`, async ({ page: pw }) => {
       await pw.goto(page.path);
       const card = pw.locator('.plan-card', { hasText: page.plan }).first();
@@ -30,33 +31,9 @@ test.describe('Commerce widgets — billing toggle', () => {
   }
 });
 
-test.describe('Commerce widgets — pricing calculator', () => {
-  test.skip(isPlaceholder, 'No real WordPress target configured.');
-
-  test('recomputes the monthly total from the controls', async ({ page }) => {
-    await page.goto('/pricing');
-    const total = page.locator('[data-testid="calc-total"]');
-    const calc = page.locator('[data-widget="pricing-calc"]');
-
-    await expect(total).toHaveText('$600'); // growth + 1 extra update pack + hosting
-
-    await calc.locator('.opt', { hasText: 'Essential' }).click();
-    await expect(total).toHaveText('$300'); // 200 + 60 + 40
-
-    await calc.locator('.stepper[data-field="sites"] button', { hasText: '+' }).click();
-    await expect(total).toHaveText('$420'); // 200 + 60 + 120 + 40
-
-    await calc.locator('.toggle-pill').click();
-    await expect(total).toHaveText('$380'); // hosting off
-  });
-
-  test('steppers clamp at their bounds', async ({ page }) => {
-    await page.goto('/pricing');
-    const updates = page.locator('.stepper[data-field="updates"]');
-    for (let i = 0; i < 8; i++) await updates.locator('button', { hasText: '+' }).click();
-    await expect(updates.locator('b')).toHaveText('6'); // max 6
-  });
-});
+// The old static "pricing-calc" widget lived only on the retired Pricing
+// page and has no replacement — Integrated Support's own hours calculator
+// (data-widget="support-calc") is covered in tests/marketing-support.spec.js.
 
 test.describe('Commerce widgets — savings calculator', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
@@ -80,9 +57,6 @@ test.describe('Commerce widgets — no-JS default state', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
 
   test('server HTML already carries the default totals', async ({ request }) => {
-    const pricing = await (await request.get('/pricing')).text();
-    expect(pricing).toContain('data-testid="calc-total">$600<');
-
     const toolbox = await (await request.get('/toolbox')).text();
     expect(toolbox).toContain('data-testid="solo-total">190<');
     expect(toolbox).toContain('You save $160/mo · $1,920/yr');

@@ -14,7 +14,7 @@
 
 import { test, expect, isPlaceholder, cacheBust, TOOL_SLUGS } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/pricing/', '/about/', '/work/', '/ai/', '/contact/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/', '/about/', '/work/', '/ai/', '/contact/'];
 const ALL = [...PAGES, ...TOOL_SLUGS.map((slug) => `/toolbox/${slug}/`)];
 
 const skipPlaceholder = () =>
@@ -88,7 +88,7 @@ test.describe('#79 Titles and descriptions', () => {
   test('Open Graph and Twitter repeat the same text', async ({ page }) => {
     skipPlaceholder();
 
-    for (const path of ['/', '/pricing/', '/toolbox/surecart/']) {
+    for (const path of ['/', '/support/', '/toolbox/surecart/']) {
       await page.goto(cacheBust(path));
 
       const seo = await seoOf(page);
