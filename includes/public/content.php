@@ -638,105 +638,265 @@ function blueworx_content_toolbox_plans() {
 }
 
 /**
- * The 3 retainer support plans.
+ * The nine Integrated Support packages.
  *
- * Ported from lib/data.ts RETAINER_PLANS, with the `btn` raw-CSS-class field
- * dropped — templates choose their own button classes.
+ * Hours are the ANNUAL allowance; the price is what the client pays every
+ * month, in GBP. priceA equals priceM — packages have no annual-billing
+ * discount — and is kept so the plan-card part and the SureCart wiring (which
+ * key on priceM/priceA) work unchanged. `featured` marks the three shown as
+ * cards on the Support page; `feat` (the highlighted card) is Growth.
  *
- * @return array List of array( name, desc, priceM, priceA, feat, pop, features[] ).
+ * Runs through the `blueworx_content_retainer_plans` filter so SureCart price
+ * IDs configured per package (includes/public/commerce.php) still apply.
+ *
+ * @return array List of plan arrays (see blueworx_content_support_package()).
  */
-function blueworx_content_retainer_plans() {
-	$plans = array(
-		array(
-			'name'     => 'Essential Support',
-			'desc'     => 'Designed for smaller businesses that require occasional updates and ongoing maintenance.',
-			'priceM'   => 200,
-			'priceA'   => 160,
-			'feat'     => false,
-			'features' => array(
-				'Access to the free toolbox',
-				'Basic template site',
-				'3 small updates per year',
-				'Up to 6 hours of expert design & developer support per month',
-				'Minimum 1 year commitment',
-			),
-		),
-		array(
-			'name'     => 'Growth Support',
-			'desc'     => 'Ideal for digital solutions that require regular updates, feature improvements, and ongoing development support.',
-			'priceM'   => 500,
-			'priceA'   => 400,
-			'feat'     => true,
-			'pop'      => true,
-			'features' => array(
-				'Access to free toolbox',
-				'Customised template site',
-				'1 major update per year',
-				'3 minor updates per year',
-				'Up to 12 hours of expert design & developer support per month',
-			),
-		),
-		array(
-			'name'     => 'Advanced Support',
-			'desc'     => 'Designed for fully customised digital solutions requiring ongoing development and improvements.',
-			'priceM'   => 750,
-			'priceA'   => 600,
-			'feat'     => false,
-			'features' => array(
-				'Access to free toolbox',
-				'Completely customised site',
-				'2 major updates per year',
-				'3 minor updates per year',
-				'Unlimited expert design & developer support',
-			),
-		),
+function blueworx_content_support_packages() {
+	$rows = array(
+		// name, annual hours, £/month, blurb, featured.
+		array( 'Starter', 24, 100, 'Keeping a simple site current — small edits, updates and the odd fix.', true ),
+		array( 'Launch', 48, 200, 'A day a month of design and development time for a growing site.', false ),
+		array( 'Scale', 72, 300, 'Steady improvement work alongside the everyday maintenance.', false ),
+		array( 'Enhance', 96, 400, 'Regular new pages, campaigns and feature work on top of upkeep.', false ),
+		array( 'Growth', 120, 500, 'A consistent programme of design, build and optimisation each month.', true ),
+		array( 'Enterprise', 240, 750, 'A standing slice of the team for multi-site or multi-brand operations.', false ),
+		array( 'Enterprise +', 360, 1000, 'Larger roadmaps with parallel workstreams and priority turnaround.', true ),
+		array( 'Advantage', 480, 1250, 'A near-full-time partner embedded in your product and marketing.', false ),
+		array( 'Advantage +', 600, 1500, 'Our deepest engagement — the whole team, on call, all year.', false ),
 	);
 
+	// The three featured packages carry hand-written feature lists; the rest
+	// derive theirs from the numbers so every card has five lines.
+	$written = array(
+		'Starter'      => array( 'Content and small design edits', 'Core, plugin and theme updates', 'Email support, 2 business days', 'Monthly summary of hours used' ),
+		'Growth'       => array( 'Design and development time', 'New pages, campaigns and fixes', 'Priority response, 1 business day', 'Quarterly review and roadmap' ),
+		'Enterprise +' => array( 'Parallel design and build workstreams', 'Multi-site and multi-brand cover', 'Same-day response on urgent work', 'Named lead and monthly reporting' ),
+	);
+	$generic = array( 'Design and development time', 'Fixes, content and small changes', 'Core, plugin and theme updates', 'Hours logged and reported monthly' );
+
+	$plans = array();
+
+	foreach ( $rows as $row ) {
+		list( $name, $hours, $gbp, $blurb, $featured ) = $row;
+
+		$per_month = $hours / 12;
+		$first     = sprintf(
+			/* translators: 1: hours a year, 2: hours a month. */
+			__( '%1$d hours a year (%2$s a month)', 'bluegroup-project-blueworx' ),
+			$hours,
+			rtrim( rtrim( number_format( $per_month, 1, '.', '' ), '0' ), '.' )
+		);
+		$rest = isset( $written[ $name ] ) ? $written[ $name ] : $generic;
+
+		$plans[] = array(
+			'name'     => $name,
+			'desc'     => $blurb,
+			'blurb'    => $blurb,
+			'hours'    => $hours,
+			'priceM'   => $gbp,
+			'priceA'   => $gbp,
+			'currency' => 'GBP',
+			'feat'     => 'Growth' === $name,
+			'pop'      => 'Growth' === $name,
+			'featured' => $featured,
+			'features' => array_merge( array( $first ), $rest ),
+		);
+	}
+
 	/**
-	 * Filters the retainer support plans.
+	 * Filters the support packages. Historically named for the three retainer
+	 * plans these replaced; the name is kept so configured SureCart hooks
+	 * still fire.
 	 *
-	 * @param array $plans The 3 plan arrays.
+	 * @param array $plans The 9 package arrays.
 	 */
 	return apply_filters( 'blueworx_content_retainer_plans', $plans );
 }
 
 /**
- * The pricing FAQ list.
+ * The support packages under the name the commerce and admin code use.
  *
- * Ported verbatim from lib/data.ts FAQS.
+ * @return array See blueworx_content_support_packages().
+ */
+function blueworx_content_retainer_plans() {
+	return blueworx_content_support_packages();
+}
+
+/**
+ * The Integrated Support FAQ.
  *
  * @return array List of array( q, a ).
  */
-function blueworx_content_faqs() {
+function blueworx_content_support_faqs() {
 	$faqs = array(
 		array(
-			'q' => 'How do payments work?',
-			'a' => 'Pay and forget! Annual payments mean more time spent on your business and less time managing subscriptions. Choose monthly or annual billing at checkout, and you can switch at any point.',
+			'q' => 'Do unused hours roll over?',
+			'a' => 'Your allowance is annual, so a quiet month simply leaves more in the pot for a busy one. Hours do not carry past the end of your support year.',
 		),
 		array(
-			'q' => 'How do I get started?',
-			'a' => 'Pick a plan, create your account, and our team helps you onboard step by step. Most websites are designed, built, and live within a few days.',
+			'q' => 'What if we go over our hours?',
+			'a' => 'We tell you before you get there, not after. You can either move up a package or approve extra hours at your package rate for that piece of work.',
 		),
 		array(
-			'q' => 'Can I change my plan later?',
-			'a' => 'Absolutely. Upgrade or downgrade at any time from your dashboard. Changes are prorated automatically so you only ever pay for what you use.',
+			'q' => 'How quickly do you respond?',
+			'a' => 'Two business days on the smaller packages, one business day from Growth upwards, and same-day on Enterprise + and above. Anything that takes a site offline is treated as urgent on every package.',
 		),
 		array(
-			'q' => 'Do I need to be a developer?',
-			'a' => 'Not at all. BlueWorx is built for business owners. Our tools are no-code and our expert team handles anything technical on your behalf.',
+			'q' => 'Can we change package mid-year?',
+			'a' => 'Yes. Move up at any time and the new allowance applies from that month. Moving down takes effect at your next renewal.',
 		),
 		array(
-			'q' => 'Will I be able to edit my package?',
-			'a' => 'Yes. Add tools, spin up new sites, and adjust your support allowance whenever your needs change. Your package flexes with your business.',
+			'q' => 'Is hosting included?',
+			'a' => 'Hosting is separate at £20 a month or £200 a year per site, so you only pay for it on the sites we host. Support packages work with sites hosted anywhere.',
 		),
 	);
 
 	/**
-	 * Filters the pricing FAQ list.
+	 * Filters the support FAQ list.
 	 *
 	 * @param array $faqs List of array( q, a ).
 	 */
-	return apply_filters( 'blueworx_content_faqs', $faqs );
+	return apply_filters( 'blueworx_content_support_faqs', $faqs );
+}
+
+/**
+ * Everything the Managed Hosting page says: the plan, the performance and
+ * security cards, the comparison table and the FAQ.
+ *
+ * @return array array( plan, perf, security, compare, faqs ).
+ */
+function blueworx_content_hosting() {
+	$data = array(
+		'plan'     => array(
+			'name'     => 'Managed Hosting',
+			'desc'     => 'Everything one WordPress site needs to stay fast, safe and online.',
+			'priceM'   => 20,
+			'priceA'   => 200,
+			'currency' => 'GBP',
+			'feat'     => true,
+			'pop'      => __( 'Per site', 'bluegroup-project-blueworx' ),
+			'subA'     => __( 'per year, billed annually', 'bluegroup-project-blueworx' ),
+			'lbl'      => __( 'INCLUDED', 'bluegroup-project-blueworx' ),
+			'features' => array(
+				'Managed WordPress hosting for one site',
+				'Free migration from your current host',
+				'Daily off-site backups, 30-day history',
+				'Free SSL and global CDN',
+				'Firewall, malware scanning and clean-up',
+				'Core, plugin and theme updates',
+				'One-click staging environment',
+				'24/7 monitoring and email support',
+			),
+		),
+		'perf'     => array(
+			array( 'stat' => '99.9%', 'name' => 'Uptime target', 'desc' => 'Monitored every minute from multiple regions, with alerts that reach a human, not a dashboard.' ),
+			array( 'stat' => '<200ms', 'name' => 'Server response', 'desc' => 'Object and page caching tuned per site, so the first byte arrives before a visitor notices the wait.' ),
+			array( 'stat' => 'NVMe', 'name' => 'Storage', 'desc' => 'All-flash NVMe disks and PHP 8 workers, not oversold spinning platters shared with 400 neighbours.' ),
+			array( 'stat' => 'Global', 'name' => 'CDN included', 'desc' => 'Static assets served from the edge, so a visitor in Sydney gets the same site speed as one in Slough.' ),
+			array( 'stat' => 'Staging', 'name' => 'Safe changes', 'desc' => 'A one-click staging copy for every site, so nothing risky is ever tried on the live version.' ),
+			array( 'stat' => '24/7', 'name' => 'Monitoring', 'desc' => 'Uptime, certificates, disk and error rates watched around the clock, with fixes started before you call.' ),
+		),
+		'security' => array(
+			array( 'name' => 'Daily backups, 30-day history', 'desc' => 'Off-site, restorable to any point in the last month, and tested — a backup nobody has restored is a rumour.' ),
+			array( 'name' => 'Free SSL, renewed automatically', 'desc' => 'Certificates issued and renewed for you, with HTTPS enforced site-wide.' ),
+			array( 'name' => 'Web application firewall', 'desc' => 'Malicious traffic, brute-force attempts and known exploits blocked at the edge before they reach WordPress.' ),
+			array( 'name' => 'Managed updates', 'desc' => 'Core, plugin and theme updates applied on a schedule and checked afterwards, not fired blind at 3am.' ),
+			array( 'name' => 'Isolated environments', 'desc' => 'Every site runs in its own container, so a neighbour being compromised is not your problem.' ),
+			array( 'name' => 'Malware clean-up included', 'desc' => 'If something does get through on a site we host, we clean it and restore it at no extra cost.' ),
+		),
+		'compare'  => array(
+			array( 'label' => 'Managed updates', 'a' => 'Included', 'b' => 'Your job', 'c' => 'Your job' ),
+			array( 'label' => 'Daily off-site backups', 'a' => '30-day history', 'b' => 'Often paid extra', 'c' => 'You configure it' ),
+			array( 'label' => 'Free migration', 'a' => 'Included', 'b' => 'Sometimes', 'c' => 'You do it' ),
+			array( 'label' => 'Staging environment', 'a' => 'One click', 'b' => 'Rarely', 'c' => 'You build it' ),
+			array( 'label' => 'WAF & malware clean-up', 'a' => 'Included', 'b' => 'Paid add-on', 'c' => 'You configure it' ),
+			array( 'label' => 'Support that knows your site', 'a' => 'The team who built it', 'b' => 'Generic ticket queue', 'c' => 'Nobody' ),
+			array( 'label' => 'Server maintenance', 'a' => 'Ours', 'b' => 'Theirs', 'c' => 'Yours' ),
+			array( 'label' => 'Typical cost of ownership', 'a' => 'One monthly fee', 'b' => 'Cheap, plus add-ons', 'c' => 'Server + your time' ),
+		),
+		'faqs'     => array(
+			array( 'q' => 'Is there a contract?', 'a' => 'No. Monthly hosting is rolling and you can leave whenever you like — we will hand over a full copy of the site if you do. Annual is paid up front and works out at ten months for twelve.' ),
+			array( 'q' => 'What counts as one site?', 'a' => 'One WordPress installation on one primary domain, including its staging copy. Multi-site networks and second brands are quoted separately.' ),
+			array( 'q' => 'Do you have traffic limits?', 'a' => 'There is no hard cap. If a site consistently uses far more resource than a typical business site we will talk to you about it rather than throttle it or bill you by surprise.' ),
+			array( 'q' => 'Can you host a site you did not build?', 'a' => 'Yes, as long as it is a WordPress site in reasonable health. We audit it during migration and tell you anything that needs attention first.' ),
+			array( 'q' => 'Where are the servers?', 'a' => 'UK and EU data centres, with the CDN serving assets globally. Tell us if you have a data residency requirement and we will confirm the region before you sign up.' ),
+		),
+	);
+
+	/**
+	 * Filters the hosting page content.
+	 *
+	 * @param array $data See above.
+	 */
+	return apply_filters( 'blueworx_content_hosting', $data );
+}
+
+/**
+ * Everything the ClubHouse page says: the plan, the nine modules (with their
+ * stroke-icon SVG paths), the self-service cards, the audiences and the FAQ.
+ *
+ * @return array array( plan, modules, self_serve, audiences, faqs ).
+ */
+function blueworx_content_clubhouse() {
+	$data = array(
+		'plan'       => array(
+			'name'     => 'ClubHouse',
+			'desc'     => 'The complete club website platform, hosted and maintained by us.',
+			'priceM'   => 20,
+			'priceA'   => 200,
+			'currency' => 'GBP',
+			'feat'     => true,
+			'pop'      => true,
+			'subA'     => __( 'per year, billed annually', 'bluegroup-project-blueworx' ),
+			'lbl'      => __( 'INCLUDED', 'bluegroup-project-blueworx' ),
+			'features' => array(
+				'All nine ClubHouse modules',
+				'Managed hosting, SSL and daily backups',
+				'Online payments for subs, tickets and kit',
+				'Unlimited teams, fixtures and members',
+				'Mobile-first club site, branded to you',
+				'Platform updates and security patches',
+				'Email support from the BlueWorx team',
+			),
+		),
+		'modules'    => array(
+			array( 'name' => 'Memberships', 'desc' => 'Tiers, joining flows, renewals and subs collected by direct debit or card.', 'paths' => array( 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8', 'M22 21v-2a4 4 0 0 0-3-3.87' ) ),
+			array( 'name' => 'Teams & squads', 'desc' => 'A page per team with squad lists, coaches, league tables and results.', 'paths' => array( 'M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6Z' ) ),
+			array( 'name' => 'Fixtures & results', 'desc' => 'Season fixtures, scores and reports, published once and shown everywhere.', 'paths' => array( 'M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z' ) ),
+			array( 'name' => 'Bookings', 'desc' => 'Courts, pitches, lanes and function rooms, bookable by members online.', 'paths' => array( 'M12 6v6l4 2', 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20' ) ),
+			array( 'name' => 'Events & socials', 'desc' => 'Open days, camps, awards nights — with tickets and capacity limits.', 'paths' => array( 'M21 11.5a8.4 8.4 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20 8.4 8.4 0 0 1 8.7 19L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 4Z' ) ),
+			array( 'name' => 'Club shop', 'desc' => 'Kit, merchandise and match-day extras, with member-only pricing.', 'paths' => array( 'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z', 'M3 6h18', 'M16 10a4 4 0 0 1-8 0' ) ),
+			array( 'name' => 'News & notices', 'desc' => 'Match reports, committee notices and a ticker for anything urgent.', 'paths' => array( 'M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z', 'M8 7h8', 'M8 12h4' ) ),
+			array( 'name' => 'Sponsors', 'desc' => 'Partner tiers, logo boards and a sponsorship enquiry route that converts.', 'paths' => array( 'M12 2 15 8.3l6.9.6-5.2 4.5 1.6 6.7L12 17l-6.3 3.1 1.6-6.7L2.1 8.9l6.9-.6Z' ) ),
+			array( 'name' => 'Calendar', 'desc' => 'Everything the club is doing this month, in one subscribable feed.', 'paths' => array( 'M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'M9 16h6' ) ),
+		),
+		'self_serve' => array(
+			array( 'tag' => 'Join', 'name' => 'Sign-up in minutes', 'desc' => 'A member joins, picks a tier, pays, and lands in the club directory without a committee member touching a spreadsheet.' ),
+			array( 'tag' => 'Renew', 'name' => 'Renewals that chase themselves', 'desc' => 'Automatic reminders, card retries and a renewal page every member can reach from their phone.' ),
+			array( 'tag' => 'Book', 'name' => 'Courts and pitches online', 'desc' => 'Availability, rules and member-only slots, with the bar and grounds team seeing the same diary.' ),
+			array( 'tag' => 'Buy', 'name' => 'Kit and tickets in one basket', 'desc' => 'Shop and event ticketing share a checkout, so one order covers the kit bag and the awards night.' ),
+		),
+		'audiences'  => array(
+			array( 'name' => 'Multi-sport clubs', 'desc' => 'Rugby, cricket, hockey, netball and tennis under one roof, each section with its own space.' ),
+			array( 'name' => 'Single-sport clubs', 'desc' => 'Juniors through to first team, with squads, fixtures and subs handled in one place.' ),
+			array( 'name' => 'Societies & associations', 'desc' => 'Membership tiers, an events calendar and a members-only area, without the sport.' ),
+			array( 'name' => 'Gyms & studios', 'desc' => 'Class booking, recurring memberships and a shop, on hosting that stays up at 6am.' ),
+		),
+		'faqs'       => array(
+			array( 'q' => 'Can we keep our existing domain?', 'a' => 'Yes. We point your current domain at the new site and handle the DNS and SSL for you, with no downtime on the day of the switch.' ),
+			array( 'q' => 'What happens to our current member list?', 'a' => 'We import it. Send us whatever you have — a spreadsheet, an export from your old system — and we map it into membership tiers before you go live.' ),
+			array( 'q' => 'Is hosting really included?', 'a' => 'It is. Managed hosting, backups, SSL, updates and monitoring are part of the monthly fee, so there is no separate hosting bill.' ),
+			array( 'q' => 'Who updates the site day to day?', 'a' => 'Your committee does, through a simple editor. Fixtures, news and events take a couple of minutes each, and we are on the end of an email when something bigger is needed.' ),
+			array( 'q' => 'Can we take payments through the site?', 'a' => 'Yes — memberships, subs, event tickets and shop orders all run through the same checkout, with money landing in the club account.' ),
+		),
+	);
+
+	/**
+	 * Filters the ClubHouse page content.
+	 *
+	 * @param array $data See above.
+	 */
+	return apply_filters( 'blueworx_content_clubhouse', $data );
 }
 
 /**

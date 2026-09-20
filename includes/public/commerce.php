@@ -287,3 +287,42 @@ function blueworx_commerce_apply_live_plans( $plans ) {
 	return $plans;
 }
 add_filter( 'blueworx_content_retainer_plans', 'blueworx_commerce_apply_live_plans' );
+
+/**
+ * Every plan a SureCart price can be configured for: the nine support
+ * packages plus the single Hosting and ClubHouse plans.
+ *
+ * Read by the admin field and its sanitizer, so a plan added here gets a row
+ * in wp-admin without a second list to edit.
+ *
+ * @return array List of plan arrays (name is what matters here).
+ */
+function blueworx_commerce_sellable_plans() {
+	$hosting   = blueworx_content_hosting();
+	$clubhouse = blueworx_content_clubhouse();
+
+	return array_merge(
+		blueworx_content_support_packages(),
+		array( $hosting['plan'], $clubhouse['plan'] )
+	);
+}
+
+/**
+ * Applies a configured SureCart price to the single plan inside the hosting
+ * or ClubHouse content, the way apply_live_plans() does for the packages.
+ *
+ * @param array $data Page content carrying a 'plan' key.
+ * @return array
+ */
+function blueworx_commerce_apply_live_single_plan( $data ) {
+	if ( ! is_array( $data ) || empty( $data['plan'] ) ) {
+		return $data;
+	}
+
+	$applied      = blueworx_commerce_apply_live_plans( array( $data['plan'] ) );
+	$data['plan'] = $applied[0];
+
+	return $data;
+}
+add_filter( 'blueworx_content_hosting', 'blueworx_commerce_apply_live_single_plan' );
+add_filter( 'blueworx_content_clubhouse', 'blueworx_commerce_apply_live_single_plan' );

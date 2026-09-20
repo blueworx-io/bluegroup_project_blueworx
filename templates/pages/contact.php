@@ -141,7 +141,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="faq-list">
-				<?php foreach ( blueworx_content_faqs() as $blueworx_contact_faq ) : ?>
+				<?php foreach ( blueworx_content_support_faqs() as $blueworx_contact_faq ) : ?>
 					<details class="faq-item">
 						<summary class="faq-q"><?php echo esc_html( $blueworx_contact_faq['q'] ); ?></summary>
 						<div class="faq-a"><?php echo esc_html( $blueworx_contact_faq['a'] ); ?></div>

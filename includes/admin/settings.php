@@ -220,7 +220,7 @@ function blueworx_site_sanitize_price_ids( $value ) {
 	$clean    = array();
 	$rejected = array();
 
-	foreach ( blueworx_content_retainer_plans() as $plan ) {
+	foreach ( blueworx_commerce_sellable_plans() as $plan ) {
 		if ( empty( $plan['name'] ) ) {
 			continue;
 		}
@@ -294,7 +294,7 @@ function blueworx_site_render_price_ids_field() {
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ( blueworx_content_retainer_plans() as $plan ) : ?>
+			<?php foreach ( blueworx_commerce_sellable_plans() as $plan ) : ?>
 				<?php
 				if ( empty( $plan['name'] ) ) {
 					continue;
