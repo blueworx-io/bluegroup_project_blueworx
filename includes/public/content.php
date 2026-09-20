@@ -760,6 +760,45 @@ function blueworx_content_support_faqs() {
 }
 
 /**
+ * The pricing FAQ list.
+ *
+ * Ported verbatim from lib/data.ts FAQS.
+ *
+ * @return array List of array( q, a ).
+ */
+function blueworx_content_faqs() {
+	$faqs = array(
+		array(
+			'q' => 'How do payments work?',
+			'a' => 'Pay and forget! Annual payments mean more time spent on your business and less time managing subscriptions. Choose monthly or annual billing at checkout, and you can switch at any point.',
+		),
+		array(
+			'q' => 'How do I get started?',
+			'a' => 'Pick a plan, create your account, and our team helps you onboard step by step. Most websites are designed, built, and live within a few days.',
+		),
+		array(
+			'q' => 'Can I change my plan later?',
+			'a' => 'Absolutely. Upgrade or downgrade at any time from your dashboard. Changes are prorated automatically so you only ever pay for what you use.',
+		),
+		array(
+			'q' => 'Do I need to be a developer?',
+			'a' => 'Not at all. BlueWorx is built for business owners. Our tools are no-code and our expert team handles anything technical on your behalf.',
+		),
+		array(
+			'q' => 'Will I be able to edit my package?',
+			'a' => 'Yes. Add tools, spin up new sites, and adjust your support allowance whenever your needs change. Your package flexes with your business.',
+		),
+	);
+
+	/**
+	 * Filters the pricing FAQ list.
+	 *
+	 * @param array $faqs List of array( q, a ).
+	 */
+	return apply_filters( 'blueworx_content_faqs', $faqs );
+}
+
+/**
  * Everything the Managed Hosting page says: the plan, the performance and
  * security cards, the comparison table and the FAQ.
  *

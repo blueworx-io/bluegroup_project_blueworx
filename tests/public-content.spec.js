@@ -156,7 +156,7 @@ test.describe('Content data layer (includes/public/content.php)', () => {
   });
 
   test('blueworx_content_faqs() returns 5 question/answer pairs', () => {
-    const faqs = runContentPhp('echo json_encode( blueworx_content_support_faqs() );');
+    const faqs = runContentPhp('echo json_encode( blueworx_content_faqs() );');
     expect(faqs).toHaveLength(5);
     for (const faq of faqs) {
       expect(Object.keys(faq).sort()).toEqual(['a', 'q']);
@@ -189,6 +189,7 @@ test.describe('Content data layer (includes/public/content.php)', () => {
       // 'blueworx_content_support_packages' one — is what's asserted here.
       'blueworx_content_retainer_plans',
       'blueworx_content_support_faqs',
+      'blueworx_content_faqs',
       'blueworx_content_hosting',
       'blueworx_content_clubhouse',
       'blueworx_content_reviews',
