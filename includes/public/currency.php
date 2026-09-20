@@ -71,7 +71,9 @@ function blueworx_currency_fetch_rates() {
 	$response = wp_remote_get(
 		$url,
 		array(
-			'timeout' => 8,
+			// Short: on a site whose cron has lapsed this runs inside a page
+			// load, and a stale rate beats a slow page.
+			'timeout' => 5,
 			'headers' => array( 'Accept' => 'application/json' ),
 		)
 	);
