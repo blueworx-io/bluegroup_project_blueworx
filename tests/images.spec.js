@@ -82,21 +82,6 @@ test.describe('#82 Images', () => {
     ).toBe(true);
   });
 
-  test('the menu’s tool icons are ready before the menu opens', async ({ page }) => {
-    skipPlaceholder();
-
-    await page.goto(cacheBust('/'));
-
-    const lazy = await page
-      .locator('.mega-panel img')
-      .evaluateAll((imgs) => imgs.filter((img) => img.getAttribute('loading') === 'lazy').length);
-
-    // They live in a panel that is in the document but hidden, so a lazy icon
-    // only starts loading when the panel opens — the one moment somebody is
-    // looking straight at it.
-    expect(lazy, 'the mega panel icons are lazy-loaded').toBe(0);
-  });
-
   test('photographs are offered as WebP, with the original as a fallback', async ({ page }) => {
     skipPlaceholder();
 

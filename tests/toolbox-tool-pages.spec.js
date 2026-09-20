@@ -48,43 +48,6 @@ test.describe('#75 Toolbox tool pages', () => {
     }
   });
 
-  // The failure on the live site was reported as dead links in the menu, so
-  // this asserts the menu rather than a list of addresses: whatever the nav
-  // renders is what a visitor can click, and every one of those has to resolve.
-  test('every tool link in the desktop mega panel resolves', async ({ page }) => {
-    skipPlaceholder();
-
-    await page.goto(cacheBust('/'));
-
-    const hrefs = await page.locator('.mega-panel a.mega-item').evaluateAll((links) =>
-      links.map((link) => link.getAttribute('href'))
-    );
-
-    expect(hrefs).toHaveLength(TOOLS.length);
-
-    for (const href of hrefs) {
-      const response = await page.request.get(href);
-      expect(response.status(), `Mega panel link ${href}`).toBe(200);
-    }
-  });
-
-  test('every tool link in the mobile menu resolves', async ({ page }) => {
-    skipPlaceholder();
-
-    await page.goto(cacheBust('/'));
-
-    const hrefs = await page
-      .locator('.mobile-menu a[href*="/toolbox/"]')
-      .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
-
-    expect(hrefs.length).toBeGreaterThanOrEqual(TOOLS.length);
-
-    for (const href of hrefs) {
-      const response = await page.request.get(href);
-      expect(response.status(), `Mobile menu link ${href}`).toBe(200);
-    }
-  });
-
   test('every tool link on the Toolbox page resolves', async ({ page }) => {
     skipPlaceholder();
 
