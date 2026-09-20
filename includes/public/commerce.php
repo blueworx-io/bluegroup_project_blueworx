@@ -73,11 +73,17 @@ function blueworx_commerce_price_ids() {
  * Derived from the plan name rather than stored alongside it, so adding a plan
  * to the content file does not also mean editing a second list.
  *
- * @param string $name Plan name, e.g. "Growth Support".
- * @return string Slug, e.g. "growth-support".
+ * The '+' is spelled out before slugging because sanitize_title() strips it
+ * silently: "Enterprise +" and "Enterprise" (and "Advantage +" and
+ * "Advantage") would otherwise both slug to the same key, so the price-ID
+ * field couldn't tell the two packages in each pair apart and one silently
+ * overwrote the other's stored ID.
+ *
+ * @param string $name Plan name, e.g. "Enterprise +".
+ * @return string Slug, e.g. "enterprise-plus".
  */
 function blueworx_commerce_plan_slug( $name ) {
-	return sanitize_title( (string) $name );
+	return sanitize_title( str_replace( '+', ' plus', (string) $name ) );
 }
 
 /**
