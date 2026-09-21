@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.16.0
+Stable tag:        1.17.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,14 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.17.0 =
+* Fixed the Support page not loading on the live site: a media file held the /support address, so the page was never created. The installer now moves the file's slug aside.
+* Added rand, Australian dollars and dirhams to the currency switcher.
+* Work is now Portfolio, listing eleven live client sites with screenshots; /work redirects there.
+* The home page introduces ClubHouse where the Toolbox grid was, and its second service card is Managed Hosting.
+* ClubHouse shows its £499 one-off setup fee. Support package hours match the catalogue.
+* One reviews section, three reviews, the same on every page. ClubHouse module icons sit inside their tiles again.
 
 = 1.16.0 =
 * Added three product pages: ClubHouse (the club website platform), Hosting (managed WordPress hosting) and Integrated Support (nine support packages with a slider and a comparison table).

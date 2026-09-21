@@ -31,7 +31,10 @@
  *                     external ) rendered as buttons after the lead. `external`
  *                     (bool, optional) appends target="_blank" rel="noopener".
  * - meta             (array, optional) List of plain label strings rendered
- *                     as `.tech-status` pills after the CTA row.
+ *                     as `.tech-status` pills after the CTA row. An item may
+ *                     instead be array( 'html' => ... ) carrying markup that is
+ *                     already escaped — a price from blueworx_public_money(),
+ *                     so the currency switcher can convert it.
  *
  * @package BlueWorxSite
  */
@@ -93,7 +96,16 @@ if ( $blueworx_th_centered ) :
 			<?php if ( ! empty( $blueworx_th_meta ) ) : ?>
 				<div class="tech-status">
 					<?php foreach ( $blueworx_th_meta as $blueworx_th_meta_item ) : ?>
-						<span><?php echo esc_html( $blueworx_th_meta_item ); ?></span>
+						<?php if ( is_array( $blueworx_th_meta_item ) && isset( $blueworx_th_meta_item['html'] ) ) : ?>
+							<span>
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the caller built this from blueworx_public_money(), which escapes.
+								echo $blueworx_th_meta_item['html'];
+								?>
+							</span>
+						<?php else : ?>
+							<span><?php echo esc_html( $blueworx_th_meta_item ); ?></span>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>

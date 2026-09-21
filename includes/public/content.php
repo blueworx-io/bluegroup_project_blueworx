@@ -638,6 +638,21 @@ function blueworx_content_toolbox_plans() {
 }
 
 /**
+ * A package's annual hours as a monthly figure, for display.
+ *
+ * Most packages do not divide evenly by twelve (75 hours is 6.25 a month),
+ * so this keeps up to two decimals and drops any trailing zeros: 24 → "2",
+ * 75 → "6.25", 140 → "11.67". The same rounding is applied in the browser
+ * by the Support page's slider (assets/js/public-widgets.js).
+ *
+ * @param int $hours Hours a year.
+ * @return string Hours a month.
+ */
+function blueworx_content_hours_a_month( $hours ) {
+	return rtrim( rtrim( number_format( (int) $hours / 12, 2, '.', '' ), '0' ), '.' );
+}
+
+/**
  * The nine Integrated Support packages.
  *
  * Hours are the ANNUAL allowance; the price is what the client pays every
@@ -653,15 +668,16 @@ function blueworx_content_toolbox_plans() {
  */
 function blueworx_content_support_packages() {
 	$rows = array(
-		// name, annual hours, £/month, blurb, featured.
+		// name, annual hours, £/month, blurb, featured. The hours and prices
+		// mirror the catalogue in the Forge admin (2026-09).
 		array( 'Starter', 24, 100, 'Keeping a simple site current — small edits, updates and the odd fix.', true ),
 		array( 'Launch', 48, 200, 'A day a month of design and development time for a growing site.', false ),
-		array( 'Scale', 72, 300, 'Steady improvement work alongside the everyday maintenance.', false ),
-		array( 'Enhance', 96, 400, 'Regular new pages, campaigns and feature work on top of upkeep.', false ),
-		array( 'Growth', 120, 500, 'A consistent programme of design, build and optimisation each month.', true ),
-		array( 'Enterprise', 240, 750, 'A standing slice of the team for multi-site or multi-brand operations.', false ),
-		array( 'Enterprise +', 360, 1000, 'Larger roadmaps with parallel workstreams and priority turnaround.', true ),
-		array( 'Advantage', 480, 1250, 'A near-full-time partner embedded in your product and marketing.', false ),
+		array( 'Scale', 75, 300, 'Steady improvement work alongside the everyday maintenance.', false ),
+		array( 'Enhance', 105, 400, 'Regular new pages, campaigns and feature work on top of upkeep.', false ),
+		array( 'Growth', 140, 500, 'A consistent programme of design, build and optimisation each month.', true ),
+		array( 'Enterprise', 225, 750, 'A standing slice of the team for multi-site or multi-brand operations.', false ),
+		array( 'Enterprise +', 320, 1000, 'Larger roadmaps with parallel workstreams and priority turnaround.', true ),
+		array( 'Advantage', 430, 1250, 'A near-full-time partner embedded in your product and marketing.', false ),
 		array( 'Advantage +', 600, 1500, 'Our deepest engagement — the whole team, on call, all year.', false ),
 	);
 
@@ -679,12 +695,11 @@ function blueworx_content_support_packages() {
 	foreach ( $rows as $row ) {
 		list( $name, $hours, $gbp, $blurb, $featured ) = $row;
 
-		$per_month = $hours / 12;
-		$first     = sprintf(
+		$first = sprintf(
 			/* translators: 1: hours a year, 2: hours a month. */
 			__( '%1$d hours a year (%2$s a month)', 'bluegroup-project-blueworx' ),
 			$hours,
-			rtrim( rtrim( number_format( $per_month, 1, '.', '' ), '0' ), '.' )
+			blueworx_content_hours_a_month( $hours )
 		);
 		$rest = isset( $written[ $name ] ) ? $written[ $name ] : $generic;
 
@@ -883,6 +898,8 @@ function blueworx_content_clubhouse() {
 			'desc'     => 'The complete club website platform, hosted and maintained by us.',
 			'priceM'   => 20,
 			'priceA'   => 200,
+			// One-off, charged once at sign-up; covers the build and launch.
+			'setup'    => 499,
 			'currency' => 'GBP',
 			'feat'     => true,
 			'pop'      => true,
@@ -939,9 +956,108 @@ function blueworx_content_clubhouse() {
 }
 
 /**
- * The homepage customer review list.
+ * The portfolio: live client sites, in the order the Portfolio page shows
+ * them. The first three are also the home page's "Selected Work" cards.
  *
- * Ported verbatim from lib/data.ts HOME_REVIEWS.
+ * Each screenshot is bundled at assets/img/portfolio/<slug>.jpg with its
+ * WebP twin; the card links out to the live site.
+ *
+ * @return array List of array( name, slug, url, sector, tags[] ).
+ */
+function blueworx_content_portfolio() {
+	$sites = array(
+		array(
+			'name'   => 'Hirasté',
+			'slug'   => 'hiraste',
+			'url'    => 'https://hiraste.com/',
+			'sector' => __( 'Hospitality & group bookings', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'PadLX',
+			'slug'   => 'padlx',
+			'url'    => 'https://padlx.com.au/',
+			'sector' => __( 'Padel & lifestyle destination, Gold Coast', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Court Booking', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'World Squash Officiating',
+			'slug'   => 'world-squash-officiating',
+			'url'    => 'https://worldsquashofficiating.com/',
+			'sector' => __( 'Training platform for squash officials', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Learning Platform', 'bluegroup-project-blueworx' ), __( 'Membership', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'FIFTH Movement',
+			'slug'   => 'fifth-movement',
+			'url'    => 'https://fifthmovement.co.uk/',
+			'sector' => __( 'PE, school sport and swimming for UK schools', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Enquiries', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Top Tier Tutors',
+			'slug'   => 'top-tier-tutors',
+			'url'    => 'https://toptiertutors.co.za/',
+			'sector' => __( 'Private tutoring, readers and scribes, South Africa', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Bookings', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Forum Lighting Solutions',
+			'slug'   => 'forum-lighting-solutions',
+			'url'    => 'https://forumlightingsolutions.com/',
+			'sector' => __( 'Commercial lighting supplier', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Product Catalogue', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'The Change Work',
+			'slug'   => 'the-change',
+			'url'    => 'https://thechange.work/',
+			'sector' => __( 'Behavioural change specialists', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Design', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Jens Pflüger',
+			'slug'   => 'jens-pflueger',
+			'url'    => 'https://jens-pflueger.de/en/',
+			'sector' => __( 'Event and trade-fair presenter, Germany', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Multilingual', 'bluegroup-project-blueworx' ), __( 'Web Design', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Studio LalaLand',
+			'slug'   => 'studio-lalaland',
+			'url'    => 'https://studiolalaland.com/',
+			'sector' => __( 'Full-service music production', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Portfolio', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Chromaesthesia',
+			'slug'   => 'chromaesthesia',
+			'url'    => 'https://chromaesthesia.space/',
+			'sector' => __( 'Music taste-sharing platform', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web App', 'bluegroup-project-blueworx' ), __( 'CMS', 'bluegroup-project-blueworx' ) ),
+		),
+		array(
+			'name'   => 'Can Sakhara',
+			'slug'   => 'cansakhara',
+			'url'    => 'https://cansakhara.com/',
+			'sector' => __( 'Private villa, Ibiza', 'bluegroup-project-blueworx' ),
+			'tags'   => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Enquiries', 'bluegroup-project-blueworx' ) ),
+		),
+	);
+
+	/**
+	 * Filters the portfolio list.
+	 *
+	 * @param array $sites List of array( name, slug, url, sector, tags[] ).
+	 */
+	return apply_filters( 'blueworx_content_portfolio', $sites );
+}
+
+/**
+ * The customer review list shown on every marketing page.
+ *
+ * One set, three reviews: the reviews section is the same wherever it
+ * appears, so a page never carries its own variant.
  *
  * @return array List of array( text, initials, name, role ).
  */
@@ -965,18 +1081,12 @@ function blueworx_content_reviews() {
 			'name'     => 'Priya Nair',
 			'role'     => 'Founder, Hirasté',
 		),
-		array(
-			'text'     => 'Migrated our entire site with zero downtime. The support has been outstanding at every single step.',
-			'initials' => 'M',
-			'name'     => 'Marcus Reed',
-			'role'     => 'CEO, QURE',
-		),
 	);
 
 	/**
-	 * Filters the homepage customer review list.
+	 * Filters the customer review list.
 	 *
 	 * @param array $reviews List of array( text, initials, name, role ).
 	 */
-	return apply_filters( 'blueworx_content_reviews', $reviews );
+	return array_slice( (array) apply_filters( 'blueworx_content_reviews', $reviews ), 0, 3 );
 }

@@ -11,7 +11,7 @@
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/clubhouse/', '/hosting/', '/toolbox/', '/work/', '/about/', '/toolbox/surecart/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/toolbox/', '/portfolio/', '/about/', '/toolbox/surecart/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
@@ -85,11 +85,11 @@ test.describe('#82 Images', () => {
   test('photographs are offered as WebP, with the original as a fallback', async ({ page }) => {
     skipPlaceholder();
 
-    await page.goto(cacheBust('/work/'));
+    await page.goto(cacheBust('/portfolio/'));
 
     const photos = (await imagesOn(page)).filter((img) => /\.(jpe?g)$/i.test(img.src));
 
-    expect(photos.length, 'no photographs on the Work page?').toBeGreaterThan(0);
+    expect(photos.length, 'no photographs on the Portfolio page?').toBeGreaterThan(0);
 
     const noWebp = photos.filter((img) => !img.webp).map((img) => img.src);
 

@@ -59,9 +59,9 @@ function blueworx_public_seo_copy() {
 			'title'       => __( 'Who We Are and How We Work With Clients', 'bluegroup-project-blueworx' ),
 			'description' => __( 'BlueWorx is a small team building and looking after websites for growing businesses. How we work, what we care about, and who you actually deal with.', 'bluegroup-project-blueworx' ),
 		),
-		'work'     => array(
-			'title'       => __( 'Client Projects and What They Changed', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Websites we have built and the businesses behind them: what the brief was, what we changed, and what it did for the people who have to run the thing.', 'bluegroup-project-blueworx' ),
+		'portfolio' => array(
+			'title'       => __( 'Our Portfolio — Websites We Have Built', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Eleven live websites BlueWorx designed, built and looks after, from sports governing bodies and tutoring companies to lighting suppliers and studios. Visit each one.', 'bluegroup-project-blueworx' ),
 		),
 		'ai'       => array(
 			'title'       => __( 'Practical AI for Your Website, Without the Hype', 'bluegroup-project-blueworx' ),

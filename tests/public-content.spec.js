@@ -112,12 +112,12 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     expect(packages.map((p) => [p.name, p.hours, p.priceM])).toEqual([
       ['Starter', 24, 100],
       ['Launch', 48, 200],
-      ['Scale', 72, 300],
-      ['Enhance', 96, 400],
-      ['Growth', 120, 500],
-      ['Enterprise', 240, 750],
-      ['Enterprise +', 360, 1000],
-      ['Advantage', 480, 1250],
+      ['Scale', 75, 300],
+      ['Enhance', 105, 400],
+      ['Growth', 140, 500],
+      ['Enterprise', 225, 750],
+      ['Enterprise +', 320, 1000],
+      ['Advantage', 430, 1250],
       ['Advantage +', 600, 1500],
     ]);
     for (const p of packages) {
@@ -163,9 +163,9 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     }
   });
 
-  test('blueworx_content_reviews() returns 4 reviews with the expected shape', () => {
+  test('blueworx_content_reviews() returns 3 reviews with the expected shape', () => {
     const reviews = runContentPhp('echo json_encode( blueworx_content_reviews() );');
-    expect(reviews).toHaveLength(4);
+    expect(reviews).toHaveLength(3);
     for (const review of reviews) {
       expect(Object.keys(review).sort()).toEqual(['initials', 'name', 'role', 'text']);
     }
@@ -193,6 +193,7 @@ test.describe('Content data layer (includes/public/content.php)', () => {
       'blueworx_content_hosting',
       'blueworx_content_clubhouse',
       'blueworx_content_reviews',
+      'blueworx_content_portfolio',
     ];
     for (const filter of expectedFilters) {
       expect(src, `content.php must call apply_filters( '${filter}', ... )`).toContain(`apply_filters( '${filter}'`);

@@ -1,20 +1,22 @@
 // The site-wide currency switcher (design pass, 2026-09). GBP is the base;
-// EUR and USD rates come from the ECB via includes/public/currency.php and are
-// handed to the page as window.blueworxCurrency — so the expected figures here
+// the EUR, USD, ZAR and AUD rates come from the ECB via
+// includes/public/currency.php (AED is derived from USD at the dirham's peg)
+// and are handed to the page as window.blueworxCurrency — so the expected figures here
 // are worked out from whatever rates the page was served with, not typed in.
 // Only elements marked data-bw-gbp convert, so the Toolbox's dollar prices are
 // untouched. The feed itself is covered by tests/currency-rates.spec.js.
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
 
-const SYMBOLS = { GBP: '£', EUR: '€', USD: '$' };
+const SYMBOLS = { GBP: '£', EUR: '€', USD: '$', ZAR: 'R', AUD: 'A$', AED: 'AED ' };
 
 /** The rates the page was served with. */
 async function pageRates(page) {
   const rates = await page.evaluate(() => window.blueworxCurrency && window.blueworxCurrency.rates);
   expect(rates, 'window.blueworxCurrency.rates is inlined on every owned page').toBeTruthy();
-  expect(rates.EUR).toBeGreaterThan(0);
-  expect(rates.USD).toBeGreaterThan(0);
+  for (const code of ['EUR', 'USD', 'ZAR', 'AUD', 'AED']) {
+    expect(rates[code], `${code} rate`).toBeGreaterThan(0);
+  }
   return rates;
 }
 
@@ -27,11 +29,12 @@ function money(gbp, rate, code, dp = 0) {
 test.describe('Currency switcher', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
 
-  test('defaults to GBP and lists three currencies', async ({ page }) => {
+  test('defaults to GBP and lists six currencies', async ({ page }) => {
     await page.goto(cacheBust('/hosting/'));
     await expect(page.locator('nav .bw-cur-btn [data-cur-label]')).toHaveText('£ GBP');
     await page.locator('nav .bw-cur-btn').click();
-    await expect(page.locator('nav .bw-cur-menu button')).toHaveCount(3);
+    const codes = await page.locator('nav .bw-cur-menu button').evaluateAll((els) => els.map((el) => el.getAttribute('data-cur')));
+    expect(codes).toEqual(['GBP', 'EUR', 'USD', 'ZAR', 'AUD', 'AED']);
     await expect(page.locator('nav .bw-cur-menu button.on')).toHaveAttribute('data-cur', 'GBP');
   });
 
@@ -56,9 +59,24 @@ test.describe('Currency switcher', () => {
     const { EUR } = await pageRates(page);
     await page.locator('nav .bw-cur-btn').click();
     await page.locator('nav .bw-cur-menu button[data-cur="EUR"]').click();
-    // Growth: £500/month; rate (500×12)/120 hrs = £50.00/hr.
+    // Growth: £500/month; rate (500×12)/140 hrs = £42.86/hr.
     await expect(page.locator('.plans .plan-card.feat .plan-price b')).toHaveText(money(500, EUR, 'EUR'));
-    await expect(page.locator('[data-testid="support-calc-rate"]')).toHaveText(`${money(50, EUR, 'EUR', 2)} / hr`);
+    await expect(page.locator('[data-testid="support-calc-rate"]')).toHaveText(`${money(42.86, EUR, 'EUR', 2)} / hr`);
+  });
+
+  test('rand, Australian dollars and dirhams convert with their own signs, the setup fee included', async ({ page }) => {
+    await page.goto(cacheBust('/clubhouse/'));
+    const rates = await pageRates(page);
+    // AED is the dollar rate at the UAE's fixed peg, not a rate of its own.
+    expect(rates.AED).toBeCloseTo(rates.USD * 3.6725, 2);
+
+    for (const [code, label] of [['ZAR', 'R ZAR'], ['AUD', 'A$ AUD'], ['AED', 'AED']]) {
+      await page.locator('nav .bw-cur-btn').click();
+      await page.locator(`nav .bw-cur-menu button[data-cur="${code}"]`).click();
+      await expect(page.locator('nav .bw-cur-btn [data-cur-label]')).toHaveText(label);
+      await expect(page.locator('.plan-price b')).toHaveText(money(20, rates[code], code));
+      await expect(page.locator('[data-testid="plan-setup"] [data-bw-gbp]')).toHaveText(money(499, rates[code], code));
+    }
   });
 
   test('the Toolbox dollar prices are not converted', async ({ page }) => {

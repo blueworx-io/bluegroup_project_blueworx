@@ -1363,3 +1363,37 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
 /* Footer: below 1000px .ft has two tracks for three children; let the brand
    block span the row so the two link columns pair up. */
 @media (max-width: 1000px) { .ft > .fb { grid-column: 1 / -1; } }
+
+/* Icon tiles: a raw <svg> dropped straight into a tile (the ClubHouse module
+   cards) is sized like the span[data-ic] blueworx_icon() wraps, so it sits
+   inside the tinted tile instead of filling it edge to edge. */
+.svc-ic > svg { width: 24px; height: 24px; display: block; }
+.fli-icon > svg { width: 22px; height: 22px; display: block; }
+
+/* Plan card: the one-off setup fee under the monthly price. */
+.plan-setup { font-size: 14px; color: #667085; margin: -12px 0 22px; }
+.plan-setup span { font-weight: 600; color: #0A0C29; }
+.feat .plan-setup { color: rgba(255,255,255,.7); }
+.feat .plan-setup span { color: #fff; }
+
+/* Home: the ClubHouse band, in the dark Toolbox band's clothes. */
+.bw-ch-band .tbx-head { max-width: 680px; }
+.bw-ch-band-tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #A5A7FF; }
+.bw-ch-band-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; }
+.bw-ch-band-shot { display: block; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 30px 70px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08); background: #10122E; transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .3s ease; }
+.bw-ch-band-shot:hover { transform: translateY(-6px); border-color: rgba(165,167,255,.42); }
+.bw-ch-band-shot img { display: block; width: 100%; height: auto; }
+.bw-ch-band-list { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; margin-bottom: 30px; }
+.bw-ch-band-item { display: flex; align-items: flex-start; gap: 14px; }
+.bw-ch-band-ic { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(139,142,255,.14); border: 1px solid rgba(165,167,255,.3); color: #C9CBFF; }
+.bw-ch-band-ic svg { width: 20px; height: 20px; display: block; }
+.bw-ch-band-item h3 { font-size: 16.5px; font-weight: 600; color: #fff; margin: 0 0 4px; letter-spacing: -.2px; }
+.bw-ch-band-item p { font-size: 13.5px; line-height: 1.5; color: rgba(255,255,255,.6); margin: 0; }
+.bw-ch-band-price { display: flex; flex-direction: column; gap: 6px; margin-bottom: 26px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.1); }
+.bw-ch-band-price b { font-family: 'Sora', sans-serif; font-size: 34px; letter-spacing: -1px; color: #fff; display: flex; align-items: baseline; gap: 8px; }
+.bw-ch-band-price b .bw-ch-band-per { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0; color: rgba(255,255,255,.6); }
+.bw-ch-band-price small { font-size: 14px; color: rgba(255,255,255,.66); }
+.bw-ch-band-price small span { color: #fff; font-weight: 600; }
+.bw-ch-band-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 1000px) { .bw-ch-band-grid { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 600px) { .bw-ch-band-list { grid-template-columns: 1fr; } }

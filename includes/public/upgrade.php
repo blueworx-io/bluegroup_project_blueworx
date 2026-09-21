@@ -123,7 +123,7 @@ add_action( 'init', 'blueworx_public_maybe_install_pages', 5 );
  */
 function blueworx_public_retire_removed_pages() {
 	$map     = (array) get_option( 'blueworx_public_page_ids', array() );
-	$retired = array( 'pricing', 'services' );
+	$retired = array( 'pricing', 'services', 'work' );
 	$changed = false;
 
 	foreach ( $retired as $slug ) {

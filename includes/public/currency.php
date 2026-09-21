@@ -3,12 +3,14 @@
  * Public front-end layer — currency exchange rates.
  *
  * Prices on the marketing pages are written in pounds. The visitor can view
- * them in euros or dollars (the switcher in templates/parts/nav.php), and the
- * conversion happens in the browser (assets/js/public-widgets.js) from the
- * rates this file hands it.
+ * them in euros, US dollars, rand, Australian dollars or dirhams (the
+ * switcher in templates/parts/nav.php), and the conversion happens in the
+ * browser (assets/js/public-widgets.js) from the rates this file hands it.
  *
  * The rates come from the European Central Bank's daily reference rates, via
- * the Frankfurter API (no key, no account). They are fetched twice a day by
+ * the Frankfurter API (no key, no account). The ECB publishes no dirham rate,
+ * so AED is worked out from the dollar figure at the UAE's fixed peg
+ * (blueworx_currency_pegs()). They are fetched twice a day by
  * WP-Cron and kept in an option, so a visitor never waits on the rate
  * service; if the site has never managed a fetch, or the last good one is a
  * day old and a fresh attempt fails, the last known figures stay in use, and
@@ -35,7 +37,35 @@ function blueworx_currency_fallback_rates() {
 	return array(
 		'EUR' => 1.17,
 		'USD' => 1.27,
+		'ZAR' => 21.8,
+		'AUD' => 1.88,
+		'AED' => 4.66,
 	);
+}
+
+/**
+ * Currencies the rate service does not publish, and how to derive them.
+ *
+ * The UAE dirham has been fixed at 3.6725 to the US dollar since 1997, so
+ * the pound-to-dirham rate is simply the pound-to-dollar rate times the peg.
+ * Anything listed here is left out of the fetch and computed afterwards.
+ *
+ * @return array Code => array( source code, multiplier ).
+ */
+function blueworx_currency_pegs() {
+	return array(
+		'AED' => array( 'USD', 3.6725 ),
+	);
+}
+
+/**
+ * The currency codes fetched from the rate service: every currency the site
+ * offers, less the pegged ones.
+ *
+ * @return string[] ISO codes.
+ */
+function blueworx_currency_fetched_codes() {
+	return array_values( array_diff( array_keys( blueworx_currency_fallback_rates() ), array_keys( blueworx_currency_pegs() ) ) );
 }
 
 /**
@@ -48,12 +78,13 @@ function blueworx_currency_rates_url() {
 	 * Filters where exchange rates are fetched from.
 	 *
 	 * The response must carry a `rates` object keyed by ISO code with the
-	 * value of one pound in that currency. Return an empty string to switch
+	 * value of one pound in that currency, for every code in
+	 * blueworx_currency_fetched_codes(). Return an empty string to switch
 	 * live rates off and use blueworx_currency_fallback_rates() instead.
 	 *
 	 * @param string $url The rates endpoint.
 	 */
-	return (string) apply_filters( 'blueworx_currency_rates_url', 'https://api.frankfurter.dev/v1/latest?base=GBP&symbols=EUR,USD' );
+	return (string) apply_filters( 'blueworx_currency_rates_url', 'https://api.frankfurter.dev/v1/latest?base=GBP&symbols=' . implode( ',', blueworx_currency_fetched_codes() ) );
 }
 
 /**
@@ -90,7 +121,7 @@ function blueworx_currency_fetch_rates() {
 
 	$rates = array();
 
-	foreach ( array_keys( blueworx_currency_fallback_rates() ) as $code ) {
+	foreach ( blueworx_currency_fetched_codes() as $code ) {
 		if ( ! isset( $body['rates'][ $code ] ) || ! is_numeric( $body['rates'][ $code ] ) ) {
 			return null;
 		}
@@ -105,6 +136,16 @@ function blueworx_currency_fetch_rates() {
 		}
 
 		$rates[ $code ] = round( $rate, 4 );
+	}
+
+	foreach ( blueworx_currency_pegs() as $code => $peg ) {
+		list( $source, $multiplier ) = $peg;
+
+		if ( ! isset( $rates[ $source ] ) ) {
+			return null;
+		}
+
+		$rates[ $code ] = round( $rates[ $source ] * $multiplier, 4 );
 	}
 
 	return array(
@@ -160,6 +201,12 @@ function blueworx_currency_rates() {
 	$stored = get_option( 'blueworx_currency_rates', array() );
 	$stale  = empty( $stored['fetched'] ) || ( time() - (int) $stored['fetched'] ) > DAY_IN_SECONDS;
 
+	// Figures stored by a release that offered fewer currencies are missing
+	// the new ones; treat them as stale so the next request fills them in.
+	if ( ! $stale && is_array( $stored ) && ! empty( $stored['rates'] ) && array_diff_key( blueworx_currency_fallback_rates(), (array) $stored['rates'] ) ) {
+		$stale = true;
+	}
+
 	if ( $stale && ! get_transient( 'blueworx_currency_rates_lock' ) ) {
 		set_transient( 'blueworx_currency_rates_lock', 1, HOUR_IN_SECONDS );
 
@@ -170,8 +217,10 @@ function blueworx_currency_rates() {
 
 	$live = is_array( $stored ) && ! empty( $stored['rates'] ) && is_array( $stored['rates'] );
 
+	// Live figures sit over the fallback ones, so a currency the stored set
+	// predates still has a number until the refresh lands.
 	$result = array(
-		'rates'  => array_merge( array( 'GBP' => 1 ), $live ? $stored['rates'] : blueworx_currency_fallback_rates() ),
+		'rates'  => array_merge( array( 'GBP' => 1 ), blueworx_currency_fallback_rates(), $live ? $stored['rates'] : array() ),
 		'source' => $live ? 'live' : 'fallback',
 		'date'   => $live && ! empty( $stored['date'] ) ? (string) $stored['date'] : '',
 	);

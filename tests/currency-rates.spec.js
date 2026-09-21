@@ -60,14 +60,18 @@ add_filter( 'pre_http_request', function ( $pre, $args, $url ) {
 			return new WP_Error( 'http_request_failed', 'fixture: the feed is down' );
 
 		case 'junk':
-			return bw_test_rates_response( '{"rates":{"EUR":0,"USD":"soon"}}' );
+			return bw_test_rates_response( '{"rates":{"EUR":0,"USD":"soon","ZAR":20,"AUD":2}}' );
+
+		case 'partial':
+			// The feed answered, but without every currency the site offers.
+			return bw_test_rates_response( '{"rates":{"EUR":1.5,"USD":2}}' );
 
 		default:
 			return bw_test_rates_response( wp_json_encode( array(
 				'amount' => 1,
 				'base'   => 'GBP',
 				'date'   => '2026-09-19',
-				'rates'  => array( 'EUR' => 1.5, 'USD' => 2 ),
+				'rates'  => array( 'EUR' => 1.5, 'USD' => 2, 'ZAR' => 25, 'AUD' => 2.5 ),
 			) ) );
 	}
 }, 10, 3 );
@@ -95,13 +99,25 @@ add_action( 'init', function () {
 		case 'ok':
 		case 'fail':
 		case 'junk':
+		case 'partial':
 			update_option( 'bw_test_rates_mode', $state, false );
+			break;
+
+		case 'old-set':
+			// Figures stored by a release that only knew euros and dollars,
+			// fetched an hour ago — fresh by age, but missing currencies.
+			update_option( 'bw_test_rates_mode', 'ok', false );
+			update_option( 'blueworx_currency_rates', array(
+				'rates'   => array( 'EUR' => 1.5, 'USD' => 2 ),
+				'date'    => '2026-09-18',
+				'fetched' => time() - HOUR_IN_SECONDS,
+			), false );
 			break;
 
 		case 'stale-fail':
 			update_option( 'bw_test_rates_mode', 'fail', false );
 			update_option( 'blueworx_currency_rates', array(
-				'rates'   => array( 'EUR' => 1.5, 'USD' => 2 ),
+				'rates'   => array( 'EUR' => 1.5, 'USD' => 2, 'ZAR' => 25, 'AUD' => 2.5, 'AED' => 7.345 ),
 				'date'    => '2026-09-18',
 				'fetched' => time() - 2 * DAY_IN_SECONDS,
 			), false );
@@ -163,7 +179,8 @@ test.describe('Live exchange rates', () => {
     const served = await pageRates(page);
     expect(served.source).toBe('live');
     expect(served.date).toBe('2026-09-19');
-    expect(served.rates).toEqual({ GBP: 1, EUR: 1.5, USD: 2 });
+    // AED is USD × 3.6725, the dirham's peg — the feed never sends it.
+    expect(served.rates).toEqual({ GBP: 1, EUR: 1.5, USD: 2, ZAR: 25, AUD: 2.5, AED: 7.345 });
 
     await page.locator('nav .bw-cur-btn').click();
     await page.locator('nav .bw-cur-menu button[data-cur="USD"]').click();
@@ -180,7 +197,7 @@ test.describe('Live exchange rates', () => {
 
     const served = await pageRates(page);
     expect(served.source).toBe('fallback');
-    expect(served.rates).toEqual({ GBP: 1, EUR: 1.17, USD: 1.27 });
+    expect(served.rates).toEqual({ GBP: 1, EUR: 1.17, USD: 1.27, ZAR: 21.8, AUD: 1.88, AED: 4.66 });
 
     await page.goto(cacheBust('/support/'));
     await page.goto(cacheBust('/clubhouse/'));
@@ -194,6 +211,27 @@ test.describe('Live exchange rates', () => {
     const served = await pageRates(page);
     expect(served.source).toBe('fallback');
     expect(served.rates.EUR).toBe(1.17);
+  });
+
+  test('a feed missing a currency is thrown away too', async ({ page }) => {
+    await setFixture(page, 'partial');
+    await page.goto(cacheBust('/hosting/'));
+
+    const served = await pageRates(page);
+    expect(served.source).toBe('fallback');
+    expect(served.rates.ZAR).toBe(21.8);
+  });
+
+  test('rates stored before a currency was added are refreshed, and the fallback fills the gap until then', async ({ page }) => {
+    await setFixture(page, 'old-set');
+    await page.goto(cacheBust('/hosting/'));
+
+    const served = await pageRates(page);
+    expect(served.source).toBe('live');
+    // Fresh by age but short of ZAR, AUD and AED, so it was refreshed at once.
+    expect(served.rates.ZAR).toBe(25);
+    expect(served.rates.AED).toBe(7.345);
+    expect((await fixtureState(page)).calls).toBe(1);
   });
 
   test('yesterday’s rates outlive a failed refresh', async ({ page }) => {
@@ -217,7 +255,7 @@ test.describe('Live exchange rates', () => {
     await login(page);
     await page.goto(SETTINGS_PATH);
 
-    await expect(page.locator('#blueworx_currency_rates')).toHaveText('£1 = €1.5000 = $2.0000');
+    await expect(page.locator('#blueworx_currency_rates')).toHaveText('£1 = €1.5000 = $2.0000 = R25.0000 = A$2.5000 = AED 7.3450');
     await expect(page.locator('#blueworx_currency_rates + .description')).toContainText('2026-09-19');
   });
 });

@@ -23,6 +23,8 @@
  *              Client Success Stories cards only).
  * - href      (string, optional) When set, the whole card is a link to this
  *              (already-escaped-safe, e.g. home_url()) URL.
+ * - external  (bool, optional)   With href: the link is a live client site
+ *              and opens in a new tab.
  *
  * @package BlueWorxSite
  */
@@ -40,6 +42,7 @@ $blueworx_wc_res_value = isset( $res_value ) ? (string) $res_value : '';
 $blueworx_wc_res_text  = isset( $res_text ) ? (string) $res_text : '';
 $blueworx_wc_desc      = isset( $desc ) ? (string) $desc : '';
 $blueworx_wc_href      = isset( $href ) ? (string) $href : '';
+$blueworx_wc_external  = ! empty( $external );
 
 ob_start();
 ?>
@@ -60,7 +63,7 @@ ob_start();
 $blueworx_wc_body = ob_get_clean();
 ?>
 <?php if ( '' !== $blueworx_wc_href ) : ?>
-	<a class="work-card" href="<?php echo esc_url( $blueworx_wc_href ); ?>" style="display:block;color:inherit;text-decoration:none">
+	<a class="work-card" href="<?php echo esc_url( $blueworx_wc_href ); ?>"<?php echo $blueworx_wc_external ? ' target="_blank" rel="noopener"' : ''; ?> style="display:block;color:inherit;text-decoration:none">
 		<?php
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $blueworx_wc_body is built above from the same esc_html()/esc_url()/esc_attr() calls, not raw input.
 		echo $blueworx_wc_body;

@@ -35,9 +35,9 @@ $blueworx_s_featured  = array_values(
 // figure, since Support has no billing toggle to switch between them.
 foreach ( $blueworx_s_featured as $blueworx_s_i => $blueworx_s_plan ) {
 	$blueworx_s_period = sprintf(
-		/* translators: %d: hours a month. */
-		__( 'per month · %d hrs a month', 'bluegroup-project-blueworx' ),
-		(int) ( $blueworx_s_plan['hours'] / 12 )
+		/* translators: %s: hours a month, e.g. "11.67". */
+		__( 'per month · %s hrs a month', 'bluegroup-project-blueworx' ),
+		blueworx_content_hours_a_month( $blueworx_s_plan['hours'] )
 	);
 
 	$blueworx_s_featured[ $blueworx_s_i ]['subM'] = $blueworx_s_period;
@@ -115,7 +115,7 @@ blueworx_public_part( 'parts/nav.php' );
 					<div class="calc-field">
 						<label for="bw-support-hours"><?php esc_html_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?></label>
 						<div class="bw-calc-big">
-							<b data-testid="support-calc-hours"><?php echo esc_html( (string) ( $blueworx_s_growth['hours'] / 12 ) ); ?></b>
+							<b data-testid="support-calc-hours"><?php echo esc_html( blueworx_content_hours_a_month( $blueworx_s_growth['hours'] ) ); ?></b>
 							<span><?php esc_html_e( 'hours', 'bluegroup-project-blueworx' ); ?> · <span data-testid="support-calc-annual"><?php echo esc_html( (string) $blueworx_s_growth['hours'] ); ?></span> <?php esc_html_e( 'hours a year', 'bluegroup-project-blueworx' ); ?></span>
 						</div>
 						<input class="bw-range" id="bw-support-hours" name="hours" type="range" min="0" max="<?php echo esc_attr( (string) ( count( $blueworx_s_packages ) - 1 ) ); ?>" step="1" value="<?php echo esc_attr( (string) $blueworx_s_growth_at ); ?>" aria-label="<?php esc_attr_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?>" />
@@ -125,9 +125,9 @@ blueworx_public_part( 'parts/nav.php' );
 									<?php
 									echo esc_html(
 										sprintf(
-											/* translators: %d: hours a month. */
-											__( '%d hrs', 'bluegroup-project-blueworx' ),
-											(int) ( $blueworx_s_end['hours'] / 12 )
+											/* translators: %s: hours a month. */
+											__( '%s hrs', 'bluegroup-project-blueworx' ),
+											blueworx_content_hours_a_month( $blueworx_s_end['hours'] )
 										)
 									);
 									?>
@@ -180,7 +180,7 @@ blueworx_public_part( 'parts/nav.php' );
 							<tr>
 								<td style="font-weight:600;color:#0A0C29"><?php echo esc_html( $blueworx_s_pkg['name'] ); ?></td>
 								<td><?php echo esc_html( $blueworx_s_pkg['hours'] . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
-								<td><?php echo esc_html( ( $blueworx_s_pkg['hours'] / 12 ) . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
+								<td><?php echo esc_html( blueworx_content_hours_a_month( $blueworx_s_pkg['hours'] ) . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
 								<td>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- blueworx_public_money() escapes.
@@ -281,6 +281,14 @@ blueworx_public_part( 'parts/nav.php' );
 		</section>
 
 		<?php
+		// The reviews section every marketing page shares.
+		blueworx_public_part(
+			'parts/testimonials.php',
+			array(
+				'testimonials' => blueworx_content_reviews(),
+			)
+		);
+
 		blueworx_public_part(
 			'parts/faq-section.php',
 			array(

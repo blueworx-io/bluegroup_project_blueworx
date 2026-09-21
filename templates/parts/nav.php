@@ -73,7 +73,7 @@ $blueworx_nav_items = array(
 	array( '/', __( 'Home', 'bluegroup-project-blueworx' ), home_url( '/' ) ),
 	array( '/hosting', __( 'Hosting', 'bluegroup-project-blueworx' ), home_url( '/hosting' ) ),
 	array( '/support', __( 'Support', 'bluegroup-project-blueworx' ), home_url( '/support' ) ),
-	array( '/work', __( 'Work', 'bluegroup-project-blueworx' ), home_url( '/work' ) ),
+	array( '/portfolio', __( 'Portfolio', 'bluegroup-project-blueworx' ), home_url( '/portfolio' ) ),
 	array( '/clubhouse', __( 'ClubHouse', 'bluegroup-project-blueworx' ), home_url( '/clubhouse' ), true ),
 );
 
@@ -89,6 +89,9 @@ $blueworx_nav_currency = '
 			<button type="button" role="option" data-cur="GBP">£ GBP<i>' . esc_html__( 'Pound', 'bluegroup-project-blueworx' ) . '</i></button>
 			<button type="button" role="option" data-cur="EUR">€ EUR<i>' . esc_html__( 'Euro', 'bluegroup-project-blueworx' ) . '</i></button>
 			<button type="button" role="option" data-cur="USD">$ USD<i>' . esc_html__( 'Dollar', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="ZAR">R ZAR<i>' . esc_html__( 'Rand', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="AUD">A$ AUD<i>' . esc_html__( 'Australian dollar', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="AED">AED<i>' . esc_html__( 'Dirham', 'bluegroup-project-blueworx' ) . '</i></button>
 		</div>
 	</div>';
 ?>

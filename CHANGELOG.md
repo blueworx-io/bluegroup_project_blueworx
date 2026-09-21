@@ -10,6 +10,41 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.17.0] - 2026-09-21
+
+### Added
+
+- **Three more currencies.** Prices can now show in South African rand,
+  Australian dollars and UAE dirhams as well as pounds, euros and US dollars.
+  The dirham is worked out from the dollar rate at the UAE's fixed peg, since
+  the ECB feed does not carry it.
+- **The Portfolio page** (replacing Work) lists eleven live client sites with
+  a screenshot of each; every card opens the site in a new tab. The old /work
+  address redirects to it. The home page's project cards are the first three.
+- **A ClubHouse block on the home page** where the Toolbox grid used to be:
+  the demo site, four of the modules, the price and two buttons.
+- **ClubHouse's £499 setup fee** is shown on its plan card, in its hero and on
+  the home page block, and converts with the currency switcher.
+
+### Changed
+
+- The home page's second service card is now Managed Hosting instead of the
+  Digital Toolbox.
+- The reviews section is the same on every page it appears on, capped at three,
+  and now also sits on the Hosting, Support and ClubHouse pages.
+- Support package hours match the catalogue: Scale 75, Enhance 105, Growth
+  140, Enterprise 225, Enterprise + 320, Advantage 430 hours a year. Prices are
+  unchanged, so the effective hourly rates moved with them.
+
+### Fixed
+
+- **The Support page on the live site.** A media file called Support.svg held
+  the /support address, so the page was never created and the menu link bounced
+  to the home page. The page installer now moves a media file's slug aside and
+  creates the page; the file itself is untouched.
+- The ClubHouse module icons filled their tiles edge to edge instead of sitting
+  inside them.
+
 ## [1.16.0] - 2026-09-20
 
 ### Added

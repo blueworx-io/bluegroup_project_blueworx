@@ -42,6 +42,8 @@ const canInstallFixture = existsSync(join(WP_ROOT, 'wp-settings.php'));
 const COLLIDED = 'bw-collide';
 const CREATED = 'bw-created';
 const LEGACY = 'bw-legacy';
+// A media file holding the slug a page needs — the live /support bug.
+const SHADOWED = 'bw-shadowed';
 
 const FIXTURE_PLUGIN = `<?php
 /**
@@ -60,6 +62,7 @@ add_filter( 'blueworx_public_pages', function ( $pages ) {
 
 	$pages['${COLLIDED}'] = array( 'title' => 'Collide', 'template' => 'pages/about.php' );
 	$pages['${CREATED}']  = array( 'title' => 'Created', 'template' => 'pages/about.php' );
+	$pages['${SHADOWED}'] = array( 'title' => 'Shadowed', 'template' => 'pages/about.php' );
 
 	return $pages;
 } );
@@ -99,6 +102,41 @@ function bw_test_pages_named( $slug ) {
 	) ) );
 }
 
+/**
+ * A media item whose attachment page sits at the slug — what Support.svg did
+ * to /support on the live site. No file on disk; only the post matters.
+ */
+function bw_test_make_attachment( $slug ) {
+	// An earlier spec's activation will have created the plugin's page at
+	// this slug; the scenario is a media item there and NO page, so clear
+	// the slug first (the install falls through a mapped ID that is no
+	// longer a page).
+	foreach ( bw_test_pages_named( $slug ) as $page_id ) {
+		wp_delete_post( $page_id, true );
+	}
+
+	foreach ( bw_test_attachments_named( $slug ) as $attachment ) {
+		wp_delete_attachment( (int) $attachment->ID, true );
+	}
+
+	return (int) wp_insert_attachment( array(
+		'post_title'     => 'Shadowed',
+		'post_name'      => $slug,
+		'post_mime_type' => 'image/svg+xml',
+		'post_status'    => 'inherit',
+	) );
+}
+
+function bw_test_attachments_named( $slug ) {
+	global $wpdb;
+
+	return (array) $wpdb->get_results( $wpdb->prepare(
+		"SELECT ID, post_name FROM {$wpdb->posts} WHERE post_type = 'attachment' AND ( post_name = %s OR post_name LIKE %s )",
+		$slug,
+		$wpdb->esc_like( $slug ) . '-%'
+	) );
+}
+
 add_action( 'wp_loaded', function () {
 	if ( ! isset( $_GET['bw_own'] ) ) {
 		return;
@@ -126,6 +164,10 @@ add_action( 'wp_loaded', function () {
 			bw_test_make_foreign_page( '${COLLIDED}', 'Collide' );
 			break;
 
+		case 'make_attachment':
+			bw_test_make_attachment( '${SHADOWED}' );
+			break;
+
 		case 'make_legacy':
 			// A page from before the stamp existed: in the map, no meta, and
 			// the data version reset so the upgrade has not run yet.
@@ -145,9 +187,12 @@ add_action( 'wp_loaded', function () {
 			break;
 
 		case 'cleanup':
-			foreach ( array( '${COLLIDED}', '${CREATED}', '${LEGACY}' ) as $slug ) {
+			foreach ( array( '${COLLIDED}', '${CREATED}', '${LEGACY}', '${SHADOWED}' ) as $slug ) {
 				foreach ( bw_test_pages_named( $slug ) as $page_id ) {
 					wp_delete_post( $page_id, true );
+				}
+				foreach ( bw_test_attachments_named( $slug ) as $attachment ) {
+					wp_delete_attachment( (int) $attachment->ID, true );
 				}
 			}
 
@@ -180,18 +225,19 @@ add_action( 'wp_loaded', function () {
 	}
 
 	$map   = (array) get_option( 'blueworx_public_page_ids', array() );
-	$slugs = array( '${COLLIDED}', '${CREATED}', '${LEGACY}' );
+	$slugs = array( '${COLLIDED}', '${CREATED}', '${LEGACY}', '${SHADOWED}' );
 	$state = array();
 
 	foreach ( $slugs as $slug ) {
 		$mapped = isset( $map[ $slug ] ) ? (int) $map[ $slug ] : 0;
-		$page   = get_page_by_path( $slug );
+		$page   = get_page_by_path( $slug, OBJECT, 'page' );
 
 		$state[ $slug ] = array(
-			'mapped'    => $mapped,
-			'page_id'   => $page instanceof WP_Post ? (int) $page->ID : 0,
-			'stamped'   => $page instanceof WP_Post ? blueworx_public_page_is_ours( $page->ID ) : false,
-			'pages'     => count( bw_test_pages_named( $slug ) ),
+			'mapped'      => $mapped,
+			'page_id'     => $page instanceof WP_Post && 'page' === $page->post_type ? (int) $page->ID : 0,
+			'stamped'     => $page instanceof WP_Post ? blueworx_public_page_is_ours( $page->ID ) : false,
+			'pages'       => count( bw_test_pages_named( $slug ) ),
+			'attachments' => array_map( function ( $a ) { return $a->post_name; }, bw_test_attachments_named( $slug ) ),
 		);
 	}
 
@@ -285,6 +331,28 @@ test('a foreign page whose slug collides is never claimed, across activate → d
     urls.filter((url) => /bw-ownership-foreign/.test(url)).length,
     'the site\'s own CSS was stripped from a page the plugin did not create — this is the production bug'
   ).toBeGreaterThan(0);
+});
+
+test('a media file holding the slug is moved aside so the page can be created', async ({ page }) => {
+  skipUnlessLocal();
+
+  await control(page, 'begin');
+  const before = await control(page, 'make_attachment');
+
+  expect(before.state[SHADOWED].attachments, 'set up with a media item at the slug').toEqual([SHADOWED]);
+  expect(before.state[SHADOWED].page_id, 'and no page there yet').toBe(0);
+
+  const after = await control(page, 'activate');
+  const shadowed = after.state[SHADOWED];
+
+  expect(shadowed.page_id, 'the page must be created — on the live site /support never was').toBeGreaterThan(0);
+  expect(shadowed.mapped).toBe(shadowed.page_id);
+  expect(shadowed.stamped).toBe(true);
+  expect(shadowed.pages, 'at the slug itself, not a suffixed one').toBe(1);
+  expect(shadowed.attachments, 'the media item keeps existing under a moved slug').toEqual([`${SHADOWED}-file`]);
+
+  await page.goto(`/${SHADOWED}/`);
+  await expect(page.locator('body.bw-page'), 'the address now serves the plugin page, not a redirect home').toHaveCount(1);
 });
 
 test('a page the plugin created is still mapped, rendered and swept', async ({ page }) => {

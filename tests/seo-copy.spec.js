@@ -14,7 +14,7 @@
 
 import { test, expect, isPlaceholder, cacheBust, TOOL_SLUGS } from './helpers.js';
 
-const PAGES = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/', '/about/', '/work/', '/ai/', '/contact/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/', '/about/', '/portfolio/', '/ai/', '/contact/'];
 const ALL = [...PAGES, ...TOOL_SLUGS.map((slug) => `/toolbox/${slug}/`)];
 
 const skipPlaceholder = () =>

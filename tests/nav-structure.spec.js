@@ -4,7 +4,7 @@
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
 
-const LINKS = ['Home', 'Hosting', 'Support', 'Work', 'ClubHouse'];
+const LINKS = ['Home', 'Hosting', 'Support', 'Portfolio', 'ClubHouse'];
 
 test.describe('Site nav structure', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');

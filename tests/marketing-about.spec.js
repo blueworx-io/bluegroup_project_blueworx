@@ -21,7 +21,7 @@ test.describe('Marketing about page', () => {
     const why = page.locator('main > div .about-why');
     await expect(why).toHaveCount(1);
     await expect(why.locator('.btn', { hasText: 'Book a Call' })).toHaveAttribute('href', /\/contact\/?$/);
-    await expect(why.locator('.btn', { hasText: 'View Our Work' })).toHaveAttribute('href', /\/work\/?$/);
+    await expect(why.locator('.btn', { hasText: 'View Our Portfolio' })).toHaveAttribute('href', /\/portfolio\/?$/);
     const whyCards = why.locator('.why-grid > div.svc');
     await expect(whyCards).toHaveCount(4);
     await expect(whyCards.nth(0)).toContainText('One team, end to end');
@@ -49,7 +49,7 @@ test.describe('Marketing about page', () => {
     const storyCards = page.locator('main > div .work-grid > a.work-card');
     await expect(storyCards).toHaveCount(3);
     await expect(storyCards.nth(0)).toContainText('Hirasté');
-    await expect(storyCards.nth(0)).toHaveAttribute('href', /\/work\/?$/);
-    await expect(page.locator('main > div .btn', { hasText: 'View All Work' })).toHaveAttribute('href', /\/work\/?$/);
+    await expect(storyCards.nth(0)).toHaveAttribute('href', /\/portfolio\/?$/);
+    await expect(page.locator('main > div .btn', { hasText: 'View the Portfolio' })).toHaveAttribute('href', /\/portfolio\/?$/);
   });
 });

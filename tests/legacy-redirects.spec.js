@@ -39,6 +39,8 @@ const REDIRECTS = [
   // folded into the three product pages.
   { from: '/pricing', to: '/support' },
   { from: '/services', to: '/support' },
+  // Work was renamed Portfolio.
+  { from: '/work', to: '/portfolio' },
 ];
 
 for (const { from, to } of REDIRECTS) {

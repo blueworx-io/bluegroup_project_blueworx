@@ -146,7 +146,7 @@ blueworx_public_part( 'parts/nav.php' );
 					<p class="lead" style="font-size:18px;margin-top:18px"><?php echo esc_html__( 'Founded to remove the complexity of running a modern digital business, BlueWorx brings strategy, design, build, hosting, and support under one roof, so you have one accountable partner instead of five vendors.', 'bluegroup-project-blueworx' ); ?></p>
 					<div style="display:flex;gap:14px;margin-top:30px;flex-wrap:wrap">
 						<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-dark btn-md"><?php echo esc_html__( 'Book a Call', 'bluegroup-project-blueworx' ); ?></a>
-						<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md"><?php echo esc_html__( 'View Our Work', 'bluegroup-project-blueworx' ); ?></a>
+						<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>" class="btn btn-outline btn-md"><?php echo esc_html__( 'View Our Portfolio', 'bluegroup-project-blueworx' ); ?></a>
 					</div>
 				</div>
 				<div class="svc-grid why-grid">
@@ -195,14 +195,14 @@ blueworx_public_part( 'parts/nav.php' );
 				<div class="work-grid">
 					<?php
 					foreach ( $blueworx_about_stories as $blueworx_about_story ) {
-						$blueworx_about_story['href'] = home_url( '/work' );
+						$blueworx_about_story['href'] = home_url( '/portfolio' );
 						blueworx_public_part( 'parts/work-card.php', $blueworx_about_story );
 					}
 					?>
 				</div>
 				<div style="display:flex;justify-content:center;margin-top:40px">
-					<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md">
-						<?php echo esc_html__( 'View All Work', 'bluegroup-project-blueworx' ); ?>
+					<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>" class="btn btn-outline btn-md">
+						<?php echo esc_html__( 'View the Portfolio', 'bluegroup-project-blueworx' ); ?>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_about_arrow above.
 						echo $blueworx_about_arrow;

@@ -28,8 +28,8 @@ $blueworx_ch_demo = 'https://demo.305media.co.uk/';
 // $blueworx_home_arrow in home.php/about.php), and the upload/share glyphs on
 // the "Need it tailored?" aside are one-off icons not in blueworx_icon_paths().
 $blueworx_ch_arrow  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>';
-$blueworx_ch_ic_up  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
-$blueworx_ch_ic_shr = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="13" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><path d="M12 22a9 9 0 0 1 0-18"></path></svg>';
+$blueworx_ch_ic_up  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
+$blueworx_ch_ic_shr = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="19" cy="13" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><path d="M12 22a9 9 0 0 1 0-18"></path></svg>';
 
 blueworx_public_document_open( array( 'body_class' => 'bw-clubhouse' ) );
 blueworx_public_part( 'parts/nav.php' );
@@ -64,7 +64,7 @@ blueworx_public_part( 'parts/nav.php' );
 							'meta'            => array(
 								__( 'live in 2 weeks', 'bluegroup-project-blueworx' ),
 								__( 'hosting included', 'bluegroup-project-blueworx' ),
-								__( 'no setup fee', 'bluegroup-project-blueworx' ),
+								array( 'html' => blueworx_public_money( $blueworx_ch['plan']['setup'], $blueworx_ch['plan']['currency'] ) . ' ' . esc_html__( 'one-off setup', 'bluegroup-project-blueworx' ) ),
 							),
 						)
 					);
@@ -118,7 +118,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php foreach ( $blueworx_ch['modules'] as $blueworx_ch_module ) : ?>
 					<div class="bw-card">
 						<div class="svc-ic" style="margin-bottom:18px">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<?php foreach ( $blueworx_ch_module['paths'] as $blueworx_ch_path ) : ?>
 									<path d="<?php echo esc_attr( $blueworx_ch_path ); ?>"></path>
 								<?php endforeach; ?>
@@ -181,7 +181,7 @@ blueworx_public_part( 'parts/nav.php' );
 			<div class="center-head" style="margin-bottom:36px">
 				<div class="eyebrow" style="margin-bottom:20px"><?php esc_html_e( 'Pricing', 'bluegroup-project-blueworx' ); ?></div>
 				<h2 class="h2"><?php esc_html_e( 'One Price. The Whole Platform.', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Hosting, updates, and every ClubHouse module included. Cancel any time.', 'bluegroup-project-blueworx' ); ?></p>
+				<p class="lead"><?php esc_html_e( 'A one-off setup fee to build and launch your site, then one monthly price with hosting, updates and every ClubHouse module included. Cancel any time.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div style="display:flex;justify-content:center;margin-bottom:34px">
 				<div class="bill-toggle" data-widget="billing-toggle">
@@ -193,7 +193,7 @@ blueworx_public_part( 'parts/nav.php' );
 				<?php blueworx_public_part( 'parts/plan-card.php', array( 'plan' => $blueworx_ch['plan'] ) ); ?>
 				<div class="bw-plan-aside">
 					<h3><?php esc_html_e( 'Need it tailored?', 'bluegroup-project-blueworx' ); ?></h3>
-					<p><?php esc_html_e( 'Bigger clubs run bigger operations. We migrate your member data, brand the site to your colours, and bolt on custom modules — quoted as a one-off project on top of the monthly platform fee.', 'bluegroup-project-blueworx' ); ?></p>
+					<p><?php esc_html_e( 'Bigger clubs run bigger operations. We migrate your member data, brand the site to your colours, and bolt on custom modules — quoted as a one-off project on top of the setup fee and monthly platform fee.', 'bluegroup-project-blueworx' ); ?></p>
 					<div class="collab-list">
 						<div class="fli">
 							<div class="fli-icon">
@@ -245,6 +245,14 @@ blueworx_public_part( 'parts/nav.php' );
 		</section>
 
 		<?php
+		// The reviews section every marketing page shares.
+		blueworx_public_part(
+			'parts/testimonials.php',
+			array(
+				'testimonials' => blueworx_content_reviews(),
+			)
+		);
+
 		blueworx_public_part(
 			'parts/faq-section.php',
 			array(

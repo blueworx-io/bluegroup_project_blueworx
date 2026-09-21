@@ -35,7 +35,7 @@ const PAGES = [
   { path: '/clubhouse/', issue: 'ClubHouse' },
   { path: '/hosting/', issue: 'Hosting' },
   { path: '/support/', issue: 'Integrated Support' },
-  { path: '/work/', issue: '#47 Work' },
+  { path: '/portfolio/', issue: '#47 Work (now Portfolio)' },
   { path: '/ai/', issue: '#48 AI Powered' },
   { path: '/toolbox/', issue: '#50 Toolbox' },
   { path: '/contact/', issue: '#52 Contact' },

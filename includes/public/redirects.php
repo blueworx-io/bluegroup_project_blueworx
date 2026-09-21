@@ -59,6 +59,9 @@ function blueworx_public_legacy_redirects() {
 			// indexed for years, so they redirect rather than 404.
 			'pricing'   => 'support',
 			'services'  => 'support',
+
+			// Work was renamed Portfolio (2026-09).
+			'work'      => 'portfolio',
 		)
 	);
 }

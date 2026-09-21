@@ -10,8 +10,8 @@
  * labelled static placeholder here, see the note at that section below), How
  * We Work (a proc-grid part), Ongoing Partnership (`.split`, bespoke — the
  * source never reuses this collab-list/collab-visual layout elsewhere),
- * ToolboxGrid (inline: not one of the parts this task builds, and its only
- * other consumer, the Toolbox archive page, is Task 9, not this one) and
+ * the ClubHouse band (a clubhouse-band part introducing the club platform,
+ * where the Toolbox grid used to sit) and
  * Testimonials (a testimonials part fed the real review content).
  *
  * The <main><div> wrapper is required, not stylistic: globals.css targets
@@ -177,12 +177,12 @@ blueworx_public_part( 'parts/nav.php' );
 					<p class="lead"><?php echo esc_html__( 'BlueWorx is the agency behind high-performing digital solutions: websites, platforms, and automations. Strategy, design, build, hosting, and ongoing support from one dedicated team.', 'bluegroup-project-blueworx' ); ?></p>
 					<div class="hh-cta">
 						<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-white btn-lg"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
-						<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline-w btn-lg">
+						<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>" class="btn btn-outline-w btn-lg">
 							<?php
 							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.
 							echo $blueworx_home_arrow;
 							?>
-							<?php echo esc_html__( 'View Our Work', 'bluegroup-project-blueworx' ); ?>
+							<?php echo esc_html__( 'View Our Portfolio', 'bluegroup-project-blueworx' ); ?>
 						</a>
 					</div>
 					<div class="hh-stats">
@@ -264,17 +264,18 @@ blueworx_public_part( 'parts/nav.php' );
 				blueworx_public_part(
 					'parts/svc-card.php',
 					array(
-						'icon'      => 'plug',
+						'icon'      => 'server',
 						'eyebrow'   => __( 'Service 02', 'bluegroup-project-blueworx' ),
-						'title'     => __( 'Digital Toolbox', 'bluegroup-project-blueworx' ),
-						'desc'      => __( 'Every premium tool your business needs, from forms and SEO to e-commerce and automation, in one subscription with hosting included. No individual licences to manage.', 'bluegroup-project-blueworx' ),
+						'title'     => __( 'Managed Hosting', 'bluegroup-project-blueworx' ),
+						'desc'      => __( 'High-performance WordPress hosting with backups, SSL, security and updates handled by us. One price per site, and we move you across for free.', 'bluegroup-project-blueworx' ),
 						'chips'     => array(
-							__( '12+ premium tools', 'bluegroup-project-blueworx' ),
-							__( 'Hosting included', 'bluegroup-project-blueworx' ),
-							__( 'Learning Center', 'bluegroup-project-blueworx' ),
+							__( '99.9% uptime', 'bluegroup-project-blueworx' ),
+							__( 'Free migration', 'bluegroup-project-blueworx' ),
+							__( 'Daily backups', 'bluegroup-project-blueworx' ),
+							__( 'Staging included', 'bluegroup-project-blueworx' ),
 						),
-						'link_text' => __( 'Explore the Toolbox', 'bluegroup-project-blueworx' ),
-						'href'      => home_url( '/toolbox' ),
+						'link_text' => __( 'Explore Hosting', 'bluegroup-project-blueworx' ),
+						'href'      => home_url( '/hosting' ),
 					)
 				);
 				?>
@@ -286,11 +287,11 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="sec" style="padding-top:0">
 			<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:40px">
 				<div>
-					<div class="eyebrow" style="margin-bottom:20px"><?php echo esc_html__( 'Selected Work', 'bluegroup-project-blueworx' ); ?></div>
+					<div class="eyebrow" style="margin-bottom:20px"><?php echo esc_html__( 'Portfolio', 'bluegroup-project-blueworx' ); ?></div>
 					<h2 class="h2" style="max-width:560px"><?php echo esc_html__( 'Recent Projects, Real Results', 'bluegroup-project-blueworx' ); ?></h2>
 				</div>
-				<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline btn-md">
-					<?php echo esc_html__( 'View All Work', 'bluegroup-project-blueworx' ); ?>
+				<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>" class="btn btn-outline btn-md">
+					<?php echo esc_html__( 'View the Portfolio', 'bluegroup-project-blueworx' ); ?>
 					<?php
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted markup, see $blueworx_home_arrow above.
 					echo $blueworx_home_arrow;
@@ -299,42 +300,28 @@ blueworx_public_part( 'parts/nav.php' );
 			</div>
 			<div class="work-grid">
 				<?php
-				blueworx_public_part(
-					'parts/work-card.php',
-					array(
-						'img'       => 'img/feature-image-1.jpg',
-						'alt'       => __( 'Hirasté website', 'bluegroup-project-blueworx' ),
-						'tags'      => array( __( 'Web Design', 'bluegroup-project-blueworx' ), __( 'Booking Platform', 'bluegroup-project-blueworx' ) ),
-						'name'      => 'Hirasté',
-						'res_value' => __( '+64%', 'bluegroup-project-blueworx' ),
-						'res_text'  => __( 'group booking enquiries', 'bluegroup-project-blueworx' ),
-						'href'      => home_url( '/work' ),
-					)
-				);
-				blueworx_public_part(
-					'parts/work-card.php',
-					array(
-						'img'       => 'img/feature-image-3.jpg',
-						'alt'       => __( 'Padel365 website', 'bluegroup-project-blueworx' ),
-						'tags'      => array( __( 'E-commerce', 'bluegroup-project-blueworx' ), __( 'Court Booking', 'bluegroup-project-blueworx' ) ),
-						'name'      => 'Padel365',
-						'res_value' => __( 'Sold-out', 'bluegroup-project-blueworx' ),
-						'res_text'  => __( 'launch season', 'bluegroup-project-blueworx' ),
-						'href'      => home_url( '/work' ),
-					)
-				);
-				blueworx_public_part(
-					'parts/work-card.php',
-					array(
-						'img'       => 'img/feature-image-4.jpg',
-						'alt'       => __( 'QURE website', 'bluegroup-project-blueworx' ),
-						'tags'      => array( __( 'Brand', 'bluegroup-project-blueworx' ), __( 'Web Build', 'bluegroup-project-blueworx' ) ),
-						'name'      => 'QURE',
-						'res_value' => __( '+38%', 'bluegroup-project-blueworx' ),
-						'res_text'  => __( 'conversion rate', 'bluegroup-project-blueworx' ),
-						'href'      => home_url( '/work' ),
-					)
-				);
+				// The first three portfolio sites, linking out to the live site like
+				// the Portfolio page does.
+				foreach ( array_slice( blueworx_content_portfolio(), 0, 3 ) as $blueworx_home_site ) {
+					blueworx_public_part(
+						'parts/work-card.php',
+						array(
+							'img'       => 'img/portfolio/' . $blueworx_home_site['slug'] . '.jpg',
+							'alt'       => sprintf(
+								/* translators: %s: client name. */
+								__( 'The %s website', 'bluegroup-project-blueworx' ),
+								$blueworx_home_site['name']
+							),
+							'tags'      => $blueworx_home_site['tags'],
+							'name'      => $blueworx_home_site['name'],
+							'desc'      => $blueworx_home_site['sector'],
+							'res_value' => (string) wp_parse_url( $blueworx_home_site['url'], PHP_URL_HOST ),
+							'res_text'  => '↗',
+							'href'      => $blueworx_home_site['url'],
+							'external'  => true,
+						)
+					);
+				}
 				?>
 			</div>
 		</section>
@@ -523,7 +510,7 @@ blueworx_public_part( 'parts/nav.php' );
 			</div>
 		</section>
 
-		<?php blueworx_public_part( 'parts/toolbox-grid.php' ); ?>
+		<?php blueworx_public_part( 'parts/clubhouse-band.php' ); ?>
 
 		<?php
 		blueworx_public_part(

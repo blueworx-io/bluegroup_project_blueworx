@@ -14,9 +14,12 @@
  *     currency     (string, optional) ISO code. 'GBP' renders "£" and marks
  *                  the amount with data-bw-gbp so public-widgets.js can
  *                  convert it; any other code renders that currency's sign
- *                  and is never converted. Absent: "$" and no conversion
- *                  (the Toolbox plans). A live SureCart amount brings its
- *                  own currency with it (includes/public/commerce.php).
+ *                  (blueworx_public_currency_sign()) and is never converted.
+ *                  Absent: "$" and no conversion (the Toolbox plans). A live
+ *                  SureCart amount brings its own currency with it
+ *                  (includes/public/commerce.php).
+ *     setup        (int, optional) A one-off setup fee, shown under the
+ *                  price in the plan's own currency (ClubHouse).
  *     subM, subA   (string, optional) Period labels. Defaults: "per month" /
  *                  "per month, billed yearly".
  *     lbl          (string, optional) Feature-list label. Default "FEATURES".
@@ -40,18 +43,14 @@ $blueworx_pc_feat   = ! empty( $blueworx_pc_plan['feat'] );
 $blueworx_pc_pop    = isset( $blueworx_pc_plan['pop'] ) ? $blueworx_pc_plan['pop'] : false;
 $blueworx_pc_cur    = isset( $blueworx_pc_plan['currency'] ) ? strtoupper( (string) $blueworx_pc_plan['currency'] ) : 'USD';
 $blueworx_pc_gbp    = 'GBP' === $blueworx_pc_cur;
-$blueworx_pc_signs  = array(
-	'GBP' => '£',
-	'EUR' => '€',
-	'USD' => '$',
-);
-$blueworx_pc_symbol = isset( $blueworx_pc_signs[ $blueworx_pc_cur ] ) ? $blueworx_pc_signs[ $blueworx_pc_cur ] : $blueworx_pc_cur . ' ';
+$blueworx_pc_symbol = blueworx_public_currency_sign( $blueworx_pc_cur );
 $blueworx_pc_btn    = $blueworx_pc_feat ? 'plan-btn dark' : 'plan-btn out';
 $blueworx_pc_sub_m  = isset( $blueworx_pc_plan['subM'] ) ? (string) $blueworx_pc_plan['subM'] : __( 'per month', 'bluegroup-project-blueworx' );
 $blueworx_pc_sub_a  = isset( $blueworx_pc_plan['subA'] ) ? (string) $blueworx_pc_plan['subA'] : __( 'per month, billed yearly', 'bluegroup-project-blueworx' );
 $blueworx_pc_lbl    = isset( $blueworx_pc_plan['lbl'] ) ? (string) $blueworx_pc_plan['lbl'] : __( 'FEATURES', 'bluegroup-project-blueworx' );
 $blueworx_pc_buy_m  = isset( $blueworx_pc_plan['buyM'] ) ? (string) $blueworx_pc_plan['buyM'] : '';
 $blueworx_pc_buy_a  = isset( $blueworx_pc_plan['buyA'] ) ? (string) $blueworx_pc_plan['buyA'] : '';
+$blueworx_pc_setup  = isset( $blueworx_pc_plan['setup'] ) ? (float) $blueworx_pc_plan['setup'] : 0;
 $blueworx_pc_href   = '' !== $blueworx_pc_buy_m ? $blueworx_pc_buy_m : home_url( '/contact' );
 
 // The feature check glyph, ported verbatim from components/Plans.tsx.
@@ -70,6 +69,16 @@ $blueworx_pc_check = '<svg class="ck" viewBox="0 0 24 24" fill="currentColor"><p
 			<b<?php echo $blueworx_pc_gbp ? ' data-bw-gbp="' . esc_attr( (string) $blueworx_pc_plan['priceM'] ) . '"' : ''; ?>><?php echo esc_html( $blueworx_pc_symbol . number_format( (float) $blueworx_pc_plan['priceM'], 0, '.', ',' ) ); ?></b>
 			<em data-sub-m="<?php echo esc_attr( $blueworx_pc_sub_m ); ?>" data-sub-a="<?php echo esc_attr( $blueworx_pc_sub_a ); ?>"><?php echo esc_html( $blueworx_pc_sub_m ); ?></em>
 		</div>
+		<?php if ( $blueworx_pc_setup > 0 ) : ?>
+			<div class="plan-setup" data-testid="plan-setup">
+				+
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- blueworx_public_money() escapes.
+				echo blueworx_public_money( $blueworx_pc_setup, $blueworx_pc_cur );
+				?>
+				<?php esc_html_e( 'one-off setup fee', 'bluegroup-project-blueworx' ); ?>
+			</div>
+		<?php endif; ?>
 		<a href="<?php echo esc_url( $blueworx_pc_href ); ?>"
 			<?php if ( '' !== $blueworx_pc_buy_m ) : ?>
 				data-buy-m="<?php echo esc_url( $blueworx_pc_buy_m ); ?>"

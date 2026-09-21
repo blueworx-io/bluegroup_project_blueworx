@@ -80,9 +80,9 @@ function blueworx_public_pages() {
 			'title'    => __( 'Contact', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/contact.php',
 		),
-		'work'     => array(
-			'title'    => __( 'Work', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/work.php',
+		'portfolio' => array(
+			'title'    => __( 'Portfolio', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/portfolio.php',
 		),
 		'ai'       => array(
 			'title'    => __( 'AI Powered', 'bluegroup-project-blueworx' ),
@@ -190,6 +190,19 @@ function blueworx_public_install_pages() {
 		// ("toolbox/surecart"), which get_page_by_path() resolves natively.
 		$existing = get_page_by_path( $slug );
 
+		// get_page_by_path() answers with attachments too, and a media file
+		// holds its address just as a page does: on the live site a file
+		// called Support.svg sat at /support, so the Support page was never
+		// created and the menu link bounced to the home page (attachment
+		// pages are off). A file's slug only serves its attachment page —
+		// the file itself is reached by its upload URL — so it is moved
+		// aside and the page takes the address.
+		if ( $existing instanceof WP_Post && 'attachment' === $existing->post_type ) {
+			blueworx_public_move_attachment_slug_aside( $existing );
+
+			$existing = null;
+		}
+
 		if ( $existing instanceof WP_Post ) {
 			// Only re-adopt a page this plugin created. A slug collision with
 			// the site's own content is not ownership: adopting it here put a
@@ -287,6 +300,24 @@ function blueworx_public_install_pages() {
 
 	update_option( 'show_on_front', 'page' );
 	update_option( 'page_on_front', (int) $map['home'] );
+}
+
+/**
+ * Frees a media file's slug so a page can be created at that address.
+ *
+ * The file keeps its ID, title and upload URL; only the slug of its (disabled)
+ * attachment page changes, to "<slug>-file" or the next free variant.
+ *
+ * @param WP_Post $attachment The media item holding the slug.
+ * @return void
+ */
+function blueworx_public_move_attachment_slug_aside( $attachment ) {
+	wp_update_post(
+		array(
+			'ID'        => (int) $attachment->ID,
+			'post_name' => wp_unique_post_slug( $attachment->post_name . '-file', (int) $attachment->ID, $attachment->post_status, 'attachment', (int) $attachment->post_parent ),
+		)
+	);
 }
 
 /**

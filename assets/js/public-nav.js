@@ -128,7 +128,7 @@
 			return;
 		}
 
-		var LABEL = { GBP: '£ GBP', EUR: '€ EUR', USD: '$ USD' };
+		var LABEL = { GBP: '£ GBP', EUR: '€ EUR', USD: '$ USD', ZAR: 'R ZAR', AUD: 'A$ AUD', AED: 'AED' };
 		var current = 'GBP';
 
 		try {

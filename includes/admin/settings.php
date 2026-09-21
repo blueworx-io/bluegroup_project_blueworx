@@ -358,17 +358,19 @@ function blueworx_site_render_price_ids_field() {
 function blueworx_site_render_currency_rates_field() {
 	$current = blueworx_currency_rates();
 	$rates   = isset( $current['rates'] ) ? (array) $current['rates'] : array();
-	$eur     = isset( $rates['EUR'] ) ? number_format_i18n( (float) $rates['EUR'], 4 ) : '—';
-	$usd     = isset( $rates['USD'] ) ? number_format_i18n( (float) $rates['USD'], 4 ) : '—';
+	$figures = array();
+
+	foreach ( array_keys( blueworx_currency_fallback_rates() ) as $code ) {
+		$figures[] = blueworx_public_currency_sign( $code ) . ( isset( $rates[ $code ] ) ? number_format_i18n( (float) $rates[ $code ], 4 ) : '—' );
+	}
 	?>
 	<p id="blueworx_currency_rates">
 		<?php
 		echo esc_html(
 			sprintf(
-				/* translators: 1: euros per pound, 2: dollars per pound. */
-				__( '£1 = €%1$s = $%2$s', 'bluegroup-project-blueworx' ),
-				$eur,
-				$usd
+				/* translators: %s: the pound's value in each currency, e.g. "€1.1700 = $1.2700". */
+				__( '£1 = %s', 'bluegroup-project-blueworx' ),
+				implode( ' = ', $figures )
 			)
 		);
 		?>

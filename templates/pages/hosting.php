@@ -262,6 +262,14 @@ blueworx_public_part( 'parts/nav.php' );
 		</section>
 
 		<?php
+		// The reviews section every marketing page shares.
+		blueworx_public_part(
+			'parts/testimonials.php',
+			array(
+				'testimonials' => blueworx_content_reviews(),
+			)
+		);
+
 		blueworx_public_part(
 			'parts/faq-section.php',
 			array(

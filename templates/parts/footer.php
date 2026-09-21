@@ -95,7 +95,7 @@ $blueworx_footer_cta_secondary_attrs = ! empty( $blueworx_footer_cta_secondary['
 			<a href="<?php echo esc_url( home_url( '/clubhouse' ) ); ?>"><?php echo esc_html__( 'ClubHouse', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/hosting' ) ); ?>"><?php echo esc_html__( 'Hosting', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php echo esc_html__( 'Integrated Support', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/work' ) ); ?>"><?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>"><?php echo esc_html__( 'Portfolio', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 		<div class="fcol">

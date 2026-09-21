@@ -16,7 +16,10 @@
 	var CURRENCIES = {
 		GBP: { symbol: '£', rate: 1 },
 		EUR: { symbol: '€', rate: 1.17 },
-		USD: { symbol: '$', rate: 1.27 }
+		USD: { symbol: '$', rate: 1.27 },
+		ZAR: { symbol: 'R', rate: 21.8 },
+		AUD: { symbol: 'A$', rate: 1.88 },
+		AED: { symbol: 'AED ', rate: 4.66 }
 	};
 
 	( function () {
@@ -190,8 +193,10 @@
 			var pkg = packages[ Math.min( packages.length - 1, Math.max( 0, parseInt( range.value, 10 ) || 0 ) ) ];
 			var perHour = ( pkg.price * 12 ) / pkg.hours;
 			var gbp = 'GBP' === pkg.currency;
+			// Two decimals, trailing zeros dropped — the same figure
+			// blueworx_content_hours_a_month() renders on the server.
 			if ( hours ) {
-				hours.textContent = String( pkg.hours / 12 );
+				hours.textContent = String( Math.round( ( pkg.hours / 12 ) * 100 ) / 100 );
 			}
 			if ( annual ) {
 				annual.textContent = String( pkg.hours );

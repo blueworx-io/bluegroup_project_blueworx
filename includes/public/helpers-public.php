@@ -328,6 +328,8 @@ function blueworx_public_currency_sign( $currency ) {
 		'GBP' => '£',
 		'EUR' => '€',
 		'USD' => '$',
+		'ZAR' => 'R',
+		'AUD' => 'A$',
 	);
 
 	$currency = strtoupper( (string) $currency );

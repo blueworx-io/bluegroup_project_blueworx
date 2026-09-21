@@ -30,13 +30,15 @@ test.describe('Marketing home page', () => {
     await expect(svcCards).toHaveCount(2);
     await expect(svcCards.nth(0)).toContainText('Integrated Support');
     await expect(svcCards.nth(0)).toHaveAttribute('href', /\/support\/?$/);
-    await expect(svcCards.nth(1)).toContainText('Digital Toolbox');
-    await expect(svcCards.nth(1)).toHaveAttribute('href', /\/toolbox\/?$/);
+    await expect(svcCards.nth(1)).toContainText('Managed Hosting');
+    await expect(svcCards.nth(1)).toHaveAttribute('href', /\/hosting\/?$/);
 
-    // Selected Work: three work-card parts.
+    // Portfolio: the first three live sites, each opening in a new tab.
     const workCards = page.locator('main > div .work-grid > a.work-card');
     await expect(workCards).toHaveCount(3);
     await expect(workCards.nth(0)).toContainText('Hirasté');
+    await expect(workCards.nth(0)).toHaveAttribute('href', 'https://hiraste.com/');
+    await expect(workCards.nth(0)).toHaveAttribute('target', '_blank');
 
     // How We Work: proc-grid part, four steps.
     const procGrid = page.locator('main > div > section .proc-grid');
@@ -46,7 +48,7 @@ test.describe('Marketing home page', () => {
 
     // Testimonials part, fed the real blueworx_content_reviews() content.
     const testimonials = page.locator('main > div .tg > .tc');
-    await expect(testimonials).toHaveCount(4);
+    await expect(testimonials).toHaveCount(3);
     await expect(testimonials.first().locator('.tname')).not.toBeEmpty();
   });
 
@@ -72,18 +74,21 @@ test.describe('Marketing home page', () => {
     ).toBeGreaterThan(-1);
   });
 
-  test('the Toolbox band lists all 12 tools with bundled favicons', async ({ page }) => {
+  test('the dark band introduces ClubHouse where the Toolbox grid used to be', async ({ page }) => {
     await page.goto(cacheBust('/'));
 
-    const tbxCards = page.locator('main > div .tbx-grid > a.tbx-card');
-    await expect(tbxCards).toHaveCount(12);
-
-    const srcs = await tbxCards.locator('.tbx-logo img').evaluateAll((els) => els.map((el) => el.getAttribute('src')));
-    for (const src of srcs) {
-      expect(src, 'toolbox favicons must be bundled by the plugin, not fetched from Google').toMatch(
-        /\/wp-content\/plugins\/bluegroup-project-blueworx\/assets\/img\/tools\/[^/]+\.png$/
-      );
-    }
+    const band = page.locator('main > div > section.bw-ch-band');
+    await expect(band).toHaveCount(1);
+    await expect(page.locator('main > div .tbx-grid')).toHaveCount(0);
+    await expect(band.locator('h2')).toContainText('ClubHouse');
+    await expect(band.locator('.bw-ch-band-item')).toHaveCount(4);
+    // The price and the setup fee both come from blueworx_content_clubhouse()
+    // and are marked for the currency switcher.
+    await expect(band.locator('.bw-ch-band-price b [data-bw-gbp="20"]')).toHaveText('£20');
+    await expect(band.locator('.bw-ch-band-price small [data-bw-gbp="499"]')).toHaveText('£499');
+    await expect(band.locator('a.btn-brand')).toHaveAttribute('href', /\/clubhouse\/?$/);
+    const shot = band.locator('.bw-ch-band-shot img');
+    expect(await shot.getAttribute('src')).toMatch(/\/assets\/img\/clubhouse-demo-home\.jpg$/);
   });
 
   test('the Ongoing Partnership split section renders the collaboration visual', async ({ page }) => {
