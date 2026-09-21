@@ -7,7 +7,7 @@ const isPlaceholder = /placeholder/i.test(baseURL);
 // Every page the plugin installs on activation (blueworx_public_pages()). If any
 // stops resolving to the plugin's own <body class="bw-page"> document — a broken
 // template, a bad registry entry, a permalink regression — this catches it.
-const OWNED_PAGES = ['/about', '/clubhouse', '/hosting', '/support', '/contact', '/portfolio', '/ai', '/toolbox'];
+const OWNED_PAGES = ['/about', '/clubhouse', '/hosting', '/support', '/contact', '/portfolio', '/ai'];
 
 for (const path of OWNED_PAGES) {
   test(`${path} renders the plugin document`, async ({ page }) => {

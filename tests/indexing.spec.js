@@ -17,7 +17,7 @@
  * what it would list. That is the same list, taken one step earlier.
  */
 
-import { test, expect, isPlaceholder, cacheBust, login, TOOL_SLUGS } from './helpers.js';
+import { test, expect, isPlaceholder, cacheBust, login } from './helpers.js';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -30,7 +30,7 @@ const FIXTURE = join(MU_DIR, 'bw-test-indexing.php');
 const canInstallFixture = existsSync(join(WP_ROOT, 'wp-settings.php'));
 
 const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
-const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/'];
+const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/portfolio/'];
 
 const FIXTURE_PLUGIN = `<?php
 /**
@@ -210,13 +210,12 @@ test.describe('#80 What may be indexed', () => {
     const state = await (await page.request.get('/?bw_index=1')).json();
     const paths = state.sitemap.map((loc) => new URL(loc).pathname);
 
-    for (const expected of ['/about/', '/clubhouse/', '/hosting/', '/support/', '/contact/', '/portfolio/', '/ai/', '/toolbox/', '/blog/']) {
+    for (const expected of ['/about/', '/clubhouse/', '/hosting/', '/support/', '/contact/', '/portfolio/', '/ai/', '/blog/']) {
       expect(paths, `${expected} is missing from the sitemap`).toContain(expected);
     }
 
-    for (const slug of TOOL_SLUGS) {
-      expect(paths, `/toolbox/${slug}/ is missing from the sitemap`).toContain(`/toolbox/${slug}/`);
-    }
+    // The Toolbox and its twelve tool pages were retired in 1.17.0.
+    expect(paths.filter((p) => p.startsWith('/toolbox'))).toEqual([]);
 
     // The live sitemap listed addresses that 404. Anything offered to a search
     // engine has to be a page that exists.
@@ -237,7 +236,9 @@ test.describe('#80 What may be indexed', () => {
     skipPlaceholder();
 
     for (const [from, to] of [
-      ['/feature/', '/toolbox'],
+      ['/feature/', '/clubhouse'],
+      ['/toolbox/', '/clubhouse'],
+      ['/toolbox/surecart/', '/clubhouse'],
       ['/portal/', '/login'],
       ['/form/', '/contact'],
     ]) {

@@ -3,8 +3,8 @@
 // includes/public/currency.php (AED is derived from USD at the dirham's peg)
 // and are handed to the page as window.blueworxCurrency — so the expected figures here
 // are worked out from whatever rates the page was served with, not typed in.
-// Only elements marked data-bw-gbp convert, so the Toolbox's dollar prices are
-// untouched. The feed itself is covered by tests/currency-rates.spec.js.
+// Only elements marked data-bw-gbp convert. The feed itself is covered by
+// tests/currency-rates.spec.js.
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
 
@@ -77,14 +77,6 @@ test.describe('Currency switcher', () => {
       await expect(page.locator('.plan-price b')).toHaveText(money(20, rates[code], code));
       await expect(page.locator('[data-testid="plan-setup"] [data-bw-gbp]')).toHaveText(money(499, rates[code], code));
     }
-  });
-
-  test('the Toolbox dollar prices are not converted', async ({ page }) => {
-    await page.goto(cacheBust('/toolbox/'));
-    await page.locator('nav .bw-cur-btn').click();
-    await page.locator('nav .bw-cur-menu button[data-cur="EUR"]').click();
-    const first = await page.locator('.plans .plan-price b').first().textContent();
-    expect(first.startsWith('$')).toBe(true);
   });
 
   test('the menu closes after choosing a currency, on Escape, and on an outside click', async ({ page }) => {

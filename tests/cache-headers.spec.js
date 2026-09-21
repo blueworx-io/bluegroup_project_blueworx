@@ -15,7 +15,7 @@
 
 import { test, expect, isPlaceholder, cacheBust, login } from './helpers.js';
 
-const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/toolbox/', '/about/', '/toolbox/surecart/'];
+const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/about/', '/portfolio/'];
 const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
 
 const skipPlaceholder = () =>

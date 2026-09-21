@@ -1,6 +1,6 @@
 // The nav after the 2026-09 restructure: five links with ClubHouse last and
 // tagged "New", Contact as the button, About, Journal and AI Powered only in
-// the footer, no Toolbox mega panel.
+// the footer, no mega panel.
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
 

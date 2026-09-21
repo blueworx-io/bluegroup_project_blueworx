@@ -15,8 +15,8 @@
  *                  the amount with data-bw-gbp so public-widgets.js can
  *                  convert it; any other code renders that currency's sign
  *                  (blueworx_public_currency_sign()) and is never converted.
- *                  Absent: "$" and no conversion (the Toolbox plans). A live
- *                  SureCart amount brings its own currency with it
+ *                  Absent: "$" and no conversion. A live SureCart amount
+ *                  brings its own currency with it
  *                  (includes/public/commerce.php).
  *     setup        (int, optional) A one-off setup fee, shown under the
  *                  price in the plan's own currency (ClubHouse).

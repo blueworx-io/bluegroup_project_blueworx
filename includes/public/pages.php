@@ -88,31 +88,11 @@ function blueworx_public_pages() {
 			'title'    => __( 'AI Powered', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/ai.php',
 		),
-		'toolbox'  => array(
-			'title'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/toolbox.php',
-		),
 		'blog'     => array(
 			'title'    => __( 'Journal', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/blog.php',
 		),
 	);
-
-	// One entry per Toolbox tool, keyed by its FULL hierarchical path
-	// ("toolbox/<slug>") so get_page_by_path() (blueworx_public_install_pages())
-	// resolves it natively and the registry stays the single source of truth —
-	// content.php's 12 tools are never hand-transcribed here. content.php is
-	// required before this file in includes/public/bootstrap.php, so
-	// blueworx_content_tools() is available wherever this function runs (init,
-	// query time, activation).
-	foreach ( blueworx_content_tools() as $blueworx_tool ) {
-		$pages[ 'toolbox/' . $blueworx_tool['slug'] ] = array(
-			'title'    => $blueworx_tool['name'],
-			'template' => 'pages/single-tool.php',
-			'slug'     => $blueworx_tool['slug'], // Child post_name.
-			'parent'   => 'toolbox', // Registry key of the parent page.
-		);
-	}
 
 	return (array) apply_filters( 'blueworx_public_pages', $pages );
 }

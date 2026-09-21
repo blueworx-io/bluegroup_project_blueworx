@@ -64,12 +64,11 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/bootstrap.php';
 // front end too or the portal cannot read a client's own records.
 require_once BLUEWORX_SITE_PATH . 'includes/records.php';
 
-// The admin surfaces: the settings screen, the Toolbox listing, and the field
+// The admin surfaces: the settings screen and the field
 // boxes for the two registers. Nothing on the front end needs any of them, so
 // they are not loaded for a public request.
 if ( is_admin() ) {
 	require_once BLUEWORX_SITE_PATH . 'includes/admin/settings.php';
-	require_once BLUEWORX_SITE_PATH . 'includes/admin/toolbox-menu.php';
 	require_once BLUEWORX_SITE_PATH . 'includes/admin/records-admin.php';
 }
 

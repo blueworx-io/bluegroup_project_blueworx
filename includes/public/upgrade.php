@@ -69,8 +69,8 @@ add_action( 'plugins_loaded', 'blueworx_public_maybe_upgrade' );
  * Every page the site has is created from the registry in
  * blueworx_public_pages(), and until now the only two things that ran that
  * installer were activation and a data-version bump. Neither fires on an
- * ordinary in-place update, so a release that added a page — a new Toolbox
- * tool, say — shipped the link, the template and the nav entry, and no page.
+ * ordinary in-place update, so a release that added a page — a new product
+ * page, say — shipped the link, the template and the nav entry, and no page.
  * The result is a dead link on a live site that no amount of front-end work
  * explains, and a data-version bump every single release to work around it.
  *
@@ -108,6 +108,16 @@ function blueworx_public_maybe_install_pages() {
 add_action( 'init', 'blueworx_public_maybe_install_pages', 5 );
 
 /**
+ * The twelve Toolbox tool slugs, kept only so their pages can be retired and
+ * their addresses redirected now the Toolbox itself is gone (1.17.0).
+ *
+ * @return string[]
+ */
+function blueworx_public_retired_tool_slugs() {
+	return array( 'sureforms', 'surerank', 'suremail', 'surewriter', 'surecart', 'zipwp', 'ottokit', 'ally', 'sweet-ai', 'elementor-ai-planner', 'elementor', 'equalize-a11y-checker' );
+}
+
+/**
  * Trashes the pages a release removed from the registry.
  *
  * A registry entry that disappears leaves its page behind: published, in the
@@ -123,7 +133,15 @@ add_action( 'init', 'blueworx_public_maybe_install_pages', 5 );
  */
 function blueworx_public_retire_removed_pages() {
 	$map     = (array) get_option( 'blueworx_public_page_ids', array() );
-	$retired = array( 'pricing', 'services', 'work' );
+	$retired = array_merge(
+		array( 'pricing', 'services', 'work', 'toolbox', 'dashboard/toolbox' ),
+		array_map(
+			function ( $slug ) {
+				return 'toolbox/' . $slug;
+			},
+			blueworx_public_retired_tool_slugs()
+		)
+	);
 	$changed = false;
 
 	foreach ( $retired as $slug ) {

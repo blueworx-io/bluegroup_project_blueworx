@@ -62,9 +62,9 @@ test.describe('Showcase — feature tabs', () => {
     const root = page.locator('[data-widget="feature-tabs"]');
     await expect(root.locator('.af-text h2')).toHaveText('Support Guides');
 
-    await root.locator('.tab-bar .tab', { hasText: 'Toolbox' }).click();
-    await expect(root.locator('.af-text h2')).toHaveText('Digital Toolbox');
-    await expect(root.locator('.af-text a')).toHaveAttribute('href', /\/toolbox/);
+    await root.locator('.tab-bar .tab', { hasText: 'ClubHouse' }).click();
+    await expect(root.locator('.af-text h2')).toHaveText('ClubHouse');
+    await expect(root.locator('.af-text a')).toHaveAttribute('href', /\/clubhouse/);
 
     await root.locator('.tab-bar .tab', { hasText: 'Hosting' }).click();
     await expect(root.locator('.af-text h2')).toHaveText('Website Hosting');

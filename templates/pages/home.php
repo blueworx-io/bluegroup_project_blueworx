@@ -11,7 +11,7 @@
  * We Work (a proc-grid part), Ongoing Partnership (`.split`, bespoke — the
  * source never reuses this collab-list/collab-visual layout elsewhere),
  * the ClubHouse band (a clubhouse-band part introducing the club platform,
- * where the Toolbox grid used to sit) and
+ * in the dark band) and
  * Testimonials (a testimonials part fed the real review content).
  *
  * The <main><div> wrapper is required, not stylistic: globals.css targets
@@ -347,11 +347,11 @@ blueworx_public_part( 'parts/nav.php' );
 				'value'   => '120,456',
 			),
 			array(
-				'label'   => __( 'Toolbox', 'bluegroup-project-blueworx' ),
-				'heading' => __( 'Digital Toolbox', 'bluegroup-project-blueworx' ),
-				'desc'    => __( 'Access a curated set of tools that power your website, automations, and integrations, all set up, managed, and maintained for you.', 'bluegroup-project-blueworx' ),
-				'cta'     => __( 'View Toolbox', 'bluegroup-project-blueworx' ),
-				'href'    => home_url( '/toolbox' ),
+				'label'   => __( 'ClubHouse', 'bluegroup-project-blueworx' ),
+				'heading' => __( 'ClubHouse', 'bluegroup-project-blueworx' ),
+				'desc'    => __( 'A ready-made club website platform: memberships, fixtures, bookings, events and a club shop, all set up, hosted and maintained for you.', 'bluegroup-project-blueworx' ),
+				'cta'     => __( 'View ClubHouse', 'bluegroup-project-blueworx' ),
+				'href'    => home_url( '/clubhouse' ),
 				'color'   => '#A5A7FF',
 				'pts'     => '120 96 112 60 84 46 72 54 62',
 				'value'   => '245,877',
@@ -371,8 +371,8 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="features-dark" data-widget="feature-tabs">
 			<div class="blob" style="width:360px;height:360px;top:-120px;right:-120px;opacity:.14"></div>
 			<div class="fd-header">
-				<h2 class="h2"><?php echo esc_html__( 'One Platform. Every Tool. Real Results.', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="fd-sub"><?php echo esc_html__( 'Every BlueWorx build ships on a managed platform with tools, hosting, and support included, so your site keeps performing long after launch.', 'bluegroup-project-blueworx' ); ?></p>
+				<h2 class="h2"><?php echo esc_html__( 'One Team. Every Service. Real Results.', 'bluegroup-project-blueworx' ); ?></h2>
+				<p class="fd-sub"><?php echo esc_html__( 'Every BlueWorx build ships on managed hosting with support included, and ClubHouse gives clubs a whole platform, so your site keeps performing long after launch.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="tab-bar">
 				<?php foreach ( $blueworx_home_feature_tabs as $blueworx_home_ft_i => $blueworx_home_ft_tab ) : ?>
@@ -461,7 +461,7 @@ blueworx_public_part( 'parts/nav.php' );
 						array(
 							'num'   => '03',
 							'title' => __( 'Scope, Design & Build', 'bluegroup-project-blueworx' ),
-							'desc'  => __( 'We scope, design, and build your digital solution, powered by the BlueWorx Toolbox.', 'bluegroup-project-blueworx' ),
+							'desc'  => __( 'We scope, design, and build your digital solution on managed BlueWorx hosting.', 'bluegroup-project-blueworx' ),
 						),
 						array(
 							'num'   => '04',

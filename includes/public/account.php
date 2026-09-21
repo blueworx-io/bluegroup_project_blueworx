@@ -86,15 +86,6 @@ function blueworx_account_sections() {
 			'template' => 'pages/dashboard-websites.php',
 			'blurb'    => __( 'The sites we look after for you, and where each one is.', 'bluegroup-project-blueworx' ),
 		),
-		'toolbox'       => array(
-			'label'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
-			'title'    => __( 'Your Toolbox', 'bluegroup-project-blueworx' ),
-			'kicker'   => __( 'Your plan', 'bluegroup-project-blueworx' ),
-			'group'    => __( 'Your plan', 'bluegroup-project-blueworx' ),
-			'icon'     => 'plug',
-			'template' => 'pages/dashboard-toolbox.php',
-			'blurb'    => __( 'The premium tools included with your plan.', 'bluegroup-project-blueworx' ),
-		),
 		// Grouped headings are emitted when the group CHANGES, so every section
 		// in a group must sit together in this array. Partner between details
 		// and support would print "Account" twice.

@@ -39,6 +39,7 @@ test.describe('Marketing home page', () => {
     await expect(workCards.nth(0)).toContainText('Hirasté');
     await expect(workCards.nth(0)).toHaveAttribute('href', 'https://hiraste.com/');
     await expect(workCards.nth(0)).toHaveAttribute('target', '_blank');
+    await expect(workCards.nth(2)).toContainText('Top Tier Tutors');
 
     // How We Work: proc-grid part, four steps.
     const procGrid = page.locator('main > div > section .proc-grid');

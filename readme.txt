@@ -12,7 +12,7 @@ The BlueWorx public marketing site, rendered by the plugin itself so it is ident
 
 == Description ==
 
-BlueWorx | Marketing Site is the public-facing blueworx.io marketing site packaged as a self-contained WordPress plugin. The plugin renders every page itself — home, services, work, pricing, about, contact, the AI page, and the toolbox — rather than relying on a theme, so the site looks the same on any host.
+BlueWorx | Marketing Site is the public-facing blueworx.io marketing site packaged as a self-contained WordPress plugin. The plugin renders every page itself — home, ClubHouse, hosting, support, portfolio, about, contact, the AI page and the journal — rather than relying on a theme, so the site looks the same on any host.
 
 It is fully self-contained: no theme is required, and it has no dependency on any other plugin. On plugin-owned pages it loads only its own styles and scripts and steps aside from the active theme's stylesheet, so it never restyles content it does not own.
 
@@ -49,6 +49,7 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 * Fixed the Support page not loading on the live site: a media file held the /support address, so the page was never created. The installer now moves the file's slug aside.
 * Added rand, Australian dollars and dirhams to the currency switcher.
 * Work is now Portfolio, listing eleven live client sites with screenshots; /work redirects there.
+* The Toolbox is gone: its pages, portal tab and admin screen are removed and every mention now points at ClubHouse; the old addresses redirect there.
 * The home page introduces ClubHouse where the Toolbox grid was, and its second service card is Managed Hosting.
 * ClubHouse shows its £499 one-off setup fee. Support package hours match the catalogue.
 * One reviews section, three reviews, the same on every page. ClubHouse module icons sit inside their tiles again.

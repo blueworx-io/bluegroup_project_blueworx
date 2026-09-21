@@ -7,9 +7,9 @@ import { test, isPlaceholder, cacheBust } from './helpers.js';
 const SITES = [
   'https://hiraste.com/',
   'https://padlx.com.au/',
+  'https://toptiertutors.co.za/',
   'https://worldsquashofficiating.com/',
   'https://fifthmovement.co.uk/',
-  'https://toptiertutors.co.za/',
   'https://forumlightingsolutions.com/',
   'https://thechange.work/',
   'https://jens-pflueger.de/en/',

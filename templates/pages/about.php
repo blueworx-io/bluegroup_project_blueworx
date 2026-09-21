@@ -68,8 +68,8 @@ $blueworx_about_stats = array(
 		'label' => __( 'Revenue Handled', 'bluegroup-project-blueworx' ),
 	),
 	array(
-		'value' => __( '2K +', 'bluegroup-project-blueworx' ),
-		'label' => __( 'Toolbox Value', 'bluegroup-project-blueworx' ),
+		'value' => __( '99.9%', 'bluegroup-project-blueworx' ),
+		'label' => __( 'Uptime Maintained', 'bluegroup-project-blueworx' ),
 	),
 );
 

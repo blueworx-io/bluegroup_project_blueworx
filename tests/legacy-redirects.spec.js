@@ -6,7 +6,7 @@
  *
  *   /shop      → /support   (#22 — rendered the home page; the site has no shop)
  *   /about-us  → /about     (#23 — duplicate of the plugin's own About page)
- *   /features  → /toolbox   (#24 — overlapped Toolbox and Services)
+ *   /features  → /clubhouse (#24 — overlapped Toolbox and Services; Toolbox itself retired in 1.17.0)
  *   /test-page → /          (#25 — a test page that was publicly reachable)
  *
  * The 2026-09 restructure retired two more: Pricing became Integrated Support
@@ -33,7 +33,7 @@ const isPlaceholder = /placeholder/i.test(baseURL);
 const REDIRECTS = [
   { from: '/shop', to: '/support' },
   { from: '/about-us', to: '/about' },
-  { from: '/features', to: '/toolbox' },
+  { from: '/features', to: '/clubhouse' },
   { from: '/test-page', to: '/' },
   // 2026-09 restructure: Pricing became Integrated Support; Services was
   // folded into the three product pages.
@@ -41,6 +41,12 @@ const REDIRECTS = [
   { from: '/services', to: '/support' },
   // Work was renamed Portfolio.
   { from: '/work', to: '/portfolio' },
+  // The Toolbox was retired in favour of ClubHouse: the product page, its
+  // twelve tool pages and the portal tab.
+  { from: '/toolbox', to: '/clubhouse' },
+  { from: '/toolbox/surecart', to: '/clubhouse' },
+  { from: '/toolbox/equalize-a11y-checker', to: '/clubhouse' },
+  { from: '/dashboard/toolbox', to: '/dashboard' },
 ];
 
 for (const { from, to } of REDIRECTS) {
@@ -89,11 +95,11 @@ test('a redirect preserves the query string', async ({ request }) => {
 
 // The guard that matters most: a path-matching redirect that is too greedy
 // takes out a real page. /about is one character away from /about-us, and
-// /toolbox is the parent of twelve live tool pages.
+// /portfolio must survive /work going.
 test('pages the plugin owns are not redirected', async ({ request }) => {
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
 
-  for (const path of ['/about/', '/toolbox/', '/support/', '/toolbox/surecart/', '/']) {
+  for (const path of ['/about/', '/clubhouse/', '/support/', '/portfolio/', '/']) {
     const response = await request.get(path, { maxRedirects: 0 });
     expect(response.status(), `expected ${path} to render, not redirect`).toBe(200);
   }

@@ -2,10 +2,9 @@
 /**
  * Site navigation template part.
  *
- * Ported from Nav.tsx. As of the 2026-09 restructure the Toolbox mega panel
- * and the About Us dropdown are gone — About and Journal now live only in
- * the footer (templates/parts/footer.php), and the nav no longer reads the
- * Toolbox tools registry at all. What remains of the original port is the
+ * Ported from Nav.tsx. As of the 2026-09 restructure the mega panel and the
+ * About Us dropdown are gone — About and Journal now live only in the footer
+ * (templates/parts/footer.php). What remains of the original port is the
  * mobile menu: the React source only mounts it while open, but a plain
  * document cannot slide open an element that does not exist yet, so this
  * renders it unconditionally and relies on assets/js/public-nav.js to toggle

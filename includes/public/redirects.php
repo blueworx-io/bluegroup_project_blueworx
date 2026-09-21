@@ -41,7 +41,7 @@ function blueworx_public_legacy_redirects() {
 		array(
 			'shop'      => 'support',
 			'about-us'  => 'about',
-			'features'  => 'toolbox',
+			'features'  => 'clubhouse',
 			'test-page' => '',
 
 			// Leftovers found in the live sitemap (#80). /feature and /portal
@@ -50,7 +50,7 @@ function blueworx_public_legacy_redirects() {
 			// /products/… paths already bounced somewhere via a rule nobody
 			// could review; they are named here so the destination is written
 			// down and behaves the same on every environment.
-			'feature'   => 'toolbox',
+			'feature'   => 'clubhouse',
 			'portal'    => 'login',
 			'form'      => 'contact',
 
@@ -62,6 +62,19 @@ function blueworx_public_legacy_redirects() {
 
 			// Work was renamed Portfolio (2026-09).
 			'work'      => 'portfolio',
+
+			// The Toolbox was retired in favour of ClubHouse (2026-09): the
+			// product page, its twelve tool pages and the portal tab.
+			'toolbox'           => 'clubhouse',
+			'dashboard/toolbox' => 'dashboard',
+		) + array_fill_keys(
+			array_map(
+				function ( $slug ) {
+					return 'toolbox/' . $slug;
+				},
+				blueworx_public_retired_tool_slugs()
+			),
+			'clubhouse'
 		)
 	);
 }

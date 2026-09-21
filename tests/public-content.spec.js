@@ -57,56 +57,6 @@ ${body}
 // browser nor a live WordPress target, matching the hermetic suites at the
 // bottom of tests/public-site.spec.js.
 test.describe('Content data layer (includes/public/content.php)', () => {
-  test('blueworx_content_tools() returns 12 tools, each with exactly 6 features', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
-
-    expect(tools, 'must return exactly 12 tools').toHaveLength(12);
-    for (const tool of tools) {
-      expect(
-        tool.features,
-        `tool "${tool.slug}" must have exactly 6 features`
-      ).toHaveLength(6);
-      for (const feature of tool.features) {
-        expect(Object.keys(feature).sort()).toEqual(['desc', 'icon', 'title']);
-      }
-      expect(Object.prototype.hasOwnProperty.call(tool, 'btn'), 'no tool carries a raw btn class').toBe(false);
-    }
-  });
-
-  test('surecart is the only tool marked popular', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
-
-    const popular = tools.filter((tool) => true === tool.popular).map((tool) => tool.slug);
-    expect(popular, 'only surecart may be popular').toEqual(['surecart']);
-  });
-
-  test('every tool slug has a matching solo_prices entry (fixtures parity)', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
-    const prices = runContentPhp('echo json_encode( blueworx_content_solo_prices() );');
-
-    const toolSlugs = tools.map((tool) => tool.slug).sort();
-    const priceSlugs = Object.keys(prices).sort();
-    expect(priceSlugs, 'solo_prices must have exactly one entry per tool, no more, no fewer').toEqual(toolSlugs);
-  });
-
-  test('blueworx_content_tool() returns a single tool by slug, or null', () => {
-    const surecart = runContentPhp("echo json_encode( blueworx_content_tool( 'surecart' ) );");
-    expect(surecart.slug).toBe('surecart');
-    expect(surecart.popular).toBe(true);
-
-    const missing = runContentPhp("echo json_encode( blueworx_content_tool( 'does-not-exist' ) );");
-    expect(missing).toBeNull();
-  });
-
-  test('blueworx_content_toolbox_plans() returns 3 plans with no btn field', () => {
-    const plans = runContentPhp('echo json_encode( blueworx_content_toolbox_plans() );');
-    expect(plans).toHaveLength(3);
-    for (const plan of plans) {
-      expect(plan).not.toHaveProperty('btn');
-      expect(plan.features.length).toBeGreaterThan(0);
-    }
-  });
-
   test('blueworx_content_support_packages() returns the nine GBP packages in order', () => {
     const packages = runContentPhp('echo json_encode( blueworx_content_support_packages() );');
     expect(packages.map((p) => [p.name, p.hours, p.priceM])).toEqual([
@@ -180,9 +130,6 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     // this guards against.
     const src = readFileSync(CONTENT_PHP, 'utf8');
     const expectedFilters = [
-      'blueworx_content_tools',
-      'blueworx_content_solo_prices',
-      'blueworx_content_toolbox_plans',
       // blueworx_content_support_packages() deliberately fires the
       // blueworx_content_retainer_plans filter (kept for the SureCart wiring
       // configured under that name), so that tag — not a

@@ -36,7 +36,7 @@ test.describe('Marketing about page', () => {
     await expect(stats.nth(1)).toContainText('82+');
     await expect(stats.nth(1)).toContainText('Projects Completed');
     await expect(stats.nth(2)).toContainText('100k +');
-    await expect(stats.nth(3)).toContainText('2K +');
+    await expect(stats.nth(3)).toContainText('99.9%');
 
     // Our Team: three team cards.
     const teamCards = page.locator('main > div .team-grid > .team-card');

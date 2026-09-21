@@ -556,22 +556,11 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 .collab-chip small { font-size: 11px; color: #667085; display: block; }
 .collab-chip b { font-size: 16px; color: #0A0C29; }
 
-/* digital toolbox dark grid */
+/* dark band (the ClubHouse block on the home page) */
 .tbx { background: #0A0C29; padding: 116px var(--gut); position: relative; overflow: hidden; }
 .tbx-head { text-align: center; max-width: 620px; margin: 0 auto 52px; }
 .tbx-head h2 { color: #fff; }
 .tbx-head p { font-size: 18px; line-height: 1.7; color: rgba(255,255,255,.66); margin-top: 16px; }
-.tbx-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-.tbx-card { background: rgba(255,255,255,.045); backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%); border-radius: 16px; padding: 24px; min-height: 208px; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.07); transition: transform .3s cubic-bezier(.2,.7,.2,1), background .3s ease, border-color .3s ease, box-shadow .3s ease; cursor: pointer; }
-.tbx-card:hover { transform: translateY(-6px); background: rgba(255,255,255,.09); border-color: rgba(165,167,255,.42); box-shadow: 0 22px 54px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.14); }
-.tbx-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.tbx-logo { width: 52px; height: 52px; border-radius: 13px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; box-shadow: 0 6px 16px rgba(0,0,0,.28); }
-.tbx-logo img { width: 30px; height: 30px; object-fit: contain; display: block; }
-.tbx-arrow { color: rgba(255,255,255,.4); flex-shrink: 0; transition: color .2s, transform .2s; }
-.tbx-card:hover .tbx-arrow { color: #A5A7FF; transform: translate(2px,-2px); }
-.tbx-arrow svg { width: 22px; height: 22px; }
-.tbx-card h3 { font-size: 19px; font-weight: 600; color: #fff; margin: 24px 0 6px; }
-.tbx-card p { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,.62); }
 
 /* ===== v2 overhaul ===== */
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -625,8 +614,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 .why-grid { grid-template-columns: 1fr 1fr; }
 .collab-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
 .sv-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-.pt-tool-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.pt-tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 
 /* ===== responsive ===== */
 @media (max-width: 1400px) {
@@ -675,7 +662,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .tech-hero { padding-top: 84px; padding-bottom: 76px; }
   .tech-hero.pb-tall { padding-bottom: 210px; }
   .tech-2col .glass-wrap { margin-top: 8px; }
-  .tbx-grid { grid-template-columns: 1fr 1fr; }
   .collab-visual { min-height: 340px; }
   .tbx { padding-top: 60px; padding-bottom: 60px; }
   .gr-cards { grid-template-columns: 1fr 1fr; }
@@ -724,7 +710,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .pt-platform { grid-template-columns: 1fr; }
   .pt-table { display: block; overflow-x: auto; }
   .pt-table th, .pt-table td { white-space: nowrap; }
-  .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 700px) {
   .sv-tools { grid-template-columns: 1fr; }
@@ -732,11 +717,11 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .tab { flex: 1 1 auto; padding: 0 18px; }
 }
 @media (max-width: 560px) {
-  .gr-cards, .ft, .tbx-grid, .proc-grid { grid-template-columns: 1fr; }
+  .gr-cards, .ft, .proc-grid { grid-template-columns: 1fr; }
   .frow { grid-template-columns: 1fr; }
   .cta-actions .btn, .hero-cta .btn { width: 100%; }
   .pt-stats { grid-template-columns: 1fr 1fr; }
-  .collab-list, .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr; }
+  .collab-list { grid-template-columns: 1fr; }
 }
 
 /* ===== AI Powered page ===== */
@@ -865,7 +850,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 }
 
 /* portal toolbox / learning card hover (ported from inline style-hover in the design export) */
-.pt-tool-link:hover { border-color: #C7C9F5 !important; box-shadow: 0 8px 22px rgba(10,12,41,.07); }
 
 /* buttons rendered as links (Next.js <Link>) must not inherit anchor underlines */
 a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
@@ -1246,17 +1230,6 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
 .dash-tb-state .dash-card-sub { padding-bottom: 22px; }
 .dash-tb-state .dash-card-sub + .btn { margin-top: 0; }
 
-.dash-tools { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 14px; }
-.dash-tool { min-width: 0; }
-.dash-tool-link { display: flex; align-items: center; gap: 13px; padding: 15px 16px; background: #fff; border: 1px solid var(--dash-line); border-radius: 14px; text-decoration: none; color: inherit; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
-.dash-tool-link:hover { border-color: #C9CBFF; box-shadow: var(--sh-2); transform: translateY(-2px); }
-.dash-tool-logo { width: 40px; height: 40px; border-radius: 11px; background: #F5F6FB; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.dash-tool-logo img { width: 24px; height: 24px; object-fit: contain; }
-.dash-tool-text { min-width: 0; flex: 1; }
-.dash-tool-name { display: block; font-size: 14.5px; font-weight: 650; color: var(--ink); }
-.dash-tool-desc { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.45; color: #8A8D99; }
-.dash-tool-state { flex-shrink: 0; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8A8D99; background: #F5F6FB; border-radius: 100px; padding: 5px 10px; }
-.dash-tool-state.on { color: #01824C; background: #ECFDF3; }
 
 @media (max-width: 900px) {
   .dash-field-row { grid-template-columns: 1fr; }

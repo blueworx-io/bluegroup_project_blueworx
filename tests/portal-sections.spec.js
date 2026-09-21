@@ -1,5 +1,6 @@
 /**
- * The portal's details, support and toolbox sections (#97, #98, #99).
+ * The portal's details and support sections (#97, #98). The toolbox section
+ * (#99) went with the Toolbox in 1.17.0.
  *
  * These are the first pages in the client area that accept input rather than
  * only showing what we already hold, so most of what is checked here is about
@@ -12,7 +13,7 @@
  * unlabelled fields. This covers behaviour.
  */
 
-import { test, expect, login, cacheBust, isPlaceholder, TOOL_SLUGS } from './helpers.js';
+import { test, expect, login, cacheBust, isPlaceholder } from './helpers.js';
 
 test.describe('#97 Your details', () => {
   test.beforeEach(async ({ page }) => {
@@ -156,39 +157,5 @@ test.describe('#98 Support', () => {
 
     const mailto = await page.locator('.dash-contact a').getAttribute('href');
     expect(mailto).toMatch(/^mailto:.+@.+/);
-  });
-});
-
-test.describe('#99 Your toolbox', () => {
-  test.beforeEach(async ({ page }) => {
-    test.skip(isPlaceholder, 'No real WordPress target configured.');
-    await login(page);
-  });
-
-  test('lists every tool in the registry, and each links to its page', async ({ page }) => {
-    await page.goto(cacheBust('/dashboard/toolbox/'));
-
-    await expect(page.locator('.dash-tool')).toHaveCount(TOOL_SLUGS.length);
-
-    const hrefs = await page
-      .locator('.dash-tool-link')
-      .evaluateAll((links) => links.map((a) => new URL(a.href).pathname.replace(/\/$/, '')));
-
-    for (const slug of TOOL_SLUGS) {
-      expect(hrefs, `${slug} is missing from the portal toolbox`).toContain(`/toolbox/${slug}`);
-    }
-  });
-
-  test('says one thing about the account, not twelve different things', async ({ page }) => {
-    await page.goto(cacheBust('/dashboard/toolbox/'));
-
-    // Every plan includes every tool, so the state is per-account. A page where
-    // some tools read "Included" and others do not would be showing a client an
-    // entitlement the site does not actually track.
-    const states = await page
-      .locator('.dash-tool-state')
-      .evaluateAll((els) => [...new Set(els.map((el) => el.textContent.trim()))]);
-
-    expect(states).toHaveLength(1);
   });
 });

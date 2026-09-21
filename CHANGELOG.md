@@ -26,10 +26,19 @@ headlessly from Netlify.
 - **ClubHouse's £499 setup fee** is shown on its plan card, in its hero and on
   the home page block, and converts with the currency switcher.
 
+### Removed
+
+- **The Toolbox.** The Toolbox page, its twelve tool pages, the portal's
+  Toolbox tab and the admin Toolbox screen are gone; every mention of it on
+  the site now points at ClubHouse. /toolbox, /toolbox/<tool>, /features and
+  /feature redirect to ClubHouse and /dashboard/toolbox to the dashboard. The
+  old pages are moved to the bin, not deleted.
+
 ### Changed
 
 - The home page's second service card is now Managed Hosting instead of the
-  Digital Toolbox.
+  Digital Toolbox, and the feature tabs show ClubHouse in its place. Top Tier
+  Tutors is the third project card.
 - The reviews are three real Trustpilot reviews. The section is the same on every page it appears on,
   and now also sits on the Hosting, Support and ClubHouse pages.
 - Support package hours match the catalogue: Scale 75, Enhance 105, Growth

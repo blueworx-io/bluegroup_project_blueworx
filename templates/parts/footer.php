@@ -87,7 +87,7 @@ $blueworx_footer_cta_secondary_attrs = ! empty( $blueworx_footer_cta_secondary['
 			<?php else : ?>
 				<span class="bw-footer-logo-text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 			<?php endif; ?>
-			<p><?php echo esc_html__( 'BlueWorx supports growing businesses worldwide with premium tools, hosting, and expert support.', 'bluegroup-project-blueworx' ); ?></p>
+			<p><?php echo esc_html__( 'BlueWorx supports growing businesses and clubs worldwide with websites, hosting, ClubHouse and expert support.', 'bluegroup-project-blueworx' ); ?></p>
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'Pages', 'bluegroup-project-blueworx' ); ?></h3>

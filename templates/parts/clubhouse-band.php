@@ -2,8 +2,7 @@
 /**
  * Dark ClubHouse band (`.tbx.bw-ch-band`), used by the Home page.
  *
- * Replaces the Toolbox grid that used to sit here (2026-09): the same dark
- * band, now introducing ClubHouse — the demo home page beside four of the
+ * The dark band that used to hold the Toolbox grid (2026-09), now introducing ClubHouse — the demo home page beside four of the
  * nine modules, the price with its setup fee, and two buttons. Content comes
  * from blueworx_content_clubhouse(), so the modules and prices can never
  * drift from the ClubHouse page's own.
