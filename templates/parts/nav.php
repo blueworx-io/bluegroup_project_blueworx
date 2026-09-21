@@ -89,7 +89,7 @@ $blueworx_nav_currency = '
 			<button type="button" role="option" data-cur="EUR">€ EUR<i>' . esc_html__( 'Euro', 'bluegroup-project-blueworx' ) . '</i></button>
 			<button type="button" role="option" data-cur="USD">$ USD<i>' . esc_html__( 'Dollar', 'bluegroup-project-blueworx' ) . '</i></button>
 			<button type="button" role="option" data-cur="ZAR">R ZAR<i>' . esc_html__( 'Rand', 'bluegroup-project-blueworx' ) . '</i></button>
-			<button type="button" role="option" data-cur="AUD">A$ AUD<i>' . esc_html__( 'Australian dollar', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="AUD">A$ AUD<i>' . esc_html__( 'Aus dollar', 'bluegroup-project-blueworx' ) . '</i></button>
 			<button type="button" role="option" data-cur="AED">AED<i>' . esc_html__( 'Dirham', 'bluegroup-project-blueworx' ) . '</i></button>
 		</div>
 	</div>';
