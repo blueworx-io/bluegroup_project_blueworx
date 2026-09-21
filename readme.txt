@@ -47,7 +47,7 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 
 = 1.16.0 =
 * Added three product pages: ClubHouse (the club website platform), Hosting (managed WordPress hosting) and Integrated Support (nine support packages with a slider and a comparison table).
-* The menu is now Home, ClubHouse, Hosting, Support, Work and AI Powered, with Contact as the header button.
+* The menu is now Home, Hosting, Support, Work and ClubHouse, with Contact as the header button. AI Powered, About and the Journal are in the footer.
 * Added a currency switcher so prices can show in GBP, EUR or USD, at the European Central Bank's daily rates.
 * Pricing and Services now redirect to Support; the old pages are moved to the bin rather than deleted.
 * Fixed FAQ answers collapsing to nothing when opened, and the "Popular" plan badge being white on white.

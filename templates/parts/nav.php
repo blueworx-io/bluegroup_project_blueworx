@@ -67,13 +67,14 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 ?>
 <?php
 // One list, rendered twice (desktop row and mobile panel), so the two can
-// never disagree about what the site's pages are.
+// never disagree about what the site's pages are. ClubHouse is last and
+// carries the "New" tag; AI Powered lives in the footer only.
 $blueworx_nav_items = array(
 	array( '/', __( 'Home', 'bluegroup-project-blueworx' ), home_url( '/' ) ),
-	array( '/clubhouse', __( 'ClubHouse', 'bluegroup-project-blueworx' ), home_url( '/clubhouse' ) ),
 	array( '/hosting', __( 'Hosting', 'bluegroup-project-blueworx' ), home_url( '/hosting' ) ),
 	array( '/support', __( 'Support', 'bluegroup-project-blueworx' ), home_url( '/support' ) ),
 	array( '/work', __( 'Work', 'bluegroup-project-blueworx' ), home_url( '/work' ) ),
+	array( '/clubhouse', __( 'ClubHouse', 'bluegroup-project-blueworx' ), home_url( '/clubhouse' ), true ),
 );
 
 // The currency switcher, rendered in the desktop cluster and again in the
@@ -101,9 +102,8 @@ $blueworx_nav_currency = '
 	</a>
 	<div class="nav-links">
 		<?php foreach ( $blueworx_nav_items as $blueworx_nav_item ) : ?>
-			<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"><?php echo esc_html( $blueworx_nav_item[1] ); ?></a>
+			<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"<?php echo ! empty( $blueworx_nav_item[3] ) ? ' style="gap:7px"' : ''; ?>><?php echo esc_html( $blueworx_nav_item[1] ); ?><?php if ( ! empty( $blueworx_nav_item[3] ) ) : ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span><?php endif; ?></a>
 		<?php endforeach; ?>
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>" style="gap:7px"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
 	</div>
 	<div class="nav-cta">
 		<a class="nav-sign-in" href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
@@ -124,9 +124,8 @@ $blueworx_nav_currency = '
 </nav>
 <div class="mobile-menu">
 	<?php foreach ( $blueworx_nav_items as $blueworx_nav_item ) : ?>
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"><?php echo esc_html( $blueworx_nav_item[1] ); ?></a>
+		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"><?php echo esc_html( $blueworx_nav_item[1] ); ?><?php if ( ! empty( $blueworx_nav_item[3] ) ) : ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span><?php endif; ?></a>
 	<?php endforeach; ?>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
 	<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 	<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?></a>
 	<?php

@@ -1,20 +1,24 @@
-// The nav after the 2026-09 restructure: six links, Contact as the button,
-// About and Journal only in the footer, no Toolbox mega panel.
+// The nav after the 2026-09 restructure: five links with ClubHouse last and
+// tagged "New", Contact as the button, About, Journal and AI Powered only in
+// the footer, no Toolbox mega panel.
 import { expect } from '@playwright/test';
 import { test, isPlaceholder, cacheBust } from './helpers.js';
 
-const LINKS = ['Home', 'ClubHouse', 'Hosting', 'Support', 'Work', 'AI Powered'];
+const LINKS = ['Home', 'Hosting', 'Support', 'Work', 'ClubHouse'];
 
 test.describe('Site nav structure', () => {
   test.skip(isPlaceholder, 'No real WordPress target configured.');
 
-  test('lists the six pages in order and nothing else', async ({ page }) => {
+  test('lists the five pages in order, ClubHouse last and tagged New, and nothing else', async ({ page }) => {
     await page.goto(cacheBust('/'));
     const links = page.locator('nav .nav-links > a');
-    await expect(links).toHaveCount(6);
+    await expect(links).toHaveCount(5);
     for (let i = 0; i < LINKS.length; i++) {
       await expect(links.nth(i)).toContainText(LINKS[i]);
     }
+    await expect(links.last().locator('.nav-tag')).toHaveText('New');
+    await expect(page.locator('nav .nav-links a', { hasText: 'AI Powered' })).toHaveCount(0);
+    await expect(page.locator('footer a', { hasText: 'AI Powered' })).toHaveCount(1);
     await expect(page.locator('nav .mega-panel')).toHaveCount(0);
     await expect(page.locator('nav .about-panel')).toHaveCount(0);
     await expect(page.locator('nav .nav-links a', { hasText: 'Toolbox' })).toHaveCount(0);

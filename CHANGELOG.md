@@ -29,9 +29,9 @@ headlessly from Netlify.
 
 ### Changed
 
-- **The menu.** Home · ClubHouse · Hosting · Support · Work · AI Powered, with
-  Contact as the header button. About and the Journal moved to the footer;
-  Toolbox left the menu (its page is still live).
+- **The menu.** Home · Hosting · Support · Work · ClubHouse (tagged "New"),
+  with Contact as the header button. About, the Journal and AI Powered moved
+  to the footer; Toolbox left the menu (its page is still live).
 - Pricing and Services now redirect to Support. The old pages are moved to the
   bin, not deleted.
 - The "Get a Quote" buttons go to the contact form.

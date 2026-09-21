@@ -22,8 +22,9 @@ test.describe('Marketing AI page', () => {
     await expect(page.locator('[data-widget="ai-pipeline"]')).toBeVisible();
   });
 
-  test('the AI Powered nav link is marked active', async ({ page }) => {
+  test('no nav link is marked active — AI Powered lives in the footer', async ({ page }) => {
     await page.goto(cacheBust('/ai/'));
-    await expect(page.locator('nav .nav-links a.active')).toContainText('AI Powered');
+    await expect(page.locator('nav .nav-links a.active')).toHaveCount(0);
+    await expect(page.locator('footer a', { hasText: 'AI Powered' })).toHaveAttribute('href', /\/ai\/?$/);
   });
 });
