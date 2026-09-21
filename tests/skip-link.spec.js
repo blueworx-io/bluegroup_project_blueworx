@@ -14,7 +14,7 @@
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/toolbox/surecart/', '/login/'];
+const PAGES = ['/', '/hosting/', '/clubhouse/', '/portfolio/', '/login/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
@@ -68,7 +68,7 @@ test.describe('#76 Skip link', () => {
   test('following it moves focus to the start of the content', async ({ page }) => {
     skipPlaceholder();
 
-    await page.goto(cacheBust('/services/'));
+    await page.goto(cacheBust('/hosting/'));
 
     await expect(page.locator('#content')).toHaveCount(1);
 

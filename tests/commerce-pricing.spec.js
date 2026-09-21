@@ -1,21 +1,26 @@
 /**
- * Pricing driven by SureCart (#41).
+ * Support packages driven by SureCart (#41).
  *
- * The prices on the Pricing page were written into the plugin, so they drifted
- * from what SureCart actually charges, and "Get started" went to the contact
- * form rather than to a checkout.
+ * The prices on the old Pricing page were written into the plugin, so they
+ * drifted from what SureCart actually charges, and "Get started" went to the
+ * contact form rather than to a checkout. The 2026-09 restructure retired
+ * Pricing in favour of the Integrated Support page (tests/marketing-support.spec.js),
+ * which shows three of the nine support packages as cards — the same
+ * plan-card part, wired the same way. Growth is the featured, middle package
+ * (£500/month, slug "growth"); it carries no annual-billing discount, and the
+ * Support page has no billing toggle to swap to an annual figure at all, so
+ * these only exercise the monthly price and buy link.
  *
  * SureCart keeps prices in its own cloud, so there is nothing to seed in
  * WordPress and no way to point these specs at real products without a real
  * SureCart account. Instead the fixture below declares the one class the plugin
  * reads through — \SureCart\Models\Price — with known amounts. That tests the
  * part this repo owns: that a configured price is read, converted, rendered and
- * turned into a buy link, that the billing toggle moves the link as well as the
- * figure, and above all that every failure path leaves the page exactly as it
- * was before any of this existed.
+ * turned into a buy link, and above all that every failure path leaves the page
+ * exactly as it was before any of this existed.
  *
- * That last one is the important one. A pricing page showing a stale price is a
- * problem; a pricing page showing a fatal error is a worse one.
+ * That last one is the important one. A support page showing a stale price is a
+ * problem; a support page showing a fatal error is a worse one.
  */
 
 import { test, expect, login, restoreAll, cacheBust, isPlaceholder } from './helpers.js';
@@ -44,6 +49,7 @@ namespace SureCart\\Models {
 	class Price {
 		public $amount;
 		public $is_zero_decimal = false;
+		public $currency        = 'gbp';
 
 		/**
 		 * SureCart's own converted_amount accessor, copied.
@@ -73,6 +79,13 @@ namespace SureCart\\Models {
 				// Present but with an amount SureCart could not give us — the
 				// plan should keep its built-in figure and still be buyable.
 				'd20b6e84-9153-4c72-8a3f-5e0947bd1c66' => array( null, false ),
+				// A store priced in dollars: the amount is $249, not £249.
+				'f4c1d2e3-5a6b-4c7d-8e9f-0a1b2c3d4e5f' => array( 24900, false, 'usd' ),
+				// Hosting and ClubHouse, monthly and annual.
+				'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d' => array( 2500, false ),
+				'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d' => array( 24000, false ),
+				'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d' => array( 3000, false ),
+				'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d' => array( 30000, false ),
 			);
 
 			if ( ! array_key_exists( $id, $prices ) ) {
@@ -85,6 +98,7 @@ namespace SureCart\\Models {
 			$price = new self();
 			$price->amount          = $prices[ $id ][0];
 			$price->is_zero_decimal = $prices[ $id ][1];
+			$price->currency        = isset( $prices[ $id ][2] ) ? $prices[ $id ][2] : 'gbp';
 
 			return $price;
 		}
@@ -102,25 +116,38 @@ namespace {
 		switch ( $_GET['bw_price_fixture'] ) {
 			case 'wired':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'c9e06c21-7772-4d19-821a-93edc6326d54', 'a' => '7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9' ),
+					'growth' => array( 'm' => 'c9e06c21-7772-4d19-821a-93edc6326d54', 'a' => '7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9' ),
 				) );
 				break;
 
 			case 'missing':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4', 'a' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4' ),
+					'growth' => array( 'm' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4', 'a' => 'a1c4f7e0-3b28-4d95-8c61-2f0e5a83b7d4' ),
 				) );
 				break;
 
 			case 'zero-decimal':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => '3f5a91c2-8e47-4b63-b0d1-6a2f7c94e830', 'a' => '' ),
+					'growth' => array( 'm' => '3f5a91c2-8e47-4b63-b0d1-6a2f7c94e830', 'a' => '' ),
 				) );
 				break;
 
 			case 'no-amount':
 				update_option( 'blueworx_surecart_price_ids', array(
-					'growth-support' => array( 'm' => 'd20b6e84-9153-4c72-8a3f-5e0947bd1c66', 'a' => '' ),
+					'growth' => array( 'm' => 'd20b6e84-9153-4c72-8a3f-5e0947bd1c66', 'a' => '' ),
+				) );
+				break;
+
+			case 'usd':
+				update_option( 'blueworx_surecart_price_ids', array(
+					'growth' => array( 'm' => 'f4c1d2e3-5a6b-4c7d-8e9f-0a1b2c3d4e5f', 'a' => '' ),
+				) );
+				break;
+
+			case 'hosting-clubhouse-wired':
+				update_option( 'blueworx_surecart_price_ids', array(
+					'managed-hosting' => array( 'm' => 'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d', 'a' => 'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d' ),
+					'clubhouse'       => array( 'm' => 'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d', 'a' => 'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d' ),
 				) );
 				break;
 
@@ -174,7 +201,7 @@ test.afterAll(() => {
   }
 });
 
-test.describe('Pricing driven by SureCart', () => {
+test.describe('Support packages driven by SureCart', () => {
   test.beforeEach(() => {
     test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
     test.skip(!canInstallFixture, 'Needs the local WordPress harness.');
@@ -189,32 +216,16 @@ test.describe('Pricing driven by SureCart', () => {
 
   test('a wired plan shows SureCart’s price and a checkout link', async ({ page }) => {
     await setFixture(page, 'wired');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
-    const card = planCard(page, 'Growth Support');
+    const card = planCard(page, 'Growth');
 
     // 24900 minor units rendered as whole units, not as 24900.
-    await expect(card.locator('.plan-price b')).toHaveText('$249');
-    await expect(card.locator('.plan-price')).toHaveAttribute('data-price-a', '199');
+    await expect(card.locator('.plan-price b')).toHaveText('£249');
 
     const href = await card.locator('a.plan-btn').getAttribute('href');
     expect(new URL(href).pathname.replace(/\/$/, '')).toBe('/checkout');
     expect(buyPriceId(href)).toBe('c9e06c21-7772-4d19-821a-93edc6326d54');
-  });
-
-  test('the billing toggle moves the checkout link as well as the price', async ({ page }) => {
-    await setFixture(page, 'wired');
-    await page.goto(cacheBust('/pricing/'));
-
-    const card = planCard(page, 'Growth Support');
-    await page.locator('.bill-toggle button', { hasText: 'Annual' }).click();
-
-    await expect(card.locator('.plan-price b')).toHaveText('$199');
-
-    // The failure this guards against is silent and expensive: choosing annual
-    // billing and being charged monthly.
-    const href = await card.locator('a.plan-btn').getAttribute('href');
-    expect(buyPriceId(href)).toBe('7b31d0af-2c55-4a10-9f6e-1d84c0b7a2e9');
   });
 
   // A currency with no minor unit is not cents. Dividing by 100 here would
@@ -222,18 +233,18 @@ test.describe('Pricing driven by SureCart', () => {
   // normal to anyone not billing in yen.
   test('a zero-decimal currency is not divided by a hundred', async ({ page }) => {
     await setFixture(page, 'zero-decimal');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
-    await expect(planCard(page, 'Growth Support').locator('.plan-price b')).toHaveText('$24900');
+    await expect(planCard(page, 'Growth').locator('.plan-price b')).toHaveText('£24,900');
   });
 
   test('an unwired plan keeps its built-in price and the contact form', async ({ page }) => {
     await setFixture(page, 'wired');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
-    const card = planCard(page, 'Essential Support');
+    const card = planCard(page, 'Starter');
 
-    await expect(card.locator('.plan-price b')).toHaveText('$200');
+    await expect(card.locator('.plan-price b')).toHaveText('£100');
     expect(await card.locator('a.plan-btn').getAttribute('href')).toContain('/contact');
   });
 
@@ -241,31 +252,47 @@ test.describe('Pricing driven by SureCart', () => {
     page,
   }) => {
     await setFixture(page, 'missing');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
     // The page still renders in full, and the plan shows the figure written
     // into the plugin.
     await expect(page.locator('.plans .plan-card')).toHaveCount(3);
-    await expect(planCard(page, 'Growth Support').locator('.plan-price b')).toHaveText('$500');
+    await expect(planCard(page, 'Growth').locator('.plan-price b')).toHaveText('£500');
   });
 
   test('a price with no readable amount keeps its figure but stays buyable', async ({ page }) => {
     await setFixture(page, 'no-amount');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
-    const card = planCard(page, 'Growth Support');
+    const card = planCard(page, 'Growth');
 
-    await expect(card.locator('.plan-price b')).toHaveText('$500');
+    await expect(card.locator('.plan-price b')).toHaveText('£500');
     expect(buyPriceId(await card.locator('a.plan-btn').getAttribute('href'))).toBe(
       'd20b6e84-9153-4c72-8a3f-5e0947bd1c66'
     );
   });
 
+  // A SureCart store priced in dollars must show dollars — and must not then
+  // be run through the pound-to-dollar conversion as though it were pounds.
+  test('a price in another currency keeps its own sign and is never converted', async ({ page }) => {
+    await setFixture(page, 'usd');
+    await page.goto(cacheBust('/support/'));
+
+    const price = planCard(page, 'Growth').locator('.plan-price b');
+
+    await expect(price).toHaveText('$249');
+    await expect(price).not.toHaveAttribute('data-bw-gbp', /.*/);
+
+    await page.locator('nav .bw-cur-btn').click();
+    await page.locator('nav .bw-cur-menu button[data-cur="EUR"]').click();
+    await expect(price).toHaveText('$249');
+  });
+
   test('with nothing configured the page is exactly as it was', async ({ page }) => {
     await setFixture(page, 'off');
-    await page.goto(cacheBust('/pricing/'));
+    await page.goto(cacheBust('/support/'));
 
-    await expect(planCard(page, 'Growth Support').locator('.plan-price b')).toHaveText('$500');
+    await expect(planCard(page, 'Growth').locator('.plan-price b')).toHaveText('£500');
 
     const hrefs = await page
       .locator('.plans a.plan-btn')
@@ -273,6 +300,73 @@ test.describe('Pricing driven by SureCart', () => {
 
     expect(hrefs).toHaveLength(3);
     expect(hrefs.every((href) => /\/contact/.test(href))).toBe(true);
+  });
+});
+
+// Hosting and ClubHouse each show a single plan card (parts/plan-card.php),
+// wired through the same blueworx_commerce_apply_live_single_plan() filter
+// that overlays SureCart prices onto it — the single-plan counterpart to the
+// nine-package grid above.
+test.describe('Hosting and ClubHouse plans driven by SureCart', () => {
+  test.beforeEach(() => {
+    test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
+    test.skip(!canInstallFixture, 'Needs the local WordPress harness.');
+  });
+
+  test.afterEach(async ({ page }) => {
+    await restoreAll([['clear the commerce options', async () => setFixture(page, 'off')]]);
+  });
+
+  for (const { path, name, monthlyId, annualId, monthlyGbp } of [
+    {
+      path: '/hosting/',
+      name: 'Managed Hosting',
+      monthlyId: 'e1a2b3c4-1111-4a2b-8c3d-4e5f6a7b8c9d',
+      annualId: 'e1a2b3c4-2222-4a2b-8c3d-4e5f6a7b8c9d',
+      monthlyGbp: '£25',
+    },
+    {
+      path: '/clubhouse/',
+      name: 'ClubHouse',
+      monthlyId: 'e1a2b3c4-3333-4a2b-8c3d-4e5f6a7b8c9d',
+      annualId: 'e1a2b3c4-4444-4a2b-8c3d-4e5f6a7b8c9d',
+      monthlyGbp: '£30',
+    },
+  ]) {
+    test(`${name}: wired shows SureCart's price and the annual toggle swaps the checkout link`, async ({
+      page,
+    }) => {
+      await setFixture(page, 'hosting-clubhouse-wired');
+      await page.goto(cacheBust(path));
+
+      const card = page.locator('.bw-plan-grid .plan-card').filter({
+        has: page.locator('.plan-name span', { hasText: name }),
+      });
+
+      // 2500 / 3000 minor units read from the fixture, not the £20 built in.
+      await expect(card.locator('.plan-price b')).toHaveText(monthlyGbp);
+
+      const link = card.locator('a.plan-btn');
+      await expect(link).toHaveAttribute('data-buy-m', new RegExp(monthlyId));
+      await expect(link).toHaveAttribute('data-buy-a', new RegExp(annualId));
+      expect(buyPriceId(await link.getAttribute('href'))).toBe(monthlyId);
+
+      await page.locator('.bill-toggle button').nth(1).click();
+      expect(buyPriceId(await link.getAttribute('href'))).toBe(annualId);
+    });
+  }
+
+  test('with nothing configured Hosting and ClubHouse keep £20 and a contact button', async ({
+    page,
+  }) => {
+    await setFixture(page, 'off');
+
+    for (const path of ['/hosting/', '/clubhouse/']) {
+      await page.goto(cacheBust(path));
+      const card = page.locator('.bw-plan-grid .plan-card').first();
+      await expect(card.locator('.plan-price b')).toHaveText('£20');
+      expect(await card.locator('a.plan-btn').getAttribute('href')).toContain('/contact');
+    }
   });
 });
 
@@ -293,21 +387,21 @@ test.describe('Pricing settings', () => {
     await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
 
     await expect(page.locator('#blueworx_checkout_url')).toHaveCount(1);
-    await expect(page.locator('#blueworx_price_growth-support_m')).toHaveCount(1);
-    await expect(page.locator('#blueworx_price_growth-support_a')).toHaveCount(1);
-    // Three plans, two intervals.
-    await expect(page.locator('input[name^="blueworx_surecart_price_ids"]')).toHaveCount(6);
+    await expect(page.locator('#blueworx_price_growth_m')).toHaveCount(1);
+    await expect(page.locator('#blueworx_price_growth_a')).toHaveCount(1);
+    // The nine support packages plus Hosting and ClubHouse, two intervals each.
+    await expect(page.locator('input[name^="blueworx_surecart_price_ids"]')).toHaveCount(22);
   });
 
   // The stored value ends up in a URL visitors are sent to, so the field takes
   // SureCart IDs and nothing else.
   test('anything that is not a SureCart price ID is not stored', async ({ page }) => {
     await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
-    await page.fill('#blueworx_price_growth-support_m', 'javascript:alert(1)');
+    await page.fill('#blueworx_price_growth_m', 'javascript:alert(1)');
     await page.click('#submit');
     await page.waitForLoadState('domcontentloaded');
 
-    await expect(page.locator('#blueworx_price_growth-support_m')).toHaveValue('');
+    await expect(page.locator('#blueworx_price_growth_m')).toHaveValue('');
   });
 
   // The counterpart to the test above, and the one that was missing. Every
@@ -319,21 +413,21 @@ test.describe('Pricing settings', () => {
     const priceId = 'c9e06c21-7772-4d19-821a-93edc6326d54';
 
     await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
-    await page.fill('#blueworx_price_growth-support_m', priceId);
+    await page.fill('#blueworx_price_growth_m', priceId);
     await page.click('#submit');
     await page.waitForLoadState('domcontentloaded');
 
-    await expect(page.locator('#blueworx_price_growth-support_m')).toHaveValue(priceId);
+    await expect(page.locator('#blueworx_price_growth_m')).toHaveValue(priceId);
   });
 
   // Losing the ID was survivable; losing it without a word is what cost the
   // time. The page must say which plan it rejected.
   test('a rejected price ID is reported rather than silently blanked', async ({ page }) => {
     await page.goto('/wp-admin/options-general.php?page=bluegroup-project-blueworx');
-    await page.fill('#blueworx_price_growth-support_m', 'javascript:alert(1)');
+    await page.fill('#blueworx_price_growth_m', 'javascript:alert(1)');
     await page.click('#submit');
     await page.waitForLoadState('domcontentloaded');
 
-    await expect(page.locator('.notice-error')).toContainText('Growth Support');
+    await expect(page.locator('.notice-error')).toContainText('Growth');
   });
 });

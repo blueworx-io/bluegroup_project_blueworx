@@ -35,7 +35,7 @@ blueworx_public_part(
 		),
 		'empty'   => __( 'You have not placed any orders yet.', 'bluegroup-project-blueworx' ),
 		'cta'     => __( 'See our support plans', 'bluegroup-project-blueworx' ),
-		'href'    => home_url( '/pricing' ),
+		'href'    => home_url( '/support' ),
 	)
 );
 

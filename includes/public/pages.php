@@ -64,51 +64,35 @@ function blueworx_public_pages() {
 			'title'    => __( 'About', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/about.php',
 		),
-		'services' => array(
-			'title'    => __( 'Services', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/services.php',
+		'clubhouse' => array(
+			'title'    => __( 'ClubHouse', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/clubhouse.php',
+		),
+		'hosting'   => array(
+			'title'    => __( 'Hosting', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/hosting.php',
+		),
+		'support'   => array(
+			'title'    => __( 'Integrated Support', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/support.php',
 		),
 		'contact'  => array(
 			'title'    => __( 'Contact', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/contact.php',
 		),
-		'work'     => array(
-			'title'    => __( 'Work', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/work.php',
+		'portfolio' => array(
+			'title'    => __( 'Portfolio', 'bluegroup-project-blueworx' ),
+			'template' => 'pages/portfolio.php',
 		),
 		'ai'       => array(
 			'title'    => __( 'AI Powered', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/ai.php',
-		),
-		'pricing'  => array(
-			'title'    => __( 'Pricing', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/pricing.php',
-		),
-		'toolbox'  => array(
-			'title'    => __( 'Toolbox', 'bluegroup-project-blueworx' ),
-			'template' => 'pages/toolbox.php',
 		),
 		'blog'     => array(
 			'title'    => __( 'Journal', 'bluegroup-project-blueworx' ),
 			'template' => 'pages/blog.php',
 		),
 	);
-
-	// One entry per Toolbox tool, keyed by its FULL hierarchical path
-	// ("toolbox/<slug>") so get_page_by_path() (blueworx_public_install_pages())
-	// resolves it natively and the registry stays the single source of truth —
-	// content.php's 12 tools are never hand-transcribed here. content.php is
-	// required before this file in includes/public/bootstrap.php, so
-	// blueworx_content_tools() is available wherever this function runs (init,
-	// query time, activation).
-	foreach ( blueworx_content_tools() as $blueworx_tool ) {
-		$pages[ 'toolbox/' . $blueworx_tool['slug'] ] = array(
-			'title'    => $blueworx_tool['name'],
-			'template' => 'pages/single-tool.php',
-			'slug'     => $blueworx_tool['slug'], // Child post_name.
-			'parent'   => 'toolbox', // Registry key of the parent page.
-		);
-	}
 
 	return (array) apply_filters( 'blueworx_public_pages', $pages );
 }
@@ -185,6 +169,19 @@ function blueworx_public_install_pages() {
 		// For a nested entry $slug is already the hierarchical path
 		// ("toolbox/surecart"), which get_page_by_path() resolves natively.
 		$existing = get_page_by_path( $slug );
+
+		// get_page_by_path() answers with attachments too, and a media file
+		// holds its address just as a page does: on the live site a file
+		// called Support.svg sat at /support, so the Support page was never
+		// created and the menu link bounced to the home page (attachment
+		// pages are off). A file's slug only serves its attachment page —
+		// the file itself is reached by its upload URL — so it is moved
+		// aside and the page takes the address.
+		if ( $existing instanceof WP_Post && 'attachment' === $existing->post_type ) {
+			blueworx_public_move_attachment_slug_aside( $existing );
+
+			$existing = null;
+		}
 
 		if ( $existing instanceof WP_Post ) {
 			// Only re-adopt a page this plugin created. A slug collision with
@@ -283,6 +280,24 @@ function blueworx_public_install_pages() {
 
 	update_option( 'show_on_front', 'page' );
 	update_option( 'page_on_front', (int) $map['home'] );
+}
+
+/**
+ * Frees a media file's slug so a page can be created at that address.
+ *
+ * The file keeps its ID, title and upload URL; only the slug of its (disabled)
+ * attachment page changes, to "<slug>-file" or the next free variant.
+ *
+ * @param WP_Post $attachment The media item holding the slug.
+ * @return void
+ */
+function blueworx_public_move_attachment_slug_aside( $attachment ) {
+	wp_update_post(
+		array(
+			'ID'        => (int) $attachment->ID,
+			'post_name' => wp_unique_post_slug( $attachment->post_name . '-file', (int) $attachment->ID, $attachment->post_status, 'attachment', (int) $attachment->post_parent ),
+		)
+	);
 }
 
 /**

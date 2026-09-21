@@ -313,3 +313,66 @@ function blueworx_public_journal_url() {
 
 	return home_url( '/blog' );
 }
+
+/**
+ * The sign for a currency code, for a price written into a template.
+ *
+ * Mirrors the CURRENCIES table in assets/js/public-widgets.js and the card
+ * in templates/parts/plan-card.php. A code with no sign here is spelled out.
+ *
+ * @param string $currency ISO code.
+ * @return string e.g. "£", "$", "CHF ".
+ */
+function blueworx_public_currency_sign( $currency ) {
+	$signs = array(
+		'GBP' => '£',
+		'EUR' => '€',
+		'USD' => '$',
+		'ZAR' => 'R',
+		'AUD' => 'A$',
+	);
+
+	$currency = strtoupper( (string) $currency );
+
+	return isset( $signs[ $currency ] ) ? $signs[ $currency ] : $currency . ' ';
+}
+
+/**
+ * A price in a template, in the currency it was given in.
+ *
+ * A pound figure is marked with data-bw-gbp so the currency switcher can
+ * convert it in the browser; a figure in any other currency shows its own
+ * sign and is left alone — a SureCart store priced in dollars must never be
+ * run through the pound conversion.
+ *
+ * @param float|int $amount   The figure.
+ * @param string    $currency ISO code; 'GBP' is the plugin's own.
+ * @param array     $args     {
+ *     @type int    $dp     Decimal places, 0 or 2. Default 0.
+ *     @type string $suffix Text after the figure, e.g. " / hr". Default ''.
+ *     @type string $style  Inline style for the span. Default ''.
+ * }
+ * @return string HTML for a single <span>, escaped.
+ */
+function blueworx_public_money( $amount, $currency = 'GBP', $args = array() ) {
+	$dp     = isset( $args['dp'] ) ? (int) $args['dp'] : 0;
+	$suffix = isset( $args['suffix'] ) ? (string) $args['suffix'] : '';
+	$style  = isset( $args['style'] ) ? (string) $args['style'] : '';
+	$sign   = blueworx_public_currency_sign( $currency );
+	$text   = $sign . number_format( (float) $amount, $dp, '.', $dp ? '' : ',' ) . $suffix;
+	$attrs  = '' !== $style ? ' style="' . esc_attr( $style ) . '"' : '';
+
+	if ( 'GBP' === strtoupper( (string) $currency ) ) {
+		$attrs .= ' data-bw-gbp="' . esc_attr( number_format( (float) $amount, $dp, '.', '' ) ) . '"';
+
+		if ( $dp ) {
+			$attrs .= ' data-bw-dp="' . esc_attr( (string) $dp ) . '"';
+		}
+
+		if ( '' !== $suffix ) {
+			$attrs .= ' data-bw-suffix="' . esc_attr( $suffix ) . '"';
+		}
+	}
+
+	return '<span' . $attrs . '>' . esc_html( $text ) . '</span>';
+}

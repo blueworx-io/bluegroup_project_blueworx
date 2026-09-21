@@ -14,7 +14,7 @@
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/toolbox/surecart/', '/pricing/', '/contact/', '/about/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/support/', '/contact/', '/about/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');

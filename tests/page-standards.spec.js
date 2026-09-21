@@ -20,8 +20,6 @@
 
 import { test, expect } from '@playwright/test';
 import { audit, firstFocusable, horizontalOverflow, PHONE } from './standards.js';
-// Read from the plugin's registry, not copied — see toolRegistry() (#83).
-import { TOOL_SLUGS } from './helpers.js';
 
 const baseURL =
   process.env.PLAYWRIGHT_BASE_URL || process.env.BASE_URL || 'https://staging.placeholder.blueworx.io';
@@ -32,18 +30,17 @@ const isPlaceholder = /placeholder/i.test(baseURL);
 const PAGES = [
   { path: '/', issue: '#44 Home' },
   { path: '/about/', issue: '#45 About' },
-  { path: '/services/', issue: '#46 Services' },
-  { path: '/work/', issue: '#47 Work' },
+  { path: '/clubhouse/', issue: 'ClubHouse' },
+  { path: '/hosting/', issue: 'Hosting' },
+  { path: '/support/', issue: 'Integrated Support' },
+  { path: '/portfolio/', issue: '#47 Work (now Portfolio)' },
   { path: '/ai/', issue: '#48 AI Powered' },
-  { path: '/pricing/', issue: '#49 Pricing' },
-  { path: '/toolbox/', issue: '#50 Toolbox' },
   { path: '/contact/', issue: '#52 Contact' },
   // #94. The journal is held to the same standard as the pages above, and it
   // is the one page whose content is the client's rather than ours — so an
   // unlabelled control or a heading level skipped by a card is exactly the
   // kind of thing that would otherwise only show up once posts exist.
   { path: '/blog/', issue: '#94 Journal' },
-  ...TOOL_SLUGS.map((slug) => ({ path: `/toolbox/${slug}/`, issue: `#51 Toolbox — ${slug}` })),
   // #55. The signed-out half of the client area — the sign-in, sign-up and
   // reset pages — is held to exactly the same standard as the marketing pages.
   // The signed-in half is in dashboard-standards.spec.js, which needs a

@@ -26,11 +26,15 @@
  * - max_width        (int, optional) Centered mode only. Inner max width in px.
  *                     Default 820 (About). Contact uses 780.
  * - extra_class      (string, optional) Centered mode only. Extra class(es) on
- *                     the `<section>`, e.g. "pb-tall" for Pricing's taller hero.
- * - cta              (array, optional) List of array( label, href, class )
- *                     rendered as buttons after the lead.
+ *                     the `<section>`, e.g. "pb-tall" for Support's taller hero.
+ * - cta              (array, optional) List of array( label, href, class,
+ *                     external ) rendered as buttons after the lead. `external`
+ *                     (bool, optional) appends target="_blank" rel="noopener".
  * - meta             (array, optional) List of plain label strings rendered
- *                     as `.tech-status` pills after the CTA row.
+ *                     as `.tech-status` pills after the CTA row. An item may
+ *                     instead be array( 'html' => ... ) carrying markup that is
+ *                     already escaped — a price from blueworx_public_money(),
+ *                     so the currency switcher can convert it.
  *
  * @package BlueWorxSite
  */
@@ -85,14 +89,23 @@ if ( $blueworx_th_centered ) :
 			<?php if ( ! empty( $blueworx_th_cta ) ) : ?>
 				<div style="display:flex;gap:14px;flex-wrap:wrap">
 					<?php foreach ( $blueworx_th_cta as $blueworx_th_button ) : ?>
-						<a href="<?php echo esc_url( $blueworx_th_button['href'] ); ?>" class="<?php echo esc_attr( $blueworx_th_button['class'] ); ?>"><?php echo esc_html( $blueworx_th_button['label'] ); ?></a>
+						<a href="<?php echo esc_url( $blueworx_th_button['href'] ); ?>" class="<?php echo esc_attr( $blueworx_th_button['class'] ); ?>"<?php echo ! empty( $blueworx_th_button['external'] ) ? ' target="_blank" rel="noopener"' : ''; ?>><?php echo esc_html( $blueworx_th_button['label'] ); ?></a>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
 			<?php if ( ! empty( $blueworx_th_meta ) ) : ?>
 				<div class="tech-status">
 					<?php foreach ( $blueworx_th_meta as $blueworx_th_meta_item ) : ?>
-						<span><?php echo esc_html( $blueworx_th_meta_item ); ?></span>
+						<?php if ( is_array( $blueworx_th_meta_item ) && isset( $blueworx_th_meta_item['html'] ) ) : ?>
+							<span>
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the caller built this from blueworx_public_money(), which escapes.
+								echo $blueworx_th_meta_item['html'];
+								?>
+							</span>
+						<?php else : ?>
+							<span><?php echo esc_html( $blueworx_th_meta_item ); ?></span>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>

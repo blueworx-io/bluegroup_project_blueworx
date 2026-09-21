@@ -10,6 +10,84 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.17.0] - 2026-09-21
+
+### Added
+
+- **Three more currencies.** Prices can now show in South African rand,
+  Australian dollars and UAE dirhams as well as pounds, euros and US dollars.
+  The dirham is worked out from the dollar rate at the UAE's fixed peg, since
+  the ECB feed does not carry it.
+- **The Portfolio page** (replacing Work) lists eleven live client sites with
+  a screenshot of each; every card opens the site in a new tab. The old /work
+  address redirects to it. The home page's project cards are the first three.
+- **A ClubHouse block on the home page** where the Toolbox grid used to be:
+  the demo site, four of the modules, the price and two buttons.
+- **ClubHouse's £499 setup fee** is shown on its plan card, in its hero and on
+  the home page block, and converts with the currency switcher.
+
+### Removed
+
+- **The Toolbox.** The Toolbox page, its twelve tool pages, the portal's
+  Toolbox tab and the admin Toolbox screen are gone; every mention of it on
+  the site now points at ClubHouse. /toolbox, /toolbox/<tool>, /features and
+  /feature redirect to ClubHouse and /dashboard/toolbox to the dashboard. The
+  old pages are moved to the bin, not deleted.
+
+### Changed
+
+- The home page's second service card is now Managed Hosting instead of the
+  Digital Toolbox, and the feature tabs show ClubHouse in its place. Top Tier
+  Tutors is the third project card.
+- The reviews are three real Trustpilot reviews. The section is the same on every page it appears on,
+  and now also sits on the Hosting, Support and ClubHouse pages.
+- Support package hours match the catalogue: Scale 75, Enhance 105, Growth
+  140, Enterprise 225, Enterprise + 320, Advantage 430 hours a year. Prices are
+  unchanged, so the effective hourly rates moved with them.
+
+### Fixed
+
+- **The Support page on the live site.** A media file called Support.svg held
+  the /support address, so the page was never created and the menu link bounced
+  to the home page. The page installer now moves a media file's slug aside and
+  creates the page; the file itself is untouched.
+- The ClubHouse module icons filled their tiles edge to edge instead of sitting
+  inside them.
+
+## [1.16.0] - 2026-09-20
+
+### Added
+
+- **Three product pages: ClubHouse, Hosting and Integrated Support.** ClubHouse
+  is the club website platform (nine modules, live demo, £20 a month). Hosting is
+  managed WordPress hosting at £20 a month per site with free migration.
+  Integrated Support replaces the old three retainer plans with nine packages
+  from £100 a month, a slider that recommends one from the hours you use, and
+  a full comparison table.
+- **A currency switcher in the header.** Prices show in GBP, EUR or USD; the
+  choice is remembered across pages. Rates are the European Central Bank's,
+  refreshed twice a day; if the feed cannot be reached the last good figures
+  stay in use. The settings screen shows the rates in use.
+- **SureCart prices keep their own currency.** A store priced in dollars or
+  euros shows that sign and is never converted as though it were pounds.
+
+### Changed
+
+- **The menu.** Home · Hosting · Support · Work · ClubHouse (tagged "New"),
+  with Contact as the header button. About, the Journal and AI Powered moved
+  to the footer; Toolbox left the menu (its page is still live).
+- Pricing and Services now redirect to Support. The old pages are moved to the
+  bin, not deleted.
+- The "Get a Quote" buttons go to the contact form.
+- The nav's Toolbox mega menu and About dropdown are gone with the new menu;
+  Toolbox tool pages are still reachable from the Toolbox page.
+
+### Fixed
+
+- FAQ answers on every page were collapsed to nothing when opened.
+- The "Popular" badge on the highlighted plan was white on white.
+- The home page's "View Toolbox" and "View Hosting" buttons went to Support.
+
 ## [1.15.0] - 2026-08-05
 
 ### Added

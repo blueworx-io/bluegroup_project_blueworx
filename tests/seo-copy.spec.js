@@ -12,10 +12,10 @@
  * is cut off mid-word.
  */
 
-import { test, expect, isPlaceholder, cacheBust, TOOL_SLUGS } from './helpers.js';
+import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/pricing/', '/about/', '/work/', '/ai/', '/contact/'];
-const ALL = [...PAGES, ...TOOL_SLUGS.map((slug) => `/toolbox/${slug}/`)];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/support/', '/about/', '/portfolio/', '/ai/', '/contact/'];
+const ALL = [...PAGES];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
@@ -88,7 +88,7 @@ test.describe('#79 Titles and descriptions', () => {
   test('Open Graph and Twitter repeat the same text', async ({ page }) => {
     skipPlaceholder();
 
-    for (const path of ['/', '/pricing/', '/toolbox/surecart/']) {
+    for (const path of ['/', '/support/', '/clubhouse/']) {
       await page.goto(cacheBust(path));
 
       const seo = await seoOf(page);

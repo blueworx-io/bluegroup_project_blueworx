@@ -18,7 +18,6 @@ const PATHS = [
   '/dashboard/invoices/',
   '/dashboard/orders/',
   '/dashboard/websites/',
-  '/dashboard/toolbox/',
   '/dashboard/details/',
   '/dashboard/support/',
 ];

@@ -57,69 +57,52 @@ ${body}
 // browser nor a live WordPress target, matching the hermetic suites at the
 // bottom of tests/public-site.spec.js.
 test.describe('Content data layer (includes/public/content.php)', () => {
-  test('blueworx_content_tools() returns 12 tools, each with exactly 6 features', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
-
-    expect(tools, 'must return exactly 12 tools').toHaveLength(12);
-    for (const tool of tools) {
-      expect(
-        tool.features,
-        `tool "${tool.slug}" must have exactly 6 features`
-      ).toHaveLength(6);
-      for (const feature of tool.features) {
-        expect(Object.keys(feature).sort()).toEqual(['desc', 'icon', 'title']);
-      }
-      expect(Object.prototype.hasOwnProperty.call(tool, 'btn'), 'no tool carries a raw btn class').toBe(false);
+  test('blueworx_content_support_packages() returns the nine GBP packages in order', () => {
+    const packages = runContentPhp('echo json_encode( blueworx_content_support_packages() );');
+    expect(packages.map((p) => [p.name, p.hours, p.priceM])).toEqual([
+      ['Starter', 24, 100],
+      ['Launch', 48, 200],
+      ['Scale', 75, 300],
+      ['Enhance', 105, 400],
+      ['Growth', 140, 500],
+      ['Enterprise', 225, 750],
+      ['Enterprise +', 320, 1000],
+      ['Advantage', 430, 1250],
+      ['Advantage +', 600, 1500],
+    ]);
+    for (const p of packages) {
+      expect(p.currency).toBe('GBP');
+      expect(p.priceA).toBe(p.priceM);
+      expect(p.features).toHaveLength(5);
     }
+    expect(packages.filter((p) => p.featured).map((p) => p.name)).toEqual(['Starter', 'Growth', 'Enterprise +']);
+    expect(packages.filter((p) => p.feat).map((p) => p.name)).toEqual(['Growth']);
+    // retainer_plans is the same list under its historical name.
+    const retainer = runContentPhp('echo json_encode( blueworx_content_retainer_plans() );');
+    expect(retainer).toEqual(packages);
   });
 
-  test('surecart is the only tool marked popular', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
+  test('hosting and clubhouse each carry one £20/£200 plan and their section data', () => {
+    const hosting = runContentPhp('echo json_encode( blueworx_content_hosting() );');
+    expect(hosting.plan).toMatchObject({ name: 'Managed Hosting', priceM: 20, priceA: 200, currency: 'GBP', feat: true, pop: 'Per site' });
+    expect(hosting.plan.features).toHaveLength(8);
+    expect(hosting.perf).toHaveLength(6);
+    expect(hosting.security).toHaveLength(6);
+    expect(hosting.compare).toHaveLength(8);
+    expect(hosting.faqs).toHaveLength(5);
 
-    const popular = tools.filter((tool) => true === tool.popular).map((tool) => tool.slug);
-    expect(popular, 'only surecart may be popular').toEqual(['surecart']);
+    const clubhouse = runContentPhp('echo json_encode( blueworx_content_clubhouse() );');
+    expect(clubhouse.plan).toMatchObject({ name: 'ClubHouse', priceM: 20, priceA: 200, currency: 'GBP', feat: true, pop: true });
+    expect(clubhouse.plan.features).toHaveLength(7);
+    expect(clubhouse.modules).toHaveLength(9);
+    expect(clubhouse.modules.every((m) => Array.isArray(m.paths) && m.paths.length > 0)).toBe(true);
+    expect(clubhouse.self_serve).toHaveLength(4);
+    expect(clubhouse.audiences).toHaveLength(4);
+    expect(clubhouse.faqs).toHaveLength(5);
   });
 
-  test('every tool slug has a matching solo_prices entry (fixtures parity)', () => {
-    const tools = runContentPhp('echo json_encode( blueworx_content_tools() );');
-    const prices = runContentPhp('echo json_encode( blueworx_content_solo_prices() );');
-
-    const toolSlugs = tools.map((tool) => tool.slug).sort();
-    const priceSlugs = Object.keys(prices).sort();
-    expect(priceSlugs, 'solo_prices must have exactly one entry per tool, no more, no fewer').toEqual(toolSlugs);
-  });
-
-  test('blueworx_content_tool() returns a single tool by slug, or null', () => {
-    const surecart = runContentPhp("echo json_encode( blueworx_content_tool( 'surecart' ) );");
-    expect(surecart.slug).toBe('surecart');
-    expect(surecart.popular).toBe(true);
-
-    const missing = runContentPhp("echo json_encode( blueworx_content_tool( 'does-not-exist' ) );");
-    expect(missing).toBeNull();
-  });
-
-  test('blueworx_content_toolbox_plans() and blueworx_content_retainer_plans() each return 3 plans, with no btn field', () => {
-    const toolboxPlans = runContentPhp('echo json_encode( blueworx_content_toolbox_plans() );');
-    const retainerPlans = runContentPhp('echo json_encode( blueworx_content_retainer_plans() );');
-
-    for (const plans of [toolboxPlans, retainerPlans]) {
-      expect(plans).toHaveLength(3);
-      for (const plan of plans) {
-        expect(Object.prototype.hasOwnProperty.call(plan, 'btn'), 'plan data must not carry a raw btn class').toBe(
-          false
-        );
-      }
-    }
-
-    const business = toolboxPlans.find((plan) => 'Business' === plan.name);
-    expect(business.pop, 'the Business plan must be marked popular').toBe(true);
-    expect(business.priceM).toBe(60);
-    expect(business.priceA).toBe(50);
-
-    const growth = retainerPlans.find((plan) => 'Growth Support' === plan.name);
-    expect(growth.pop, 'the Growth Support plan must be marked popular').toBe(true);
-    expect(growth.priceM).toBe(500);
-    expect(growth.priceA).toBe(400);
+  test('the support FAQ has five entries', () => {
+    expect(runContentPhp('echo json_encode( blueworx_content_support_faqs() );')).toHaveLength(5);
   });
 
   test('blueworx_content_faqs() returns 5 question/answer pairs', () => {
@@ -130,13 +113,13 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     }
   });
 
-  test('blueworx_content_reviews() returns 4 reviews with the expected shape', () => {
+  test('blueworx_content_reviews() returns 3 reviews with the expected shape', () => {
     const reviews = runContentPhp('echo json_encode( blueworx_content_reviews() );');
-    expect(reviews).toHaveLength(4);
+    expect(reviews).toHaveLength(3);
     for (const review of reviews) {
       expect(Object.keys(review).sort()).toEqual(['initials', 'name', 'role', 'text']);
     }
-    expect(reviews[0].name).toBe('Hannah Whitfield');
+    expect(reviews[0].name).toBe('Andrew');
   });
 
   test('each accessor result is filterable via blueworx_content_<name>', () => {
@@ -147,12 +130,17 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     // this guards against.
     const src = readFileSync(CONTENT_PHP, 'utf8');
     const expectedFilters = [
-      'blueworx_content_tools',
-      'blueworx_content_solo_prices',
-      'blueworx_content_toolbox_plans',
+      // blueworx_content_support_packages() deliberately fires the
+      // blueworx_content_retainer_plans filter (kept for the SureCart wiring
+      // configured under that name), so that tag — not a
+      // 'blueworx_content_support_packages' one — is what's asserted here.
       'blueworx_content_retainer_plans',
+      'blueworx_content_support_faqs',
       'blueworx_content_faqs',
+      'blueworx_content_hosting',
+      'blueworx_content_clubhouse',
       'blueworx_content_reviews',
+      'blueworx_content_portfolio',
     ];
     for (const filter of expectedFilters) {
       expect(src, `content.php must call apply_filters( '${filter}', ... )`).toContain(`apply_filters( '${filter}'`);

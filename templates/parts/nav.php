@@ -2,18 +2,17 @@
 /**
  * Site navigation template part.
  *
- * Ported from Nav.tsx. The React source conditionally mounts the Toolbox
- * mega panel, the About Us dropdown and the mobile menu only while each is
- * open — a plain document cannot hover into, or slide open, an element that
- * does not exist yet, so this port renders all three unconditionally and
- * relies on assets/js/public-nav.js to toggle an ".open" class, matched by
- * ".mega-panel"/".about-panel"/".mobile-menu" rules in assets/css/public.css.
- * That is the one deliberate structural difference from the source; markup
- * order and every class name otherwise match it exactly.
+ * Ported from Nav.tsx. As of the 2026-09 restructure the mega panel and the
+ * About Us dropdown are gone — About and Journal now live only in the footer
+ * (templates/parts/footer.php). What remains of the original port is the
+ * mobile menu: the React source only mounts it while open, but a plain
+ * document cannot slide open an element that does not exist yet, so this
+ * renders it unconditionally and relies on assets/js/public-nav.js to toggle
+ * an ".open" class, matched by the ".mobile-menu" rule in assets/css/public.css.
  *
- * Every internal href is built with home_url( '/services' ) etc. (matching
- * templates/parts/footer.php), not a bare "/services" — the source's own
- * <Link href="/services"> paths assume a root-domain deployment, but on a
+ * Every internal href is built with home_url( '/support' ) etc. (matching
+ * templates/parts/footer.php), not a bare "/support" — the source's own
+ * <Link href="/support"> paths assume a root-domain deployment, but on a
  * subdirectory WordPress install (example.com/blog/) a bare root-relative
  * href points outside the site entirely. blueworx_public_nav_active_class()
  * still compares against the home-relative $blueworx_nav_path built below,
@@ -27,17 +26,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/*
- * The Toolbox tools, from the plugin's own registry.
- *
- * This list used to be hand-transcribed here — the same twelve tools, written
- * out a second time. Two copies of the same list drift, and the copy the menu
- * reads is not the copy the pages are created from, so the menu can link to a
- * tool that has no page (or miss one that does). blueworx_content_tools() is
- * the single source of truth for both.
- */
-$blueworx_nav_tools = blueworx_content_tools();
 
 // Resolve the current request path once, relative to the site root, so every
 // active-state check below compares against the same value. blueworx_public_pages()
@@ -60,8 +48,8 @@ if ( ! function_exists( 'blueworx_public_nav_active_class' ) ) {
 	 * Exact match for "/", prefix match otherwise — ports Nav.tsx's
 	 * `href === "/" ? pathname === "/" : pathname.startsWith(href)` verbatim.
 	 *
-	 * @param string $href         Root-relative href, e.g. '/services'.
-	 * @param string $current_path Current request path, e.g. '/services/seo'.
+	 * @param string $href         Root-relative href, e.g. '/support'.
+	 * @param string $current_path Current request path, e.g. '/support/seo'.
 	 * @return string 'active' or ''.
 	 */
 	function blueworx_public_nav_active_class( $href, $current_path ) {
@@ -76,6 +64,36 @@ if ( ! function_exists( 'blueworx_public_nav_active_class' ) ) {
 $blueworx_nav_logo_path = BLUEWORX_SITE_PATH . 'assets/img/logo.png';
 $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 ?>
+<?php
+// One list, rendered twice (desktop row and mobile panel), so the two can
+// never disagree about what the site's pages are. ClubHouse is last and
+// carries the "New" tag; AI Powered lives in the footer only.
+$blueworx_nav_items = array(
+	array( '/', __( 'Home', 'bluegroup-project-blueworx' ), home_url( '/' ) ),
+	array( '/hosting', __( 'Hosting', 'bluegroup-project-blueworx' ), home_url( '/hosting' ) ),
+	array( '/support', __( 'Support', 'bluegroup-project-blueworx' ), home_url( '/support' ) ),
+	array( '/portfolio', __( 'Portfolio', 'bluegroup-project-blueworx' ), home_url( '/portfolio' ) ),
+	array( '/clubhouse', __( 'ClubHouse', 'bluegroup-project-blueworx' ), home_url( '/clubhouse' ), true ),
+);
+
+// The currency switcher, rendered in the desktop cluster and again in the
+// mobile panel. Both copies are wired by public-nav.js.
+$blueworx_nav_currency = '
+	<div class="bw-cur">
+		<button type="button" class="bw-cur-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="' . esc_attr__( 'Currency', 'bluegroup-project-blueworx' ) . '">
+			<span data-cur-label>£ GBP</span>
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9" /></svg>
+		</button>
+		<div class="bw-cur-menu" role="listbox">
+			<button type="button" role="option" data-cur="GBP">£ GBP<i>' . esc_html__( 'Pound', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="EUR">€ EUR<i>' . esc_html__( 'Euro', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="USD">$ USD<i>' . esc_html__( 'Dollar', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="ZAR">R ZAR<i>' . esc_html__( 'Rand', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="AUD">A$ AUD<i>' . esc_html__( 'Aus dollar', 'bluegroup-project-blueworx' ) . '</i></button>
+			<button type="button" role="option" data-cur="AED">AED<i>' . esc_html__( 'Dirham', 'bluegroup-project-blueworx' ) . '</i></button>
+		</div>
+	</div>';
+?>
 <nav>
 	<a class="nav-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 		<?php if ( file_exists( $blueworx_nav_logo_path ) ) : ?>
@@ -85,96 +103,20 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 		<?php endif; ?>
 	</a>
 	<div class="nav-links">
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( 'Home', 'bluegroup-project-blueworx' ); ?></a>
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/services', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/services' ) ); ?>"><?php echo esc_html__( 'Services', 'bluegroup-project-blueworx' ); ?></a>
-
-		<div class="nav-drop" data-nav-drop="mega">
-			<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/toolbox', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>">
-				<?php echo esc_html__( 'Toolbox', 'bluegroup-project-blueworx' ); ?>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="6 9 12 15 18 9" /></svg>
-			</a>
-			<div class="mega-panel">
-				<?php foreach ( $blueworx_nav_tools as $blueworx_nav_tool ) : ?>
-					<a
-						href="<?php echo esc_url( home_url( '/toolbox/' . $blueworx_nav_tool['slug'] ) ); ?>"
-						class="mega-item"
-						style="display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;"
-					>
-						<div style="width:38px;height:38px;border-radius:10px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
-							<?php
-							// Eager, not lazy: the menu is in the document from
-							// the start but hidden, so a lazy icon only begins
-							// loading once the panel opens — the one moment the
-							// visitor is looking straight at it.
-							blueworx_public_image(
-								'img/tools/' . $blueworx_nav_tool['slug'] . '.png',
-								$blueworx_nav_tool['name'],
-								array(
-									'eager' => true,
-									'style' => 'width:22px;height:22px;object-fit:contain',
-								)
-							);
-							?>
-						</div>
-						<div>
-							<div style="font-size:14.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:7px">
-								<?php echo esc_html( $blueworx_nav_tool['name'] ); ?>
-								<?php if ( ! empty( $blueworx_nav_tool['popular'] ) ) : ?>
-									<span class="nav-tag tag-dark"><?php echo esc_html__( 'Popular', 'bluegroup-project-blueworx' ); ?></span>
-								<?php endif; ?>
-							</div>
-							<div style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.4;margin-top:2px"><?php echo esc_html( $blueworx_nav_tool['desc'] ); ?></div>
-						</div>
-					</a>
-				<?php endforeach; ?>
-				<div style="grid-column:1 / -1;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:16px;display:flex;justify-content:space-between;align-items:center">
-					<span style="font-size:13px;color:rgba(255,255,255,.5)"><?php echo esc_html__( '12 tools, one subscription.', 'bluegroup-project-blueworx' ); ?></span>
-					<a href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>" style="font-size:14px;font-weight:600;color:#A5A7FF;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none">
-						<?php echo esc_html__( 'Browse the full Toolbox', 'bluegroup-project-blueworx' ); ?>
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
-					</a>
-				</div>
-			</div>
-		</div>
-
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/pricing', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
-
-		<div class="nav-drop" data-nav-drop="about">
-			<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/about', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/about' ) ); ?>">
-				<?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="6 9 12 15 18 9" /></svg>
-			</a>
-			<div class="about-panel">
-				<a
-					class="<?php echo esc_attr( blueworx_public_nav_active_class( '/work', $blueworx_nav_path ) ); ?>"
-					href="<?php echo esc_url( home_url( '/work' ) ); ?>"
-					style="display:block;padding:10px 14px;color:#fff;font-size:14.5px;font-weight:500;border-radius:8px;text-decoration:none"
-				>
-					<?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?>
-				</a>
-				<?php
-				// The journal sits under About Us beside Work, which is where
-				// the design puts it (#94). The top row is already six items
-				// wide and a seventh wraps it onto two lines at laptop widths.
-				?>
-				<a
-					class="<?php echo esc_attr( blueworx_public_nav_active_class( '/blog', $blueworx_nav_path ) ); ?>"
-					href="<?php echo esc_url( blueworx_public_journal_url() ); ?>"
-					style="display:block;padding:10px 14px;color:#fff;font-size:14.5px;font-weight:500;border-radius:8px;text-decoration:none"
-				>
-					<?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?>
-				</a>
-			</div>
-		</div>
-
-		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>" style="gap:7px"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
+		<?php foreach ( $blueworx_nav_items as $blueworx_nav_item ) : ?>
+			<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"<?php echo ! empty( $blueworx_nav_item[3] ) ? ' style="gap:7px"' : ''; ?>><?php echo esc_html( $blueworx_nav_item[1] ); ?><?php if ( ! empty( $blueworx_nav_item[3] ) ) : ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span><?php endif; ?></a>
+		<?php endforeach; ?>
 	</div>
 	<div class="nav-cta">
 		<a class="nav-sign-in" href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
-		<a class="nav-btn" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>">
-			<?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?>
+		<a class="nav-btn" href="<?php echo esc_url( home_url( '/contact' ) ); ?>">
+			<?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
 		</a>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_attr__()/esc_html__() calls and static markup.
+		echo $blueworx_nav_currency;
+		?>
 	</div>
 	<a class="nav-sign-in-mobile" href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 	<button class="hamburger" aria-label="<?php echo esc_attr__( 'Toggle menu', 'bluegroup-project-blueworx' ); ?>" aria-expanded="false">
@@ -183,19 +125,13 @@ $blueworx_nav_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 	</button>
 </nav>
 <div class="mobile-menu">
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( 'Home', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/services', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/services' ) ); ?>"><?php echo esc_html__( 'Services', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/toolbox', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php echo esc_html__( 'Toolbox', 'bluegroup-project-blueworx' ); ?></a>
-	<div style="display:flex;flex-direction:column;gap:0;padding-left:12px;border-left:2px solid rgba(79,70,229,.15);margin:0 0 4px">
-		<?php foreach ( $blueworx_nav_tools as $blueworx_nav_tool ) : ?>
-			<a href="<?php echo esc_url( home_url( '/toolbox/' . $blueworx_nav_tool['slug'] ) ); ?>" style="font-size:13.5px;padding:8px 8px"><?php echo esc_html( $blueworx_nav_tool['name'] ); ?></a>
-		<?php endforeach; ?>
-	</div>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/pricing', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/about', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/work', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/work' ) ); ?>" style="font-size:13.5px;padding-left:24px"><?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/blog', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( blueworx_public_journal_url() ); ?>" style="font-size:13.5px;padding-left:24px"><?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="<?php echo esc_attr( blueworx_public_nav_active_class( '/ai', $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span></a>
+	<?php foreach ( $blueworx_nav_items as $blueworx_nav_item ) : ?>
+		<a class="<?php echo esc_attr( blueworx_public_nav_active_class( $blueworx_nav_item[0], $blueworx_nav_path ) ); ?>" href="<?php echo esc_url( $blueworx_nav_item[2] ); ?>"><?php echo esc_html( $blueworx_nav_item[1] ); ?><?php if ( ! empty( $blueworx_nav_item[3] ) ) : ?><span class="nav-tag tag-light"><?php echo esc_html__( 'New', 'bluegroup-project-blueworx' ); ?></span><?php endif; ?></a>
+	<?php endforeach; ?>
 	<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
-	<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
+	<a class="btn btn-brand btn-md" href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?></a>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- see above.
+	echo $blueworx_nav_currency;
+	?>
 </div>

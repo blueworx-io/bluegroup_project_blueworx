@@ -113,6 +113,14 @@ function blueworx_site_register_settings() {
 		BLUEWORX_SITE_SETTINGS_SLUG,
 		'blueworx_site_main'
 	);
+
+	add_settings_field(
+		'blueworx_currency_rates',
+		__( 'Exchange rates', 'bluegroup-project-blueworx' ),
+		'blueworx_site_render_currency_rates_field',
+		BLUEWORX_SITE_SETTINGS_SLUG,
+		'blueworx_site_main'
+	);
 }
 add_action( 'admin_init', 'blueworx_site_register_settings' );
 
@@ -220,7 +228,7 @@ function blueworx_site_sanitize_price_ids( $value ) {
 	$clean    = array();
 	$rejected = array();
 
-	foreach ( blueworx_content_retainer_plans() as $plan ) {
+	foreach ( blueworx_commerce_sellable_plans() as $plan ) {
 		if ( empty( $plan['name'] ) ) {
 			continue;
 		}
@@ -294,7 +302,7 @@ function blueworx_site_render_price_ids_field() {
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ( blueworx_content_retainer_plans() as $plan ) : ?>
+			<?php foreach ( blueworx_commerce_sellable_plans() as $plan ) : ?>
 				<?php
 				if ( empty( $plan['name'] ) ) {
 					continue;
@@ -332,6 +340,54 @@ function blueworx_site_render_price_ids_field() {
 		<?php echo esc_html__( 'Find these in SureCart under each product. A plan left empty keeps the price built into the plugin and sends its button to the contact form.', 'bluegroup-project-blueworx' ); ?>
 		<?php if ( ! blueworx_commerce_ready() ) : ?>
 			<br /><strong><?php echo esc_html__( 'SureCart is not active, so these are stored but not used yet.', 'bluegroup-project-blueworx' ); ?></strong>
+		<?php endif; ?>
+	</p>
+	<?php
+}
+
+/**
+ * Shows the exchange rates the currency switcher is using right now.
+ *
+ * Read-only: the figures come from the European Central Bank twice a day
+ * (includes/public/currency.php) and there is nothing to type in. It is here
+ * so someone checking a euro or dollar price on the site can see where the
+ * number came from, and whether the live feed is working.
+ *
+ * @return void
+ */
+function blueworx_site_render_currency_rates_field() {
+	$current = blueworx_currency_rates();
+	$rates   = isset( $current['rates'] ) ? (array) $current['rates'] : array();
+	$figures = array();
+
+	foreach ( array_keys( blueworx_currency_fallback_rates() ) as $code ) {
+		$figures[] = blueworx_public_currency_sign( $code ) . ( isset( $rates[ $code ] ) ? number_format_i18n( (float) $rates[ $code ], 4 ) : '—' );
+	}
+	?>
+	<p id="blueworx_currency_rates">
+		<?php
+		echo esc_html(
+			sprintf(
+				/* translators: %s: the pound's value in each currency, e.g. "€1.1700 = $1.2700". */
+				__( '£1 = %s', 'bluegroup-project-blueworx' ),
+				implode( ' = ', $figures )
+			)
+		);
+		?>
+	</p>
+	<p class="description">
+		<?php if ( 'live' === $current['source'] ) : ?>
+			<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %s: date the rates are for. */
+					__( 'European Central Bank reference rates for %s, refreshed twice a day.', 'bluegroup-project-blueworx' ),
+					$current['date']
+				)
+			);
+			?>
+		<?php else : ?>
+			<strong><?php echo esc_html__( 'The live rate feed has not been reached yet, so the fixed launch rates are in use.', 'bluegroup-project-blueworx' ); ?></strong>
 		<?php endif; ?>
 	</p>
 	<?php

@@ -9,6 +9,97 @@
 ( function () {
 	'use strict';
 
+	// GBP is the base. The rates are the ECB's, handed over by the server in
+	// window.blueworxCurrency (includes/public/currency.php); the figures here
+	// only apply if that is missing, so a broken inline script cannot leave
+	// the switcher painting nothing.
+	var CURRENCIES = {
+		GBP: { symbol: '£', rate: 1 },
+		EUR: { symbol: '€', rate: 1.17 },
+		USD: { symbol: '$', rate: 1.27 },
+		ZAR: { symbol: 'R', rate: 21.8 },
+		AUD: { symbol: 'A$', rate: 1.88 },
+		AED: { symbol: 'AED ', rate: 4.66 }
+	};
+
+	( function () {
+		var cfg = window.blueworxCurrency;
+		if ( ! cfg || ! cfg.rates ) {
+			return;
+		}
+		for ( var code in CURRENCIES ) {
+			var rate = Number( cfg.rates[ code ] );
+			if ( isFinite( rate ) && rate > 0 ) {
+				CURRENCIES[ code ].rate = rate;
+			}
+		}
+	} )();
+
+	// The currency the visitor last chose on this page. The switcher
+	// announces its choice as a "bw:currency" event, and that wins over
+	// storage: where storage is blocked (private mode) the choice still has
+	// to apply to the page it was made on.
+	var chosen = '';
+
+	function currentCurrency() {
+		var code = chosen;
+		if ( ! code ) {
+			try {
+				code = localStorage.getItem( 'bw-currency' ) || 'GBP';
+			} catch {
+				code = 'GBP';
+			}
+		}
+		return CURRENCIES[ code ] ? code : 'GBP';
+	}
+
+	window.addEventListener( 'bw:currency', function ( event ) {
+		if ( event.detail && CURRENCIES[ event.detail ] ) {
+			chosen = event.detail;
+		}
+	} );
+
+	/**
+	 * Formats a GBP amount in the visitor's chosen currency.
+	 *
+	 * @param {number} gbp Amount in pounds.
+	 * @param {number} dp  Decimal places (0 or 2).
+	 * @return {string} e.g. "£20", "€58.50".
+	 */
+	function money( gbp, dp ) {
+		var cur = CURRENCIES[ currentCurrency() ];
+		var value = Number( gbp ) * cur.rate;
+		if ( dp ) {
+			return cur.symbol + value.toFixed( dp );
+		}
+		return cur.symbol + Math.round( value ).toLocaleString( 'en-GB' );
+	}
+
+	/**
+	 * Repaints every element carrying a base GBP amount.
+	 *
+	 * Templates render the pound figure, so the page is correct with JS off
+	 * and only ever changes when the visitor picks another currency.
+	 */
+	function paintPrices() {
+		var els = document.querySelectorAll( '[data-bw-gbp]' );
+		for ( var i = 0; i < els.length; i++ ) {
+			var el = els[ i ];
+			var dp = parseInt( el.getAttribute( 'data-bw-dp' ) || '0', 10 );
+			el.textContent = ( el.getAttribute( 'data-bw-prefix' ) || '' )
+				+ money( el.getAttribute( 'data-bw-gbp' ), dp )
+				+ ( el.getAttribute( 'data-bw-suffix' ) || '' );
+		}
+	}
+
+	function initCurrencyPrices() {
+		if ( ! document.querySelector( '[data-bw-gbp]' ) ) {
+			return;
+		}
+		paintPrices();
+		window.addEventListener( 'bw:currency', paintPrices );
+	}
+
 	function initBillingToggle() {
 		var toggle = document.querySelector( '[data-widget="billing-toggle"]' );
 		if ( ! toggle ) {
@@ -30,7 +121,15 @@
 				var b = prices[ i ].querySelector( 'b' );
 				var em = prices[ i ].querySelector( 'em' );
 				if ( b ) {
-					b.textContent = '$' + ( annual ? prices[ i ].getAttribute( 'data-price-a' ) : prices[ i ].getAttribute( 'data-price-m' ) );
+					var amount = annual ? prices[ i ].getAttribute( 'data-price-a' ) : prices[ i ].getAttribute( 'data-price-m' );
+					if ( b.hasAttribute( 'data-bw-gbp' ) ) {
+						// A pound price: store the new base and let the painter
+						// render it in whatever currency is selected.
+						b.setAttribute( 'data-bw-gbp', amount );
+						b.textContent = money( amount, 0 );
+					} else {
+						b.textContent = ( prices[ i ].getAttribute( 'data-symbol' ) || '$' ) + amount;
+					}
 				}
 				if ( em ) {
 					em.textContent = annual ? em.getAttribute( 'data-sub-a' ) : em.getAttribute( 'data-sub-m' );
@@ -60,121 +159,81 @@
 		apply( false );
 	}
 
-	function initPricingCalc() {
-		var root = document.querySelector( '[data-widget="pricing-calc"]' );
+	/**
+	 * The Support page's hours slider (2026-09 restructure).
+	 *
+	 * The slider indexes the nine packages, whose numbers the template
+	 * writes into data-packages so this never carries a second copy of the
+	 * price list. Prices go through the painter's data-bw-gbp contract so a
+	 * currency change repaints them like every other price on the page.
+	 */
+	function initSupportCalc() {
+		var root = document.querySelector( '[data-widget="support-calc"]' );
 		if ( ! root ) {
 			return;
 		}
-		var out = root.querySelector( '[data-testid="calc-total"]' );
-		var base = { essential: 200, growth: 500, advanced: 750 };
-		var state = { support: 'growth', updates: 2, sites: 1, hosting: true };
-
-		function clamp( v, min, max ) {
-			return Math.max( min, Math.min( max, v ) );
-		}
-		function render() {
-			var total = base[ state.support ] + ( state.updates - 1 ) * 60 + ( state.sites - 1 ) * 120 + ( state.hosting ? 40 : 0 );
-			if ( out ) {
-				out.textContent = '$' + total;
-			}
-		}
-
-		var opts = root.querySelectorAll( '.opt-row .opt' );
-		for ( var i = 0; i < opts.length; i++ ) {
-			( function ( opt ) {
-				opt.addEventListener( 'click', function () {
-					state.support = opt.getAttribute( 'data-support' );
-					for ( var j = 0; j < opts.length; j++ ) {
-						opts[ j ].className = 'opt';
-					}
-					opt.className = 'opt on';
-					render();
-				} );
-			}( opts[ i ] ) );
-		}
-
-		var steppers = root.querySelectorAll( '.stepper' );
-		for ( var s = 0; s < steppers.length; s++ ) {
-			( function ( stepper ) {
-				var field = stepper.getAttribute( 'data-field' );
-				var min = parseInt( stepper.getAttribute( 'data-min' ), 10 );
-				var max = parseInt( stepper.getAttribute( 'data-max' ), 10 );
-				var value = stepper.querySelector( 'b' );
-				var buttons = stepper.querySelectorAll( 'button' );
-				function change( delta ) {
-					state[ field ] = clamp( state[ field ] + delta, min, max );
-					if ( value ) {
-						value.textContent = state[ field ];
-					}
-					render();
-				}
-				buttons[ 0 ].addEventListener( 'click', function () {
-					change( -1 );
-				} );
-				buttons[ 1 ].addEventListener( 'click', function () {
-					change( 1 );
-				} );
-			}( steppers[ s ] ) );
-		}
-
-		var hosting = root.querySelector( '.toggle-pill' );
-		if ( hosting ) {
-			hosting.addEventListener( 'click', function () {
-				state.hosting = ! state.hosting;
-				hosting.className = state.hosting ? 'toggle-pill on' : 'toggle-pill';
-				hosting.setAttribute( 'aria-pressed', state.hosting ? 'true' : 'false' );
-				render();
-			} );
-		}
-		render();
-	}
-
-	function initSavingsCalc() {
-		var root = document.querySelector( '[data-widget="savings-calc"]' );
-		if ( ! root ) {
+		var packages;
+		try {
+			packages = JSON.parse( root.getAttribute( 'data-packages' ) || '[]' );
+		} catch {
 			return;
 		}
-		var hostingCost = 30;
-		var toolboxCost = 30;
-		var rows = root.querySelectorAll( '.sv-row' );
-		var soloOut = root.querySelector( '[data-testid="solo-total"]' );
-		var saveOut = root.querySelector( '[data-testid="savings-line"]' );
-
-		function group( n ) {
-			return String( n ).replace( /\B(?=(\d{3})+(?!\d))/g, ',' );
-		}
-		function render() {
-			var solo = hostingCost;
-			for ( var i = 0; i < rows.length; i++ ) {
-				if ( '1' === rows[ i ].getAttribute( 'data-on' ) ) {
-					solo += parseInt( rows[ i ].getAttribute( 'data-price' ), 10 );
-				}
-			}
-			var save = Math.max( 0, solo - toolboxCost );
-			if ( soloOut ) {
-				soloOut.textContent = solo;
-			}
-			if ( saveOut ) {
-				saveOut.textContent = 'You save $' + group( save ) + '/mo · $' + group( save * 12 ) + '/yr';
-			}
+		var range = root.querySelector( 'input[type="range"]' );
+		var hours = root.querySelector( '[data-testid="support-calc-hours"]' );
+		var annual = root.querySelector( '[data-testid="support-calc-annual"]' );
+		var name = root.querySelector( '[data-testid="support-calc-name"]' );
+		var blurb = root.querySelector( '[data-testid="support-calc-blurb"]' );
+		var rate = root.querySelector( '[data-testid="support-calc-rate"]' );
+		var price = root.querySelector( '[data-testid="support-calc-price"]' );
+		if ( ! range || ! packages.length ) {
+			return;
 		}
 
-		for ( var i = 0; i < rows.length; i++ ) {
-			( function ( row ) {
-				var pill = row.querySelector( '.toggle-pill' );
-				if ( ! pill ) {
-					return;
+		function apply() {
+			var pkg = packages[ Math.min( packages.length - 1, Math.max( 0, parseInt( range.value, 10 ) || 0 ) ) ];
+			var perHour = ( pkg.price * 12 ) / pkg.hours;
+			var gbp = 'GBP' === pkg.currency;
+			// Two decimals, trailing zeros dropped — the same figure
+			// blueworx_content_hours_a_month() renders on the server.
+			if ( hours ) {
+				hours.textContent = String( Math.round( ( pkg.hours / 12 ) * 100 ) / 100 );
+			}
+			if ( annual ) {
+				annual.textContent = String( pkg.hours );
+			}
+			if ( name ) {
+				name.textContent = pkg.name;
+			}
+			if ( blurb ) {
+				blurb.textContent = pkg.blurb;
+			}
+			// A pound figure goes through the painter so it follows the
+			// switcher; a package priced in another currency is written as
+			// is, in its own sign, and never converted.
+			if ( rate ) {
+				if ( gbp ) {
+					rate.setAttribute( 'data-bw-gbp', perHour.toFixed( 2 ) );
+					rate.setAttribute( 'data-bw-dp', '2' );
+					rate.setAttribute( 'data-bw-suffix', ' / hr' );
+				} else {
+					rate.removeAttribute( 'data-bw-gbp' );
+					rate.textContent = pkg.sign + perHour.toFixed( 2 ) + ' / hr';
 				}
-				pill.addEventListener( 'click', function () {
-					var on = '1' === row.getAttribute( 'data-on' );
-					row.setAttribute( 'data-on', on ? '0' : '1' );
-					pill.className = on ? 'toggle-pill' : 'toggle-pill on';
-					pill.setAttribute( 'aria-pressed', on ? 'false' : 'true' );
-					render();
-				} );
-			}( rows[ i ] ) );
+			}
+			if ( price ) {
+				if ( gbp ) {
+					price.setAttribute( 'data-bw-gbp', String( pkg.price ) );
+				} else {
+					price.removeAttribute( 'data-bw-gbp' );
+					price.textContent = pkg.sign + pkg.price.toLocaleString( 'en-GB' );
+				}
+			}
+			paintPrices();
 		}
-		render();
+
+		range.addEventListener( 'input', apply );
+		range.addEventListener( 'change', apply );
+		apply();
 	}
 
 	function initFaqAccordion() {
@@ -283,6 +342,9 @@
 			}
 			if ( cta && cta.firstChild ) {
 				cta.firstChild.nodeValue = tab.getAttribute( 'data-cta' ) + ' ';
+			}
+			if ( cta && tab.getAttribute( 'data-href' ) ) {
+				cta.setAttribute( 'href', tab.getAttribute( 'data-href' ) );
 			}
 		}
 
@@ -572,13 +634,13 @@
 	}
 
 	function init() {
+		initCurrencyPrices();
 		initBackButtons();
 		initJournalFilter();
 		initArticleToc();
 		initCopyLink();
 		initBillingToggle();
-		initPricingCalc();
-		initSavingsCalc();
+		initSupportCalc();
 		initFaqAccordion();
 		initAiPipeline();
 		initFeatureTabs();

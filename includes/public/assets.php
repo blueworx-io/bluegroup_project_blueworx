@@ -52,6 +52,15 @@ function blueworx_enqueue_public_assets() {
 		blueworx_site_asset_version( 'assets/js/public-widgets.js' ),
 		true
 	);
+
+	// The exchange rates the currency switcher converts with. Inlined rather
+	// than fetched by the browser so prices repaint the instant the visitor
+	// picks a currency, with no request in between.
+	wp_add_inline_script(
+		'blueworx-public-widgets',
+		'window.blueworxCurrency = ' . wp_json_encode( blueworx_currency_rates() ) . ';',
+		'before'
+	);
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
 

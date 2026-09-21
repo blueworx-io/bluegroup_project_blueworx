@@ -122,6 +122,16 @@ test.describe('BlueWorx site settings', () => {
     await expect(page.locator('#blueworx_client_login_url')).toHaveCount(1);
   });
 
+  // "Enterprise +" and "Enterprise" (and "Advantage +"/"Advantage") slugged to
+  // the same key before blueworx_commerce_plan_slug() spelled the '+' out, so
+  // their price-ID rows collided and one silently overwrote the other's ID.
+  test('Enterprise and Enterprise + get their own price ID rows, not a shared one', async ({ page }) => {
+    await page.goto(SETTINGS_PATH);
+
+    await expect(page.locator('input[name="blueworx_surecart_price_ids[enterprise-plus][m]"]')).toHaveCount(1);
+    await expect(page.locator('input[name="blueworx_surecart_price_ids[enterprise][m]"]')).toHaveCount(1);
+  });
+
   // The whole point of the screen: the Contact page has been showing a
   // placeholder rather than a form, and this is the step that ends that.
   test('a shortcode saved here renders on the public Contact page', async ({ page }) => {

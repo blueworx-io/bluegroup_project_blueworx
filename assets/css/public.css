@@ -104,20 +104,6 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .tag-dark::before { background: #6D6AF0; box-shadow: 0 0 6px rgba(109,106,240,.95); }
 .mobile-menu .tag-light { margin-left: 8px; vertical-align: 2px; }
 
-/* Toolbox mega panel + About Us dropdown (Nav.tsx). Unlike the React source,
-   which mounts these only while open, templates/parts/nav.php renders both
-   unconditionally and assets/js/public-nav.js toggles ".open" — so the panel
-   has to be hidden by CSS rather than by not existing. ":focus-within" on
-   the shared ".nav-drop" wrapper reveals the panel for keyboard users too —
-   Tab onto the trigger link, or onto any link already inside the panel,
-   keeps it open without depending on public-nav.js's focusin/focusout
-   handlers having already run. */
-.nav-drop { position: relative; }
-.mega-panel { display: none; position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%); width: 760px; background: #0A0C29; border-radius: 20px; box-shadow: 0 30px 70px rgba(10,12,41,.35); padding: 28px; grid-template-columns: 1fr 1fr; gap: 6px 18px; z-index: 60; }
-.mega-panel.open, .nav-drop:focus-within .mega-panel { display: grid; }
-.about-panel { display: none; position: absolute; top: calc(100% + 10px); left: 0; min-width: 160px; background: #0A0C29; border-radius: 14px; box-shadow: 0 20px 50px rgba(10,12,41,.3); padding: 8px; z-index: 60; }
-.about-panel.open, .nav-drop:focus-within .about-panel { display: block; }
-
 /* ===== buttons ===== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: none; cursor: pointer; font-family: var(--font-sora), sans-serif; font-weight: 600; letter-spacing: -.01em; border-radius: 13px; transition: background .22s ease, color .22s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }
 .btn:hover { transform: translateY(-2px); }
@@ -349,6 +335,7 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .plan-name span { font-size: 18px; font-weight: 600; color: #0A0C29; }
 .feat .plan-name span { color: #fff; }
 .pop { font-size: 12px; font-weight: 600; color: #4F46E5; background: #fff; padding: 5px 12px; border-radius: 20px; }
+.feat .plan-name .pop { color: #4338CA; }
 .plan-desc { font-size: 14px; line-height: 1.55; color: #667085; margin-bottom: 18px; min-height: 42px; }
 .feat .plan-desc { color: rgba(255,255,255,.78); }
 .plan-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 22px; }
@@ -389,6 +376,7 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .calc-field { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #F0F0F5; }
 .calc-field:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .calc-field > label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
+.bw-calc-label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
 .opt-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .opt { padding: 11px 18px; border-radius: 10px; background: #fff; border: 1px solid #E6E6E6; font-size: 14px; font-weight: 500; color: #4C4C4C; cursor: pointer; transition: .18s; }
 .opt:hover { border-color: #A5A7FF; }
@@ -408,14 +396,14 @@ nav.nav-scrolled { background: rgba(255,255,255,.78); box-shadow: 0 10px 34px rg
 .calc-out .cv { font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-weight: 700; font-size: 56px; letter-spacing: -1px; }
 .calc-out .cp { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 24px; }
 
-/* faq */
+/* faq — native <details>; the answer must never be height-clipped */
 .faq-list { max-width: 940px; margin: 0 auto; }
 .faq-item { border-bottom: 1px solid #EFEFF0; }
-.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 8px; cursor: pointer; font-size: 18px; font-weight: 600; color: #0A0C29; }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 8px; cursor: pointer; font-size: 18px; font-weight: 600; color: #0A0C29; list-style: none; }
+.faq-q::-webkit-details-marker { display: none; }
 .faq-q svg { width: 22px; height: 22px; flex-shrink: 0; color: #4F46E5; transition: transform .25s ease; }
-.faq-item.open .faq-q svg { transform: rotate(180deg); }
-.faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; }
-.faq-item.open .faq-a { max-height: 240px; padding: 0 8px 26px; }
+.faq-item[open] .faq-q svg { transform: rotate(180deg); }
+.faq-a { max-height: none; overflow: visible; padding: 0 8px 26px; }
 .faq-a p { font-size: 15px; line-height: 1.65; color: #667085; max-width: 820px; }
 
 /* testimonials */
@@ -568,22 +556,11 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 .collab-chip small { font-size: 11px; color: #667085; display: block; }
 .collab-chip b { font-size: 16px; color: #0A0C29; }
 
-/* digital toolbox dark grid */
+/* dark band (the ClubHouse block on the home page) */
 .tbx { background: #0A0C29; padding: 116px var(--gut); position: relative; overflow: hidden; }
 .tbx-head { text-align: center; max-width: 620px; margin: 0 auto 52px; }
 .tbx-head h2 { color: #fff; }
 .tbx-head p { font-size: 18px; line-height: 1.7; color: rgba(255,255,255,.66); margin-top: 16px; }
-.tbx-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-.tbx-card { background: rgba(255,255,255,.045); backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%); border-radius: 16px; padding: 24px; min-height: 208px; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.07); transition: transform .3s cubic-bezier(.2,.7,.2,1), background .3s ease, border-color .3s ease, box-shadow .3s ease; cursor: pointer; }
-.tbx-card:hover { transform: translateY(-6px); background: rgba(255,255,255,.09); border-color: rgba(165,167,255,.42); box-shadow: 0 22px 54px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.14); }
-.tbx-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.tbx-logo { width: 52px; height: 52px; border-radius: 13px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; box-shadow: 0 6px 16px rgba(0,0,0,.28); }
-.tbx-logo img { width: 30px; height: 30px; object-fit: contain; display: block; }
-.tbx-arrow { color: rgba(255,255,255,.4); flex-shrink: 0; transition: color .2s, transform .2s; }
-.tbx-card:hover .tbx-arrow { color: #A5A7FF; transform: translate(2px,-2px); }
-.tbx-arrow svg { width: 22px; height: 22px; }
-.tbx-card h3 { font-size: 19px; font-weight: 600; color: #fff; margin: 24px 0 6px; }
-.tbx-card p { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,.62); }
 
 /* ===== v2 overhaul ===== */
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -637,8 +614,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
 .why-grid { grid-template-columns: 1fr 1fr; }
 .collab-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
 .sv-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
-.pt-tool-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.pt-tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 
 /* ===== responsive ===== */
 @media (max-width: 1400px) {
@@ -687,7 +662,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .tech-hero { padding-top: 84px; padding-bottom: 76px; }
   .tech-hero.pb-tall { padding-bottom: 210px; }
   .tech-2col .glass-wrap { margin-top: 8px; }
-  .tbx-grid { grid-template-columns: 1fr 1fr; }
   .collab-visual { min-height: 340px; }
   .tbx { padding-top: 60px; padding-bottom: 60px; }
   .gr-cards { grid-template-columns: 1fr 1fr; }
@@ -736,7 +710,6 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .pt-platform { grid-template-columns: 1fr; }
   .pt-table { display: block; overflow-x: auto; }
   .pt-table th, .pt-table td { white-space: nowrap; }
-  .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 700px) {
   .sv-tools { grid-template-columns: 1fr; }
@@ -744,11 +717,11 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .tab { flex: 1 1 auto; padding: 0 18px; }
 }
 @media (max-width: 560px) {
-  .gr-cards, .ft, .tbx-grid, .proc-grid { grid-template-columns: 1fr; }
+  .gr-cards, .ft, .proc-grid { grid-template-columns: 1fr; }
   .frow { grid-template-columns: 1fr; }
   .cta-actions .btn, .hero-cta .btn { width: 100%; }
   .pt-stats { grid-template-columns: 1fr 1fr; }
-  .collab-list, .pt-tool-grid, .pt-tier-grid { grid-template-columns: 1fr; }
+  .collab-list { grid-template-columns: 1fr; }
 }
 
 /* ===== AI Powered page ===== */
@@ -876,15 +849,7 @@ main > div > .sec:last-child:not([style*="background"]) { padding-bottom: 0; }
   .ai-pipe, .ai-models { grid-template-columns: 1fr; }
 }
 
-/* mega menu item hover (ported from inline style-hover in the design export) */
-.mega-item:hover { background: rgba(255,255,255,.07); }
-/* mega items live inside .nav-links, whose anchors are nowrap for the top-level
-   labels — without this the descriptions can't wrap and the grid overflows its
-   fixed-width panel */
-.nav-links a.mega-item { white-space: normal; }
-
 /* portal toolbox / learning card hover (ported from inline style-hover in the design export) */
-.pt-tool-link:hover { border-color: #C7C9F5 !important; box-shadow: 0 8px 22px rgba(10,12,41,.07); }
 
 /* buttons rendered as links (Next.js <Link>) must not inherit anchor underlines */
 a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
@@ -1265,17 +1230,6 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
 .dash-tb-state .dash-card-sub { padding-bottom: 22px; }
 .dash-tb-state .dash-card-sub + .btn { margin-top: 0; }
 
-.dash-tools { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 14px; }
-.dash-tool { min-width: 0; }
-.dash-tool-link { display: flex; align-items: center; gap: 13px; padding: 15px 16px; background: #fff; border: 1px solid var(--dash-line); border-radius: 14px; text-decoration: none; color: inherit; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
-.dash-tool-link:hover { border-color: #C9CBFF; box-shadow: var(--sh-2); transform: translateY(-2px); }
-.dash-tool-logo { width: 40px; height: 40px; border-radius: 11px; background: #F5F6FB; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.dash-tool-logo img { width: 24px; height: 24px; object-fit: contain; }
-.dash-tool-text { min-width: 0; flex: 1; }
-.dash-tool-name { display: block; font-size: 14.5px; font-weight: 650; color: var(--ink); }
-.dash-tool-desc { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.45; color: #8A8D99; }
-.dash-tool-state { flex-shrink: 0; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8A8D99; background: #F5F6FB; border-radius: 100px; padding: 5px 10px; }
-.dash-tool-state.on { color: #01824C; background: #ECFDF3; }
 
 @media (max-width: 900px) {
   .dash-field-row { grid-template-columns: 1fr; }
@@ -1295,3 +1249,124 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
 .dash-site-url { display: inline-block; margin-top: 8px; font-size: 13.5px; color: var(--brand-dk); overflow-wrap: anywhere; }
 .dash-site-host { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
 .dash-site-label { display: block; font-family: 'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8A8D99; margin-bottom: 2px; }
+
+/* ===== site restructure (2026-09) — shared layout ===== */
+/* Deterministic card grids. auto-fit left orphan rows (3 + 1), so column
+   counts are fixed per breakpoint. */
+.bw-g2, .bw-g3, .bw-g4 { display: grid; gap: 20px; }
+.bw-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bw-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bw-g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .bw-g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .bw-g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .bw-g2, .bw-g3, .bw-g4 { grid-template-columns: minmax(0, 1fr); } }
+
+/* A hairline between adjacent light sections. A modifier, not a sibling
+   selector, so a page states which sections divide rather than inheriting it
+   from whatever happens to precede them. */
+.bw-page .sec.bw-divided { border-top: 1px solid #EFEFF0; }
+
+/* Light and dark cards used by the product pages. */
+.bw-card { background: #fff; border: 1px solid #EFEFF0; border-radius: 16px; padding: 28px 26px; box-shadow: 0 1px 2px rgba(10,12,41,.04); }
+.bw-card h3 { font-size: 19px; letter-spacing: -.3px; margin: 0 0 8px; }
+.bw-card p { font-size: 15px; margin: 0; color: #4C4C4C; line-height: 1.55; }
+.bw-card .bw-stat { font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 600; letter-spacing: -1px; color: #4F46E5; margin-bottom: 10px; }
+.bw-card-dark { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 26px 24px; }
+.bw-card-dark .bw-tag { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #A5A7FF; margin-bottom: 14px; }
+.bw-card-dark h3 { font-size: 19px; color: #fff; margin: 0 0 8px; letter-spacing: -.3px; }
+.bw-card-dark p { font-size: 14.5px; color: rgba(255,255,255,.66); margin: 0; line-height: 1.6; }
+
+/* The "supporting panel" beside a single plan card (ClubHouse, Hosting). */
+.bw-plan-aside { background: #F5F6FF; border-radius: 16px; padding: 34px 32px; display: flex; flex-direction: column; gap: 18px; }
+.bw-plan-aside h3 { font-size: 22px; letter-spacing: -.4px; margin: 0; }
+.bw-plan-aside p { font-size: 15.5px; margin: 0; color: #4C4C4C; line-height: 1.6; }
+.bw-plan-aside .collab-list { margin: 0; }
+.bw-plan-aside .fli { border-bottom: none; padding: 8px 0; }
+.bw-plan-aside .fli span { font-size: 16px; }
+.bw-plan-aside .pf { font-size: 15px; }
+.bw-plan-aside .btn { align-self: flex-start; }
+.bw-plan-grid { gap: 22px; max-width: 960px; margin: 0 auto; }
+
+/* Split section header: eyebrow + h2 on the left, a button on the right. */
+.bw-split-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+.bw-split-head .h2 { max-width: 560px; }
+
+/* Support page: hours slider. */
+input[type="range"].bw-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 99px; background: #E8E7F7; outline: none; }
+input[type="range"].bw-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(10,12,41,.25); cursor: pointer; }
+input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; cursor: pointer; }
+.bw-range-ends { display: flex; justify-content: space-between; font-size: 12.5px; color: #A0AFC0; margin-top: 8px; }
+.bw-calc-big { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.bw-calc-big b { font-family: 'Sora', sans-serif; font-size: 40px; letter-spacing: -1px; color: #0A0C29; }
+.bw-calc-big span { font-size: 15px; color: #667085; }
+.bw-calc-name { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 600; color: #0A0C29; }
+.bw-calc-blurb { font-size: 14.5px; color: #667085; margin: 6px 0 0; line-height: 1.55; }
+.bw-calc-rate { font-family: 'Sora', sans-serif; font-size: 18px; color: #0A0C29; }
+
+/* ClubHouse: the hero headline is set so the accent phrase holds one line in
+   the 560px column; the demo band is a wide slot beside a stacked pair. */
+.tech-hero.bw-hero-tight .h1 { font-size: 56px; letter-spacing: -1.9px; }
+.tech-hero.bw-hero-tight .h1 .tech-grad { white-space: nowrap; }
+@media (max-width: 1100px) { .tech-hero.bw-hero-tight .h1 { font-size: 44px; letter-spacing: -1.2px; } }
+@media (max-width: 700px) { .tech-hero.bw-hero-tight .h1 { font-size: 36px; letter-spacing: -.9px; } }
+.bw-demo { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: stretch; grid-auto-rows: 392px; }
+.bw-demo-stack { display: grid; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; min-width: 0; min-height: 0; height: 100%; }
+.bw-demo-shot { display: block; width: 100%; height: 100%; min-width: 0; border-radius: 16px; overflow: hidden; border: 1px solid #EFEFF0; box-shadow: 0 1px 2px rgba(10,12,41,.04); }
+.bw-demo-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+@media (max-width: 900px) { .bw-demo { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; } .bw-demo-shot { aspect-ratio: 16 / 9; } }
+
+/* Nav: larger logo, tighter link gap, the currency switcher. */
+.nav-logo img { height: 34px; }
+.nav-links { gap: 4px; }
+.bw-cur { position: relative; flex-shrink: 0; }
+.bw-cur-btn { display: inline-flex; align-items: center; gap: 7px; height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid rgba(10,12,41,.14); background: #fff; font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 600; color: #0A0C29; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.bw-cur-btn:hover { background: #E8E7F7; border-color: #4338CA; color: #4338CA; }
+.bw-cur-btn svg { width: 14px; height: 14px; transition: transform .2s ease; }
+.bw-cur.open .bw-cur-btn svg { transform: rotate(180deg); }
+.bw-cur-menu { display: none; position: absolute; top: calc(100% + 10px); right: 0; min-width: 236px; background: #0A0C29; border-radius: 14px; box-shadow: 0 30px 70px rgba(10,12,41,.34); padding: 8px; z-index: 260; }
+.bw-cur.open .bw-cur-menu { display: block; }
+.bw-cur-menu button { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; white-space: nowrap; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 500; color: #fff; cursor: pointer; transition: background .18s ease; }
+.bw-cur-menu button:hover { background: rgba(255,255,255,.08); }
+.bw-cur-menu button.on { background: rgba(139,142,255,.18); color: #C9CBFF; }
+.bw-cur-menu button i { font-style: normal; opacity: .55; font-size: 13px; }
+.mobile-menu .bw-cur { width: 100%; margin-top: 6px; }
+.mobile-menu .bw-cur-btn { width: 100%; justify-content: space-between; }
+.mobile-menu .bw-cur-menu { left: 0; right: 0; }
+
+/* Footer: below 1000px .ft has two tracks for three children; let the brand
+   block span the row so the two link columns pair up. */
+@media (max-width: 1000px) { .ft > .fb { grid-column: 1 / -1; } }
+
+/* Icon tiles: a raw <svg> dropped straight into a tile (the ClubHouse module
+   cards) is sized like the span[data-ic] blueworx_icon() wraps, so it sits
+   inside the tinted tile instead of filling it edge to edge. */
+.svc-ic > svg { width: 24px; height: 24px; display: block; }
+.fli-icon > svg { width: 22px; height: 22px; display: block; }
+
+/* Plan card: the one-off setup fee under the monthly price. */
+.plan-setup { font-size: 14px; color: #667085; margin: -12px 0 22px; }
+.plan-setup span { font-weight: 600; color: #0A0C29; }
+.feat .plan-setup { color: rgba(255,255,255,.7); }
+.feat .plan-setup span { color: #fff; }
+
+/* Home: the ClubHouse band, in the dark Toolbox band's clothes. */
+.bw-ch-band .tbx-head { max-width: 680px; }
+.bw-ch-band-tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #A5A7FF; }
+.bw-ch-band-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; }
+.bw-ch-band-shot { display: block; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 30px 70px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08); background: #10122E; transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .3s ease; }
+.bw-ch-band-shot:hover { transform: translateY(-6px); border-color: rgba(165,167,255,.42); }
+.bw-ch-band-shot img { display: block; width: 100%; height: auto; }
+.bw-ch-band-list { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; margin-bottom: 30px; }
+.bw-ch-band-item { display: flex; align-items: flex-start; gap: 14px; }
+.bw-ch-band-ic { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(139,142,255,.14); border: 1px solid rgba(165,167,255,.3); color: #C9CBFF; }
+.bw-ch-band-ic svg { width: 20px; height: 20px; display: block; }
+.bw-ch-band-item h3 { font-size: 16.5px; font-weight: 600; color: #fff; margin: 0 0 4px; letter-spacing: -.2px; }
+.bw-ch-band-item p { font-size: 13.5px; line-height: 1.5; color: rgba(255,255,255,.6); margin: 0; }
+.bw-ch-band-price { display: flex; flex-direction: column; gap: 6px; margin-bottom: 26px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.1); }
+.bw-ch-band-price b { font-family: 'Sora', sans-serif; font-size: 34px; letter-spacing: -1px; color: #fff; display: flex; align-items: baseline; gap: 8px; }
+.bw-ch-band-price b .bw-ch-band-per { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0; color: rgba(255,255,255,.6); }
+.bw-ch-band-price small { font-size: 14px; color: rgba(255,255,255,.66); }
+.bw-ch-band-price small span { color: #fff; font-weight: 600; }
+.bw-ch-band-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 1000px) { .bw-ch-band-grid { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 600px) { .bw-ch-band-list { grid-template-columns: 1fr; } }

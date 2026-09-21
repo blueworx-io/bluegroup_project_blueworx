@@ -15,7 +15,7 @@
 
 import { test, expect, isPlaceholder, cacheBust, login } from './helpers.js';
 
-const PUBLIC_PATHS = ['/', '/services/', '/toolbox/', '/pricing/', '/about/', '/toolbox/surecart/'];
+const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/about/', '/portfolio/'];
 const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
 
 const skipPlaceholder = () =>
@@ -72,7 +72,7 @@ test.describe('#81 Caching', () => {
 
     // The marketing pages too, not just the dashboard: signed in, they carry
     // the admin bar and the visitor's own name.
-    for (const path of ['/', '/pricing/', '/dashboard/']) {
+    for (const path of ['/', '/support/', '/dashboard/']) {
       const response = await page.goto(cacheBust(path));
       const cacheControl = (response.headers()['cache-control'] || '').toLowerCase();
 
@@ -93,9 +93,9 @@ test.describe('#81 Caching', () => {
   test('a form post is never treated as cacheable', async ({ page }) => {
     skipPlaceholder();
 
-    const response = await page.request.post('/pricing/', { form: { anything: '1' } });
+    const response = await page.request.post('/support/', { form: { anything: '1' } });
     const cacheControl = (response.headers()['cache-control'] || '').toLowerCase();
 
-    expect(cacheControl, `POST /pricing/: ${cacheControl}`).not.toContain('public');
+    expect(cacheControl, `POST /support/: ${cacheControl}`).not.toContain('public');
   });
 });

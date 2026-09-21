@@ -169,13 +169,13 @@ blueworx_public_part( 'parts/nav.php' );
 						<h1 class="h1" style="margin-top:22px"><?php esc_html_e( 'From Prompt to Production — ', 'bluegroup-project-blueworx' ); ?><span class="tech-grad"><?php esc_html_e( 'Built by AI', 'bluegroup-project-blueworx' ); ?></span><?php esc_html_e( ', Shipped by Experts', 'bluegroup-project-blueworx' ); ?></h1>
 						<p class="lead" style="margin-top:22px"><?php esc_html_e( 'We build websites, plugins, automations and custom tools with an AI-first process. Claude models turn your brief into production-ready code on a vetted stack, reviewed, tested and shipped by our team.', 'bluegroup-project-blueworx' ); ?></p>
 						<div class="hh-cta" style="margin-top:34px">
-							<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>" class="btn btn-white btn-lg"><?php esc_html_e( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
-							<a href="<?php echo esc_url( home_url( '/work' ) ); ?>" class="btn btn-outline-w btn-lg">
+							<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-white btn-lg"><?php esc_html_e( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
+							<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>" class="btn btn-outline-w btn-lg">
 								<?php
 								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static trusted arrow markup.
 								echo $blueworx_ai_arrow;
 								?>
-								<?php esc_html_e( 'View Our Work', 'bluegroup-project-blueworx' ); ?>
+								<?php esc_html_e( 'View Our Portfolio', 'bluegroup-project-blueworx' ); ?>
 							</a>
 						</div>
 						<div class="ai-lead-tags">

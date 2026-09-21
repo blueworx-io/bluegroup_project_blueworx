@@ -29,35 +29,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The title and description for each page, keyed by registry key.
  *
- * Tool pages are keyed "toolbox/<slug>" like the rest of the registry.
- *
  * @return array Registry key => array( title, description ).
  */
 function blueworx_public_seo_copy() {
 	$copy = array(
 		'home'     => array(
-			'title'       => __( 'Websites, Hosting and 12 Premium Tools in One Plan', 'bluegroup-project-blueworx' ),
-			'description' => __( 'BlueWorx builds and looks after business websites, with hosting, support and twelve premium WordPress tools included in one straightforward monthly plan.', 'bluegroup-project-blueworx' ),
+			'title'       => __( 'Websites, Hosting, Support and ClubHouse, From One Team', 'bluegroup-project-blueworx' ),
+			'description' => __( 'BlueWorx designs, builds and looks after business websites, with managed hosting, integrated support and ClubHouse, the club website platform, from one team.', 'bluegroup-project-blueworx' ),
 		),
-		'services' => array(
-			'title'       => __( 'Web Design, Managed Hosting and Ongoing Support', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Website design and build, managed hosting and ongoing support from one team. See exactly what each BlueWorx service covers and how a project actually runs.', 'bluegroup-project-blueworx' ),
+		'clubhouse' => array(
+			'title'       => __( 'ClubHouse — The Website Platform for Sports Clubs', 'bluegroup-project-blueworx' ),
+			'description' => __( 'A ready-made club website with memberships, teams, fixtures, bookings, events and a shop, on managed hosting from day one. £20 a month, live in two weeks.', 'bluegroup-project-blueworx' ),
 		),
-		'toolbox'  => array(
-			'title'       => __( 'Twelve Premium WordPress Tools, One Subscription', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Twelve premium WordPress tools for forms, SEO, email, checkout, accessibility and AI, bundled into one subscription instead of twelve separate licences.', 'bluegroup-project-blueworx' ),
+		'hosting'   => array(
+			'title'       => __( 'Managed WordPress Hosting, One Price Per Site', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Fast managed WordPress hosting with daily backups, free SSL, a firewall, staging and monitoring handled for you. £20 a month per site, and we move you for free.', 'bluegroup-project-blueworx' ),
 		),
-		'pricing'  => array(
-			'title'       => __( 'Plans and Pricing for Websites, Hosting and Tools', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Straightforward monthly plans covering your website, its hosting, your support and all twelve premium tools. Compare what each plan includes and what it costs.', 'bluegroup-project-blueworx' ),
+		'support'   => array(
+			'title'       => __( 'Integrated Support — Design and Development on Retainer', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Nine support packages from £100 a month. Buy a block of hours and spend them on design, development, content, SEO or fixes, with the whole BlueWorx team behind them.', 'bluegroup-project-blueworx' ),
 		),
 		'about'    => array(
 			'title'       => __( 'Who We Are and How We Work With Clients', 'bluegroup-project-blueworx' ),
 			'description' => __( 'BlueWorx is a small team building and looking after websites for growing businesses. How we work, what we care about, and who you actually deal with.', 'bluegroup-project-blueworx' ),
 		),
-		'work'     => array(
-			'title'       => __( 'Client Projects and What They Changed', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Websites we have built and the businesses behind them: what the brief was, what we changed, and what it did for the people who have to run the thing.', 'bluegroup-project-blueworx' ),
+		'portfolio' => array(
+			'title'       => __( 'Our Portfolio — Websites We Have Built', 'bluegroup-project-blueworx' ),
+			'description' => __( 'Eleven live websites BlueWorx designed, built and looks after, from sports governing bodies and tutoring companies to lighting suppliers and studios. Visit each one.', 'bluegroup-project-blueworx' ),
 		),
 		'ai'       => array(
 			'title'       => __( 'Practical AI for Your Website, Without the Hype', 'bluegroup-project-blueworx' ),
@@ -72,66 +70,6 @@ function blueworx_public_seo_copy() {
 			'description' => __( 'What we learn running websites, stores and campaigns for clients: speed, checkout, SEO, automation and accessibility, written plainly enough to act on.', 'bluegroup-project-blueworx' ),
 		),
 	);
-
-	// The twelve tool pages. Written out here rather than generated from the
-	// tagline in content.php: a description assembled from a sentence written
-	// for a page heading reads like one, and comes out too short for the space
-	// a search result gives it. The tagline says what the tool is; these say
-	// why somebody searching would want it and that it comes with the plan.
-	$tools = array(
-		'sureforms'             => array(
-			'title'       => __( 'SureForms — Forms That Convert, Without Code', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Build contact forms, quote requests and multi-step flows with conditional logic, payments and spam filtering. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'surerank'              => array(
-			'title'       => __( 'SureRank — Plain-English SEO for WordPress', 'bluegroup-project-blueworx' ),
-			'description' => __( 'See what is holding your pages back in search, in plain English, with a health score and keyword tracking. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'suremail'              => array(
-			'title'       => __( 'SureMail — Email From Your Site That Arrives', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Reliable delivery for every order confirmation, form notification and password reset your site sends, with logs. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'surewriter'            => array(
-			'title'       => __( 'SureWriter — On-Brand Copy, Drafted in Seconds', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Draft page copy, product descriptions and marketing content that sounds like your business rather than a robot. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'surecart'              => array(
-			'title'       => __( 'SureCart — Modern Checkout and Subscriptions', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Sell products, services, downloads and subscriptions with a fast checkout that does not send buyers away. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'zipwp'                 => array(
-			'title'       => __( 'ZipWP — A Whole WordPress Site in Minutes', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Describe the business and get a complete WordPress site — pages, copy and images — to start from rather than a blank screen. Included with every plan.', 'bluegroup-project-blueworx' ),
-		),
-		'ottokit'               => array(
-			'title'       => __( 'OttoKit — Automate the Jobs Nobody Wants', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Connect your website to the tools you already use and let the repetitive jobs run themselves, with no code. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'ally'                  => array(
-			'title'       => __( 'Ally — Make Your Site Usable by Everyone', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Ongoing accessibility improvements so visitors using a screen reader, a keyboard or a phone can all get where they need. Included with every plan.', 'bluegroup-project-blueworx' ),
-		),
-		'sweet-ai'              => array(
-			'title'       => __( 'Sweet AI — A Second Read on Everything You Write', 'bluegroup-project-blueworx' ),
-			'description' => __( 'An assistant that reviews your pages for clarity and impact and suggests what to cut, before a customer reads them. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'elementor-ai-planner'  => array(
-			'title'       => __( 'Elementor AI Planner — Plan the Site Before Building It', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Map out your pages, structure and navigation before a single one is built, so the site makes sense to visitors. Included with every BlueWorx plan.', 'bluegroup-project-blueworx' ),
-		),
-		'elementor'             => array(
-			'title'       => __( 'Elementor — Change Your Own Pages, Safely', 'bluegroup-project-blueworx' ),
-			'description' => __( 'The visual page builder behind every layout we design, so you can edit your own pages without touching code or breaking anything. Included with every plan.', 'bluegroup-project-blueworx' ),
-		),
-		'equalize-a11y-checker' => array(
-			'title'       => __( 'Equalize — Catch Accessibility Problems as You Write', 'bluegroup-project-blueworx' ),
-			'description' => __( 'Real-time WCAG checks that flag a missing alt text or an unreadable colour while the page is being edited, not months later. Included with every plan.', 'bluegroup-project-blueworx' ),
-		),
-	);
-
-	foreach ( $tools as $blueworx_seo_slug => $blueworx_seo_entry ) {
-		$copy[ 'toolbox/' . $blueworx_seo_slug ] = $blueworx_seo_entry;
-	}
 
 	return (array) apply_filters( 'blueworx_public_seo_copy', $copy );
 }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="assets/css/blueworx-fonts.css" />
+<link rel="stylesheet" href="assets/css/public.css" />
+<style>
+body { margin: 0; background: #fff; }
+a { color: #4F46E5; }
+a:hover { color: #4338CA; }
+/* The nav lives in this component, so it is no longer a direct child of
+   .bw-page — public.css's `.bw-page:not(.bw-dashboard) > nav` rule stops
+   matching, and the import wrapper would also trap position:sticky. */
+.bw-page:not(.bw-dashboard) > .sc-host:has(> nav) { display: contents; }
+.bw-page:not(.bw-dashboard) nav { width: 100%; height: 96px; background: rgba(255,255,255,.62); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); display: flex; align-items: center; padding: 0 var(--gut); border-bottom: 1px solid rgba(10,12,41,.07); position: sticky; top: 0; z-index: 200; transition: transform .38s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, background .3s ease; will-change: transform; }
+@media (max-width: 1000px) {
+  .bw-page:not(.bw-dashboard) nav { padding: 0 24px; justify-content: space-between; }
+}
+.nav-logo img { height: 34px; width: auto; }
+.nav-links { gap: 4px; }
+.nav-links a { white-space: nowrap; }
+.bw-cur { position: relative; flex-shrink: 0; }
+.bw-cur-btn { display: inline-flex; align-items: center; gap: 7px; height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid rgba(10,12,41,.14); background: #fff; font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 600; color: #0A0C29; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.bw-cur-btn:hover { background: #E8E7F7; border-color: #4338CA; color: #4338CA; }
+.bw-cur-btn svg { width: 14px; height: 14px; transition: transform .2s ease; }
+.bw-cur.open .bw-cur-btn svg { transform: rotate(180deg); }
+.bw-cur-menu { display: none; position: absolute; top: calc(100% + 10px); right: 0; min-width: 150px; background: #0A0C29; border-radius: 14px; box-shadow: 0 30px 70px rgba(10,12,41,.34); padding: 8px; z-index: 260; }
+.bw-cur.open .bw-cur-menu { display: block; }
+.bw-cur-menu button { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 500; color: #fff; cursor: pointer; transition: background .18s ease; }
+.bw-cur-menu button:hover { background: rgba(255,255,255,.08); }
+.bw-cur-menu button.on { background: rgba(139,142,255,.18); color: #C9CBFF; }
+.bw-cur-menu button i { font-style: normal; opacity: .55; font-size: 13px; }
+.mobile-menu .bw-cur { width: 100%; margin-top: 6px; }
+.mobile-menu .bw-cur-btn { width: 100%; justify-content: space-between; }
+.mobile-menu .bw-cur-menu { left: 0; right: 0; }
+</style>
+</helmet>
+<nav>
+	<a class="nav-logo" href="BlueWorx%20Home.dc.html"><img src="assets/img/logo.png" alt="BlueWorx" width="170" height="34" /></a>
+	<div class="nav-links">
+		<a data-page="home" href="BlueWorx%20Home.dc.html">Home</a>
+		<a data-page="clubhouse" href="BlueWorx%20ClubHouse.dc.html">ClubHouse</a>
+		<a data-page="hosting" href="BlueWorx%20Hosting.dc.html">Hosting</a>
+		<a data-page="support" href="BlueWorx%20Support.dc.html">Support</a>
+		<a data-page="work" href="BlueWorx%20Work.dc.html">Work</a>
+		<a data-page="ai" href="BlueWorx%20AI%20Powered.dc.html" style="gap:7px">AI Powered<span class="nav-tag tag-light">New</span></a>
+	</div>
+	<div class="nav-cta">
+		<a class="nav-sign-in" href="BlueWorx%20Dashboard.dc.html">Client Login</a>
+		<a class="nav-btn" href="BlueWorx%20Contact.dc.html">Contact
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+		</a>
+		<div class="bw-cur">
+			<button type="button" class="bw-cur-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Currency">
+				<span data-cur-label>£ GBP</span>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+			</button>
+			<div class="bw-cur-menu" role="listbox">
+				<button type="button" data-cur="GBP">£ GBP<i>Pound</i></button>
+				<button type="button" data-cur="EUR">€ EUR<i>Euro</i></button>
+				<button type="button" data-cur="USD">$ USD<i>Dollar</i></button>
+			</div>
+		</div>
+	</div>
+	<a class="nav-sign-in-mobile" href="BlueWorx%20Dashboard.dc.html">Client Login</a>
+	<button class="hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span></button>
+</nav>
+<div class="mobile-menu">
+	<a data-page="home" href="BlueWorx%20Home.dc.html">Home</a>
+	<a data-page="clubhouse" href="BlueWorx%20ClubHouse.dc.html">ClubHouse</a>
+	<a data-page="hosting" href="BlueWorx%20Hosting.dc.html">Hosting</a>
+	<a data-page="support" href="BlueWorx%20Support.dc.html">Support</a>
+	<a data-page="work" href="BlueWorx%20Work.dc.html">Work</a>
+	<a data-page="ai" href="BlueWorx%20AI%20Powered.dc.html">AI Powered<span class="nav-tag tag-light">New</span></a>
+	<a href="BlueWorx%20Dashboard.dc.html">Client Login</a>
+	<a class="btn btn-brand btn-md" href="BlueWorx%20Contact.dc.html">Contact</a>
+	<div class="bw-cur">
+		<button type="button" class="bw-cur-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Currency">
+			<span data-cur-label>£ GBP</span>
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+		</button>
+		<div class="bw-cur-menu" role="listbox">
+			<button type="button" data-cur="GBP">£ GBP<i>Pound</i></button>
+			<button type="button" data-cur="EUR">€ EUR<i>Euro</i></button>
+			<button type="button" data-cur="USD">$ USD<i>Dollar</i></button>
+		</div>
+	</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;clubhouse&quot;,&quot;hosting&quot;,&quot;support&quot;,&quot;work&quot;,&quot;ai&quot;,&quot;contact&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const active = this.props.active || '';
+    if (active) {
+      document.querySelectorAll('[data-page="' + active + '"]').forEach((a) => a.classList.add('active'));
+    }
+    // Currency is shared across the site: stored once, broadcast to any page
+    // holding prices.
+    const LABEL = { GBP: '£ GBP', EUR: '€ EUR', USD: '$ USD' };
+    let cur = 'GBP';
+    try { cur = localStorage.getItem('bw-currency') || 'GBP'; } catch (e) {}
+    const paint = (c) => {
+      document.querySelectorAll('[data-cur-label]').forEach((el) => { el.textContent = LABEL[c] || LABEL.GBP; });
+      document.querySelectorAll('.bw-cur-menu button').forEach((b) => {
+        b.classList.toggle('on', b.getAttribute('data-cur') === c);
+      });
+    };
+    const closeAll = () => document.querySelectorAll('.bw-cur.open').forEach((d) => {
+      d.classList.remove('open');
+      const t = d.querySelector('.bw-cur-btn');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+    paint(cur);
+    document.querySelectorAll('.bw-cur').forEach((drop) => {
+      const toggle = drop.querySelector('.bw-cur-btn');
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !drop.classList.contains('open');
+        closeAll();
+        if (willOpen) { drop.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
+      });
+      drop.querySelectorAll('.bw-cur-menu button').forEach((b) => {
+        b.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const c = b.getAttribute('data-cur');
+          try { localStorage.setItem('bw-currency', c); } catch (e2) {}
+          paint(c);
+          closeAll();
+          window.dispatchEvent(new CustomEvent('bw:currency', { detail: c }));
+        });
+      });
+    });
+    document.addEventListener('click', closeAll);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+    if (!document.querySelector('script[data-bw="assets/js/public-nav.js"]')) {
+      const s = document.createElement('script');
+      s.src = 'assets/js/public-nav.js';
+      s.setAttribute('data-bw', 'assets/js/public-nav.js');
+      document.body.appendChild(s);
+    }
+  }
+}
+
+</script>
+</body>
+</html>

@@ -11,7 +11,7 @@
 
 import { test, expect, isPlaceholder, cacheBust } from './helpers.js';
 
-const PAGES = ['/', '/services/', '/toolbox/', '/work/', '/about/', '/toolbox/surecart/'];
+const PAGES = ['/', '/clubhouse/', '/hosting/', '/portfolio/', '/about/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
@@ -82,29 +82,14 @@ test.describe('#82 Images', () => {
     ).toBe(true);
   });
 
-  test('the menu’s tool icons are ready before the menu opens', async ({ page }) => {
-    skipPlaceholder();
-
-    await page.goto(cacheBust('/'));
-
-    const lazy = await page
-      .locator('.mega-panel img')
-      .evaluateAll((imgs) => imgs.filter((img) => img.getAttribute('loading') === 'lazy').length);
-
-    // They live in a panel that is in the document but hidden, so a lazy icon
-    // only starts loading when the panel opens — the one moment somebody is
-    // looking straight at it.
-    expect(lazy, 'the mega panel icons are lazy-loaded').toBe(0);
-  });
-
   test('photographs are offered as WebP, with the original as a fallback', async ({ page }) => {
     skipPlaceholder();
 
-    await page.goto(cacheBust('/work/'));
+    await page.goto(cacheBust('/portfolio/'));
 
     const photos = (await imagesOn(page)).filter((img) => /\.(jpe?g)$/i.test(img.src));
 
-    expect(photos.length, 'no photographs on the Work page?').toBeGreaterThan(0);
+    expect(photos.length, 'no photographs on the Portfolio page?').toBeGreaterThan(0);
 
     const noWebp = photos.filter((img) => !img.webp).map((img) => img.src);
 
@@ -143,7 +128,7 @@ test.describe('#82 Images', () => {
     expect(blockCss, `block CSS still on the page: ${blockCss.join(', ')}`).toEqual([]);
   });
 
-  for (const path of ['/', '/services/', '/toolbox/']) {
+  for (const path of ['/', '/hosting/', '/clubhouse/']) {
     test(`${path} does not shift about as it loads`, async ({ page }) => {
       skipPlaceholder();
 

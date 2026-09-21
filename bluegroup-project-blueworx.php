@@ -3,7 +3,7 @@
  * Plugin Name:       BlueWorx | Marketing Site
  * Plugin URI:        https://blueworx.io/
  * Description:       The BlueWorx public marketing site, rendered by the plugin itself so it is identical wherever it is hosted. Self-contained: no theme and no dependency on other plugins.
- * Version:           1.15.0
+ * Version:           1.17.0
  * Requires at least: 5.0
  * Requires PHP:      8.0
  * Author:            BlueWorx
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BLUEWORX_SITE_VERSION' ) ) {
-	define( 'BLUEWORX_SITE_VERSION', '1.15.0' );
+	define( 'BLUEWORX_SITE_VERSION', '1.17.0' );
 }
 
 if ( ! defined( 'BLUEWORX_SITE_PATH' ) ) {
@@ -64,12 +64,11 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/bootstrap.php';
 // front end too or the portal cannot read a client's own records.
 require_once BLUEWORX_SITE_PATH . 'includes/records.php';
 
-// The admin surfaces: the settings screen, the Toolbox listing, and the field
+// The admin surfaces: the settings screen and the field
 // boxes for the two registers. Nothing on the front end needs any of them, so
 // they are not loaded for a public request.
 if ( is_admin() ) {
 	require_once BLUEWORX_SITE_PATH . 'includes/admin/settings.php';
-	require_once BLUEWORX_SITE_PATH . 'includes/admin/toolbox-menu.php';
 	require_once BLUEWORX_SITE_PATH . 'includes/admin/records-admin.php';
 }
 
@@ -102,6 +101,10 @@ function blueworx_site_activate() {
 function blueworx_site_deactivate() {
 	if ( function_exists( 'blueworx_public_restore_prior_front' ) ) {
 		blueworx_public_restore_prior_front();
+	}
+
+	if ( function_exists( 'blueworx_currency_unschedule_refresh' ) ) {
+		blueworx_currency_unschedule_refresh();
 	}
 }
 

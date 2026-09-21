@@ -24,6 +24,16 @@
  * fallback (the site name) still applies if the bundled file is somehow
  * absent, so `.fb` never renders a broken image.
  *
+ * As of the 2026-09 restructure the CTA band's title, copy and both buttons
+ * are page-supplied rather than fixed: each product page ends on its own
+ * ask, not the footer's. About and Journal, dropped from the nav, now live
+ * in the footer's second column alongside Contact and Client Login.
+ *
+ * @param string $cta_title     Optional. CTA heading. Defaults to the agency-wide copy.
+ * @param string $cta_copy      Optional. CTA body copy. Defaults to the agency-wide copy.
+ * @param array  $cta_primary   Optional. array( 'label', 'href', 'external' ). Defaults to Get a Quote -> /contact.
+ * @param array  $cta_secondary Optional. array( 'label', 'href', 'external' ). Defaults to Book a Call -> /contact.
+ *
  * @package BlueWorxSite
  */
 
@@ -33,7 +43,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $blueworx_footer_logo_path = BLUEWORX_SITE_PATH . 'assets/img/logo.png';
-$blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
+
+// The CTA band's copy is the page's, not the footer's: each product page ends
+// on its own ask. Defaults are the agency-wide ones.
+$blueworx_footer_cta_title     = isset( $cta_title ) ? (string) $cta_title : __( 'Ready to Build a Digital Solution That Wins?', 'bluegroup-project-blueworx' );
+$blueworx_footer_cta_copy      = isset( $cta_copy ) ? (string) $cta_copy : __( "Book a free strategy call. We'll review your current setup and show you exactly where the opportunities are.", 'bluegroup-project-blueworx' );
+$blueworx_footer_cta_primary   = isset( $cta_primary ) && is_array( $cta_primary ) ? $cta_primary : array(
+	'label' => __( 'Get a Quote', 'bluegroup-project-blueworx' ),
+	'href'  => home_url( '/contact' ),
+);
+$blueworx_footer_cta_secondary = isset( $cta_secondary ) && is_array( $cta_secondary ) ? $cta_secondary : array(
+	'label' => __( 'Book a Call', 'bluegroup-project-blueworx' ),
+	'href'  => home_url( '/contact' ),
+);
+$blueworx_footer_cta_primary_attrs   = ! empty( $blueworx_footer_cta_primary['external'] ) ? ' target="_blank" rel="noopener"' : '';
+$blueworx_footer_cta_secondary_attrs = ! empty( $blueworx_footer_cta_secondary['external'] ) ? ' target="_blank" rel="noopener"' : '';
 ?>
 <div class="cta-soft">
 	<div class="cta-inner">
@@ -41,11 +65,11 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 		blueworx_blob( 'width:220px;height:220px;bottom:-80px;left:-40px;opacity:.4' );
 		blueworx_blob( 'width:180px;height:180px;top:-60px;right:-20px;opacity:.35' );
 		?>
-		<h2 class="h2"><?php echo esc_html__( 'Ready to Build a Digital Solution That Wins?', 'bluegroup-project-blueworx' ); ?></h2>
-		<p><?php echo esc_html__( "Book a free strategy call. We'll review your current setup and show you exactly where the opportunities are.", 'bluegroup-project-blueworx' ); ?></p>
+		<h2 class="h2"><?php echo esc_html( $blueworx_footer_cta_title ); ?></h2>
+		<p><?php echo esc_html( $blueworx_footer_cta_copy ); ?></p>
 		<div class="cta-actions">
-			<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>" class="btn btn-brand btn-md"><?php echo esc_html__( 'Get a Quote', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-outline-w btn-md"><?php echo esc_html__( 'Book a Call', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( $blueworx_footer_cta_primary['href'] ); ?>" class="btn btn-brand btn-md"<?php echo $blueworx_footer_cta_primary_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attribute string. ?>><?php echo esc_html( $blueworx_footer_cta_primary['label'] ); ?></a>
+			<a href="<?php echo esc_url( $blueworx_footer_cta_secondary['href'] ); ?>" class="btn btn-outline-w btn-md"<?php echo $blueworx_footer_cta_secondary_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attribute string. ?>><?php echo esc_html( $blueworx_footer_cta_secondary['label'] ); ?></a>
 		</div>
 	</div>
 </div>
@@ -63,22 +87,22 @@ $blueworx_footer_logo_url  = BLUEWORX_SITE_URL . 'assets/img/logo.png';
 			<?php else : ?>
 				<span class="bw-footer-logo-text"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
 			<?php endif; ?>
-			<p><?php echo esc_html__( 'BlueWorx supports growing businesses worldwide with premium tools, hosting, and expert support.', 'bluegroup-project-blueworx' ); ?></p>
+			<p><?php echo esc_html__( 'BlueWorx supports growing businesses and clubs worldwide with websites, hosting, ClubHouse and expert support.', 'bluegroup-project-blueworx' ); ?></p>
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'Pages', 'bluegroup-project-blueworx' ); ?></h3>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( 'Home', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/services' ) ); ?>"><?php echo esc_html__( 'Services', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/clubhouse' ) ); ?>"><?php echo esc_html__( 'ClubHouse', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/hosting' ) ); ?>"><?php echo esc_html__( 'Hosting', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php echo esc_html__( 'Integrated Support', 'bluegroup-project-blueworx' ); ?></a>
+			<a href="<?php echo esc_url( home_url( '/portfolio' ) ); ?>"><?php echo esc_html__( 'Portfolio', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/ai' ) ); ?>"><?php echo esc_html__( 'AI Powered', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/work' ) ); ?>"><?php echo esc_html__( 'Work', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/toolbox' ) ); ?>"><?php echo esc_html__( 'Toolbox', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/pricing' ) ); ?>"><?php echo esc_html__( 'Pricing', 'bluegroup-project-blueworx' ); ?></a>
-			<?php // Resolved through the page map rather than home_url('/blog'), so the link survives a rename (#94). ?>
-			<a href="<?php echo esc_url( blueworx_public_journal_url() ); ?>"><?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?></a>
 		</div>
 		<div class="fcol">
 			<h3><?php echo esc_html__( 'About', 'bluegroup-project-blueworx' ); ?></h3>
+			<a href="<?php echo esc_url( home_url( '/about' ) ); ?>"><?php echo esc_html__( 'About Us', 'bluegroup-project-blueworx' ); ?></a>
+			<?php // Resolved through the page map rather than home_url('/blog'), so the link survives a rename (#94). ?>
+			<a href="<?php echo esc_url( blueworx_public_journal_url() ); ?>"><?php echo esc_html__( 'Journal', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php echo esc_html__( 'Contact', 'bluegroup-project-blueworx' ); ?></a>
 			<a href="<?php echo esc_url( blueworx_public_client_login_url() ); ?>"><?php echo esc_html__( 'Client Login', 'bluegroup-project-blueworx' ); ?></a>
 		</div>

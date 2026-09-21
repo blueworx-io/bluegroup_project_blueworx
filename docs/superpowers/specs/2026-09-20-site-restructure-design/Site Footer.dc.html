@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="assets/css/blueworx-fonts.css" />
+<link rel="stylesheet" href="assets/css/public.css" />
+<style>
+body { margin: 0; background: #fff; }
+a { color: #4F46E5; }
+a:hover { color: #4338CA; }
+/* Below 1000px public.css gives .ft two tracks for three children, leaving an
+   empty quadrant — let the brand block span the row so the link columns pair. */
+@media (max-width: 1000px) { .ft > .fb { grid-column: 1 / -1; } }
+</style>
+</helmet>
+<footer>
+	<div class="ft">
+		<div class="fb">
+			<img src="assets/img/logo.png" alt="BlueWorx" style="filter:brightness(0) invert(1)" />
+			<p>BlueWorx supports growing businesses worldwide with premium tools, hosting, and expert support.</p>
+		</div>
+		<div class="fcol">
+			<h3>Pages</h3>
+			<a href="BlueWorx%20Home.dc.html">Home</a>
+			<a href="BlueWorx%20ClubHouse.dc.html">ClubHouse</a>
+			<a href="BlueWorx%20Hosting.dc.html">Hosting</a>
+			<a href="BlueWorx%20Support.dc.html">Integrated Support</a>
+			<a href="BlueWorx%20Work.dc.html">Work</a>
+			<a href="BlueWorx%20AI%20Powered.dc.html">AI Powered</a>
+		</div>
+		<div class="fcol">
+			<h3>About</h3>
+			<a href="#">About Us</a>
+			<a href="#">Journal</a>
+			<a href="BlueWorx%20Contact.dc.html">Contact</a>
+			<a href="BlueWorx%20Dashboard.dc.html">Client Login</a>
+		</div>
+	</div>
+	<div class="fbot">
+		<p>© 2026 BlueWorx. All rights reserved.</p>
+		<p>Powered by BabyBlue Digital.</p>
+	</div>
+</footer>
+
+</x-dc>
+</body>
+</html>
