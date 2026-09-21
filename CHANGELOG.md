@@ -30,7 +30,7 @@ headlessly from Netlify.
 
 - The home page's second service card is now Managed Hosting instead of the
   Digital Toolbox.
-- The reviews section is the same on every page it appears on, capped at three,
+- The reviews are three real Trustpilot reviews. The section is the same on every page it appears on,
   and now also sits on the Hosting, Support and ClubHouse pages.
 - Support package hours match the catalogue: Scale 75, Enhance 105, Growth
   140, Enterprise 225, Enterprise + 320, Advantage 430 hours a year. Prices are

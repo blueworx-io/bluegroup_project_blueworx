@@ -169,7 +169,7 @@ test.describe('Content data layer (includes/public/content.php)', () => {
     for (const review of reviews) {
       expect(Object.keys(review).sort()).toEqual(['initials', 'name', 'role', 'text']);
     }
-    expect(reviews[0].name).toBe('Hannah Whitfield');
+    expect(reviews[0].name).toBe('Andrew');
   });
 
   test('each accessor result is filterable via blueworx_content_<name>', () => {

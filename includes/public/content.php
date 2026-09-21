@@ -1063,23 +1063,24 @@ function blueworx_content_portfolio() {
  */
 function blueworx_content_reviews() {
 	$reviews = array(
+		// Real Trustpilot reviews, quoted as written.
 		array(
-			'text'     => 'BlueWorx took our site off three separate platforms and put everything in one place. Hosting, tools, and support — it just works.',
-			'initials' => 'H',
-			'name'     => 'Hannah Whitfield',
-			'role'     => 'Owner, Bloom & Co.',
+			'text'     => 'The brief I gave was carried out in a prompt and efficient manner. The website was professional in appearance and a cost effective product.',
+			'initials' => 'A',
+			'name'     => 'Andrew',
+			'role'     => 'Sarmac',
 		),
 		array(
-			'text'     => 'They rebuilt our booking flow and our conversions climbed within weeks. It genuinely feels like an extension of our own team.',
-			'initials' => 'D',
-			'name'     => 'Daniel Okafor',
-			'role'     => 'Director, Padel365',
+			'text'     => 'I have had websites designed in the past, but no one has been as thorough, understanding, patient, and most of all professional. I can\'t recommend them enough.',
+			'initials' => 'A',
+			'name'     => 'Alicia',
+			'role'     => 'Style Me Slim',
 		),
 		array(
-			'text'     => 'Fast, reliable, and always one message away. The toolbox alone saved us hundreds a month in subscriptions.',
-			'initials' => 'P',
-			'name'     => 'Priya Nair',
-			'role'     => 'Founder, Hirasté',
+			'text'     => 'Great organisation with a can-do attitude. Our website is looking good.',
+			'initials' => 'C',
+			'name'     => 'Cheetham Hill Sports Club',
+			'role'     => 'Trustpilot review',
 		),
 	);
 
