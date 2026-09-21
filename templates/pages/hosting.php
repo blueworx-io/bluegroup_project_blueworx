@@ -21,6 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $blueworx_h = blueworx_content_hosting();
 
+// The "from £100 a month" in the support aside is the cheapest support
+// package's real price, so it cannot drift from the Support page.
+$blueworx_h_support_packages = blueworx_content_support_packages();
+$blueworx_h_support_from     = reset( $blueworx_h_support_packages );
+
 // Static, trusted SVGs ported verbatim from the design. See clubhouse.php's
 // $blueworx_ch_arrow for why these are not routed through blueworx_icon().
 $blueworx_h_arrow    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>';
@@ -202,9 +207,9 @@ blueworx_public_part( 'parts/nav.php' );
 						<?php
 						echo wp_kses(
 							sprintf(
-								/* translators: %s: the "£100" figure, wrapped in a currency-converting span. */
+								/* translators: %s: the cheapest support package's monthly price, in a span. */
 								__( 'Hosting keeps the site running. Integrated Support keeps it improving — design and development hours you can spend on anything, from %s a month.', 'bluegroup-project-blueworx' ),
-								'<span data-bw-gbp="100">£100</span>'
+								blueworx_public_money( $blueworx_h_support_from['priceM'], $blueworx_h_support_from['currency'] )
 							),
 							array( 'span' => array( 'data-bw-gbp' => true ) )
 						);

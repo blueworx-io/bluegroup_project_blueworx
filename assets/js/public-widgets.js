@@ -32,15 +32,29 @@
 		}
 	} )();
 
+	// The currency the visitor last chose on this page. The switcher
+	// announces its choice as a "bw:currency" event, and that wins over
+	// storage: where storage is blocked (private mode) the choice still has
+	// to apply to the page it was made on.
+	var chosen = '';
+
 	function currentCurrency() {
-		var code = 'GBP';
-		try {
-			code = localStorage.getItem( 'bw-currency' ) || 'GBP';
-		} catch {
-			code = 'GBP';
+		var code = chosen;
+		if ( ! code ) {
+			try {
+				code = localStorage.getItem( 'bw-currency' ) || 'GBP';
+			} catch {
+				code = 'GBP';
+			}
 		}
 		return CURRENCIES[ code ] ? code : 'GBP';
 	}
+
+	window.addEventListener( 'bw:currency', function ( event ) {
+		if ( event.detail && CURRENCIES[ event.detail ] ) {
+			chosen = event.detail;
+		}
+	} );
 
 	/**
 	 * Formats a GBP amount in the visitor's chosen currency.
@@ -174,7 +188,8 @@
 
 		function apply() {
 			var pkg = packages[ Math.min( packages.length - 1, Math.max( 0, parseInt( range.value, 10 ) || 0 ) ) ];
-			var perHour = ( pkg.gbp * 12 ) / pkg.hours;
+			var perHour = ( pkg.price * 12 ) / pkg.hours;
+			var gbp = 'GBP' === pkg.currency;
 			if ( hours ) {
 				hours.textContent = String( pkg.hours / 12 );
 			}
@@ -187,11 +202,26 @@
 			if ( blurb ) {
 				blurb.textContent = pkg.blurb;
 			}
+			// A pound figure goes through the painter so it follows the
+			// switcher; a package priced in another currency is written as
+			// is, in its own sign, and never converted.
 			if ( rate ) {
-				rate.setAttribute( 'data-bw-gbp', perHour.toFixed( 2 ) );
+				if ( gbp ) {
+					rate.setAttribute( 'data-bw-gbp', perHour.toFixed( 2 ) );
+					rate.setAttribute( 'data-bw-dp', '2' );
+					rate.setAttribute( 'data-bw-suffix', ' / hr' );
+				} else {
+					rate.removeAttribute( 'data-bw-gbp' );
+					rate.textContent = pkg.sign + perHour.toFixed( 2 ) + ' / hr';
+				}
 			}
 			if ( price ) {
-				price.setAttribute( 'data-bw-gbp', String( pkg.gbp ) );
+				if ( gbp ) {
+					price.setAttribute( 'data-bw-gbp', String( pkg.price ) );
+				} else {
+					price.removeAttribute( 'data-bw-gbp' );
+					price.textContent = pkg.sign + pkg.price.toLocaleString( 'en-GB' );
+				}
 			}
 			paintPrices();
 		}

@@ -64,10 +64,14 @@ $blueworx_s_last   = end( $blueworx_s_packages );
 $blueworx_s_calc_packages = array_map(
 	function ( $p ) {
 		return array(
-			'name'  => $p['name'],
-			'hours' => (int) $p['hours'],
-			'gbp'   => (int) $p['priceM'],
-			'blurb' => $p['blurb'],
+			'name'     => $p['name'],
+			'hours'    => (int) $p['hours'],
+			'price'    => (int) $p['priceM'],
+			// A SureCart price can arrive in another currency; the script
+			// only converts pounds.
+			'currency' => isset( $p['currency'] ) ? strtoupper( (string) $p['currency'] ) : 'GBP',
+			'sign'     => blueworx_public_currency_sign( isset( $p['currency'] ) ? $p['currency'] : 'GBP' ),
+			'blurb'    => $p['blurb'],
 		);
 	},
 	$blueworx_s_packages
@@ -84,7 +88,14 @@ blueworx_public_part( 'parts/nav.php' );
 				<h1 class="h1"><?php esc_html_e( 'Your Design & Development Team, ', 'bluegroup-project-blueworx' ); ?><span class="tech-grad"><?php esc_html_e( 'On Retainer', 'bluegroup-project-blueworx' ); ?></span></h1>
 				<p class="lead"><?php esc_html_e( 'Buy a block of hours each month and use them however your business needs: design, development, fixes, content, SEO, or a new landing page. All of the team, none of the admin.', 'bluegroup-project-blueworx' ); ?></p>
 				<div class="tech-status" style="justify-content:center">
-					<span><?php esc_html_e( 'from', 'bluegroup-project-blueworx' ); ?> <b style="font:inherit" data-bw-gbp="100">£100</b> <?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></span>
+					<span>
+						<?php esc_html_e( 'from', 'bluegroup-project-blueworx' ); ?>
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- blueworx_public_money() escapes.
+						echo blueworx_public_money( $blueworx_s_first['priceM'], $blueworx_s_first['currency'] );
+						?>
+						<?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?>
+					</span>
 					<span><?php esc_html_e( 'hours pooled annually', 'bluegroup-project-blueworx' ); ?></span>
 					<span><?php esc_html_e( 'cancel any time', 'bluegroup-project-blueworx' ); ?></span>
 				</div>
@@ -134,12 +145,12 @@ blueworx_public_part( 'parts/nav.php' );
 						<?php
 						$blueworx_s_growth_rate = $blueworx_s_growth['priceM'] * 12 / $blueworx_s_growth['hours'];
 						?>
-						<b class="bw-calc-rate" data-testid="support-calc-rate" data-bw-gbp="<?php echo esc_attr( number_format( $blueworx_s_growth_rate, 2, '.', '' ) ); ?>" data-bw-dp="2" data-bw-suffix=" / hr"><?php echo esc_html( '£' . number_format( $blueworx_s_growth_rate, 2, '.', '' ) . ' / hr' ); ?></b>
+						<b class="bw-calc-rate" data-testid="support-calc-rate"<?php echo 'GBP' === $blueworx_s_growth['currency'] ? ' data-bw-gbp="' . esc_attr( number_format( $blueworx_s_growth_rate, 2, '.', '' ) ) . '" data-bw-dp="2" data-bw-suffix=" / hr"' : ''; ?>><?php echo esc_html( blueworx_public_currency_sign( $blueworx_s_growth['currency'] ) . number_format( $blueworx_s_growth_rate, 2, '.', '' ) . ' / hr' ); ?></b>
 					</div>
 				</div>
 				<div class="calc-out">
 					<div class="cl"><?php esc_html_e( 'Your package', 'bluegroup-project-blueworx' ); ?></div>
-					<div class="cv" data-testid="support-calc-price" data-bw-gbp="<?php echo esc_attr( (int) $blueworx_s_growth['priceM'] ); ?>"><?php echo esc_html( '£' . number_format( (float) $blueworx_s_growth['priceM'], 0, '.', ',' ) ); ?></div>
+					<div class="cv" data-testid="support-calc-price"<?php echo 'GBP' === $blueworx_s_growth['currency'] ? ' data-bw-gbp="' . esc_attr( (int) $blueworx_s_growth['priceM'] ) . '"' : ''; ?>><?php echo esc_html( blueworx_public_currency_sign( $blueworx_s_growth['currency'] ) . number_format( (float) $blueworx_s_growth['priceM'], 0, '.', ',' ) ); ?></div>
 					<div class="cp"><?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></div>
 					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get this plan', 'bluegroup-project-blueworx' ); ?></a>
 				</div>
@@ -171,10 +182,16 @@ blueworx_public_part( 'parts/nav.php' );
 								<td><?php echo esc_html( $blueworx_s_pkg['hours'] . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
 								<td><?php echo esc_html( ( $blueworx_s_pkg['hours'] / 12 ) . ' ' . __( 'hrs', 'bluegroup-project-blueworx' ) ); ?></td>
 								<td>
-									<span data-bw-gbp="<?php echo esc_attr( number_format( $blueworx_s_rate, 2, '.', '' ) ); ?>" data-bw-dp="2" data-bw-suffix=" / hr"><?php echo esc_html( '£' . number_format( $blueworx_s_rate, 2, '.', '' ) . ' / hr' ); ?></span>
+									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- blueworx_public_money() escapes.
+									echo blueworx_public_money( $blueworx_s_rate, $blueworx_s_pkg['currency'], array( 'dp' => 2, 'suffix' => ' / hr' ) );
+									?>
 								</td>
 								<td style="font-weight:600;color:#0A0C29">
-									<span data-bw-gbp="<?php echo esc_attr( (int) $blueworx_s_pkg['priceM'] ); ?>"><?php echo esc_html( '£' . number_format( (float) $blueworx_s_pkg['priceM'], 0, '.', ',' ) ); ?></span>
+									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- blueworx_public_money() escapes.
+									echo blueworx_public_money( $blueworx_s_pkg['priceM'], $blueworx_s_pkg['currency'] );
+									?>
 								</td>
 							</tr>
 						<?php endforeach; ?>

@@ -315,7 +315,11 @@ function blueworx_commerce_apply_live_plans( $plans ) {
 
 			$live = blueworx_commerce_price( $price_id );
 
-			if ( null !== $live ) {
+			// A live amount in another currency is only shown when it can
+			// stand alone. If the other interval kept its pound figure, the
+			// card would read "$200 a year" for a £200 figure, so a mixed
+			// plan keeps the built-in pound prices and just stays buyable.
+			if ( null !== $live && ( 'GBP' === $live['currency'] || ! blueworx_commerce_plan_mixed( $ids[ $slug ], $live['currency'] ) ) ) {
 				$plans[ $index ][ $key ]      = $live['amount'];
 				$plans[ $index ]['currency'] = $live['currency'];
 			}
@@ -331,6 +335,34 @@ function blueworx_commerce_apply_live_plans( $plans ) {
 	return $plans;
 }
 add_filter( 'blueworx_content_retainer_plans', 'blueworx_commerce_apply_live_plans' );
+
+/**
+ * Whether a plan's configured intervals cannot all be shown in one currency.
+ *
+ * True when any configured interval failed to resolve, or resolved in a
+ * different currency from the one given.
+ *
+ * @param array  $plan_ids Price IDs keyed 'm' / 'a'.
+ * @param string $currency The currency one interval resolved in.
+ * @return bool
+ */
+function blueworx_commerce_plan_mixed( $plan_ids, $currency ) {
+	foreach ( array( 'm', 'a' ) as $interval ) {
+		$price_id = isset( $plan_ids[ $interval ] ) ? (string) $plan_ids[ $interval ] : '';
+
+		if ( '' === $price_id ) {
+			continue;
+		}
+
+		$live = blueworx_commerce_price( $price_id );
+
+		if ( null === $live || $live['currency'] !== $currency ) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 /**
  * Every plan a SureCart price can be configured for: the nine support
