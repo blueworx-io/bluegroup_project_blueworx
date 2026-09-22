@@ -61,8 +61,54 @@ function blueworx_enqueue_public_assets() {
 		'window.blueworxCurrency = ' . wp_json_encode( blueworx_currency_rates() ) . ';',
 		'before'
 	);
+
+	blueworx_public_enqueue_shop_form_assets();
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
+
+/**
+ * The shop's front-end bundle, on the sign-in page only.
+ *
+ * The sign-in form is the shop's `<sc-login-form>` — a custom element, and the
+ * script that boots it is declared by the shop's own dashboard block, which
+ * this page is not. Without this the page renders correct markup that never
+ * comes alive. Its stylesheet goes with it, from the asset pass rather than
+ * from the render, so it reaches the head instead of the footer, where the form
+ * would snap into shape after the page had already been seen.
+ *
+ * Guarded on both handles: a shop that registers them under other names, or no
+ * shop at all, costs nothing here and is answered in the template instead.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_shop_form_assets() {
+	if ( ! blueworx_public_renders_shop_form() ) {
+		return;
+	}
+
+	if ( wp_script_is( 'surecart-components', 'registered' ) ) {
+		wp_enqueue_script( 'surecart-components' );
+	}
+
+	if ( wp_style_is( 'surecart-themes-default', 'registered' ) ) {
+		wp_enqueue_style( 'surecart-themes-default' );
+	}
+}
+
+/**
+ * Whether the page being rendered carries the shop's sign-in form.
+ *
+ * Checked by TEMPLATE rather than by slug, for the same reason
+ * blueworx_public_page_needs_foreign_assets() is: an administrator who renames
+ * the sign-in page must not silently turn its form's script off.
+ *
+ * @return bool
+ */
+function blueworx_public_renders_shop_form() {
+	$page = blueworx_public_current_page();
+
+	return is_array( $page ) && isset( $page['template'] ) && 'pages/login.php' === $page['template'];
+}
 
 /**
  * Dequeues the active theme's own front-end stylesheet on plugin-owned
@@ -171,6 +217,15 @@ function blueworx_public_allowed_asset_prefixes() {
 		$prefixes[] = 'global-styles';
 		$prefixes[] = 'core-block-supports';
 		$prefixes[] = 'classic-theme-styles';
+	}
+
+	// The sign-in page runs the shop's own form (templates/pages/login.php).
+	// Sweeping its bundle would leave a web component with nothing to bring it
+	// to life — a form that renders and then does nothing at all. Added only on
+	// that page, so every other page still refuses the shop's hundred block
+	// stylesheets.
+	if ( function_exists( 'blueworx_public_renders_shop_form' ) && blueworx_public_renders_shop_form() ) {
+		$prefixes[] = 'surecart';
 	}
 
 	// The admin bar is only ever shown to a logged-in user, and stripping it

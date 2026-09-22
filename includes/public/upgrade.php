@@ -134,7 +134,9 @@ function blueworx_public_retired_tool_slugs() {
 function blueworx_public_retire_removed_pages() {
 	$map     = (array) get_option( 'blueworx_public_page_ids', array() );
 	$retired = array_merge(
-		array( 'pricing', 'services', 'work', 'toolbox', 'dashboard/toolbox' ),
+		// 'register' and 'reset-password' went with the forms they carried when
+		// the shop's sign-in form took over /login (1.20.0).
+		array( 'pricing', 'services', 'work', 'toolbox', 'dashboard/toolbox', 'register', 'reset-password' ),
 		array_map(
 			function ( $slug ) {
 				return 'toolbox/' . $slug;

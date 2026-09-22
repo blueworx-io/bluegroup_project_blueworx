@@ -2,9 +2,18 @@
 /**
  * Sign in (#43).
  *
- * Posts to itself; includes/public/auth.php handles the submission before
- * anything is rendered, so a failed sign-in is a redirect back here with a
- * notice rather than a half-drawn page.
+ * The form is the shop's — `<sc-login-form>`, a custom element its own script
+ * brings to life, posting to its own route. That route is wp_authenticate()
+ * underneath, so every login guard the site has still applies, and a shop that
+ * is installed but not yet connected still signs people in.
+ *
+ * What stays ours is the card around it: the heading, the line under it, and
+ * the way through for somebody who has no account yet. The form's own title is
+ * left empty and hidden in CSS — the card already says "Sign in", and the form
+ * repeating it two lines below reads like two forms.
+ *
+ * Where a member lands afterwards is set in includes/public/auth.php, on the
+ * shop's sc_login_redirect_url filter.
  *
  * @package BlueWorxSite
  */
@@ -14,53 +23,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Carried through the form so that a visitor who was sent here from a
-// dashboard page lands back on it. Validated in blueworx_auth_redirect_target()
-// before it is ever used as a destination.
-$blueworx_login_redirect = isset( $_GET['redirect_to'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect_to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only.
+$blueworx_login_heading = __( 'Sign in', 'bluegroup-project-blueworx' );
 
 blueworx_public_part(
 	'parts/auth-shell.php',
 	array(
-		'heading' => __( 'Sign in', 'bluegroup-project-blueworx' ),
+		'heading' => $blueworx_login_heading,
 		'blurb'   => __( 'Your plans, invoices and orders, all in one place.', 'bluegroup-project-blueworx' ),
 	)
 );
 ?>
-<form class="auth-form" method="post" action="<?php echo esc_url( blueworx_auth_url( 'login' ) ); ?>">
-	<?php wp_nonce_field( 'blueworx_auth_login', 'blueworx_auth_nonce' ); ?>
-	<input type="hidden" name="blueworx_auth_action" value="login" />
-	<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $blueworx_login_redirect ); ?>" />
+<?php if ( blueworx_auth_shop_form_available() ) : ?>
+	<sc-login-form></sc-login-form>
 
-	<div class="auth-field">
-		<label for="blueworx_email"><?php esc_html_e( 'Email address', 'bluegroup-project-blueworx' ); ?></label>
-		<input type="email" id="blueworx_email" name="blueworx_email" autocomplete="username" required />
-	</div>
-
-	<div class="auth-field">
-		<label for="blueworx_password"><?php esc_html_e( 'Password', 'bluegroup-project-blueworx' ); ?></label>
-		<input type="password" id="blueworx_password" name="blueworx_password" autocomplete="current-password" required />
-	</div>
-
-	<div class="auth-row">
-		<label class="auth-check" for="blueworx_remember">
-			<input type="checkbox" id="blueworx_remember" name="blueworx_remember" value="1" />
-			<?php esc_html_e( 'Keep me signed in', 'bluegroup-project-blueworx' ); ?>
-		</label>
-		<a href="<?php echo esc_url( blueworx_auth_url( 'reset-password' ) ); ?>"><?php esc_html_e( 'Forgotten your password?', 'bluegroup-project-blueworx' ); ?></a>
-	</div>
-
-	<button type="submit" class="btn btn-brand btn-md auth-submit"><?php esc_html_e( 'Sign in', 'bluegroup-project-blueworx' ); ?></button>
-</form>
-
-<p class="auth-alt">
-	<?php if ( blueworx_auth_registration_open() ) : ?>
+	<p class="auth-alt">
 		<?php esc_html_e( 'New here?', 'bluegroup-project-blueworx' ); ?>
-		<a href="<?php echo esc_url( blueworx_auth_url( 'register' ) ); ?>"><?php esc_html_e( 'Create an account', 'bluegroup-project-blueworx' ); ?></a>
-	<?php else : ?>
-		<?php esc_html_e( 'Do not have an account yet?', 'bluegroup-project-blueworx' ); ?>
-		<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php esc_html_e( 'Get in touch', 'bluegroup-project-blueworx' ); ?></a>
-	<?php endif; ?>
-</p>
+		<a href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php esc_html_e( 'See the support packages', 'bluegroup-project-blueworx' ); ?></a>
+	</p>
+<?php else : ?>
+	<?php
+	// No shop, so no form to draw. Saying so and pointing at the WordPress
+	// sign-in is honest; an empty card, or a custom element with nothing to
+	// bring it to life, is a page that looks broken and leaves no way in.
+	?>
+	<p class="auth-notice auth-notice-error" role="alert">
+		<?php esc_html_e( 'Client sign-in is unavailable at the moment.', 'bluegroup-project-blueworx' ); ?>
+	</p>
+
+	<p class="auth-alt">
+		<a href="<?php echo esc_url( wp_login_url() ); ?>"><?php esc_html_e( 'Sign in to WordPress instead', 'bluegroup-project-blueworx' ); ?></a>
+	</p>
+<?php endif; ?>
 <?php
 blueworx_public_part( 'parts/auth-end.php' );

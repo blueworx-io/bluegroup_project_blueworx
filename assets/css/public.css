@@ -907,6 +907,16 @@ a.btn, a.plan-btn, a.pt-btn, a.nav-btn { text-decoration: none; }
 .auth-row a, .auth-alt a { color: var(--brand); font-weight: 600; }
 .auth-submit { width: 100%; text-decoration: none; }
 .auth-alt { font-size: 14.5px; color: var(--muted); text-align: center; margin: 24px 0 0; }
+/* The shop's sign-in form. It is a custom element, so until its script defines
+   it the browser treats it as inline — a block box is what the card expects,
+   and saying so here means the form does not reflow as it comes alive. Its
+   inside is the shop's own (shadow DOM); only the box around it is ours. */
+sc-login-form { display: block; }
+/* The form's own title, two lines under the card's "Sign in" heading, reads as
+   a second form starting. The card carries the heading; the form carries the
+   fields. Its inside is the shop's (shadow DOM), so this reaches it through the
+   part the shop exposes. */
+sc-login-form::part(title) { display: none; }
 
 @media (max-width: 560px) {
   .auth { padding: 116px 20px 72px; }

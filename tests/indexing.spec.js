@@ -29,7 +29,7 @@ const MU_DIR = join(WP_ROOT, 'wp-content', 'mu-plugins');
 const FIXTURE = join(MU_DIR, 'bw-test-indexing.php');
 const canInstallFixture = existsSync(join(WP_ROOT, 'wp-settings.php'));
 
-const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
+const PRIVATE_PATHS = ['/login/'];
 const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/portfolio/'];
 
 const FIXTURE_PLUGIN = `<?php

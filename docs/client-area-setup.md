@@ -40,16 +40,17 @@ This one lives in SureCart rather than in our settings, because SureCart owns
 what happens after a payment. Without it a customer lands on SureCart's own
 confirmation page instead of their dashboard.
 
-## 4. Decide whether people can create their own account
+## 4. Signing in is SureCart's form
 
-**Settings → General → Membership → "Anyone can register".**
+`/login` carries SureCart's own sign-in form, which covers a forgotten password
+too. The site has no screens of its own for signing up or resetting any more:
+`/register` and `/reset-password` both send people to `/login`.
 
-- **Off** (how it is now): `/register` invites the visitor to get in touch, and
-  you create accounts yourself.
-- **On**: anyone can create an account from `/register`.
+Accounts are created at checkout. To make one by hand, add the user under
+**Users → Add New**.
 
-Off is the safer default and is a real choice, not an oversight — turn it on
-deliberately.
+Administrators land in wp-admin after signing in; everyone else lands on
+`/dashboard`.
 
 ## 5. Check the way in
 
@@ -59,14 +60,14 @@ field empty unless you want it somewhere else.
 
 ## What to try, in order
 
-1. Create yourself a client account (or register one, if you turned that on).
+1. Create yourself a client account under Users → Add New.
 2. Sign out, sign back in from the nav's Client Login. You should land on
    `/dashboard`.
 3. Buy a plan from `/pricing` using SureCart's test card. You should end up on
    the dashboard.
 4. Check Subscriptions, Invoices and Orders all show that purchase.
-5. Reset your password from `/login` and sign in with the new one. The email
-   should link back to the site, never to `wp-login.php`.
+5. Use the form's "forgot password" and set a new one. The whole exchange
+   happens on `/login`, never on `wp-login.php`.
 
 ## What is deliberately not here
 

@@ -63,6 +63,14 @@ function blueworx_public_legacy_redirects() {
 			// Work was renamed Portfolio (2026-09).
 			'work'      => 'portfolio',
 
+			// The shop's sign-in form took over /login (2026-09), and it covers
+			// creating an account and setting a new password itself. Both of
+			// our own screens went with it. A reset link sent before this
+			// release lands here too — its key is no longer ours to use, so the
+			// honest destination is the form that can start a fresh one.
+			'register'          => 'login',
+			'reset-password'    => 'login',
+
 			// The Toolbox was retired in favour of ClubHouse (2026-09): the
 			// product page, its twelve tool pages and the portal tab.
 			'toolbox'           => 'clubhouse',
