@@ -10,6 +10,21 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.19.0] - 2026-09-22
+
+### Changed
+
+- **The Support Flow panel** beside the enquiry form, from the Contact design:
+  a dark column showing a ticket's four steps (lands, triaged, in progress,
+  confirmed) with a connector that fills between them and an "Average first
+  reply: 38 minutes" stat. Drawn in CSS, animated on an 8s loop, still under
+  reduced-motion settings, and hidden on phones. It replaces the static
+  illustration, whose image files are gone.
+- The Contact FAQ is now about getting in touch (reply times, first call,
+  what to send, working outside the UK, taking over an existing site) rather
+  than the pricing questions it borrowed before.
+- The form section keeps the site's standard 116px rhythm top and bottom.
+
 ## [1.18.0] - 2026-09-22
 
 ### Added

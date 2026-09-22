@@ -226,6 +226,25 @@ test.describe('Marketing contact page', () => {
     });
   });
 
+  test('the Support Flow panel sits beside the form with four steps and a footer stat', async ({ page }) => {
+    await page.goto(cacheBust('/contact/'));
+
+    const flow = page.locator('.contact-grid .support-flow');
+    await expect(flow).toBeVisible();
+    await expect(flow).toHaveAttribute('role', 'presentation');
+    await expect(flow.locator('.sf-step')).toHaveCount(4);
+    await expect(flow.locator('.sf-step .sf-title')).toHaveText([
+      'Your message lands',
+      'Triaged by a person',
+      'Work in progress',
+      'Fixed and confirmed',
+    ]);
+    // Three connectors: none under the last step.
+    await expect(flow.locator('.sf-track')).toHaveCount(3);
+    await expect(flow.locator('.sf-foot')).toContainText('38 minutes');
+    await expect(page.locator('.contact-illus')).toHaveCount(0);
+  });
+
   test('the cards point at the dashboard, the portfolio and the sales inbox', async ({ page }) => {
     await page.goto(cacheBust('/contact/'));
 

@@ -196,6 +196,43 @@ function blueworx_content_faqs() {
 }
 
 /**
+ * The Contact page's FAQ: what to expect from getting in touch.
+ *
+ * @return array List of array( q, a ).
+ */
+function blueworx_content_contact_faqs() {
+	$faqs = array(
+		array(
+			'q' => 'How quickly will I hear back?',
+			'a' => 'Within one business day, from the person who will actually work on your project — not an account manager reading from a script.',
+		),
+		array(
+			'q' => 'Do you charge for the first conversation?',
+			'a' => 'No. The first call is a proper look at your setup and an honest view on what would help. If that is not us, we will say so.',
+		),
+		array(
+			'q' => 'What should I send you?',
+			'a' => 'Your current website address, a sense of what is not working, and any deadline you are working to. That is enough for a useful first call.',
+		),
+		array(
+			'q' => 'Do you work with clients outside the UK?',
+			'a' => 'Yes. Most of our work is remote, and our hosting serves clients across the UK, Europe and further afield. Prices can be shown in pounds, euros, dollars, rand or dirhams.',
+		),
+		array(
+			'q' => 'Can you take over a site someone else built?',
+			'a' => 'Regularly. We audit what is there, tell you what is worth keeping, and quote for the rest before you commit to anything.',
+		),
+	);
+
+	/**
+	 * Filters the Contact page FAQ list.
+	 *
+	 * @param array $faqs List of array( q, a ).
+	 */
+	return apply_filters( 'blueworx_content_contact_faqs', $faqs );
+}
+
+/**
  * Everything the Managed Hosting page says: the plan, the performance and
  * security cards, the comparison table and the FAQ.
  *

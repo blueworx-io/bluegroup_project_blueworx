@@ -96,7 +96,7 @@ test.describe('#82 Images', () => {
     expect(noWebp, `photographs served without a WebP alternative:\n${noWebp.join('\n')}`).toEqual([]);
   });
 
-  test('an image the design hides on a phone is not downloaded on a phone', async ({ page }) => {
+  test('the Support Flow panel is hidden on a phone and fetches no image for it', async ({ page }) => {
     skipPlaceholder();
 
     await page.setViewportSize({ width: 390, height: 844 });
@@ -106,9 +106,12 @@ test.describe('#82 Images', () => {
 
     await page.goto(cacheBust('/contact/'), { waitUntil: 'networkidle' });
 
+    // The panel is drawn with CSS alone; the old illustration it replaced
+    // must not still be requested by anything.
+    await expect(page.locator('.support-flow')).toBeHidden();
     expect(
       requested.filter((url) => url.includes('contact-illustration')),
-      'the contact illustration is hidden below 900px but still downloaded'
+      'the retired contact illustration is still being downloaded'
     ).toEqual([]);
   });
 

@@ -487,17 +487,48 @@ select.bw-in { cursor: pointer; }
 .cf-sent { border: 1px solid #CFE9DC; background: #F2FAF6; border-radius: 16px; padding: 32px 28px; }
 .cf-sent h2 { font-family: var(--font-sora), sans-serif; font-size: 22px; margin: 0 0 10px; color: #01824C; letter-spacing: -.3px; }
 .cf-sent p { font-size: 15.5px; color: #4C4C4C; margin: 0 0 20px; line-height: 1.6; }
-/* The illustration is a background, not an <img>, because the rule further
-   down hides it below 900px and a hidden <img> is downloaded anyway. WebP where
-   the browser reads it, the JPEG where it does not. */
-.contact-illus {
-  padding: 20px;
-  min-height: 560px;
-  background-image: url(../img/contact-illustration.jpg);
-  background-image: image-set(url(../img/contact-illustration.webp) type("image/webp"), url(../img/contact-illustration.jpg) type("image/jpeg"));
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+/* The Support Flow panel beside the form (templates/parts/support-flow.php):
+   one 8s loop of four 2s beats, each step's animations delayed 2s × index so
+   the active state walks down the list. Transform and opacity only. */
+.support-flow { position: relative; display: flex; flex-direction: column; min-height: 560px; background: #06081F; overflow: hidden; }
+.support-flow::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(139,142,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(139,142,255,.07) 1px, transparent 1px); background-size: 44px 44px; }
+.support-flow::after { content: ""; position: absolute; top: -80px; right: -90px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(79,70,229,.6), transparent 70%); filter: blur(34px); }
+.sf-head { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 40px 40px 30px; }
+.sf-head-label { display: flex; align-items: center; gap: 9px; font: 11px/1 'SF Mono', ui-monospace, Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; color: rgba(226,228,255,.58); }
+.sf-dot { width: 7px; height: 7px; border-radius: 50%; background: #7CFFB2; animation: sfPulse 1.6s ease-out infinite; }
+.sf-ticket { font: 11px 'SF Mono', ui-monospace, Menlo, monospace; color: rgba(226,228,255,.42); border: 1px solid rgba(139,142,255,.22); background: rgba(139,142,255,.07); border-radius: 999px; padding: 5px 11px; }
+.sf-steps { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 0 40px; }
+.sf-step { position: relative; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 16px; padding-bottom: 30px; flex: 1 1 0; min-height: 86px; animation: sfStep 8s ease-in-out infinite; }
+.sf-step:last-child { flex: 0 0 auto; padding-bottom: 0; }
+.sf-step:nth-child(2), .sf-step:nth-child(2) .sf-fill, .sf-step:nth-child(2) .sf-node { animation-delay: 2s; }
+.sf-step:nth-child(3), .sf-step:nth-child(3) .sf-fill, .sf-step:nth-child(3) .sf-node { animation-delay: 4s; }
+.sf-step:nth-child(4), .sf-step:nth-child(4) .sf-node { animation-delay: 6s; }
+.sf-track { position: absolute; left: 18px; top: 42px; bottom: -2px; width: 2px; background: rgba(139,142,255,.16); overflow: hidden; }
+.sf-fill { width: 100%; height: 100%; transform-origin: top; background: linear-gradient(#6D66F0, rgba(79,70,229,.3)); animation: sfLine 8s ease-in-out infinite; }
+.sf-node { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(139,142,255,.22); display: flex; align-items: center; justify-content: center; animation: sfNode 8s ease-in-out infinite; }
+.sf-node svg { width: 17px; height: 17px; }
+.sf-body { padding-top: 2px; }
+.sf-titlerow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sf-title { font-family: var(--font-sora), sans-serif; font-size: 15.5px; font-weight: 600; color: #fff; letter-spacing: -.2px; }
+.sf-time { font: 11px 'SF Mono', ui-monospace, Menlo, monospace; color: rgba(226,228,255,.4); }
+.sf-note { font-size: 13.5px; line-height: 1.5; color: rgba(226,228,255,.6); margin-top: 4px; }
+.sf-foot { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 30px 40px 40px; padding: 17px 19px; border: 1px solid rgba(139,142,255,.18); background: rgba(139,142,255,.06); border-radius: 14px; }
+.sf-foot-label { font-size: 13.5px; line-height: 1.4; color: rgba(226,228,255,.66); }
+.sf-foot-value { font-family: var(--font-sora), sans-serif; font-size: 19px; font-weight: 600; color: #fff; letter-spacing: -.4px; }
+@keyframes sfPulse { 0% { box-shadow: 0 0 0 0 rgba(124,255,178,.5); } 100% { box-shadow: 0 0 0 9px rgba(124,255,178,0); } }
+@keyframes sfStep { 0% { opacity: .34; } 7%, 24% { opacity: 1; } 32%, 100% { opacity: .58; } }
+@keyframes sfNode {
+  0% { background: rgba(139,142,255,.07); border-color: rgba(139,142,255,.22); box-shadow: 0 0 0 0 rgba(79,70,229,0); color: rgba(226,228,255,.5); }
+  8% { background: #4F46E5; border-color: #8B8EFF; box-shadow: 0 0 0 8px rgba(79,70,229,.16); color: #fff; }
+  24% { background: #4F46E5; border-color: #8B8EFF; box-shadow: 0 0 0 0 rgba(79,70,229,0); color: #fff; }
+  32%, 100% { background: rgba(79,70,229,.4); border-color: rgba(139,142,255,.45); color: rgba(255,255,255,.8); }
+}
+@keyframes sfLine { 0% { transform: scaleY(0); } 22%, 100% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .sf-step, .sf-node, .sf-fill, .sf-dot { animation: none !important; }
+  .sf-step { opacity: 1; }
+  .sf-fill { transform: none; }
+  .sf-node { background: rgba(79,70,229,.4); border-color: rgba(139,142,255,.45); color: rgba(255,255,255,.8); }
 }
 .contact-cards { background: #0A0C29; padding: 80px var(--gut); position: relative; overflow: hidden; }
 .cc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
@@ -677,7 +708,7 @@ select.bw-in { cursor: pointer; }
   .sec, .features-dark, .split, .stats-band, .contact-cards, .feat-split { padding-top: 60px; padding-bottom: 60px; }
   .cta-inner { padding: 44px 28px; }
   .ft { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .contact-illus { display: none; }
+  .support-flow { display: none; }
   .stat-nums { grid-template-columns: 1fr 1fr; }
   .story-card { flex-basis: 300px; }
   .cmp-scroll { overflow-x: auto; }
