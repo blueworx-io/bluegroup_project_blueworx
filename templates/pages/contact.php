@@ -3,7 +3,7 @@
  * Contact page template.
  *
  * Ported from app/contact/page.tsx's five sections, in source order: a
- * centered tech-hero (780px), the contact grid (form column + illustration),
+ * centered tech-hero (780px), the contact grid (form column + Support Flow panel),
  * a dark contact-cards band (dashboard / portfolio / email), a static FAQ
  * section, and testimonials.
  *
@@ -88,7 +88,7 @@ blueworx_public_part( 'parts/nav.php' );
 		);
 		?>
 
-		<section style="padding:56px 0 0">
+		<section style="padding:116px 0">
 			<div class="contact-grid">
 				<div class="contact-form">
 					<?php
@@ -101,16 +101,7 @@ blueworx_public_part( 'parts/nav.php' );
 					}
 					?>
 				</div>
-				<?php
-				// A background image rather than an <img>, deliberately. The
-				// design hides this illustration entirely below 900px, and a
-				// hidden <img> is still downloaded — 140KB fetched on a phone to
-				// render nothing. A background on a display:none element is not
-				// fetched at all. It is decorative, so nothing is lost by it
-				// having no alt text; the panel is marked presentational so a
-				// screen reader does not announce an empty region.
-				?>
-				<div class="contact-illus" role="presentation"></div>
+				<?php blueworx_public_part( 'parts/support-flow.php' ); ?>
 			</div>
 		</section>
 
@@ -133,10 +124,10 @@ blueworx_public_part( 'parts/nav.php' );
 		<section class="sec">
 			<div class="center-head" style="margin-bottom:40px">
 				<h2 class="h2"><?php esc_html_e( 'Frequently asked questions', 'bluegroup-project-blueworx' ); ?></h2>
-				<p class="lead"><?php esc_html_e( 'Everything you need to know about the product and billing.', 'bluegroup-project-blueworx' ); ?></p>
+				<p class="lead"><?php esc_html_e( 'Everything you need to know before you get in touch.', 'bluegroup-project-blueworx' ); ?></p>
 			</div>
 			<div class="faq-list">
-				<?php foreach ( blueworx_content_faqs() as $blueworx_contact_faq ) : ?>
+				<?php foreach ( blueworx_content_contact_faqs() as $blueworx_contact_faq ) : ?>
 					<details class="faq-item">
 						<summary class="faq-q"><?php echo esc_html( $blueworx_contact_faq['q'] ); ?></summary>
 						<div class="faq-a"><?php echo esc_html( $blueworx_contact_faq['a'] ); ?></div>
