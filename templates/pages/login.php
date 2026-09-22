@@ -37,8 +37,8 @@ blueworx_public_part(
 	<sc-login-form></sc-login-form>
 
 	<p class="auth-alt">
-		<?php esc_html_e( 'New here?', 'bluegroup-project-blueworx' ); ?>
-		<a href="<?php echo esc_url( home_url( '/support' ) ); ?>"><?php esc_html_e( 'See the support packages', 'bluegroup-project-blueworx' ); ?></a>
+		<?php esc_html_e( 'Do not have an account yet?', 'bluegroup-project-blueworx' ); ?>
+		<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php esc_html_e( 'Get in touch', 'bluegroup-project-blueworx' ); ?></a>
 	</p>
 <?php else : ?>
 	<?php
