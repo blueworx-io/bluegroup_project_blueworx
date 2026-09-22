@@ -63,6 +63,7 @@ function blueworx_enqueue_public_assets() {
 	);
 
 	blueworx_public_enqueue_shop_form_assets();
+	blueworx_public_enqueue_commission_assets();
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
 
@@ -93,6 +94,38 @@ function blueworx_public_enqueue_shop_form_assets() {
 	if ( wp_style_is( 'surecart-themes-default', 'registered' ) ) {
 		wp_enqueue_style( 'surecart-themes-default' );
 	}
+}
+
+/**
+ * The commission calculator, on its own page only.
+ *
+ * The prices and rates ride along inline rather than being fetched, so the
+ * first keystroke recalculates with no request in between — the same reason
+ * the currency rates are inlined above. Nothing secret is in there: it is the
+ * public price list plus the rates already printed on the page.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_commission_assets() {
+	$page = blueworx_public_current_page();
+
+	if ( ! is_array( $page ) || ! isset( $page['template'] ) || 'pages/dashboard-commission.php' !== $page['template'] ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'blueworx-commission',
+		BLUEWORX_SITE_URL . 'assets/js/commission.js',
+		array(),
+		blueworx_site_asset_version( 'assets/js/commission.js' ),
+		true
+	);
+
+	wp_add_inline_script(
+		'blueworx-commission',
+		'window.blueworxCommission = ' . wp_json_encode( blueworx_commission_payload() ) . ';',
+		'before'
+	);
 }
 
 /**

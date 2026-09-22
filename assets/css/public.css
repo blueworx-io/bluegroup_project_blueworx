@@ -1415,3 +1415,64 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
 .bw-ch-band-cta { display: flex; flex-wrap: wrap; gap: 12px; }
 @media (max-width: 1000px) { .bw-ch-band-grid { grid-template-columns: 1fr; gap: 36px; } }
 @media (max-width: 600px) { .bw-ch-band-list { grid-template-columns: 1fr; } }
+
+/* The commission calculator (#112). Built to the Claude Design handoff, but in
+   the portal's own tokens rather than the handoff's raw hex: the design was
+   drawn against a lighter shell than the one this portal has, and a card that
+   carries its own greys sits in the page looking like it came from somewhere
+   else. Radii, spacing and the two-card split are the design's. */
+.comm { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.comm-build { flex: 2 1 560px; padding: 0 22px; }
+.comm-out { flex: 1 1 320px; padding: 0 22px; position: sticky; top: 0; }
+.comm-note { flex: 1 1 100%; display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 13px 18px; border: 1px solid #C9CBFF; border-radius: 12px; background: #F5F6FF; font-size: 13.5px; line-height: 1.45; color: var(--brand-dk); }
+.comm-hint-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.comm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 14px; border-bottom: 1px solid var(--dash-line); }
+.comm-head-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--dash-ink); }
+.comm-reset { border: 0; background: none; padding: 0; font-family: inherit; font-size: 13.5px; font-weight: 500; color: var(--brand); cursor: pointer; }
+.comm-reset:hover { color: var(--brand-dk); }
+
+.comm-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding: 18px 0; border-bottom: 1px solid var(--dash-line); }
+.comm-row:last-child { border-bottom: 0; }
+.comm-row-name { flex: 1 1 180px; min-width: 0; }
+.comm-row-title { font-size: 14.5px; font-weight: 700; }
+.comm-row-meta { font-size: 13px; color: var(--dash-body); margin-top: 2px; }
+.comm-row-result { flex: 0 0 auto; min-width: 150px; margin-left: auto; text-align: right; white-space: nowrap; }
+.comm-row-fee { font-size: 14.5px; font-weight: 700; }
+.comm-row-rate { font-size: 12.5px; color: var(--dash-body); margin-top: 2px; }
+
+/* Stepper and segmented control. Both are plain buttons: they change a figure
+   on this page and never navigate, which is the one case a button is right. */
+.comm-step { display: inline-flex; align-items: center; height: 34px; border: 1px solid #D8DAE5; border-radius: 8px; overflow: hidden; background: #fff; }
+.comm-step-btn { width: 32px; height: 32px; border: 0; background: none; font-size: 16px; line-height: 1; color: var(--dash-body); cursor: pointer; }
+.comm-step-btn:hover { background: #F5F6FF; color: var(--brand-dk); }
+.comm-step-val { min-width: 34px; padding: 0 4px; text-align: center; font-size: 13.5px; font-weight: 600; border-left: 1px solid var(--dash-line); border-right: 1px solid var(--dash-line); }
+
+.comm-seg { display: inline-flex; gap: 2px; padding: 3px; background: var(--dash-field); border: 1px solid var(--dash-line); border-radius: 9px; }
+.comm-seg-btn { padding: 5px 12px; border: 1px solid transparent; border-radius: 6px; background: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--dash-body); cursor: pointer; transition: background .16s ease, color .16s ease, border-color .16s ease; }
+.comm-seg-btn.on { background: #fff; border-color: #C9CBFF; color: var(--brand); }
+
+.comm-select { height: 36px; min-width: 200px; max-width: 100%; padding: 0 10px; border: 1px solid #D8DAE5; border-radius: 8px; background: #fff; font-family: inherit; font-size: 13.5px; color: var(--dash-ink); }
+
+.comm-hint { flex: 1 1 100%; display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; border-radius: 8px; background: #F5F6FF; font-size: 13px; color: var(--brand-dk); }
+.comm-hint[hidden] { display: none; }
+
+.comm-total-block { padding: 20px 0 18px; border-bottom: 1px solid var(--dash-line); }
+.comm-total { margin: 0; font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -.8px; }
+.comm-total-when { font-size: 14px; font-weight: 500; color: var(--dash-body); letter-spacing: 0; }
+.comm-total-sub { margin: 4px 0 0; font-size: 13px; color: var(--dash-body); }
+
+.comm-break { padding: 6px 0; }
+.comm-break-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 10px 0; }
+.comm-break-name { font-size: 13.5px; font-weight: 600; }
+.comm-break-detail { font-size: 12.5px; color: var(--dash-body); margin-top: 2px; }
+.comm-break-fee { font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.comm-break-empty { margin: 0; padding: 18px 0; text-align: center; font-size: 13.5px; color: var(--dash-body); }
+
+.comm-rates { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 22px; padding: 14px 16px; border-radius: 8px; background: var(--dash-field); font-size: 12.5px; line-height: 1.5; color: var(--dash-body); }
+.comm-rates strong { color: var(--dash-ink); }
+
+@media (max-width: 900px) {
+  .comm-build, .comm-out { flex: 1 1 100%; }
+  .comm-out { position: static; }
+}

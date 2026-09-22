@@ -52,7 +52,19 @@ Accounts are created at checkout. To make one by hand, add the user under
 Administrators land in wp-admin after signing in; everyone else lands on
 `/dashboard`.
 
-## 5. Check the way in
+## 5. Give a salesperson the commission calculator
+
+**Users → the person → Role → "BlueWorx: Sales Staff".**
+
+They then see a Sales section in the client area with the commission
+calculator in it. Nobody else can see it, or reach `/dashboard/commission`.
+Administrators can already see it without being given the role.
+
+The rates it quotes (20% on Hosting and ClubHouse, 10% or 20% on support
+depending on whether the package is worth £9,000 a year) are set in the
+plugin's code, not in a setting — they are a business rule, not a preference.
+
+## 6. Check the way in
 
 The Client Login link in the navigation goes to `/login` unless
 **Settings → BlueWorx Site → Client Login link** says otherwise. Leave that

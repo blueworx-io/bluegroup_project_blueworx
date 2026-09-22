@@ -120,6 +120,19 @@ function blueworx_account_sections() {
 			'template' => 'pages/dashboard-support.php',
 			'blurb'    => __( 'Ask us for help, and see who to contact.', 'bluegroup-project-blueworx' ),
 		),
+		// Ours, not the client's: what a sale pays us out. `restricted` rather
+		// than `only_if` because the two are not the same promise — see the
+		// note on blueworx_account_visible_sections().
+		'commission'    => array(
+			'label'      => __( 'Commission', 'bluegroup-project-blueworx' ),
+			'title'      => __( 'Commission', 'bluegroup-project-blueworx' ),
+			'kicker'     => __( 'Sales', 'bluegroup-project-blueworx' ),
+			'group'      => __( 'Sales', 'bluegroup-project-blueworx' ),
+			'icon'       => 'percent',
+			'template'   => 'pages/dashboard-commission.php',
+			'blurb'      => __( 'Work out what you earn on a sale before you send the quote.', 'bluegroup-project-blueworx' ),
+			'restricted' => 'blueworx_user_can_sell',
+		),
 	);
 
 	/**
@@ -139,6 +152,15 @@ function blueworx_account_sections() {
  * partner whose referrals are entered next week would otherwise be linked to a
  * page that 404s. This only decides what is offered.
  *
+ * That is why there are two keys rather than one:
+ *
+ * - `only_if` hides a tab that would be an empty page. The address still
+ *   works, and reaching it shows the empty state.
+ * - `restricted` hides a tab nobody else may read, and
+ *   blueworx_account_require_section_access() turns them away from the address
+ *   as well. Anything about us rather than about the client — what a sale pays
+ *   — belongs on this one.
+ *
  * @return array Slug => section, filtered to the ones this client should see.
  */
 function blueworx_account_visible_sections() {
@@ -149,11 +171,61 @@ function blueworx_account_visible_sections() {
 			continue;
 		}
 
+		if ( ! blueworx_account_section_permitted( $section ) ) {
+			continue;
+		}
+
 		$visible[ $slug ] = $section;
 	}
 
 	return $visible;
 }
+
+/**
+ * Whether the current user may read a section at all.
+ *
+ * A section with no `restricted` key is readable by any signed-in client, which
+ * is every section the client area started with.
+ *
+ * @param array $section A section definition.
+ * @return bool
+ */
+function blueworx_account_section_permitted( $section ) {
+	if ( ! isset( $section['restricted'] ) || ! is_callable( $section['restricted'] ) ) {
+		return true;
+	}
+
+	return (bool) call_user_func( $section['restricted'] );
+}
+
+/**
+ * Sends a signed-in client away from a section they may not read.
+ *
+ * Here rather than in the template for the same reason the login gate is:
+ * a template that forgets the check shows our commission rates to a client,
+ * and "remember to add the check" is not a control.
+ *
+ * Runs after blueworx_account_require_login() (priority 1), so a logged-out
+ * visitor is sent to sign in rather than bounced to a dashboard they cannot
+ * see either.
+ *
+ * @return void
+ */
+function blueworx_account_require_section_access() {
+	if ( ! is_user_logged_in() || ! blueworx_account_is_account_request() ) {
+		return;
+	}
+
+	$current = blueworx_public_current_page();
+
+	if ( ! is_array( $current ) || blueworx_account_section_permitted( $current ) ) {
+		return;
+	}
+
+	wp_safe_redirect( blueworx_account_url(), 302 );
+	exit;
+}
+add_action( 'template_redirect', 'blueworx_account_require_section_access', 2 );
 
 /**
  * Registers the client-area pages alongside the marketing ones.
@@ -178,13 +250,23 @@ function blueworx_account_register_pages( $pages ) {
 	);
 
 	foreach ( blueworx_account_sections() as $slug => $section ) {
-		$pages[ BLUEWORX_ACCOUNT_ROOT . '/' . $slug ] = array(
+		$page = array(
 			'title'    => $section['title'],
 			'template' => $section['template'],
 			'slug'     => $slug,
 			'parent'   => BLUEWORX_ACCOUNT_ROOT,
 			'account'  => true,
 		);
+
+		// Travels with the page, not just with the sidebar entry: the gate on
+		// template_redirect asks the PAGE whether this user may read it, and a
+		// restriction left behind in the section list would hide the tab while
+		// the address stayed open to anybody signed in.
+		if ( isset( $section['restricted'] ) ) {
+			$page['restricted'] = $section['restricted'];
+		}
+
+		$pages[ BLUEWORX_ACCOUNT_ROOT . '/' . $slug ] = $page;
 	}
 
 	return $pages;
