@@ -10,6 +10,25 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.18.0] - 2026-09-22
+
+### Added
+
+- **An enquiry form on the Contact page.** Name, company, email, phone, what
+  you need, a rough budget (chips or a figure) and a message, sent to
+  sales@blueworx.io. Required fields are checked in the browser and again on
+  the server, the send happens without a reload, and a thank-you panel takes
+  the form's place. It still works with JavaScript off. A configured
+  third-party form shortcode is still used instead when one is set.
+
+### Changed
+
+- The contact cards: "Already a customer?" goes to the client dashboard, "See
+  what we build" goes to the portfolio, and the email is sales@blueworx.io.
+- The pills under a centred page heading ("reply within 1 business day", "no
+  obligation") now sit centred with the copy above them.
+- The footer credit reads "A BlueGroup Company".
+
 ## [1.17.0] - 2026-09-21
 
 ### Added

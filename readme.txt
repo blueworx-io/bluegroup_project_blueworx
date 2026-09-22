@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.17.0
+Stable tag:        1.18.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,11 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.18.0 =
+* The Contact page has its own enquiry form: name, company, email, phone, topic, budget bands and a message, sent to sales@blueworx.io. It works without JavaScript and shows a thank-you panel once sent.
+* The three contact cards now point at the client dashboard, the portfolio and sales@blueworx.io.
+* The hero pills on centred pages are centred; the footer reads "A BlueGroup Company".
 
 = 1.17.0 =
 * Fixed the Support page not loading on the live site: a media file held the /support address, so the page was never created. The installer now moves the file's slug aside.

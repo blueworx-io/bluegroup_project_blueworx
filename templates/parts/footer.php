@@ -119,6 +119,6 @@ $blueworx_footer_cta_secondary_attrs = ! empty( $blueworx_footer_cta_secondary['
 			);
 			?>
 		</p>
-		<p><?php echo esc_html__( 'Powered by BabyBlue Digital.', 'bluegroup-project-blueworx' ); ?></p>
+		<p><?php echo esc_html__( 'A BlueGroup Company', 'bluegroup-project-blueworx' ); ?></p>
 	</div>
 </footer>
