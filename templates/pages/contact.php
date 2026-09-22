@@ -4,16 +4,16 @@
  *
  * Ported from app/contact/page.tsx's five sections, in source order: a
  * centered tech-hero (780px), the contact grid (form column + illustration),
- * a dark contact-cards band (phone / WhatsApp / email), a static FAQ section,
- * and testimonials.
+ * a dark contact-cards band (dashboard / portfolio / email), a static FAQ
+ * section, and testimonials.
  *
- * The form column is where the source mounted a React ContactForm. Per the
- * plan, forms on this site are third-party shortcodes: this renders the
- * shortcode named by the `blueworx_contact_form_shortcode` option (filterable),
- * and nothing else — do_shortcode() is called on that single configured value,
- * NOT on arbitrary input, so it can never be coerced into running some other
- * shortcode. When the option is empty (the default), a clearly-labelled
- * placeholder stands in so the page is whole and obviously awaiting a form.
+ * The form column renders the plugin's own enquiry form
+ * (templates/parts/contact-form.php, handled by includes/public/contact-form.php)
+ * unless a third-party form has been configured: then it renders the
+ * shortcode named by the `blueworx_contact_form_shortcode` option
+ * (filterable), and nothing else — do_shortcode() is called on that single
+ * configured value, NOT on arbitrary input, so it can never be coerced into
+ * running some other shortcode.
  *
  * The FAQ list is a Plan 3 interactive accordion; until then it renders as
  * native <details> so it is fully functional with no JavaScript.
@@ -31,25 +31,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $blueworx_contact_cards = array(
 	array(
-		'icon'  => 'phone',
-		'title' => __( 'Give us a call', 'bluegroup-project-blueworx' ),
-		'sub'   => __( 'Mon–Fri from 8am to 5pm.', 'bluegroup-project-blueworx' ),
-		'link'  => '+00 (704) 555-0127',
-		'href'  => 'tel:+007045550127',
+		'icon'  => 'users',
+		'title' => __( 'Already a customer?', 'bluegroup-project-blueworx' ),
+		'sub'   => __( 'Sign in to raise a request or check on your site.', 'bluegroup-project-blueworx' ),
+		'link'  => __( 'Go to your dashboard', 'bluegroup-project-blueworx' ),
+		'href'  => blueworx_account_url(),
 	),
 	array(
-		'icon'  => 'chat',
-		'title' => __( 'Send us a WhatsApp', 'bluegroup-project-blueworx' ),
-		'sub'   => __( 'Speak to our friendly team.', 'bluegroup-project-blueworx' ),
-		'link'  => '+00 (704) 555-0127',
-		'href'  => 'https://wa.me/007045550127',
+		'icon'  => 'sparkles',
+		'title' => __( 'See what we build', 'bluegroup-project-blueworx' ),
+		'sub'   => __( 'Live client sites we design, host and support.', 'bluegroup-project-blueworx' ),
+		'link'  => __( 'View our portfolio', 'bluegroup-project-blueworx' ),
+		'href'  => home_url( '/portfolio' ),
 	),
 	array(
 		'icon'  => 'mail',
 		'title' => __( 'Email us here', 'bluegroup-project-blueworx' ),
 		'sub'   => __( 'Let us know how we can help.', 'bluegroup-project-blueworx' ),
-		'link'  => 'info@blueworx.com',
-		'href'  => 'mailto:info@blueworx.com',
+		'link'  => blueworx_contact_email(),
+		'href'  => 'mailto:' . blueworx_contact_email(),
 	),
 );
 
@@ -97,12 +97,7 @@ blueworx_public_part( 'parts/nav.php' );
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- do_shortcode returns the form plugin's own escaped markup.
 						echo do_shortcode( $blueworx_contact_form_shortcode );
 					} else {
-						?>
-						<div class="bw-plan3-placeholder" data-widget="contact-form">
-							<p><?php esc_html_e( 'Contact form goes here.', 'bluegroup-project-blueworx' ); ?></p>
-							<p class="bw-placeholder-note"><?php esc_html_e( 'Set the contact form shortcode (BlueWorx contact form option) to your form plugin&rsquo;s shortcode to display it here.', 'bluegroup-project-blueworx' ); ?></p>
-						</div>
-						<?php
+						blueworx_public_part( 'parts/contact-form.php' );
 					}
 					?>
 				</div>
@@ -129,7 +124,7 @@ blueworx_public_part( 'parts/nav.php' );
 						<div class="cc-ic"><?php blueworx_icon( $blueworx_contact_card['icon'] ); ?></div>
 						<h3><?php echo esc_html( $blueworx_contact_card['title'] ); ?></h3>
 						<p><?php echo esc_html( $blueworx_contact_card['sub'] ); ?></p>
-						<a href="<?php echo esc_url( $blueworx_contact_card['href'] ); ?>"<?php echo 0 === strpos( $blueworx_contact_card['href'], 'https://' ) ? ' rel="noopener"' : ''; ?>><?php echo esc_html( $blueworx_contact_card['link'] ); ?></a>
+						<a href="<?php echo esc_url( $blueworx_contact_card['href'] ); ?>"><?php echo esc_html( $blueworx_contact_card['link'] ); ?></a>
 					</div>
 				<?php endforeach; ?>
 			</div>

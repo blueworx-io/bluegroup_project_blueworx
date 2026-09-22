@@ -633,6 +633,201 @@
 		}
 	}
 
+	/**
+	 * The Contact page's enquiry form (templates/parts/contact-form.php).
+	 *
+	 * Without this script the form is a plain POST and the server renders the
+	 * outcome. With it: the budget chips fill the budget field, the required
+	 * fields are checked before anything is sent, and the send goes over fetch
+	 * so the success panel appears in place rather than after a reload. The
+	 * server (includes/public/contact-form.php) checks everything again.
+	 */
+	function initContactForm() {
+		var form = document.querySelector( '[data-cf-form]' );
+		if ( ! form ) {
+			return;
+		}
+
+		var sent = document.querySelector( '[data-cf-sent]' );
+		var alert = form.querySelector( '[data-cf-alert]' );
+		var submit = form.querySelector( '[data-cf-submit]' );
+		var chips = form.querySelectorAll( '[data-cf-chips] [data-budget]' );
+		var budget = form.querySelector( '#bw-budget' );
+		var again = sent ? sent.querySelector( '[data-cf-again]' ) : null;
+
+		function setChip( active ) {
+			for ( var i = 0; i < chips.length; i++ ) {
+				var on = chips[ i ] === active;
+				chips[ i ].classList.toggle( 'bw-chip-on', on );
+				chips[ i ].setAttribute( 'aria-pressed', on ? 'true' : 'false' );
+			}
+		}
+
+		for ( var c = 0; c < chips.length; c++ ) {
+			chips[ c ].addEventListener( 'click', function ( e ) {
+				var chip = e.currentTarget;
+				var wasOn = chip.classList.contains( 'bw-chip-on' );
+				setChip( wasOn ? null : chip );
+				if ( budget ) {
+					budget.value = wasOn ? '' : chip.getAttribute( 'data-budget' );
+				}
+			} );
+		}
+
+		// A typed figure and a picked band must never disagree: typing clears
+		// the chip unless what is typed is exactly that chip's label.
+		if ( budget ) {
+			budget.addEventListener( 'input', function () {
+				var match = null;
+				for ( var i = 0; i < chips.length; i++ ) {
+					if ( chips[ i ].getAttribute( 'data-budget' ) === budget.value ) {
+						match = chips[ i ];
+					}
+				}
+				setChip( match );
+			} );
+		}
+
+		// The error keys (name, email, message) match the [data-cf-msg] slots;
+		// the field itself is the input beside that slot.
+		function fieldFor( key ) {
+			var msg = form.querySelector( '[data-cf-msg="' + key + '"]' );
+			return msg ? msg.parentNode.querySelector( '.bw-in' ) : null;
+		}
+
+		function setError( name, message ) {
+			var field = fieldFor( name );
+			var msg = form.querySelector( '[data-cf-msg="' + name + '"]' );
+			var wrap = field ? field.closest( '.cf-field' ) : null;
+			if ( msg ) {
+				msg.textContent = message || '';
+			}
+			if ( wrap ) {
+				wrap.classList.toggle( 'err', !! message );
+			}
+			if ( field ) {
+				if ( message ) {
+					field.setAttribute( 'aria-invalid', 'true' );
+				} else {
+					field.removeAttribute( 'aria-invalid' );
+				}
+			}
+		}
+
+		function validate() {
+			var errors = {};
+			var name = fieldFor( 'name' );
+			var email = fieldFor( 'email' );
+			var message = fieldFor( 'message' );
+
+			if ( ! name.value.trim() ) {
+				errors.name = 'Please tell us your name.';
+			}
+			if ( ! email.value.trim() ) {
+				errors.email = 'Please add your email address.';
+			} else if ( ! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test( email.value.trim() ) ) {
+				errors.email = 'That email address does not look right.';
+			}
+			if ( ! message.value.trim() ) {
+				errors.message = 'Please tell us a little about the project.';
+			}
+			return errors;
+		}
+
+		function showErrors( errors ) {
+			var names = [ 'name', 'email', 'message' ];
+			var first = null;
+			for ( var i = 0; i < names.length; i++ ) {
+				setError( names[ i ], errors[ names[ i ] ] );
+				if ( errors[ names[ i ] ] && ! first ) {
+					first = fieldFor( names[ i ] );
+				}
+			}
+			if ( first ) {
+				first.focus();
+			}
+		}
+
+		function showSent() {
+			form.hidden = true;
+			if ( sent ) {
+				sent.hidden = false;
+				var heading = sent.querySelector( 'h2' );
+				if ( heading ) {
+					heading.setAttribute( 'tabindex', '-1' );
+					heading.focus();
+				}
+			}
+		}
+
+		if ( again ) {
+			again.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				form.reset();
+				setChip( null );
+				showErrors( {} );
+				sent.hidden = true;
+				form.hidden = false;
+				fieldFor( 'name' ).focus();
+			} );
+		}
+
+		// Clear a field's error as soon as it is corrected.
+		form.addEventListener( 'input', function ( e ) {
+			var wrap = e.target && e.target.closest ? e.target.closest( '.cf-field.err' ) : null;
+			var msg = wrap ? wrap.querySelector( '[data-cf-msg]' ) : null;
+			if ( msg ) {
+				setError( msg.getAttribute( 'data-cf-msg' ), '' );
+			}
+		} );
+
+		form.addEventListener( 'submit', function ( e ) {
+			var errors = validate();
+			if ( Object.keys( errors ).length ) {
+				e.preventDefault();
+				showErrors( errors );
+				return;
+			}
+
+			if ( ! window.fetch || ! window.FormData ) {
+				return; // A plain POST; the server renders the outcome.
+			}
+
+			e.preventDefault();
+			if ( alert ) {
+				alert.hidden = true;
+			}
+			submit.disabled = true;
+
+			fetch( form.action, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: { 'X-Requested-With': 'XMLHttpRequest' },
+				body: new FormData( form )
+			} ).then( function ( res ) {
+				return res.json();
+			} ).then( function ( data ) {
+				submit.disabled = false;
+				if ( data && data.ok ) {
+					showSent();
+					return;
+				}
+				if ( data && data.errors && Object.keys( data.errors ).length ) {
+					showErrors( data.errors );
+					return;
+				}
+				if ( alert ) {
+					alert.hidden = false;
+				}
+			} ).catch( function () {
+				submit.disabled = false;
+				if ( alert ) {
+					alert.hidden = false;
+				}
+			} );
+		} );
+	}
+
 	function init() {
 		initCurrencyPrices();
 		initBackButtons();
@@ -645,6 +840,7 @@
 		initAiPipeline();
 		initFeatureTabs();
 		initAiDemo();
+		initContactForm();
 	}
 
 	if ( 'loading' === document.readyState ) {

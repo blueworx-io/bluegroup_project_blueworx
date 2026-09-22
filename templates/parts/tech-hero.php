@@ -94,7 +94,7 @@ if ( $blueworx_th_centered ) :
 				</div>
 			<?php endif; ?>
 			<?php if ( ! empty( $blueworx_th_meta ) ) : ?>
-				<div class="tech-status">
+				<div class="tech-status"<?php echo $blueworx_th_centered ? ' style="justify-content:center"' : ''; ?>>
 					<?php foreach ( $blueworx_th_meta as $blueworx_th_meta_item ) : ?>
 						<?php if ( is_array( $blueworx_th_meta_item ) && isset( $blueworx_th_meta_item['html'] ) ) : ?>
 							<span>
