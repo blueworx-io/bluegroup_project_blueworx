@@ -5,9 +5,10 @@
  *
  * Four steps of a support ticket — lands, triaged, worked on, confirmed — with
  * a connector that fills between them and an active state that walks down the
- * list on an 8s loop (assets/css/public.css, the `sf*` keyframes). Purely
- * illustrative: the ticket number and times are made up, so the whole panel is
- * marked presentational and hidden below 900px where only the form matters.
+ * list on an 8s loop (assets/css/public.css, the `sf*` keyframes). The ticket
+ * number and times are illustrative, so the whole panel is marked
+ * presentational and hidden below 900px where only the form matters; the
+ * footer figure is real, taken from the Support catalogue.
  *
  * @package BlueWorxSite
  */
@@ -45,6 +46,10 @@ $blueworx_sf_steps = array(
 );
 
 $blueworx_sf_last = count( $blueworx_sf_steps ) - 1;
+
+// The footer stat is the largest Support package's annual hours, read from the
+// catalogue so it cannot drift from the Support page.
+$blueworx_sf_hours = max( array_map( 'intval', wp_list_pluck( blueworx_content_support_packages(), 'hours' ) ) );
 ?>
 <div class="support-flow" role="presentation" data-support-flow>
 	<div class="sf-head">
@@ -78,7 +83,17 @@ $blueworx_sf_last = count( $blueworx_sf_steps ) - 1;
 	</div>
 
 	<div class="sf-foot">
-		<div class="sf-foot-label"><?php esc_html_e( 'Average first reply', 'bluegroup-project-blueworx' ); ?></div>
-		<div class="sf-foot-value"><?php esc_html_e( '38 minutes', 'bluegroup-project-blueworx' ); ?></div>
+		<div class="sf-foot-label"><?php esc_html_e( 'Support hours available', 'bluegroup-project-blueworx' ); ?></div>
+		<div class="sf-foot-value">
+			<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %s: annual hours of the largest Support package. */
+					__( 'up to %s hrs / yr', 'bluegroup-project-blueworx' ),
+					number_format_i18n( $blueworx_sf_hours )
+				)
+			);
+			?>
+		</div>
 	</div>
 </div>

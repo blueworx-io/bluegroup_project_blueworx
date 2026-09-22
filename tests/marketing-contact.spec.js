@@ -241,7 +241,10 @@ test.describe('Marketing contact page', () => {
     ]);
     // Three connectors: none under the last step.
     await expect(flow.locator('.sf-track')).toHaveCount(3);
-    await expect(flow.locator('.sf-foot')).toContainText('38 minutes');
+    // The footer stat is the top Support package's hours, so it must match
+    // what the Support page sells.
+    await expect(flow.locator('.sf-foot')).toContainText('Support hours available');
+    await expect(flow.locator('.sf-foot')).toContainText('up to 600 hrs / yr');
     await expect(page.locator('.contact-illus')).toHaveCount(0);
   });
 

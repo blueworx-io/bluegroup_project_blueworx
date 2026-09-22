@@ -46,7 +46,7 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 == Changelog ==
 
 = 1.19.0 =
-* The Contact page's illustration is replaced by the animated Support Flow panel from the design: four ticket steps, a connector that fills between them and an average-first-reply stat. Hidden on phones.
+* The Contact page's illustration is replaced by the animated Support Flow panel from the design: four ticket steps, a connector that fills between them and the support hours available. Hidden on phones.
 * The Contact FAQ now answers questions about getting in touch rather than billing.
 
 = 1.18.0 =
