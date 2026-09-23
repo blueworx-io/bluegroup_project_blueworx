@@ -46,6 +46,33 @@ function blueworx_public_page_is_ours( $post_id ) {
 }
 
 /**
+ * Names this plugin's pages "BlueWorx" in the Pages list's Source column.
+ *
+ * The column is the BlueWorx Labs plugin's, and so is what follows from it: a
+ * page with a source offers only View and Edit, and cannot be trashed. Only
+ * pages still in the ID map are named — a retired page sits in the bin and
+ * must stay deletable from there.
+ *
+ * @param string $label   A label another plugin gave first, or ''.
+ * @param int    $post_id Page ID.
+ * @return string
+ */
+function blueworx_public_page_source( $label, $post_id ) {
+	if ( '' !== (string) $label ) {
+		return $label;
+	}
+
+	$map = array_map( 'intval', (array) get_option( 'blueworx_public_page_ids', array() ) );
+
+	if ( in_array( (int) $post_id, $map, true ) && blueworx_public_page_is_ours( $post_id ) ) {
+		return 'BlueWorx';
+	}
+
+	return $label;
+}
+add_filter( 'blueworx_page_source', 'blueworx_public_page_source', 10, 2 );
+
+/**
  * The pages this plugin owns and renders.
  *
  * Real WordPress Pages are created for these so menus, SEO plugins and later
