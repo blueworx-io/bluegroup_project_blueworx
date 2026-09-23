@@ -31,13 +31,24 @@
 	}
 
 	/**
+	 * A rate for display: 0.2 reads as "20".
+	 *
+	 * @param {number} rate Rate as a fraction.
+	 * @return {string}
+	 */
+	function percent( rate ) {
+		return String( Math.round( rate * 100 ) );
+	}
+
+	/**
 	 * The hours a build comes to, and the stages behind them.
 	 *
-	 * @param {number}  pages      Pages designed and built.
-	 * @param {boolean} membership Whether a membership system is included.
+	 * @param {number}  pages        Pages designed and built.
+	 * @param {boolean} membership   Whether a membership system is included.
+	 * @param {number}  integrations How many other systems it has to talk to.
 	 * @return {Object} total and stages.
 	 */
-	function build( pages, membership ) {
+	function build( pages, membership, integrations ) {
 		var model = data.model;
 		var fixed = model.fixed;
 		var stages = [
@@ -45,6 +56,14 @@
 			{ key: 'design', label: 'Design and review', hours: pages * model.design_per_page },
 			{ key: 'build', label: 'Build and review', hours: pages * model.build_per_page },
 		];
+
+		if ( integrations > 0 ) {
+			stages.push( {
+				key: 'integrations',
+				label: 'Custom integrations',
+				hours: integrations * model.integration,
+			} );
+		}
 
 		if ( membership ) {
 			stages.push( { key: 'membership', label: 'Membership system', hours: model.membership } );
@@ -124,7 +143,10 @@
 		var buildBox = root.querySelector( '[data-build]' );
 		var hostingMode = root.querySelector( '[data-hosting-mode]' );
 		var clubhouseMode = root.querySelector( '[data-clubhouse-mode]' );
+		var clubhouseSupport = root.querySelector( '[data-clubhouse-support]' );
+		var membershipAsk = root.querySelector( '[data-membership-ask]' );
 		var pagesBox = root.querySelector( '[data-pages]' );
+		var integrationsBox = root.querySelector( '[data-integrations]' );
 		var pagesFixed = root.querySelector( '[data-pages-fixed]' );
 		var stagesList = root.querySelector( '[data-stages]' );
 		var hoursOut = root.querySelector( '[data-testid="quote-hours"]' );
@@ -133,6 +155,7 @@
 		var remaining = root.querySelector( '[data-testid="quote-remaining"]' );
 		var lines = root.querySelector( '[data-quote-lines]' );
 		var commission = root.querySelector( '[data-testid="quote-commission"]' );
+		var commissionParts = root.querySelector( '[data-commission-parts]' );
 
 		/** Whether the quote is being sized as a build. */
 		function isBuild() {
@@ -200,10 +223,11 @@
 			}
 
 			if ( quote.clubhouse ) {
-				// The setup fee stands a standard ClubHouse up. A custom one is
-				// built from scratch and the build hours already carry that work.
-				if ( 'standard' === quote.clubhouseMode ) {
-					rows.push( [ 'ClubHouse setup', money( data.setup ) + ' one-off' ] );
+				// The setup fee is for standing a membership system up, so it
+				// follows that question rather than the ClubHouse itself. A custom
+				// one never carries it: the build hours already cover that work.
+				if ( 'standard' === quote.clubhouseMode && quote.membership ) {
+					rows.push( [ 'Membership setup', money( data.setup ) + ' one-off' ] );
 				}
 
 				rows.push( [ data.products.clubhouse.name, money( data.products.clubhouse.year ) + ' a year' ] );
@@ -225,7 +249,16 @@
 			} );
 		}
 
-		/** Draws what the quote pays, where that is shown at all. */
+		/**
+		 * Draws what the quote pays, where that is shown at all.
+		 *
+		 * Part by part, because the parts do not pay the same: a site earns 20%
+		 * of its subscription flat, while a support package earns 10% or 20%
+		 * depending on whether it is worth £9,000 a year. A single total cannot
+		 * say which rate did what, and that is the first thing anybody asks.
+		 *
+		 * @param {number} index The quoted package, or -1 for none.
+		 */
 		function paintCommission( index ) {
 			if ( ! commission ) {
 				return;
@@ -233,30 +266,47 @@
 
 			var rates = data.rates;
 			var total = 0;
+			var parts = [];
+
+			/**
+			 * Adds one part, and remembers how it was worked out.
+			 *
+			 * @param {string} label  What it is.
+			 * @param {number} value  The sale value it is paid on.
+			 * @param {number} rate   The rate paid on it.
+			 */
+			function add( label, value, rate ) {
+				total += value * rate;
+				parts.push( money( value * rate ) + ' ' + label + ' at ' + percent( rate ) + '%' );
+			}
 
 			if ( quote.hosting ) {
-				total += data.products.hosting.year * rates.seat;
+				add( 'hosting', data.products.hosting.year, rates.seat );
 			}
 
 			if ( quote.clubhouse ) {
 				// The one-off setup fee earns nothing: commission is on the
 				// subscription, which is the part that was sold.
-				total += data.products.clubhouse.year * rates.seat;
+				add( 'ClubHouse', data.products.clubhouse.year, rates.seat );
 			}
 
 			if ( index >= 0 ) {
 				var annual = packages[ index ].price * 12;
 
-				total += annual * ( annual >= rates.threshold ? rates.support_high : rates.support_low );
+				add( 'support', annual, annual >= rates.threshold ? rates.support_high : rates.support_low );
 			}
 
 			commission.textContent = money( total );
+
+			if ( commissionParts ) {
+				commissionParts.textContent = parts.length > 1 ? parts.join( ' · ' ) : '';
+			}
 		}
 
 		/** Redraws everything from the current quote. */
 		function paint() {
 			var building = isBuild();
-			var sized = building ? build( pageCount(), quote.membership ) : null;
+			var sized = building ? build( pageCount(), quote.membership, quote.integrations ) : null;
 			var index = parseInt( range.value, 10 ) || 0;
 
 			if ( hostingMode ) {
@@ -272,6 +322,7 @@
 			paintSegments( root.querySelector( '[data-toggle="hosting"]' ), quote.hosting ? 'yes' : 'no' );
 			paintSegments( root.querySelector( '[data-toggle="clubhouse"]' ), quote.clubhouse ? 'yes' : 'no' );
 			paintSegments( root.querySelector( '[data-toggle="membership"]' ), quote.membership ? 'yes' : 'no' );
+			paintSegments( root.querySelector( '[data-toggle="management"]' ), quote.clubhouseSupport ? 'yes' : 'no' );
 
 			if ( buildBox ) {
 				buildBox.hidden = ! building;
@@ -284,15 +335,31 @@
 				pagesBox.querySelector( '[data-qty]' ).textContent = String( quote.pages );
 			}
 
+			if ( integrationsBox ) {
+				integrationsBox.querySelector( '[data-qty]' ).textContent = String( quote.integrations );
+			}
+
 			if ( pagesFixed ) {
 				pagesFixed.hidden = ! ( building && quote.clubhouse && 'custom' === quote.clubhouseMode );
 			}
 
-			// Standard ClubHouse is a platform somebody joins: no hours, and
-			// so no package to slide between either.
+			// A standard ClubHouse is a platform somebody joins: no hours, and
+			// so nothing to slide between — unless they also want us looking
+			// after it, which is what the management question asks.
 			var standardClubhouse = quote.clubhouse && 'standard' === quote.clubhouseMode;
+			var noPackage = standardClubhouse && ! quote.clubhouseSupport;
 
-			slider.hidden = building || standardClubhouse;
+			if ( clubhouseSupport ) {
+				clubhouseSupport.hidden = ! standardClubhouse;
+			}
+
+			// A build is charged 30 hours for a membership system; a standard
+			// ClubHouse is charged the setup fee for one. Nothing else asks.
+			if ( membershipAsk ) {
+				membershipAsk.hidden = ! ( building || standardClubhouse );
+			}
+
+			slider.hidden = building || noPackage;
 
 			if ( building ) {
 				index = packageFor( packages, sized.total );
@@ -336,10 +403,10 @@
 			}
 
 			// The package panel says nothing useful for a standard ClubHouse.
-			root.classList.toggle( 'quote-no-package', standardClubhouse );
+			root.classList.toggle( 'quote-no-package', noPackage );
 
 			paintLines();
-			paintCommission( standardClubhouse ? -1 : index );
+			paintCommission( noPackage ? -1 : index );
 		}
 
 		root.addEventListener( 'click', function ( event ) {
@@ -349,7 +416,13 @@
 			if ( step ) {
 				var by = 'up' === step.getAttribute( 'data-step' ) ? 1 : -1;
 
-				quote.pages = Math.min( 60, Math.max( 1, quote.pages + by ) );
+				if ( step.closest( '[data-integrations]' ) ) {
+					// None is a real answer here, unlike pages.
+					quote.integrations = Math.min( 40, Math.max( 0, quote.integrations + by ) );
+				} else {
+					quote.pages = Math.min( 60, Math.max( 1, quote.pages + by ) );
+				}
+
 				paint();
 				return;
 			}
@@ -366,6 +439,8 @@
 
 				if ( 'membership' === name ) {
 					quote.membership = 'yes' === value;
+				} else if ( 'management' === name ) {
+					quote.clubhouseSupport = 'yes' === value;
 				} else {
 					quote[ name ] = 'yes' === value;
 

@@ -31,17 +31,20 @@ blueworx_public_part(
 ?>
 <p class="dash-lede"><?php echo esc_html( $blueworx_qb_sections['quote-builder']['blurb'] ); ?></p>
 
-<div class="dash-card quote-card">
-	<?php
-	blueworx_public_part(
-		'parts/quote-calculator.php',
-		array(
-			'full'       => true,
-			'commission' => true,
-		)
-	);
-	?>
-</div>
+<?php
+// No card around it. The marketing page frames the calculator because it sits
+// in the middle of a long scrolling page; here the dashboard already provides
+// the frame, and a card inside a card inside the calculator's own two panels
+// is three borders to look through.
+blueworx_public_part(
+	'parts/quote-calculator.php',
+	array(
+		'full'       => true,
+		'commission' => true,
+		'plain'      => true,
+	)
+);
+?>
 
 <p class="comm-note">
 	<?php blueworx_icon( 'info', 'comm-hint-icon' ); ?>

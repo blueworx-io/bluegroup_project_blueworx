@@ -180,6 +180,28 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-testid="quote-remaining"]')).toHaveText('26 hrs');
   });
 
+  // Each integration is 20 hours, so two take the same 84-hour build to 124 —
+  // past what Growth's 140 leaves room for comfortably, but still inside it.
+  test('each custom integration adds twenty hours', async ({ page }) => {
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="build"]');
+    await setPages(page, 5);
+    await page.click('[data-integrations] [data-step="up"]');
+    await page.click('[data-integrations] [data-step="up"]');
+
+    await expect(page.locator('[data-integrations] [data-qty]')).toHaveText('2');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('124 hrs');
+    await expect(page.locator('[data-stage="integrations"]')).toContainText('40 hrs');
+  });
+
+  test('a build with no integrations does not list them', async ({ page }) => {
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="build"]');
+
+    await expect(page.locator('[data-integrations] [data-qty]')).toHaveText('0');
+    await expect(page.locator('[data-stage="integrations"]')).toHaveCount(0);
+  });
+
   // The ClubHouse page count belongs to the ClubHouse branch. It was showing
   // on a hosting build because a flex row beats the browser's own [hidden].
   test('the ClubHouse page count stays out of a hosting build', async ({ page }) => {
@@ -220,15 +242,36 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-testid="quote-over"]')).toBeVisible();
   });
 
-  test('standard ClubHouse quotes the setup fee and the subscription, with no hours', async ({
-    page,
-  }) => {
+  test('standard ClubHouse quotes the subscription alone, with no hours', async ({ page }) => {
     await toggle(page, 'clubhouse', 'yes');
     await page.click('[data-clubhouse-mode] [data-value="standard"]');
 
-    await expect(page.locator('[data-quote-lines]')).toContainText('£499');
     await expect(page.locator('[data-quote-lines]')).toContainText('£200');
     await expect(page.locator('[data-testid="quote-hours"]')).toBeHidden();
+    // Nothing to look after unless they ask for it, so no package either.
+    await expect(page.locator('input[type="range"]')).toBeHidden();
+  });
+
+  // The setup fee pays for standing a membership system up, so it follows
+  // that question rather than the ClubHouse itself.
+  test('the setup fee arrives with the membership system, not before it', async ({ page }) => {
+    await toggle(page, 'clubhouse', 'yes');
+    await page.click('[data-clubhouse-mode] [data-value="standard"]');
+
+    await expect(page.locator('[data-quote-lines]')).not.toContainText('£499');
+
+    await toggle(page, 'membership', 'yes');
+
+    await expect(page.locator('[data-quote-lines]')).toContainText('£499');
+  });
+
+  test('ongoing management on a standard ClubHouse brings the slider back', async ({ page }) => {
+    await toggle(page, 'clubhouse', 'yes');
+    await page.click('[data-clubhouse-mode] [data-value="standard"]');
+    await toggle(page, 'management', 'yes');
+
+    await expect(page.locator('input[type="range"]')).toBeVisible();
+    await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Growth');
   });
 
   // 12 pages, fixed: 6 + 48 + 96 + 6 + 6 + 6.
@@ -254,12 +297,6 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-quote-lines]')).toContainText('£200');
   });
 
-  test('a standard ClubHouse still carries it', async ({ page }) => {
-    await toggle(page, 'clubhouse', 'yes');
-    await page.click('[data-clubhouse-mode] [data-value="standard"]');
-
-    await expect(page.locator('[data-quote-lines]')).toContainText('£499');
-  });
 
   test('a visitor is never shown what the sale pays us', async ({ page }) => {
     await toggle(page, 'hosting', 'yes');
@@ -314,6 +351,32 @@ test.describe('The quote builder in the Sales section', () => {
 
     // Growth's £600, plus 20% of £200 of hosting.
     await expect(page.locator('.quote-commission')).toContainText('£640');
+  });
+
+  // A site and a support package are not paid at the same rate, and a single
+  // total cannot say which rate did what.
+  test('it says what each part of the quote pays, and at what rate', async ({ page }) => {
+    await fixture(page, 'sales_in');
+    await page.goto(cacheBust('/dashboard/quote-builder/'));
+
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="support"]');
+
+    const parts = page.locator('[data-commission-parts]');
+    await expect(parts).toContainText('£40 hosting at 20%');
+    await expect(parts).toContainText('£600 support at 10%');
+  });
+
+  // Growth is £6,000 a year (10%); Enterprise is £9,000 (20%).
+  test('a package over the threshold pays the higher rate here too', async ({ page }) => {
+    await fixture(page, 'sales_in');
+    await page.goto(cacheBust('/dashboard/quote-builder/'));
+
+    await toggle(page, 'clubhouse', 'yes');
+    await page.click('[data-clubhouse-mode] [data-value="custom"]');
+
+    await expect(page.locator('[data-commission-parts]')).toContainText('£1,800 support at 20%');
+    await expect(page.locator('.quote-commission')).toContainText('£1,840');
   });
 
   test('an administrator can reach it and a client cannot', async ({ page }) => {

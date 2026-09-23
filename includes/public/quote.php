@@ -60,6 +60,8 @@ function blueworx_quote_model() {
 			'design_per_page'  => 4,
 			'build_per_page'   => 8,
 			'membership'       => 30,
+			// Each one is a system of somebody else's to learn, connect and test.
+			'integration'      => 20,
 			// A custom ClubHouse is the same build with the page count settled:
 			// the platform's twelve screens.
 			'clubhouse_pages'  => 12,
@@ -71,11 +73,12 @@ function blueworx_quote_model() {
 /**
  * The hours a build comes to.
  *
- * @param int  $pages      How many pages are designed and built.
- * @param bool $membership Whether it needs a membership system.
+ * @param int  $pages        How many pages are designed and built.
+ * @param bool $membership   Whether it needs a membership system.
+ * @param int  $integrations How many other systems it has to talk to.
  * @return int
  */
-function blueworx_quote_build_hours( $pages, $membership ) {
+function blueworx_quote_build_hours( $pages, $membership, $integrations = 0 ) {
 	$model = blueworx_quote_model();
 	$pages = max( 1, (int) $pages );
 	$hours = 0;
@@ -90,17 +93,20 @@ function blueworx_quote_build_hours( $pages, $membership ) {
 		$hours += (int) $model['membership'];
 	}
 
+	$hours += max( 0, (int) $integrations ) * (int) $model['integration'];
+
 	return $hours;
 }
 
 /**
  * The stages a build is made of, ready to list.
  *
- * @param int  $pages      Page count.
- * @param bool $membership Whether a membership system is included.
+ * @param int  $pages        Page count.
+ * @param bool $membership   Whether a membership system is included.
+ * @param int  $integrations How many other systems it has to talk to.
  * @return array List of array( key, label, hours, fixed ).
  */
-function blueworx_quote_build_stages( $pages, $membership ) {
+function blueworx_quote_build_stages( $pages, $membership, $integrations = 0 ) {
 	$model = blueworx_quote_model();
 	$pages = max( 1, (int) $pages );
 
@@ -124,6 +130,17 @@ function blueworx_quote_build_stages( $pages, $membership ) {
 			'fixed' => false,
 		),
 	);
+
+	$integrations = max( 0, (int) $integrations );
+
+	if ( $integrations > 0 ) {
+		$stages[] = array(
+			'key'   => 'integrations',
+			'label' => __( 'Custom integrations', 'bluegroup-project-blueworx' ),
+			'hours' => $integrations * (int) $model['integration'],
+			'fixed' => false,
+		);
+	}
 
 	if ( $membership ) {
 		$stages[] = array(
@@ -178,13 +195,18 @@ function blueworx_quote_default() {
 	$model = blueworx_quote_model();
 
 	return array(
-		'hosting'       => false,
-		'clubhouse'     => false,
-		'hostingMode'   => 'support',
-		'clubhouseMode' => 'standard',
-		'pages'         => (int) $model['default_pages'],
-		'membership'    => false,
-		'support'       => 'growth',
+		'hosting'          => false,
+		'clubhouse'        => false,
+		'hostingMode'      => 'support',
+		'clubhouseMode'    => 'standard',
+		// A standard ClubHouse is a platform somebody joins. Whether we also
+		// look after it for them is a separate question, and the answer is what
+		// decides whether a support package is quoted with it.
+		'clubhouseSupport' => false,
+		'pages'            => (int) $model['default_pages'],
+		'integrations'     => 0,
+		'membership'       => false,
+		'support'          => 'growth',
 	);
 }
 
@@ -223,16 +245,17 @@ function blueworx_quote_summary( $quote ) {
 	$pages  = ! empty( $quote['clubhouse'] ) && 'custom' === $quote['clubhouseMode']
 		? (int) $model['clubhouse_pages']
 		: (int) $quote['pages'];
-	$hours  = $build ? blueworx_quote_build_hours( $pages, ! empty( $quote['membership'] ) ) : 0;
+	$hours  = $build ? blueworx_quote_build_hours( $pages, ! empty( $quote['membership'] ), isset( $quote['integrations'] ) ? (int) $quote['integrations'] : 0 ) : 0;
 	$lines  = array();
 	$slug   = '';
 
 	if ( $build ) {
 		$slug = blueworx_quote_package_for_hours( $hours );
 	} elseif ( ! empty( $quote['clubhouse'] ) ) {
-		// Standard ClubHouse is a platform somebody joins, not a build. There
-		// are no hours to cover, so no support package is quoted with it.
-		$slug = '';
+		// Standard ClubHouse is a platform somebody joins, not a build, so
+		// there are no hours to cover. A package is only quoted with it if they
+		// also want us looking after it.
+		$slug = ! empty( $quote['clubhouseSupport'] ) && isset( $quote['support'] ) ? (string) $quote['support'] : '';
 	} else {
 		$slug = isset( $quote['support'] ) ? (string) $quote['support'] : '';
 	}
@@ -246,12 +269,13 @@ function blueworx_quote_summary( $quote ) {
 	}
 
 	if ( ! empty( $quote['clubhouse'] ) ) {
-		// The setup fee covers standing a standard ClubHouse up. A custom one
-		// is being built from scratch and the build hours already carry that
+		// The setup fee is for standing a membership system up, so it is only
+		// charged when they want one. A custom ClubHouse never carries it: it
+		// is being built from scratch and the build hours already cover that
 		// work, so charging it as well charges the same thing twice.
-		if ( 'standard' === $quote['clubhouseMode'] ) {
+		if ( 'standard' === $quote['clubhouseMode'] && ! empty( $quote['membership'] ) ) {
 			$lines[] = array(
-				'label'  => __( 'ClubHouse setup', 'bluegroup-project-blueworx' ),
+				'label'  => __( 'Membership setup', 'bluegroup-project-blueworx' ),
 				'detail' => __( 'one-off, charged at sign-up', 'bluegroup-project-blueworx' ),
 				'amount' => (float) $clubhouse['plan']['setup'],
 			);

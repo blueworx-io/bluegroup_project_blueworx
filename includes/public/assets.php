@@ -375,4 +375,73 @@ function blueworx_public_dequeue_foreign_assets() {
 		}
 	}
 }
+
+/**
+ * The same sweep, for script modules.
+ *
+ * WordPress 6.5 added a THIRD queue beside wp_scripts() and wp_styles(), and
+ * the sweep above cannot see into it: a module is enqueued with
+ * wp_enqueue_script_module() and printed from wp_script_modules(), so
+ * wp_dequeue_script() has nothing to do with it. SureCart's cart and checkout
+ * ship that way, which is how two of its bundles were still loading — and
+ * throwing "wp is not defined" — on marketing pages that contain no shop at
+ * all, on a site whose whole point is that they do not.
+ *
+ * Hooked into both wp_head and wp_footer because which one core prints them at
+ * depends on whether the site runs a block theme. Running twice is harmless: a
+ * module already dequeued is simply not in the queue the second time.
+ *
+ * The head pass is at priority 9, NOT 0. wp_enqueue_scripts itself fires from
+ * inside wp_head (priority 2), so at priority 0 the queue is still empty and
+ * there is nothing to sweep — measured, after the first attempt at this swept
+ * a queue that had not been filled yet and changed nothing at all. 9 is after
+ * everyone has enqueued and before core prints at 10.
+ *
+ * The allowlist is the one the classic sweep uses, plus core's own namespace
+ * on a journal article — the Interactivity API is how an interactive core
+ * block works, and those blocks are the client's content, not ours to break.
+ *
+ * @return void
+ */
+function blueworx_public_dequeue_foreign_script_modules() {
+	if ( ! function_exists( 'wp_script_modules' ) || ! blueworx_public_renders_request() ) {
+		return;
+	}
+
+	/** This filter is documented in includes/public/assets.php */
+	if ( ! apply_filters( 'blueworx_public_sweep_foreign_assets', ! blueworx_public_page_needs_foreign_assets() ) ) {
+		return;
+	}
+
+	$modules  = wp_script_modules();
+	$prefixes = blueworx_public_allowed_asset_prefixes();
+
+	if ( function_exists( 'blueworx_public_renders_post' ) && blueworx_public_renders_post() ) {
+		$prefixes[] = '@wordpress/';
+	}
+
+	// get_queue() arrived with the API's second outing (6.9). Without it there
+	// is nothing to enumerate, and guessing at ids would be worse than leaving
+	// them alone.
+	if ( ! method_exists( $modules, 'get_queue' ) || ! method_exists( $modules, 'dequeue' ) ) {
+		return;
+	}
+
+	foreach ( (array) $modules->get_queue() as $id ) {
+		$allowed = false;
+
+		foreach ( $prefixes as $prefix ) {
+			if ( 0 === strpos( (string) $id, (string) $prefix ) ) {
+				$allowed = true;
+				break;
+			}
+		}
+
+		if ( ! $allowed ) {
+			$modules->dequeue( $id );
+		}
+	}
+}
+add_action( 'wp_head', 'blueworx_public_dequeue_foreign_script_modules', 9 );
+add_action( 'wp_footer', 'blueworx_public_dequeue_foreign_script_modules', 0 );
 add_action( 'wp_enqueue_scripts', 'blueworx_public_dequeue_foreign_assets', PHP_INT_MAX );

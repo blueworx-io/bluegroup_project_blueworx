@@ -11,6 +11,9 @@
  *              plain hours slider the Support page had before, which is what
  *              the Settings switch turns it back to.
  * - commission (bool) Show what the quote pays. Never true on a public page.
+ * - plain      (bool) Drop the decorative frame the marketing page gives it.
+ *              The client area has its own page furniture and does not need a
+ *              second card around the calculator inside it.
  *
  * The slider's markup and its data-testid hooks are unchanged from when this
  * lived in pages/support.php: the currency painter reads them, and so do the
@@ -26,6 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $blueworx_q_full       = ! empty( $full );
 $blueworx_q_commission = ! empty( $commission );
+$blueworx_q_plain      = ! empty( $plain );
 $blueworx_q_packages   = blueworx_content_support_packages();
 $blueworx_q_quote      = blueworx_quote_default();
 $blueworx_q_model      = blueworx_quote_model();
@@ -85,7 +89,7 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 	<?php
 }
 ?>
-<div class="calc<?php echo $blueworx_q_full ? ' calc-quote' : ''; ?>" data-widget="support-calc"
+<div class="calc<?php echo $blueworx_q_full ? ' calc-quote' : ''; ?><?php echo $blueworx_q_plain ? ' calc-plain' : ''; ?>" data-widget="support-calc"
 	data-packages="<?php echo esc_attr( wp_json_encode( $blueworx_q_table ) ); ?>"
 	<?php echo $blueworx_q_full ? ' data-quote="full"' : ''; ?>>
 	<div class="calc-panel">
@@ -115,6 +119,28 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 				</div>
 			</div>
 
+			<?php
+			// Only for a standard ClubHouse: the platform is theirs either way,
+			// and this is whether we look after it. Yes brings the hours slider
+			// back so a package can be picked alongside it.
+			?>
+			<div class="calc-field quote-branch" data-clubhouse-support hidden>
+				<div class="quote-rows">
+					<?php blueworx_quote_toggle( 'management', __( 'Ongoing management?', 'bluegroup-project-blueworx' ), false ); ?>
+				</div>
+			</div>
+
+			<?php
+			// Asked by a build (it is 30 hours of work) and by a standard
+			// ClubHouse (it is what the setup fee is for), so it lives outside
+			// the build box rather than being written out twice.
+			?>
+			<div class="calc-field quote-branch" data-membership-ask hidden>
+				<div class="quote-rows">
+					<?php blueworx_quote_toggle( 'membership', __( 'Membership system?', 'bluegroup-project-blueworx' ), false ); ?>
+				</div>
+			</div>
+
 			<div class="calc-field quote-build" data-build hidden>
 				<div class="quote-rows">
 					<div class="quote-ask" data-pages>
@@ -122,6 +148,20 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 						<span class="comm-step" role="group" aria-label="<?php esc_attr_e( 'How many pages', 'bluegroup-project-blueworx' ); ?>">
 							<button type="button" class="comm-step-btn" data-step="down" aria-label="<?php esc_attr_e( 'One fewer', 'bluegroup-project-blueworx' ); ?>">&minus;</button>
 							<span class="comm-step-val" data-qty><?php echo esc_html( (string) $blueworx_q_model['default_pages'] ); ?></span>
+							<button type="button" class="comm-step-btn" data-step="up" aria-label="<?php esc_attr_e( 'One more', 'bluegroup-project-blueworx' ); ?>">+</button>
+						</span>
+					</div>
+
+					<?php
+					// Asked on every build, ClubHouse included: a booking system
+					// or a CRM is somebody else's system to learn, connect and
+					// test whatever the site is built on.
+					?>
+					<div class="quote-ask" data-integrations>
+						<span class="quote-ask-label"><?php esc_html_e( 'Custom integrations', 'bluegroup-project-blueworx' ); ?></span>
+						<span class="comm-step" role="group" aria-label="<?php esc_attr_e( 'How many custom integrations', 'bluegroup-project-blueworx' ); ?>">
+							<button type="button" class="comm-step-btn" data-step="down" aria-label="<?php esc_attr_e( 'One fewer', 'bluegroup-project-blueworx' ); ?>">&minus;</button>
+							<span class="comm-step-val" data-qty>0</span>
 							<button type="button" class="comm-step-btn" data-step="up" aria-label="<?php esc_attr_e( 'One more', 'bluegroup-project-blueworx' ); ?>">+</button>
 						</span>
 					</div>
@@ -139,7 +179,6 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 						</span>
 					</div>
 
-					<?php blueworx_quote_toggle( 'membership', __( 'Membership system?', 'bluegroup-project-blueworx' ), false ); ?>
 				</div>
 
 				<ul class="quote-stages" data-stages>
@@ -217,8 +256,14 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 		</div>
 	</div>
 
+<?php
+// The right-hand column. The quote and what it pays belong together and are
+// stacked, with the quote panel taking whatever height the questions beside it
+// leave over, so the two columns finish level however long the left one gets.
+?>
+<div class="calc-side">
 	<div class="calc-out">
-		<div class="cl"><?php esc_html_e( 'Your package', 'bluegroup-project-blueworx' ); ?></div>
+		<div class="cl"><?php esc_html_e( 'Suggested Package', 'bluegroup-project-blueworx' ); ?></div>
 		<div class="cv" data-testid="support-calc-price"<?php echo $blueworx_q_gbp ? ' data-bw-gbp="' . esc_attr( (int) $blueworx_q_growth['priceM'] ) . '"' : ''; ?>><?php echo esc_html( blueworx_public_currency_sign( $blueworx_q_growth['currency'] ) . number_format( (float) $blueworx_q_growth['priceM'], 0, '.', ',' ) ); ?></div>
 		<div class="cp"><?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></div>
 
@@ -235,9 +280,17 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 		$blueworx_q_pay = blueworx_commission_summary( blueworx_quote_to_sale( $blueworx_q_quote ) );
 		?>
 		<div class="quote-commission">
-			<span class="quote-commission-label"><?php esc_html_e( 'This quote pays you', 'bluegroup-project-blueworx' ); ?></span>
+			<span class="quote-commission-label"><?php esc_html_e( 'This quote commission of', 'bluegroup-project-blueworx' ); ?></span>
 			<b data-testid="quote-commission"><?php echo esc_html( blueworx_commission_money( $blueworx_q_pay['commission'] ) ); ?></b>
 			<span class="quote-commission-note"><?php esc_html_e( 'in year one, on the first year of the sale', 'bluegroup-project-blueworx' ); ?></span>
+			<?php
+			// Written out part by part because the parts are not paid at the
+			// same rate: hosting and ClubHouse earn 20% flat, a support package
+			// 10% or 20% depending on what it is worth. One total hides which
+			// of those is which.
+			?>
+			<span class="quote-commission-parts" data-commission-parts></span>
 		</div>
 	<?php endif; ?>
+	</div>
 </div>

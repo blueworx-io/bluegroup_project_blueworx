@@ -46,9 +46,10 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 == Changelog ==
 
 = 1.22.0 =
-* Adds a quote builder: pick hosting or ClubHouse, then ongoing support or a build, and it sizes the work in hours and quotes the package that covers it.
+* Adds a quote builder: pick hosting or ClubHouse, then ongoing support or a build, and it sizes the work in hours and quotes the package that covers it, with the hours left over.
 * It appears in the Sales section and on the public Support page. Settings > BlueWorx Site turns the public one back to the plain hours slider.
-* Sales staff also see what the quote pays them; visitors never do.
+* Sales staff also see what the quote pays them, and at what rate for each part; visitors never do.
+* Fixes other plugins’ script modules loading on the marketing pages, which is what put SureCart’s code on pages that never asked for it.
 
 = 1.21.0 =
 * Salespeople get a commission calculator in the client area: build a sale and see what it pays, per product and in total, for the first year.
