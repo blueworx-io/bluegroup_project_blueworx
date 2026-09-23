@@ -9,7 +9,7 @@
  * - the page renders the shop's form rather than a form of our own,
  * - the shop's script reaches the page, which our own asset sweep would
  *   otherwise strip — leaving correct markup that never comes alive,
- * - where a member lands afterwards, including an admin going to wp-admin and
+ * - where a member lands afterwards, the dashboard for everybody, and
  *   an off-site `redirect_to` being refused (an open redirect on a login page
  *   is the classic phishing setup),
  * - the retired /register and /reset-password addresses still go somewhere.
@@ -224,10 +224,13 @@ test.describe('Where the shop sends people once it has signed them in', () => {
     expect(await landsOn(page, null)).toBe('/dashboard');
   });
 
-  test('an admin goes straight to wp-admin', async ({ page }) => {
+  // Everybody who signs in here signs in as a client would, whatever else
+  // they can do on the site. wp-admin is a place an administrator goes on
+  // purpose, not somewhere signing in should drop them.
+  test('an admin goes to the dashboard too', async ({ page }) => {
     await login(page);
 
-    expect(await landsOn(page, null)).toBe('/wp-admin');
+    expect(await landsOn(page, null)).toBe('/dashboard');
   });
 
   test('a client is returned to the page they were heading for', async ({ page }) => {

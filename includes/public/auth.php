@@ -150,19 +150,13 @@ function blueworx_auth_redirect_target( $requested = null ) {
 /**
  * Where somebody with no destination of their own belongs.
  *
- * An administrator is not here to read their own invoices — they are here to
- * run the site, and every one of them reaches this page only because they typed
- * /login rather than the admin address. Sending them to wp-admin saves the hop.
- * `manage_options` rather than `edit_posts`: a client with an author-ish role on
- * some future part of the site is still a client.
+ * The dashboard, whoever they are. Signing in at /login is signing in as a
+ * member, and an administrator who wants wp-admin goes there directly — being
+ * dropped into it because of a role is a surprise, not a shortcut.
  *
  * @return string Absolute URL.
  */
 function blueworx_auth_home_for_current_user() {
-	if ( current_user_can( 'manage_options' ) ) {
-		return admin_url();
-	}
-
 	return blueworx_account_url();
 }
 

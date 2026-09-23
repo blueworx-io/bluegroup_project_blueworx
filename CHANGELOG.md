@@ -10,6 +10,15 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.22.1] - 2026-09-23
+
+### Changed
+
+- **Signing in always lands on the dashboard, administrators included.** An
+  administrator who signed in at /login used to be dropped into wp-admin. They
+  go there on purpose when they want it; being thrown there for having a role
+  is a surprise, not a shortcut.
+
 ## [1.22.0] - 2026-09-23
 
 ### Added
