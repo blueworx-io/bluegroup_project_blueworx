@@ -64,6 +64,14 @@ The rates it quotes (20% on Hosting and ClubHouse, 10% or 20% on support
 depending on whether the package is worth £9,000 a year) are set in the
 plugin's code, not in a setting — they are a business rule, not a preference.
 
+They also get the Quote Builder, which sizes a build in hours and quotes the
+package that covers it. The same builder is on the public Support page.
+
+**Settings → BlueWorx Site → Quote builder on Support** turns the public one
+back to the plain hours slider. Worth knowing before you leave it on: it shows
+visitors how we size work — 4 hours to design a page, 8 to build it, 30 for a
+membership system. Turning it off changes nothing for sales staff.
+
 ## 6. Check the way in
 
 The Client Login link in the navigation goes to `/login` unless

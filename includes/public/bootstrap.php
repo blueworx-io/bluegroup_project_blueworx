@@ -28,6 +28,8 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/account-data.php';
 // After content.php and commerce.php — the calculator reads its prices from the
 // first and names its packages with the second.
 require_once BLUEWORX_SITE_PATH . 'includes/public/commission.php';
+// After commission.php — a quote is priced with the same packages and rates.
+require_once BLUEWORX_SITE_PATH . 'includes/public/quote.php';
 // After account.php — its handlers run on the pages that file registers, and
 // they redirect through blueworx_account_url().
 require_once BLUEWORX_SITE_PATH . 'includes/public/account-forms.php';

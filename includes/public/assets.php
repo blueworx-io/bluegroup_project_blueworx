@@ -64,6 +64,45 @@ function blueworx_enqueue_public_assets() {
 
 	blueworx_public_enqueue_shop_form_assets();
 	blueworx_public_enqueue_commission_assets();
+	blueworx_public_enqueue_quote_assets();
+}
+
+/**
+ * The quote builder, wherever the full one is rendered.
+ *
+ * Two pages carry it: the Support page (unless the Settings switch is off) and
+ * the Sales section's Quote Builder. The model rides along inline so a page
+ * count recalculates as it is typed, with no request in between.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_quote_assets() {
+	$page = blueworx_public_current_page();
+
+	if ( ! is_array( $page ) || ! isset( $page['template'] ) ) {
+		return;
+	}
+
+	$on_support = 'pages/support.php' === $page['template'] && blueworx_quote_public_enabled();
+	$on_sales   = 'pages/dashboard-quote-builder.php' === $page['template'];
+
+	if ( ! $on_support && ! $on_sales ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'blueworx-quote',
+		BLUEWORX_SITE_URL . 'assets/js/quote.js',
+		array( 'blueworx-public-widgets' ),
+		blueworx_site_asset_version( 'assets/js/quote.js' ),
+		true
+	);
+
+	wp_add_inline_script(
+		'blueworx-quote',
+		'window.blueworxQuote = ' . wp_json_encode( blueworx_quote_payload() ) . ';',
+		'before'
+	);
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
 

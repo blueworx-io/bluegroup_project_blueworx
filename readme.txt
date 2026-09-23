@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.21.0
+Stable tag:        1.22.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,11 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.22.0 =
+* Adds a quote builder: pick hosting or ClubHouse, then ongoing support or a build, and it sizes the work in hours and quotes the package that covers it.
+* It appears in the Sales section and on the public Support page. Settings > BlueWorx Site turns the public one back to the plain hours slider.
+* Sales staff also see what the quote pays them; visitors never do.
 
 = 1.21.0 =
 * Salespeople get a commission calculator in the client area: build a sale and see what it pays, per product and in total, for the first year.

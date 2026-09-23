@@ -172,6 +172,12 @@
 		if ( ! root ) {
 			return;
 		}
+		// The quote builder (assets/js/quote.js) owns the whole widget where it
+		// is rendered, slider included. Two scripts on one range control would
+		// each undo the other's work.
+		if ( 'full' === root.getAttribute( 'data-quote' ) ) {
+			return;
+		}
 		var packages;
 		try {
 			packages = JSON.parse( root.getAttribute( 'data-packages' ) || '[]' );

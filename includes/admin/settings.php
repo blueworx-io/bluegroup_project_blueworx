@@ -64,6 +64,16 @@ function blueworx_site_register_settings() {
 
 	register_setting(
 		BLUEWORX_SITE_SETTINGS_GROUP,
+		'blueworx_quote_builder_public',
+		array(
+			'type'              => 'boolean',
+			'default'           => true,
+			'sanitize_callback' => 'blueworx_site_sanitize_checkbox',
+		)
+	);
+
+	register_setting(
+		BLUEWORX_SITE_SETTINGS_GROUP,
 		'blueworx_surecart_price_ids',
 		array(
 			'type'              => 'array',
@@ -112,6 +122,15 @@ function blueworx_site_register_settings() {
 		'blueworx_site_render_price_ids_field',
 		BLUEWORX_SITE_SETTINGS_SLUG,
 		'blueworx_site_main'
+	);
+
+	add_settings_field(
+		'blueworx_quote_builder_public',
+		__( 'Quote builder on Support', 'bluegroup-project-blueworx' ),
+		'blueworx_site_render_quote_builder_field',
+		BLUEWORX_SITE_SETTINGS_SLUG,
+		'blueworx_site_main',
+		array( 'label_for' => 'blueworx_quote_builder_public' )
 	);
 
 	add_settings_field(
@@ -170,6 +189,45 @@ function blueworx_site_sanitize_link_target( $value ) {
 
 	// A path. Keep the leading slash, drop anything that is not part of one.
 	return '/' . ltrim( sanitize_text_field( $value ), '/' );
+}
+
+/**
+ * Sanitises a checkbox. An unticked box posts nothing at all, so anything
+ * that is not the box's own value is off.
+ *
+ * @param mixed $value Posted value.
+ * @return int 1 or 0.
+ */
+function blueworx_site_sanitize_checkbox( $value ) {
+	return ( '1' === (string) $value || 1 === $value || true === $value ) ? 1 : 0;
+}
+
+/**
+ * Renders the switch for the Support page's quote builder.
+ *
+ * Off is a real position, not a fallback: the questions behind a build quote
+ * say how we size work, and whether visitors see that is a commercial call.
+ * The Sales section keeps the full calculator either way.
+ *
+ * @return void
+ */
+function blueworx_site_render_quote_builder_field() {
+	$on = (bool) get_option( 'blueworx_quote_builder_public', 1 );
+	?>
+	<?php
+	// An unticked box posts nothing, and a setting that is not posted is left
+	// exactly as it was — so without this the switch could be turned on and
+	// never off again.
+	?>
+	<input type="hidden" name="blueworx_quote_builder_public" value="0" />
+	<label for="blueworx_quote_builder_public">
+		<input type="checkbox" id="blueworx_quote_builder_public" name="blueworx_quote_builder_public" value="1" <?php checked( $on ); ?> />
+		<?php echo esc_html__( 'Show the full quote builder on the Support page', 'bluegroup-project-blueworx' ); ?>
+	</label>
+	<p class="description">
+		<?php echo esc_html__( 'On, visitors can size a build or a rebuild themselves — including what we allow per page and for a membership system. Off, the page shows the plain hours slider instead. Sales staff always get the full one in their dashboard.', 'bluegroup-project-blueworx' ); ?>
+	</p>
+	<?php
 }
 
 /**

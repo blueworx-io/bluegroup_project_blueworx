@@ -133,6 +133,16 @@ function blueworx_account_sections() {
 			'blurb'      => __( 'Work out what you earn on a sale before you send the quote.', 'bluegroup-project-blueworx' ),
 			'restricted' => 'blueworx_user_can_sell',
 		),
+		'quote-builder' => array(
+			'label'      => __( 'Quote Builder', 'bluegroup-project-blueworx' ),
+			'title'      => __( 'Quote Builder', 'bluegroup-project-blueworx' ),
+			'kicker'     => __( 'Sales', 'bluegroup-project-blueworx' ),
+			'group'      => __( 'Sales', 'bluegroup-project-blueworx' ),
+			'icon'       => 'chart',
+			'template'   => 'pages/dashboard-quote-builder.php',
+			'blurb'      => __( 'Size a build or a support package, and see what it costs and what it pays.', 'bluegroup-project-blueworx' ),
+			'restricted' => 'blueworx_user_can_sell',
+		),
 	);
 
 	/**

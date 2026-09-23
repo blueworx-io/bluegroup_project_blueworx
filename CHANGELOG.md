@@ -10,6 +10,30 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.22.0] - 2026-09-23
+
+### Added
+
+- **A quote builder**, in the Sales section and on the public Support page.
+  Hosting or ClubHouse (one or the other), then either ongoing support — the
+  slider, as before — or a build. A build is sized in hours: 6 discovery, 4 a
+  page to design, 8 a page to build, 30 for a membership system, then 6 each
+  for testing, deployment and monitoring. The quote is the smallest package
+  whose annual hours cover the total, and a build too big for the largest
+  package says so rather than quoting one.
+- A custom ClubHouse is the same build with the page count fixed at twelve;
+  a standard one quotes the setup fee and the subscription, with no hours.
+- The Sales copy of it also shows what the quote pays. A visitor never sees
+  that.
+- **Settings → BlueWorx Site → Quote builder on Support**, which puts the
+  public page back to the plain hours slider. The Sales section keeps the full
+  builder either way.
+
+### Changed
+
+- The Support page's calculator is now a shared part, rendered in both places,
+  so the public page and the Sales section cannot quote different numbers.
+
 ## [1.21.0] - 2026-09-22
 
 ### Added

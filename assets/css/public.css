@@ -1476,3 +1476,49 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
   .comm-build, .comm-out { flex: 1 1 100%; }
   .comm-out { position: static; }
 }
+
+/* The quote builder (#113). The calculator's own panel styles are shared with
+   the Support page's slider, which this grew out of; only the questions and
+   the quote lines are new. */
+.quote-asks { display: flex; flex-wrap: wrap; gap: 12px 26px; }
+.quote-ask { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex: 1 1 240px; min-height: 38px; }
+.quote-ask-label { font-size: 14px; font-weight: 600; }
+.quote-ask-value { font-size: 13.5px; color: var(--muted); }
+/* A question row is display:flex, and a flex rule beats the browser's own
+   [hidden] { display: none }. Without this the ClubHouse page count showed on
+   a hosting build — hidden in the markup, visible on the screen. */
+.quote-ask[hidden], .quote-branch[hidden], .quote-build[hidden], .quote-lines[hidden], .quote-over[hidden], .quote-hours[hidden] { display: none; }
+/* The build questions: one per line, evenly spaced, with the controls lined up
+   in a column of their own rather than wherever the label's length leaves them. */
+.quote-rows { display: flex; flex-direction: column; }
+.quote-rows .quote-ask { flex: 1 1 auto; padding: 11px 0; border-bottom: 1px solid var(--line, #EEEEF5); }
+.quote-rows .quote-ask:first-child { padding-top: 0; }
+.quote-rows .quote-ask:last-child { border-bottom: 0; padding-bottom: 0; }
+.quote-branch .bw-calc-label, .quote-build .bw-calc-label { margin-bottom: 8px; }
+
+.quote-stages { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.quote-stages li { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-size: 13.5px; color: var(--muted); }
+.quote-stages b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.quote-hours { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line, #EEEEF5); font-size: 14px; font-weight: 600; }
+.quote-hours b { font-size: 20px; }
+.quote-hours-left { margin-top: 8px; padding-top: 8px; border-top: 0; font-weight: 500; color: var(--muted); }
+.quote-hours-left b { font-size: 15px; color: var(--ink); }
+.quote-over { margin: 12px 0 0; padding: 10px 14px; border-radius: 8px; background: #FEF3F2; color: #B42318; font-size: 13px; }
+
+.quote-lines { list-style: none; margin: 14px 0 18px; padding: 14px 0 0; border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.quote-lines li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; color: rgba(255,255,255,.7); }
+.quote-lines b { color: #fff; font-weight: 600; white-space: nowrap; }
+
+/* A standard ClubHouse has no hours and so no package: the panel that would
+   name one is taken out rather than left showing a package nobody is buying. */
+.quote-no-package .calc-out .cl, .quote-no-package .calc-out .cv, .quote-no-package .calc-out .cp { display: none; }
+
+.quote-commission { flex: 1 1 100%; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; margin-top: 16px; padding: 14px 18px; border: 1px solid #C9CBFF; border-radius: 12px; background: #F5F6FF; color: var(--brand-dk, #4338CA); }
+.quote-commission-label { font-size: 13.5px; font-weight: 600; }
+.quote-commission b { font-size: 20px; font-weight: 700; }
+.quote-commission-note { font-size: 12.5px; opacity: .8; }
+
+/* In the client area the calculator sits inside a dashboard card, which
+   already carries the padding and the border. */
+.quote-card { padding: 22px; }
+.quote-card .calc { margin: 0; }
