@@ -10,6 +10,28 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.20.0] - 2026-09-22
+
+### Changed
+
+- **Signing in is SureCart's form.** `/login` now carries `<sc-login-form>` in
+  the site's own card, the same swap the ClubHouse plugin made. It authenticates
+  through WordPress underneath, so every login guard on the site still applies,
+  and it covers a forgotten password itself.
+- After signing in, an administrator lands in wp-admin and everyone else lands
+  on their dashboard. An off-site `redirect_to` is still refused.
+- SureCart's front-end bundle is loaded on the sign-in page only, and exempted
+  from the asset sweep there — without it the form renders and never comes
+  alive. Every other page still refuses it.
+
+### Removed
+
+- **The sign-up and password-reset pages.** SureCart's form does both, and
+  keeping ours meant a second front door onto the same house: a second set of
+  nonces, failure messages and reset emails to keep working. `/register` and
+  `/reset-password` are trashed on upgrade and both addresses now redirect to
+  `/login`.
+
 ## [1.19.0] - 2026-09-22
 
 ### Changed

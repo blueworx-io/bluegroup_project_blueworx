@@ -16,7 +16,7 @@
 import { test, expect, isPlaceholder, cacheBust, login } from './helpers.js';
 
 const PUBLIC_PATHS = ['/', '/clubhouse/', '/hosting/', '/support/', '/about/', '/portfolio/'];
-const PRIVATE_PATHS = ['/login/', '/register/', '/reset-password/'];
+const PRIVATE_PATHS = ['/login/'];
 
 const skipPlaceholder = () =>
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');

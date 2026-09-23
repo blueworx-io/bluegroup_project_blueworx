@@ -41,13 +41,12 @@ const PAGES = [
   // unlabelled control or a heading level skipped by a card is exactly the
   // kind of thing that would otherwise only show up once posts exist.
   { path: '/blog/', issue: '#94 Journal' },
-  // #55. The signed-out half of the client area — the sign-in, sign-up and
-  // reset pages — is held to exactly the same standard as the marketing pages.
-  // The signed-in half is in dashboard-standards.spec.js, which needs a
-  // session and therefore a different `test`.
+  // #55. The signed-out half of the client area — now the sign-in page alone,
+  // since the shop's form covers signing up and resetting a password — is held
+  // to exactly the same standard as the marketing pages. The signed-in half is
+  // in dashboard-standards.spec.js, which needs a session and therefore a
+  // different `test`.
   { path: '/login/', issue: '#55 Sign in' },
-  { path: '/register/', issue: '#55 Create an account' },
-  { path: '/reset-password/', issue: '#55 Reset your password' },
 ];
 
 const skipPlaceholder = () =>
