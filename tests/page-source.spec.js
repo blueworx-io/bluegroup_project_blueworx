@@ -1,5 +1,5 @@
 /**
- * The Pages list's Source column names this plugin's pages "BlueWorx".
+ * The Pages list's Source column names this plugin's pages "BlueWorx page".
  *
  * The column, and the read-only row actions that come with it, are the BlueWorx
  * Labs plugin's; Labs is not in the test WordPress. What is ours is the answer
@@ -55,7 +55,7 @@ test.afterAll(() => {
   }
 });
 
-test('names our pages BlueWorx, leaves others alone, and keeps a label given first', async ({
+test('names our pages "BlueWorx page", leaves others alone, and keeps a label given first', async ({
   request,
 }) => {
   test.skip(isPlaceholder || !canInstallFixture, 'Needs the local WordPress harness.');
@@ -63,7 +63,7 @@ test('names our pages BlueWorx, leaves others alone, and keeps a label given fir
   const response = await request.get(new URL('/?bw_source=1', baseURL).toString());
   const result = await response.json();
 
-  expect(result.ours).toBe('BlueWorx');
+  expect(result.ours).toBe('BlueWorx page');
   expect(result.other).toBe('');
   expect(result.claimed).toBe('Commerce page');
 });

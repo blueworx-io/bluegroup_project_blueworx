@@ -46,7 +46,7 @@ function blueworx_public_page_is_ours( $post_id ) {
 }
 
 /**
- * Names this plugin's pages "BlueWorx" in the Pages list's Source column.
+ * Names this plugin's pages "BlueWorx page" in the Pages list's Source column.
  *
  * The column is the BlueWorx Labs plugin's, and so is what follows from it: a
  * page with a source offers only View and Edit, and cannot be trashed. Only
@@ -65,7 +65,7 @@ function blueworx_public_page_source( $label, $post_id ) {
 	$map = array_map( 'intval', (array) get_option( 'blueworx_public_page_ids', array() ) );
 
 	if ( in_array( (int) $post_id, $map, true ) && blueworx_public_page_is_ours( $post_id ) ) {
-		return 'BlueWorx';
+		return 'BlueWorx page';
 	}
 
 	return $label;

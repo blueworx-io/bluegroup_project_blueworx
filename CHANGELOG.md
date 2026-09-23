@@ -17,7 +17,7 @@ headlessly from Netlify.
 - **Commission and Quote Builder now live on the customer dashboard** that the
   BlueWorx Labs plugin provides (/customer-dashboard/). Only salespeople and
   administrators see them. Signing in lands everyone on that dashboard.
-- **This plugin's pages show "BlueWorx" in the Pages list's Source column**
+- **This plugin's pages show "BlueWorx page" in the Pages list's Source column**
   (with BlueWorx Labs active), and offer only View and Edit — they cannot be
   trashed from there, the same as the shop's pages.
 

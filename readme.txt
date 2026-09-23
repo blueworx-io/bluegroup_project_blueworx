@@ -46,7 +46,7 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 == Changelog ==
 
 = 1.23.0 =
-* Commission and Quote Builder now appear on the BlueWorx Labs customer dashboard, for salespeople and administrators only. This plugin's own /dashboard and its other sections are gone. Its pages are labelled "BlueWorx" in the Pages list and can only be viewed or edited there, not trashed.
+* Commission and Quote Builder now appear on the BlueWorx Labs customer dashboard, for salespeople and administrators only. This plugin's own /dashboard and its other sections are gone. Its pages are labelled "BlueWorx page" in the Pages list and can only be viewed or edited there, not trashed.
 
 = 1.22.1 =
 * Signing in now always lands on the dashboard, administrators included, instead of sending admins to wp-admin.
