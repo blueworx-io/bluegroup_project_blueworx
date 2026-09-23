@@ -41,6 +41,9 @@ function blueworx_icon_paths() {
 		'workflow' => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h3A2.5 2.5 0 0 1 15.5 9v5"/>',
 		'gauge'    => '<path d="M12 14l4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
 		'shield'   => '<path d="M20 13c0 5-3.5 7.5-8 8.5-4.5-1-8-3.5-8-8.5V6.5l8-3 8 3z"/><path d="m9 12 2 2 4-4"/>',
+		// The Sales section and the notes on its calculator (#112).
+		'percent'  => '<line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+		'info'     => '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
 		// Article sharing (#95). Drawn in the same single-weight stroke style
 		// as the set above rather than dropped in as the platforms' own filled
 		// marks: these sit in a row of identical outline buttons, and two

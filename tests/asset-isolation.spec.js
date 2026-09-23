@@ -64,6 +64,22 @@ add_filter( 'blueworx_contact_form_shortcode', function ( $shortcode ) {
 	return isset( $_GET['bw_fixture_form'] ) ? '[bw_fixture_form]' : $shortcode;
 } );
 
+/**
+ * Stands in for the script MODULES a plugin enqueues — SureCart's cart and
+ * checkout arrive this way. A different queue from the one above, and the one
+ * the sweep used to miss entirely.
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
+		return;
+	}
+
+	wp_enqueue_script_module( '@bw-fixture/module', home_url( '/bw-fixture-module.js' ), array(), '1.0' );
+	// Core's own modules are what make an interactive block work in a journal
+	// article, so they are allowed where article content is rendered.
+	wp_enqueue_script_module( '@wordpress/fixture-interactivity', home_url( '/bw-fixture-core-module.js' ), array(), '1.0' );
+} );
+
 add_shortcode( 'bw_fixture_form', function () {
 	return '<form id="bw-fixture-form"><button type="submit">Send</button></form>';
 } );
@@ -115,6 +131,46 @@ test('a plugin-rendered page loads none of another plugin\'s assets', async ({ p
   // its printed <style> id — that is the form SureCart's hundred block styles
   // take, and the bulk of the weight.
   await expect(page.locator('style#bw-fixture-inline-inline-css')).toHaveCount(0);
+});
+
+// Script modules are a THIRD queue, beside scripts and styles, and the sweep
+// could not see into it: SureCart ships its cart and checkout that way, and
+// both were loading — and throwing "wp is not defined" — on marketing pages
+// that contain no shop at all.
+test('a plugin-rendered page loads none of another plugin\'s script modules', async ({ page }) => {
+  skipUnlessLocal();
+
+  await page.goto('/about/');
+
+  await expect(page.locator('script[src*="bw-fixture-module"]')).toHaveCount(0);
+  await expect(page.locator('script[src*="bw-fixture-core-module"]')).toHaveCount(0);
+});
+
+// An interactive core block in a journal article is the client's own content,
+// and core's modules are what make it work — so they are allowed where article
+// content is rendered, exactly as core's block CSS already is.
+test('a journal article keeps core\'s own script modules', async ({ page }) => {
+  skipUnlessLocal();
+
+  await page.goto('/blog/');
+
+  // Whatever the journal lists — an article's own address, not /blog/ itself
+  // and not the feed. Derived rather than hard-coded so this keeps working
+  // whichever post the throwaway WordPress happens to have.
+  const href = await page
+    .locator('main a[href]')
+    .evaluateAll((els) =>
+      els
+        .map((el) => el.getAttribute('href'))
+        .find((url) => url && /^https?:/.test(url) && !/\/(blog|feed|wp-json)\/?$/.test(url) && new URL(url).pathname.split('/').filter(Boolean).length === 1)
+    );
+
+  test.skip(!href, 'no published article to read');
+
+  await page.goto(href);
+
+  await expect(page.locator('script[src*="bw-fixture-core-module"]')).toHaveCount(1);
+  await expect(page.locator('script[src*="bw-fixture-module"]')).toHaveCount(0);
 });
 
 test('a page the plugin does not render keeps another plugin\'s assets', async ({ page }) => {

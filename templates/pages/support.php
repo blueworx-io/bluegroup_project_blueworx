@@ -110,51 +110,20 @@ blueworx_public_part( 'parts/nav.php' );
 				<h2 class="h2"><?php esc_html_e( 'How Many Hours Do You Need?', 'bluegroup-project-blueworx' ); ?></h2>
 				<p class="lead"><?php esc_html_e( "Slide to the support you use each month. We'll show the package that covers it.", 'bluegroup-project-blueworx' ); ?></p>
 			</div>
-			<div class="calc" data-widget="support-calc" data-packages="<?php echo esc_attr( wp_json_encode( $blueworx_s_calc_packages ) ); ?>">
-				<div class="calc-panel">
-					<div class="calc-field">
-						<label for="bw-support-hours"><?php esc_html_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?></label>
-						<div class="bw-calc-big">
-							<b data-testid="support-calc-hours"><?php echo esc_html( blueworx_content_hours_a_month( $blueworx_s_growth['hours'] ) ); ?></b>
-							<span><?php esc_html_e( 'hours', 'bluegroup-project-blueworx' ); ?> · <span data-testid="support-calc-annual"><?php echo esc_html( (string) $blueworx_s_growth['hours'] ); ?></span> <?php esc_html_e( 'hours a year', 'bluegroup-project-blueworx' ); ?></span>
-						</div>
-						<input class="bw-range" id="bw-support-hours" name="hours" type="range" min="0" max="<?php echo esc_attr( (string) ( count( $blueworx_s_packages ) - 1 ) ); ?>" step="1" value="<?php echo esc_attr( (string) $blueworx_s_growth_at ); ?>" aria-label="<?php esc_attr_e( 'Support hours per month', 'bluegroup-project-blueworx' ); ?>" />
-						<div class="bw-range-ends">
-							<?php foreach ( array( $blueworx_s_first, $blueworx_s_last ) as $blueworx_s_end ) : ?>
-								<span>
-									<?php
-									echo esc_html(
-										sprintf(
-											/* translators: %s: hours a month. */
-											__( '%s hrs', 'bluegroup-project-blueworx' ),
-											blueworx_content_hours_a_month( $blueworx_s_end['hours'] )
-										)
-									);
-									?>
-								</span>
-							<?php endforeach; ?>
-						</div>
-					</div>
-					<div class="calc-field">
-						<div class="bw-calc-label"><?php esc_html_e( 'Package', 'bluegroup-project-blueworx' ); ?></div>
-						<div class="bw-calc-name" data-testid="support-calc-name"><?php echo esc_html( $blueworx_s_growth['name'] ); ?></div>
-						<p class="bw-calc-blurb" data-testid="support-calc-blurb"><?php echo esc_html( $blueworx_s_growth['blurb'] ); ?></p>
-					</div>
-					<div class="calc-field" style="display:flex;align-items:center;justify-content:space-between;gap:16px">
-						<div class="bw-calc-label" style="margin:0"><?php esc_html_e( 'Effective hourly rate', 'bluegroup-project-blueworx' ); ?></div>
-						<?php
-						$blueworx_s_growth_rate = $blueworx_s_growth['priceM'] * 12 / $blueworx_s_growth['hours'];
-						?>
-						<b class="bw-calc-rate" data-testid="support-calc-rate"<?php echo 'GBP' === $blueworx_s_growth['currency'] ? ' data-bw-gbp="' . esc_attr( number_format( $blueworx_s_growth_rate, 2, '.', '' ) ) . '" data-bw-dp="2" data-bw-suffix=" / hr"' : ''; ?>><?php echo esc_html( blueworx_public_currency_sign( $blueworx_s_growth['currency'] ) . number_format( $blueworx_s_growth_rate, 2, '.', '' ) . ' / hr' ); ?></b>
-					</div>
-				</div>
-				<div class="calc-out">
-					<div class="cl"><?php esc_html_e( 'Your package', 'bluegroup-project-blueworx' ); ?></div>
-					<div class="cv" data-testid="support-calc-price"<?php echo 'GBP' === $blueworx_s_growth['currency'] ? ' data-bw-gbp="' . esc_attr( (int) $blueworx_s_growth['priceM'] ) . '"' : ''; ?>><?php echo esc_html( blueworx_public_currency_sign( $blueworx_s_growth['currency'] ) . number_format( (float) $blueworx_s_growth['priceM'], 0, '.', ',' ) ); ?></div>
-					<div class="cp"><?php esc_html_e( 'per month', 'bluegroup-project-blueworx' ); ?></div>
-					<a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="btn btn-brand btn-md" style="width:100%;text-decoration:none"><?php esc_html_e( 'Get this plan', 'bluegroup-project-blueworx' ); ?></a>
-				</div>
-			</div>
+			<?php
+			// The calculator moved into a part when the quote builder was added
+			// (#113): the Sales section renders the same one. `full` is the
+			// Settings switch — off puts this page back to the plain slider.
+			blueworx_public_part(
+				'parts/quote-calculator.php',
+				array(
+					'full'       => blueworx_quote_public_enabled(),
+					// Never on a public page: what a sale pays us is not a visitor's
+					// business, whoever happens to be signed in while reading it.
+					'commission' => false,
+				)
+			);
+			?>
 		</section>
 
 		<section class="sec bw-divided">

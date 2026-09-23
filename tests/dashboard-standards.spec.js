@@ -23,6 +23,9 @@ const PAGES = [
   { path: '/dashboard/websites/', name: 'Websites' },
   { path: '/dashboard/details/', name: 'Your details' },
   { path: '/dashboard/support/', name: 'Support' },
+  // Sales (#112). Signed in as an administrator, who sees it.
+  { path: '/dashboard/commission/', name: 'Commission' },
+  { path: '/dashboard/quote-builder/', name: 'Quote Builder' },
 ];
 
 for (const { path, name } of PAGES) {

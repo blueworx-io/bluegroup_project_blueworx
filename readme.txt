@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.20.0
+Stable tag:        1.22.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,18 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.22.0 =
+* Adds a quote builder: pick hosting or ClubHouse, then ongoing support or a build, and it sizes the work in hours and quotes the package that covers it, with the hours left over.
+* Each stage shows its working, so you can see what one page costs to design and to build.
+* A custom ClubHouse is costed at half a from-scratch build, since the platform is already there, and its pages build in 3 hours rather than 10.
+* It appears in the Sales section and on the public Support page. Settings > BlueWorx Site turns the public one back to the plain hours slider.
+* Sales staff also see what the quote pays them, and at what rate for each part; visitors never do.
+* Fixes other plugins’ script modules loading on the marketing pages, which is what put SureCart’s code on pages that never asked for it.
+
+= 1.21.0 =
+* Salespeople get a commission calculator in the client area: build a sale and see what it pays, per product and in total, for the first year.
+* Adds a "BlueWorx: Sales Staff" role. Only they and administrators can see the Sales section, or reach its address.
 
 = 1.20.0 =
 * Signing in now uses SureCart's own form on /login, which also handles a forgotten password. Administrators land in wp-admin, clients on their dashboard.

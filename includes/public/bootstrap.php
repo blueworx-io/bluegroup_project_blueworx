@@ -19,9 +19,17 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/content.php';
 // After content.php — commerce filters the plans that file defines.
 require_once BLUEWORX_SITE_PATH . 'includes/public/commerce.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/pages.php';
+// Before account.php — the Sales section is gated on the capability this file
+// installs, so the capability has to exist before the section is registered.
+require_once BLUEWORX_SITE_PATH . 'includes/public/roles.php';
 // After pages.php — the client area registers its pages on that file's filter.
 require_once BLUEWORX_SITE_PATH . 'includes/public/account.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/account-data.php';
+// After content.php and commerce.php — the calculator reads its prices from the
+// first and names its packages with the second.
+require_once BLUEWORX_SITE_PATH . 'includes/public/commission.php';
+// After commission.php — a quote is priced with the same packages and rates.
+require_once BLUEWORX_SITE_PATH . 'includes/public/quote.php';
 // After account.php — its handlers run on the pages that file registers, and
 // they redirect through blueworx_account_url().
 require_once BLUEWORX_SITE_PATH . 'includes/public/account-forms.php';

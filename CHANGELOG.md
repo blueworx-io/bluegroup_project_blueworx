@@ -10,6 +10,62 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.22.0] - 2026-09-23
+
+### Added
+
+- **A quote builder**, in the Sales section and on the public Support page.
+  Hosting or ClubHouse (one or the other), then either ongoing support — the
+  slider, as before — or a build. A build is sized in hours: 6 discovery, 6 a
+  page to design, 10 a page to build, 30 for a membership system, 20 for each
+  custom integration, then 6 each for testing, deployment and monitoring. The
+  quote is the smallest package whose annual hours cover the total, and it says
+  how many hours that leaves over. A build too big for the largest package says
+  so rather than quoting one.
+- Every stage that multiplies out shows its working — "5 pages × 6 hrs" beside
+  the 30 it comes to — so the per-page rate is there without doing the sum.
+- A custom ClubHouse is the same build with the page count fixed at twelve,
+  and at half the hours: the platform is already built, so it is half the work
+  of the same thing from scratch — and a screen built on it is 3 hours rather
+  than 10. A standard one quotes the subscription, asks whether they want
+  ongoing management before showing a support package at all, and only adds
+  the membership setup fee if they want a membership system.
+- The Sales copy of it also shows what the quote pays, broken down part by
+  part, because hosting and ClubHouse pay a flat 20% while a support package
+  pays 10% or 20% depending on its size. A visitor never sees any of it.
+- **Settings → BlueWorx Site → Quote builder on Support**, which puts the
+  public page back to the plain hours slider. The Sales section keeps the full
+  builder either way.
+
+### Changed
+
+- The Support page’s calculator is now a shared part, rendered in both places,
+  so the public page and the Sales section cannot quote different numbers.
+
+### Fixed
+
+- **Other plugins’ scripts no longer load on the marketing pages.** The site
+  already kept foreign styles and scripts off its own pages, but WordPress 6.5
+  added a third queue for script modules that slipped past it — which is how
+  SureCart’s code ended up loading, and erroring, on pages that never asked
+  for it. That queue is now swept the same way.
+
+## [1.21.0] - 2026-09-22
+
+### Added
+
+- **A commission calculator** in the client area, under a new Sales section:
+  build a sale from Hosting, ClubHouse and a support package and see what it
+  pays, per product and in total, annually or monthly. First-year value only.
+  Prices come from the same table the Support, Hosting and ClubHouse pages use,
+  so a price change moves both together; the rates and the £9,000 support
+  threshold are in one place in `includes/public/commission.php`.
+- **A "BlueWorx: Sales Staff" role** — a client account plus permission to see
+  the Sales section. Administrators get that permission without the role.
+- Sections can now be `restricted` as well as hidden. A hidden section keeps a
+  working address (the Partner tab is meant to); a restricted one turns anybody
+  else away from it, which is what the commission rates need.
+
 ## [1.20.0] - 2026-09-22
 
 ### Changed

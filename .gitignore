@@ -12,3 +12,6 @@ playwright-report/
 .env
 .env.*
 !.env.example
+
+# Playwright MCP browser scratch output.
+.playwright-mcp/

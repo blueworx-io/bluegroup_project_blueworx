@@ -10,8 +10,9 @@
 
 import { test, expect, login, cacheBust, isPlaceholder, baseURL } from './helpers.js';
 
-// The sections offered to an ordinary client — the sidebar tabs and the
-// overview's tiles are both exactly this list.
+// The sections offered to the signed-in account these specs use, which is an
+// administrator — the sidebar tabs and the overview's tiles are both exactly
+// this list.
 const PATHS = [
   '/dashboard/',
   '/dashboard/subscriptions/',
@@ -20,6 +21,11 @@ const PATHS = [
   '/dashboard/websites/',
   '/dashboard/details/',
   '/dashboard/support/',
+  // Sales (#112). These specs sign in as an administrator, who sees the Sales
+  // section without being given the role — so it is in this list, while a
+  // client sees neither it nor its heading (tests/commission.spec.js).
+  '/dashboard/commission/',
+  '/dashboard/quote-builder/',
 ];
 
 // Every gated address, including Partner — which is hidden from the sidebar
@@ -123,7 +129,7 @@ test.describe('Client dashboard — signed in', () => {
     // No "Partner" heading for a client with no referrals, and no heading
     // printed twice — which is what happens if a section is filed out of order
     // in the registry, since headings are emitted when the group changes.
-    expect(labels).toEqual(['Billing', 'Your plan', 'Account']);
+    expect(labels).toEqual(['Billing', 'Your plan', 'Account', 'Sales']);
   });
 
   // A search engine should not hold a copy of a customer's dashboard. Counted

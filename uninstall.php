@@ -16,6 +16,26 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// The Sales Staff role and its capability. Removed here and not on deactivate:
+// a role taken away leaves the people holding it with no role at all, which is
+// a real change to who can sign in, and uninstall is the one moment that is
+// expected. Anybody left on it is moved to Subscriber first so they keep their
+// client account.
+$blueworx_sales_users = get_users( array( 'role' => 'blueworx_sales' ) );
+
+foreach ( $blueworx_sales_users as $blueworx_sales_user ) {
+	$blueworx_sales_user->set_role( 'subscriber' );
+}
+
+remove_role( 'blueworx_sales' );
+
+$blueworx_admin_role = get_role( 'administrator' );
+
+if ( $blueworx_admin_role ) {
+	$blueworx_admin_role->remove_cap( 'blueworx_view_sales' );
+}
+
+delete_option( 'blueworx_roles_version' );
 delete_option( 'blueworx_public_prior_front' );
 delete_option( 'blueworx_public_page_ids' );
 delete_option( 'blueworx_public_data_version' );

@@ -63,6 +63,46 @@ function blueworx_enqueue_public_assets() {
 	);
 
 	blueworx_public_enqueue_shop_form_assets();
+	blueworx_public_enqueue_commission_assets();
+	blueworx_public_enqueue_quote_assets();
+}
+
+/**
+ * The quote builder, wherever the full one is rendered.
+ *
+ * Two pages carry it: the Support page (unless the Settings switch is off) and
+ * the Sales section's Quote Builder. The model rides along inline so a page
+ * count recalculates as it is typed, with no request in between.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_quote_assets() {
+	$page = blueworx_public_current_page();
+
+	if ( ! is_array( $page ) || ! isset( $page['template'] ) ) {
+		return;
+	}
+
+	$on_support = 'pages/support.php' === $page['template'] && blueworx_quote_public_enabled();
+	$on_sales   = 'pages/dashboard-quote-builder.php' === $page['template'];
+
+	if ( ! $on_support && ! $on_sales ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'blueworx-quote',
+		BLUEWORX_SITE_URL . 'assets/js/quote.js',
+		array( 'blueworx-public-widgets' ),
+		blueworx_site_asset_version( 'assets/js/quote.js' ),
+		true
+	);
+
+	wp_add_inline_script(
+		'blueworx-quote',
+		'window.blueworxQuote = ' . wp_json_encode( blueworx_quote_payload() ) . ';',
+		'before'
+	);
 }
 add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
 
@@ -93,6 +133,38 @@ function blueworx_public_enqueue_shop_form_assets() {
 	if ( wp_style_is( 'surecart-themes-default', 'registered' ) ) {
 		wp_enqueue_style( 'surecart-themes-default' );
 	}
+}
+
+/**
+ * The commission calculator, on its own page only.
+ *
+ * The prices and rates ride along inline rather than being fetched, so the
+ * first keystroke recalculates with no request in between — the same reason
+ * the currency rates are inlined above. Nothing secret is in there: it is the
+ * public price list plus the rates already printed on the page.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_commission_assets() {
+	$page = blueworx_public_current_page();
+
+	if ( ! is_array( $page ) || ! isset( $page['template'] ) || 'pages/dashboard-commission.php' !== $page['template'] ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'blueworx-commission',
+		BLUEWORX_SITE_URL . 'assets/js/commission.js',
+		array(),
+		blueworx_site_asset_version( 'assets/js/commission.js' ),
+		true
+	);
+
+	wp_add_inline_script(
+		'blueworx-commission',
+		'window.blueworxCommission = ' . wp_json_encode( blueworx_commission_payload() ) . ';',
+		'before'
+	);
 }
 
 /**
@@ -303,4 +375,73 @@ function blueworx_public_dequeue_foreign_assets() {
 		}
 	}
 }
+
+/**
+ * The same sweep, for script modules.
+ *
+ * WordPress 6.5 added a THIRD queue beside wp_scripts() and wp_styles(), and
+ * the sweep above cannot see into it: a module is enqueued with
+ * wp_enqueue_script_module() and printed from wp_script_modules(), so
+ * wp_dequeue_script() has nothing to do with it. SureCart's cart and checkout
+ * ship that way, which is how two of its bundles were still loading — and
+ * throwing "wp is not defined" — on marketing pages that contain no shop at
+ * all, on a site whose whole point is that they do not.
+ *
+ * Hooked into both wp_head and wp_footer because which one core prints them at
+ * depends on whether the site runs a block theme. Running twice is harmless: a
+ * module already dequeued is simply not in the queue the second time.
+ *
+ * The head pass is at priority 9, NOT 0. wp_enqueue_scripts itself fires from
+ * inside wp_head (priority 2), so at priority 0 the queue is still empty and
+ * there is nothing to sweep — measured, after the first attempt at this swept
+ * a queue that had not been filled yet and changed nothing at all. 9 is after
+ * everyone has enqueued and before core prints at 10.
+ *
+ * The allowlist is the one the classic sweep uses, plus core's own namespace
+ * on a journal article — the Interactivity API is how an interactive core
+ * block works, and those blocks are the client's content, not ours to break.
+ *
+ * @return void
+ */
+function blueworx_public_dequeue_foreign_script_modules() {
+	if ( ! function_exists( 'wp_script_modules' ) || ! blueworx_public_renders_request() ) {
+		return;
+	}
+
+	/** This filter is documented in includes/public/assets.php */
+	if ( ! apply_filters( 'blueworx_public_sweep_foreign_assets', ! blueworx_public_page_needs_foreign_assets() ) ) {
+		return;
+	}
+
+	$modules  = wp_script_modules();
+	$prefixes = blueworx_public_allowed_asset_prefixes();
+
+	if ( function_exists( 'blueworx_public_renders_post' ) && blueworx_public_renders_post() ) {
+		$prefixes[] = '@wordpress/';
+	}
+
+	// get_queue() arrived with the API's second outing (6.9). Without it there
+	// is nothing to enumerate, and guessing at ids would be worse than leaving
+	// them alone.
+	if ( ! method_exists( $modules, 'get_queue' ) || ! method_exists( $modules, 'dequeue' ) ) {
+		return;
+	}
+
+	foreach ( (array) $modules->get_queue() as $id ) {
+		$allowed = false;
+
+		foreach ( $prefixes as $prefix ) {
+			if ( 0 === strpos( (string) $id, (string) $prefix ) ) {
+				$allowed = true;
+				break;
+			}
+		}
+
+		if ( ! $allowed ) {
+			$modules->dequeue( $id );
+		}
+	}
+}
+add_action( 'wp_head', 'blueworx_public_dequeue_foreign_script_modules', 9 );
+add_action( 'wp_footer', 'blueworx_public_dequeue_foreign_script_modules', 0 );
 add_action( 'wp_enqueue_scripts', 'blueworx_public_dequeue_foreign_assets', PHP_INT_MAX );
