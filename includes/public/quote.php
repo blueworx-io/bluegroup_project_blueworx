@@ -57,43 +57,68 @@ function blueworx_quote_model() {
 					'hours' => 6,
 				),
 			),
-			'design_per_page'  => 4,
-			'build_per_page'   => 8,
+			'design_per_page'  => 6,
+			'build_per_page'   => 10,
 			'membership'       => 30,
 			// Each one is a system of somebody else's to learn, connect and test.
 			'integration'      => 20,
 			// A custom ClubHouse is the same build with the page count settled:
-			// the platform's twelve screens.
+			// the platform's twelve screens. It takes half the hours of the same
+			// work from scratch, because the platform is already built — and
+			// building a screen on it is quicker again than half.
 			'clubhouse_pages'  => 12,
+			'clubhouse_share'  => 0.5,
+			'clubhouse_build'  => 3,
 			'default_pages'    => 5,
 		)
 	);
 }
 
 /**
+ * How a stage's hours were arrived at, for the stages that have a rate.
+ *
+ * A stage total says nothing about how long one page takes, which is the
+ * number a salesperson is asked for on a call. Only the stages that multiply
+ * out get one; a flat six hours has no rate to show.
+ *
+ * @param int  $count How many of the thing.
+ * @param int  $each  Hours each one takes.
+ * @param bool $pages Whether the thing is pages, which are worth naming.
+ * @return string
+ */
+function blueworx_quote_rate_note( $count, $each, $pages ) {
+	if ( $pages ) {
+		return sprintf(
+			/* translators: 1: number of pages, 2: hours each page takes. */
+			_n( '%1$d page × %2$d hrs', '%1$d pages × %2$d hrs', (int) $count, 'bluegroup-project-blueworx' ),
+			(int) $count,
+			(int) $each
+		);
+	}
+
+	return sprintf(
+		/* translators: 1: how many, 2: hours each one takes. */
+		__( '%1$d × %2$d hrs', 'bluegroup-project-blueworx' ),
+		(int) $count,
+		(int) $each
+	);
+}
+
+/**
  * The hours a build comes to.
  *
- * @param int  $pages        How many pages are designed and built.
- * @param bool $membership   Whether it needs a membership system.
- * @param int  $integrations How many other systems it has to talk to.
+ * @param int   $pages        How many pages are designed and built.
+ * @param bool  $membership   Whether it needs a membership system.
+ * @param int   $integrations How many other systems it has to talk to.
+ * @param array $options      As blueworx_quote_build_stages().
  * @return int
  */
-function blueworx_quote_build_hours( $pages, $membership, $integrations = 0 ) {
-	$model = blueworx_quote_model();
-	$pages = max( 1, (int) $pages );
+function blueworx_quote_build_hours( $pages, $membership, $integrations = 0, $options = array() ) {
 	$hours = 0;
 
-	foreach ( $model['fixed'] as $stage ) {
+	foreach ( blueworx_quote_build_stages( $pages, $membership, $integrations, $options ) as $stage ) {
 		$hours += (int) $stage['hours'];
 	}
-
-	$hours += $pages * ( (int) $model['design_per_page'] + (int) $model['build_per_page'] );
-
-	if ( $membership ) {
-		$hours += (int) $model['membership'];
-	}
-
-	$hours += max( 0, (int) $integrations ) * (int) $model['integration'];
 
 	return $hours;
 }
@@ -101,32 +126,49 @@ function blueworx_quote_build_hours( $pages, $membership, $integrations = 0 ) {
 /**
  * The stages a build is made of, ready to list.
  *
- * @param int  $pages        Page count.
- * @param bool $membership   Whether a membership system is included.
- * @param int  $integrations How many other systems it has to talk to.
+ * @param int   $pages        Page count.
+ * @param bool  $membership   Whether a membership system is included.
+ * @param int   $integrations How many other systems it has to talk to.
+ * @param array $options      share: the fraction of a from-scratch build this
+ *                            is. build_per_page: overrides the build rate, for
+ *                            work where the share does not describe it.
  * @return array List of array( key, label, hours, fixed ).
  */
-function blueworx_quote_build_stages( $pages, $membership, $integrations = 0 ) {
+function blueworx_quote_build_stages( $pages, $membership, $integrations = 0, $options = array() ) {
 	$model = blueworx_quote_model();
 	$pages = max( 1, (int) $pages );
+	$share = isset( $options['share'] ) ? (float) $options['share'] : 1.0;
+
+	// A build on ground already broken is a fraction of the same work from
+	// scratch. Every stage takes the same fraction, so the lines a client is
+	// shown still add up to the total underneath them.
+	$rate = function ( $hours ) use ( $share ) {
+		return (int) round( $hours * (float) $share );
+	};
+
+	$build_per_page = isset( $options['build_per_page'] )
+		? (int) $options['build_per_page']
+		: $rate( (int) $model['build_per_page'] );
 
 	$stages = array(
 		array(
 			'key'   => 'discovery',
 			'label' => $model['fixed']['discovery']['label'],
-			'hours' => (int) $model['fixed']['discovery']['hours'],
+			'hours' => $rate( (int) $model['fixed']['discovery']['hours'] ),
 			'fixed' => true,
 		),
 		array(
 			'key'   => 'design',
 			'label' => __( 'Design and review', 'bluegroup-project-blueworx' ),
-			'hours' => $pages * (int) $model['design_per_page'],
+			'hours' => $pages * $rate( (int) $model['design_per_page'] ),
+			'note'  => blueworx_quote_rate_note( $pages, $rate( (int) $model['design_per_page'] ), true ),
 			'fixed' => false,
 		),
 		array(
 			'key'   => 'build',
 			'label' => __( 'Build and review', 'bluegroup-project-blueworx' ),
-			'hours' => $pages * (int) $model['build_per_page'],
+			'hours' => $pages * $build_per_page,
+			'note'  => blueworx_quote_rate_note( $pages, $build_per_page, true ),
 			'fixed' => false,
 		),
 	);
@@ -137,7 +179,8 @@ function blueworx_quote_build_stages( $pages, $membership, $integrations = 0 ) {
 		$stages[] = array(
 			'key'   => 'integrations',
 			'label' => __( 'Custom integrations', 'bluegroup-project-blueworx' ),
-			'hours' => $integrations * (int) $model['integration'],
+			'hours' => $integrations * $rate( (int) $model['integration'] ),
+			'note'  => blueworx_quote_rate_note( $integrations, $rate( (int) $model['integration'] ), false ),
 			'fixed' => false,
 		);
 	}
@@ -146,7 +189,7 @@ function blueworx_quote_build_stages( $pages, $membership, $integrations = 0 ) {
 		$stages[] = array(
 			'key'   => 'membership',
 			'label' => __( 'Membership system', 'bluegroup-project-blueworx' ),
-			'hours' => (int) $model['membership'],
+			'hours' => $rate( (int) $model['membership'] ),
 			'fixed' => false,
 		);
 	}
@@ -155,7 +198,7 @@ function blueworx_quote_build_stages( $pages, $membership, $integrations = 0 ) {
 		$stages[] = array(
 			'key'   => $key,
 			'label' => $model['fixed'][ $key ]['label'],
-			'hours' => (int) $model['fixed'][ $key ]['hours'],
+			'hours' => $rate( (int) $model['fixed'][ $key ]['hours'] ),
 			'fixed' => true,
 		);
 	}
@@ -242,10 +285,12 @@ function blueworx_quote_summary( $quote ) {
 	$clubhouse = blueworx_content_clubhouse();
 
 	$build  = blueworx_quote_is_build( $quote );
-	$pages  = ! empty( $quote['clubhouse'] ) && 'custom' === $quote['clubhouseMode']
-		? (int) $model['clubhouse_pages']
-		: (int) $quote['pages'];
-	$hours  = $build ? blueworx_quote_build_hours( $pages, ! empty( $quote['membership'] ), isset( $quote['integrations'] ) ? (int) $quote['integrations'] : 0 ) : 0;
+	$custom = ! empty( $quote['clubhouse'] ) && 'custom' === $quote['clubhouseMode'];
+	$pages  = $custom ? (int) $model['clubhouse_pages'] : (int) $quote['pages'];
+	$opts   = $custom
+		? array( 'share' => (float) $model['clubhouse_share'], 'build_per_page' => (int) $model['clubhouse_build'] )
+		: array();
+	$hours  = $build ? blueworx_quote_build_hours( $pages, ! empty( $quote['membership'] ), isset( $quote['integrations'] ) ? (int) $quote['integrations'] : 0, $opts ) : 0;
 	$lines  = array();
 	$slug   = '';
 

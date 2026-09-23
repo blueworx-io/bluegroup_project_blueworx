@@ -1499,6 +1499,10 @@ input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; bord
 .quote-stages { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .quote-stages li { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-size: 13.5px; color: var(--muted); }
 .quote-stages b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+/* The working behind a stage that multiplies out, so the per-page rate is
+   readable without doing the division. margin-left keeps it against the
+   total it produced rather than stranded in the middle of the row. */
+.quote-stages [data-note] { margin-left: auto; font-style: normal; font-size: 12px; opacity: .7; white-space: nowrap; }
 .quote-hours { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line, #EEEEF5); font-size: 14px; font-weight: 600; }
 .quote-hours b { font-size: 20px; }
 .quote-hours-left { margin-top: 8px; padding-top: 8px; border-top: 0; font-weight: 500; color: var(--muted); }

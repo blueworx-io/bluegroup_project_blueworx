@@ -47,6 +47,8 @@ Copy each plan's price ID out of SureCart and paste it into the matching box und
 
 = 1.22.0 =
 * Adds a quote builder: pick hosting or ClubHouse, then ongoing support or a build, and it sizes the work in hours and quotes the package that covers it, with the hours left over.
+* Each stage shows its working, so you can see what one page costs to design and to build.
+* A custom ClubHouse is costed at half a from-scratch build, since the platform is already there, and its pages build in 3 hours rather than 10.
 * It appears in the Sales section and on the public Support page. Settings > BlueWorx Site turns the public one back to the plain hours slider.
 * Sales staff also see what the quote pays them, and at what rate for each part; visitors never do.
 * Fixes other plugins’ script modules loading on the marketing pages, which is what put SureCart’s code on pages that never asked for it.

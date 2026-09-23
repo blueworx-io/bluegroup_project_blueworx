@@ -25,6 +25,7 @@ const PATHS = [
   // section without being given the role — so it is in this list, while a
   // client sees neither it nor its heading (tests/commission.spec.js).
   '/dashboard/commission/',
+  '/dashboard/quote-builder/',
 ];
 
 // Every gated address, including Partner — which is hidden from the sidebar

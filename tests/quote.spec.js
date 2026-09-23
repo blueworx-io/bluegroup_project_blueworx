@@ -164,8 +164,8 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-quote-lines]')).toContainText('£200');
   });
 
-  // 6 discovery + (5 × 4) design + (5 × 8) build + 30 membership + 6 + 6 + 6.
-  test('a five-page rebuild with a membership system comes to 114 hours, on Growth', async ({
+  // 6 discovery + (5 × 6) design + (5 × 10) build + 30 membership + 6 + 6 + 6.
+  test('a five-page rebuild with a membership system comes to 134 hours, on Growth', async ({
     page,
   }) => {
     await toggle(page, 'hosting', 'yes');
@@ -173,15 +173,15 @@ test.describe('The quote builder on the Support page', () => {
     await setPages(page, 5);
     await toggle(page, 'membership', 'yes');
 
-    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('114 hrs');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('134 hrs');
     await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Growth');
     await expect(page.locator('[data-testid="support-calc-price"]')).toHaveText('£500');
-    // Growth is 140 hours a year, so 26 are left once the build is out of it.
-    await expect(page.locator('[data-testid="quote-remaining"]')).toHaveText('26 hrs');
+    // Growth is 140 hours a year, so 6 are left once the build is out of it.
+    await expect(page.locator('[data-testid="quote-remaining"]')).toHaveText('6 hrs');
   });
 
-  // Each integration is 20 hours, so two take the same 84-hour build to 124 —
-  // past what Growth's 140 leaves room for comfortably, but still inside it.
+  // Each integration is 20 hours, so two take the same 104-hour build to 144 —
+  // past Growth's 140 and onto Enterprise.
   test('each custom integration adds twenty hours', async ({ page }) => {
     await toggle(page, 'hosting', 'yes');
     await page.click('[data-hosting-mode] [data-value="build"]');
@@ -190,7 +190,7 @@ test.describe('The quote builder on the Support page', () => {
     await page.click('[data-integrations] [data-step="up"]');
 
     await expect(page.locator('[data-integrations] [data-qty]')).toHaveText('2');
-    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('124 hrs');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('144 hrs');
     await expect(page.locator('[data-stage="integrations"]')).toContainText('40 hrs');
   });
 
@@ -212,14 +212,37 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-pages-fixed]')).toBeHidden();
   });
 
-  test('taking the membership system away drops it to 84 hours, on Enhance', async ({ page }) => {
+  test('taking the membership system away drops it to 104 hours, on Enhance', async ({ page }) => {
     await toggle(page, 'hosting', 'yes');
     await page.click('[data-hosting-mode] [data-value="build"]');
     await setPages(page, 5);
     await toggle(page, 'membership', 'no');
 
-    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('84 hrs');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('104 hrs');
     await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Enhance');
+  });
+
+  // A stage total on its own does not say how long a page takes, which is the
+  // number a salesperson is actually asked for on a call.
+  test('the design and build lines show what one page costs', async ({ page }) => {
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="build"]');
+    await setPages(page, 5);
+
+    await expect(page.locator('[data-stage="design"]')).toContainText('5 pages × 6 hrs');
+    await expect(page.locator('[data-stage="design"]')).toContainText('30 hrs');
+    await expect(page.locator('[data-stage="build"]')).toContainText('5 pages × 10 hrs');
+    await expect(page.locator('[data-stage="build"]')).toContainText('50 hrs');
+  });
+
+  test('integrations show their rate too, and the fixed stages show none', async ({ page }) => {
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="build"]');
+    await page.click('[data-integrations] [data-step="up"]');
+
+    await expect(page.locator('[data-stage="integrations"]')).toContainText('1 × 20 hrs');
+    // Discovery is six hours however big the job is — there is no rate to show.
+    await expect(page.locator('[data-stage="discovery"] [data-note]')).toHaveCount(0);
   });
 
   test('the fixed stages are not editable', async ({ page }) => {
@@ -238,7 +261,7 @@ test.describe('The quote builder on the Support page', () => {
     await page.click('[data-hosting-mode] [data-value="build"]');
     await setPages(page, 50);
 
-    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('624 hrs');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('824 hrs');
     await expect(page.locator('[data-testid="quote-over"]')).toBeVisible();
   });
 
@@ -274,13 +297,19 @@ test.describe('The quote builder on the Support page', () => {
     await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Growth');
   });
 
-  // 12 pages, fixed: 6 + 48 + 96 + 6 + 6 + 6.
-  test('a custom ClubHouse is a twelve-page build, at 168 hours', async ({ page }) => {
+  // The ClubHouse platform is already built, so a custom one is half the work
+  // of the same thing from scratch — and building on it is quicker still, at
+  // 3 hours a page rather than 5. That comes to 3 + 36 + 36 + 3 + 3 + 3.
+  test('a custom ClubHouse builds at three hours a page, coming to 84', async ({ page }) => {
     await toggle(page, 'clubhouse', 'yes');
     await page.click('[data-clubhouse-mode] [data-value="custom"]');
 
-    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('168 hrs');
-    await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Enterprise');
+    await expect(page.locator('[data-testid="quote-hours"]')).toHaveText('84 hrs');
+    await expect(page.locator('[data-stage="design"]')).toContainText('12 pages × 3 hrs');
+    await expect(page.locator('[data-stage="build"]')).toContainText('12 pages × 3 hrs');
+    // Everything else still halves, so the lines add up to the total.
+    await expect(page.locator('[data-stage="discovery"]')).toContainText('3 hrs');
+    await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Enhance');
     // Twelve pages is what a ClubHouse is, so there is nothing to count up or
     // down — the stepper goes and a plain statement takes its place.
     await expect(page.locator('[data-pages]')).toBeHidden();
@@ -367,14 +396,17 @@ test.describe('The quote builder in the Sales section', () => {
     await expect(parts).toContainText('£600 support at 10%');
   });
 
-  // Growth is £6,000 a year (10%); Enterprise is £9,000 (20%).
+  // Growth is £6,000 a year (10%); Enterprise is £9,000, which meets the
+  // threshold and pays 20%. Ten pages is a 184-hour build, so Enterprise.
   test('a package over the threshold pays the higher rate here too', async ({ page }) => {
     await fixture(page, 'sales_in');
     await page.goto(cacheBust('/dashboard/quote-builder/'));
 
-    await toggle(page, 'clubhouse', 'yes');
-    await page.click('[data-clubhouse-mode] [data-value="custom"]');
+    await toggle(page, 'hosting', 'yes');
+    await page.click('[data-hosting-mode] [data-value="build"]');
+    await setPages(page, 10);
 
+    await expect(page.locator('[data-testid="support-calc-name"]')).toHaveText('Enterprise');
     await expect(page.locator('[data-commission-parts]')).toContainText('£1,800 support at 20%');
     await expect(page.locator('.quote-commission')).toContainText('£1,840');
   });

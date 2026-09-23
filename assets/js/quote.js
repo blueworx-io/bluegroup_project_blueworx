@@ -41,36 +41,73 @@
 	}
 
 	/**
+	 * How a stage with a rate was arrived at.
+	 *
+	 * @param {number}  count How many of the thing.
+	 * @param {number}  each  Hours each one takes.
+	 * @param {boolean} pages Whether the thing is pages, which are worth naming.
+	 * @return {string} The working, e.g. "5 pages × 4 hrs".
+	 */
+	function rateNote( count, each, pages ) {
+		var what = pages ? ( 1 === count ? ' page' : ' pages' ) : '';
+
+		return count + what + ' × ' + each + ' hrs';
+	}
+
+	/**
 	 * The hours a build comes to, and the stages behind them.
 	 *
 	 * @param {number}  pages        Pages designed and built.
 	 * @param {boolean} membership   Whether a membership system is included.
 	 * @param {number}  integrations How many other systems it has to talk to.
+	 * @param {Object}  options      share: the fraction of a from-scratch build
+	 *                               this is. buildPerPage: overrides the build
+	 *                               rate, for work the share does not describe.
 	 * @return {Object} total and stages.
 	 */
-	function build( pages, membership, integrations ) {
+	function build( pages, membership, integrations, options ) {
 		var model = data.model;
 		var fixed = model.fixed;
+		var opts = options || {};
+
+		// A build on ground already broken is a fraction of the same work from
+		// scratch. Every stage takes the same fraction, so the lines still add
+		// up to the total underneath them.
+		var rate = function ( hours ) {
+			return Math.round( hours * ( opts.share || 1 ) );
+		};
+		var buildPerPage = opts.buildPerPage || rate( model.build_per_page );
 		var stages = [
-			{ key: 'discovery', label: fixed.discovery.label, hours: fixed.discovery.hours },
-			{ key: 'design', label: 'Design and review', hours: pages * model.design_per_page },
-			{ key: 'build', label: 'Build and review', hours: pages * model.build_per_page },
+			{ key: 'discovery', label: fixed.discovery.label, hours: rate( fixed.discovery.hours ) },
+			{
+				key: 'design',
+				label: 'Design and review',
+				hours: pages * rate( model.design_per_page ),
+				note: rateNote( pages, rate( model.design_per_page ), true ),
+			},
+			{
+				key: 'build',
+				label: 'Build and review',
+				hours: pages * buildPerPage,
+				note: rateNote( pages, buildPerPage, true ),
+			},
 		];
 
 		if ( integrations > 0 ) {
 			stages.push( {
 				key: 'integrations',
 				label: 'Custom integrations',
-				hours: integrations * model.integration,
+				hours: integrations * rate( model.integration ),
+				note: rateNote( integrations, rate( model.integration ), false ),
 			} );
 		}
 
 		if ( membership ) {
-			stages.push( { key: 'membership', label: 'Membership system', hours: model.membership } );
+			stages.push( { key: 'membership', label: 'Membership system', hours: rate( model.membership ) } );
 		}
 
 		[ 'testing', 'deployment', 'monitoring' ].forEach( function ( key ) {
-			stages.push( { key: key, label: fixed[ key ].label, hours: fixed[ key ].hours } );
+			stages.push( { key: key, label: fixed[ key ].label, hours: rate( fixed[ key ].hours ) } );
 		} );
 
 		return {
@@ -172,9 +209,24 @@
 
 		/** How many pages this quote covers — fixed for a custom ClubHouse. */
 		function pageCount() {
-			return quote.clubhouse && 'custom' === quote.clubhouseMode
-				? data.model.clubhouse_pages
-				: quote.pages;
+			return isCustomClubhouse() ? data.model.clubhouse_pages : quote.pages;
+		}
+
+		/** Whether this is a ClubHouse built on the platform rather than from scratch. */
+		function isCustomClubhouse() {
+			return quote.clubhouse && 'custom' === quote.clubhouseMode;
+		}
+
+		/** How this quote departs from a from-scratch build, if it does. */
+		function buildOptions() {
+			if ( ! isCustomClubhouse() ) {
+				return {};
+			}
+
+			return {
+				share: data.model.clubhouse_share,
+				buildPerPage: data.model.clubhouse_build,
+			};
 		}
 
 		/** Draws the package name, blurb, rate and price. */
@@ -306,7 +358,9 @@
 		/** Redraws everything from the current quote. */
 		function paint() {
 			var building = isBuild();
-			var sized = building ? build( pageCount(), quote.membership, quote.integrations ) : null;
+			var sized = building
+				? build( pageCount(), quote.membership, quote.integrations, buildOptions() )
+				: null;
 			var index = parseInt( range.value, 10 ) || 0;
 
 			if ( hostingMode ) {
@@ -377,6 +431,17 @@
 					label.textContent = stage.label;
 					value.textContent = stage.hours + ' hrs';
 					li.appendChild( label );
+
+					// Only the stages that multiply out show their working, and it sits
+					// beside the total it produced rather than under the label.
+					if ( stage.note ) {
+						var note = document.createElement( 'i' );
+
+						note.setAttribute( 'data-note', '' );
+						note.textContent = stage.note;
+						li.appendChild( note );
+					}
+
 					li.appendChild( value );
 					stagesList.appendChild( li );
 				} );

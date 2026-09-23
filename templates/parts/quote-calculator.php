@@ -185,6 +185,9 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 					<?php foreach ( blueworx_quote_build_stages( $blueworx_q_model['default_pages'], false ) as $blueworx_q_stage ) : ?>
 						<li data-stage="<?php echo esc_attr( $blueworx_q_stage['key'] ); ?>">
 							<span><?php echo esc_html( $blueworx_q_stage['label'] ); ?></span>
+							<?php if ( ! empty( $blueworx_q_stage['note'] ) ) : ?>
+								<i data-note><?php echo esc_html( $blueworx_q_stage['note'] ); ?></i>
+							<?php endif; ?>
 							<b>
 								<?php
 								printf(
@@ -245,7 +248,6 @@ function blueworx_quote_toggle( $name, $label, $on ) {
 		</div>
 
 		<div class="calc-field">
-			<div class="bw-calc-label"><?php esc_html_e( 'Package', 'bluegroup-project-blueworx' ); ?></div>
 			<div class="bw-calc-name" data-testid="support-calc-name"><?php echo esc_html( $blueworx_q_growth['name'] ); ?></div>
 			<p class="bw-calc-blurb" data-testid="support-calc-blurb"><?php echo esc_html( $blueworx_q_growth['blurb'] ); ?></p>
 		</div>
