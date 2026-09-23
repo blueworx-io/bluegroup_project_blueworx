@@ -110,20 +110,23 @@ blueworx_public_part( 'parts/nav.php' );
 				<h2 class="h2"><?php esc_html_e( 'How Many Hours Do You Need?', 'bluegroup-project-blueworx' ); ?></h2>
 				<p class="lead"><?php esc_html_e( "Slide to the support you use each month. We'll show the package that covers it.", 'bluegroup-project-blueworx' ); ?></p>
 			</div>
-			<?php
-			// The calculator moved into a part when the quote builder was added
-			// (#113): the Sales section renders the same one. `full` is the
-			// Settings switch — off puts this page back to the plain slider.
-			blueworx_public_part(
-				'parts/quote-calculator.php',
-				array(
-					'full'       => blueworx_quote_public_enabled(),
-					// Never on a public page: what a sale pays us is not a visitor's
-					// business, whoever happens to be signed in while reading it.
-					'commission' => false,
-				)
-			);
-			?>
+			<div class="blueworx-sales">
+				<?php
+				// The calculator moved into a part when the quote builder was added
+				// (#113): the Sales section renders the same one, and both are
+				// styled by assets/css/sales.css, scoped to this wrapper. `full` is
+				// the Settings switch — off puts this page back to the plain slider.
+				blueworx_public_part(
+					'parts/quote-calculator.php',
+					array(
+						'full'       => blueworx_quote_public_enabled(),
+						// Never on a public page: what a sale pays us is not a visitor's
+						// business, whoever happens to be signed in while reading it.
+						'commission' => false,
+					)
+				);
+				?>
+			</div>
 		</section>
 
 		<section class="sec bw-divided">

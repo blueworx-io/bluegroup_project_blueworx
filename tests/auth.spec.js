@@ -9,7 +9,8 @@
  * - the page renders the shop's form rather than a form of our own,
  * - the shop's script reaches the page, which our own asset sweep would
  *   otherwise strip — leaving correct markup that never comes alive,
- * - where a member lands afterwards, the dashboard for everybody, and
+ * - where a member lands afterwards, the Labs customer dashboard for
+ *   everybody (a stand-in for it here — see tests/labs-stand-in.js), and
  *   an off-site `redirect_to` being refused (an open redirect on a login page
  *   is the classic phishing setup),
  * - the retired /register and /reset-password addresses still go somewhere.
@@ -21,6 +22,7 @@
  */
 
 import { test, expect, cacheBust, isPlaceholder, baseURL, login } from './helpers.js';
+import { installLabsStandIn, removeLabsStandIn } from './labs-stand-in.js';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -124,12 +126,14 @@ test.beforeAll(() => {
   }
   mkdirSync(MU_DIR, { recursive: true });
   writeFileSync(FIXTURE, FIXTURE_PLUGIN);
+  installLabsStandIn();
 });
 
 test.afterAll(async ({ playwright }) => {
   if (!isPlaceholder && canInstallFixture) {
     const request = await playwright.request.newContext({ baseURL });
     await request.get('/?bw_auth=cleanup').catch(() => {});
+    await removeLabsStandIn(request);
     await request.dispose();
   }
 
@@ -200,16 +204,7 @@ test.describe('The sign-in page', () => {
 
     await page.goto('/login/');
 
-    expect(path(page.url())).toBe('/dashboard');
-  });
-
-  test('is where signing out lands, not wp-login', async ({ page }) => {
-    await fixture(page, 'sign_in_client');
-    await page.goto(cacheBust('/dashboard/'));
-
-    await page.click('.dash-signout');
-
-    expect(path(page.url())).toBe('/login');
+    expect(path(page.url())).toBe('/customer-dashboard');
   });
 });
 
@@ -221,7 +216,7 @@ test.describe('Where the shop sends people once it has signed them in', () => {
   test('a client goes to their dashboard', async ({ page }) => {
     await fixture(page, 'sign_in_client');
 
-    expect(await landsOn(page, null)).toBe('/dashboard');
+    expect(await landsOn(page, null)).toBe('/customer-dashboard');
   });
 
   // Everybody who signs in here signs in as a client would, whatever else
@@ -230,13 +225,13 @@ test.describe('Where the shop sends people once it has signed them in', () => {
   test('an admin goes to the dashboard too', async ({ page }) => {
     await login(page);
 
-    expect(await landsOn(page, null)).toBe('/dashboard');
+    expect(await landsOn(page, null)).toBe('/customer-dashboard');
   });
 
   test('a client is returned to the page they were heading for', async ({ page }) => {
     await fixture(page, 'sign_in_client');
 
-    expect(await landsOn(page, '/dashboard/invoices/')).toBe('/dashboard/invoices');
+    expect(await landsOn(page, '/support/')).toBe('/support');
   });
 
   // A login page that will forward to anywhere is a phishing tool with a
@@ -247,7 +242,7 @@ test.describe('Where the shop sends people once it has signed them in', () => {
     const { url } = await fixture(page, 'redirect', '&target=https%3A%2F%2Fexample.invalid%2Fsteal');
 
     expect(new URL(url, baseURL).host).toBe(new URL(baseURL).host);
-    expect(path(url)).toBe('/dashboard');
+    expect(path(url)).toBe('/customer-dashboard');
   });
 });
 

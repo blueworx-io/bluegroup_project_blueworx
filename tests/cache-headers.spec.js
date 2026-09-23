@@ -70,9 +70,9 @@ test.describe('#81 Caching', () => {
 
     await login(page);
 
-    // The marketing pages too, not just the dashboard: signed in, they carry
-    // the admin bar and the visitor's own name.
-    for (const path of ['/', '/support/', '/dashboard/']) {
+    // Signed in, the marketing pages carry the admin bar and the visitor's
+    // own name.
+    for (const path of ['/', '/support/', '/login/']) {
       const response = await page.goto(cacheBust(path));
       const cacheControl = (response.headers()['cache-control'] || '').toLowerCase();
 

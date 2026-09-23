@@ -10,6 +10,32 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.23.1] - 2026-09-23
+
+### Fixed
+
+- **The site went down after updating to 1.23.0** when BlueWorx Labs was
+  active: every page showed "This is a blueworx page ... cannot be deleted".
+  The update now finishes cleanly.
+
+## [1.23.0] - 2026-09-23
+
+### Changed
+
+- **Commission and Quote Builder now live on the customer dashboard** that the
+  BlueWorx Labs plugin provides (/customer-dashboard/). Only salespeople and
+  administrators see them. Signing in lands everyone on that dashboard.
+- **This plugin's pages show "BlueWorx page" in the Pages list's Source column**
+  (with BlueWorx Labs active), and offer only View and Edit — they cannot be
+  trashed from there, the same as the shop's pages.
+
+### Removed
+
+- **This plugin's own dashboard at /dashboard**, with its Subscriptions,
+  Invoices, Orders, Websites, Partner, Your details and Support sections, and
+  the website and referral registers that only fed it. Its pages are moved to
+  the bin on update; the old addresses now show "not found".
+
 ## [1.22.1] - 2026-09-23
 
 ### Changed

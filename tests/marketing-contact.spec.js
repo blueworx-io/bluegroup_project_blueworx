@@ -248,12 +248,14 @@ test.describe('Marketing contact page', () => {
     await expect(page.locator('.contact-illus')).toHaveCount(0);
   });
 
-  test('the cards point at the dashboard, the portfolio and the sales inbox', async ({ page }) => {
+  // Customers are sent to sign in, which lands them on their dashboard — this
+  // plugin has no dashboard of its own to point at.
+  test('the cards point at sign-in, the portfolio and the sales inbox', async ({ page }) => {
     await page.goto(cacheBust('/contact/'));
 
     const cards = page.locator('.contact-cards .cc');
     await expect(cards.nth(0)).toContainText('Already a customer?');
-    await expect(cards.nth(0).locator('a')).toHaveAttribute('href', /\/dashboard\/?$/);
+    await expect(cards.nth(0).locator('a')).toHaveAttribute('href', /\/login\/?$/);
     await expect(cards.nth(1).locator('a')).toHaveAttribute('href', /\/portfolio\/?$/);
     await expect(cards.nth(2).locator('a')).toHaveAttribute('href', 'mailto:sales@blueworx.io');
     await expect(cards.nth(2).locator('a')).toHaveText('sales@blueworx.io');

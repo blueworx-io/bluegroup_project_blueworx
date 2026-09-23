@@ -35,7 +35,9 @@ $blueworx_contact_cards = array(
 		'title' => __( 'Already a customer?', 'bluegroup-project-blueworx' ),
 		'sub'   => __( 'Sign in to raise a request or check on your site.', 'bluegroup-project-blueworx' ),
 		'link'  => __( 'Go to your dashboard', 'bluegroup-project-blueworx' ),
-		'href'  => blueworx_account_url(),
+		// Sign-in, which lands a client on their dashboard — and sends
+		// somebody already signed in straight there.
+		'href'  => blueworx_public_client_login_url(),
 	),
 	array(
 		'icon'  => 'sparkles',

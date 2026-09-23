@@ -155,7 +155,7 @@ function blueworx_blob( $style = '' ) {
  * default is what changed.
  *
  * A stored value is passed through as-is when it is absolute, and resolved
- * against the site otherwise, so both '/dashboard' and a full URL work.
+ * against the site otherwise, so both '/customer-dashboard' and a full URL work.
  *
  * @return string Absolute URL.
  */

@@ -1,11 +1,10 @@
 <?php
 /**
- * Client dashboard — the commission calculator (#112).
+ * The commission calculator (#112), as a panel on the Labs customer dashboard.
  *
- * Only salespeople and administrators ever reach this: the section carries a
- * `restricted` callback (includes/public/account.php) which hides the tab AND
- * turns anybody else away from the address, because what a sale pays us is not
- * a client's business.
+ * Only salespeople and administrators ever get this: includes/public/labs-dashboard.php
+ * checks before it is drawn, because what a sale pays us is not a client's
+ * business. Labs draws the panel's title and lede; this is the body.
  *
  * The page is rendered with the default sale already worked out in PHP rather
  * than as an empty frame for JavaScript to fill, so it is correct before
@@ -21,26 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$blueworx_comm_sections = blueworx_account_sections();
 $blueworx_comm_sale     = blueworx_commission_default_sale();
 $blueworx_comm_summary  = blueworx_commission_summary( $blueworx_comm_sale );
 $blueworx_comm_products = blueworx_commission_products();
 $blueworx_comm_packages = blueworx_commission_packages();
 $blueworx_comm_rates    = blueworx_commission_rates();
-
-blueworx_public_part(
-	'parts/dash-shell.php',
-	array(
-		'section' => 'commission',
-		'heading' => $blueworx_comm_sections['commission']['title'],
-		'kicker'  => $blueworx_comm_sections['commission']['kicker'],
-	)
-);
 ?>
-<p class="dash-lede"><?php echo esc_html( $blueworx_comm_sections['commission']['blurb'] ); ?></p>
-
 <div class="comm" data-commission>
-	<section class="dash-card comm-build">
+	<section class="sales-card comm-build">
 		<header class="comm-head">
 			<h2 class="comm-head-title"><?php esc_html_e( 'Build the sale', 'bluegroup-project-blueworx' ); ?></h2>
 			<button type="button" class="comm-reset" data-reset><?php esc_html_e( 'Reset', 'bluegroup-project-blueworx' ); ?></button>
@@ -191,7 +178,7 @@ blueworx_public_part(
 		</div>
 	</section>
 
-	<aside class="dash-card comm-out">
+	<aside class="sales-card comm-out">
 		<header class="comm-head">
 			<h2 class="comm-head-title"><?php esc_html_e( 'Your commission', 'bluegroup-project-blueworx' ); ?></h2>
 			<div class="comm-seg" role="group" aria-label="<?php esc_attr_e( 'Show commission', 'bluegroup-project-blueworx' ); ?>">
@@ -279,5 +266,3 @@ blueworx_public_part(
 		</p>
 	</noscript>
 </div>
-<?php
-blueworx_public_part( 'parts/dash-end.php' );

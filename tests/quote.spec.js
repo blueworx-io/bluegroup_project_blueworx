@@ -2,7 +2,7 @@
  * The quote builder (#113).
  *
  * One calculator, in two places: the public Support page and the Sales section
- * of the client area. The numbers are the same in both — that is the point of
+ * of the Labs customer dashboard. The numbers are the same in both — that is the point of
  * sharing it — so the sums are tested once, on whichever page is cheaper to
  * reach, and what differs between the two is tested separately:
  *
@@ -17,6 +17,7 @@
  */
 
 import { test, expect, cacheBust, isPlaceholder, baseURL, login } from './helpers.js';
+import { installLabsStandIn, removeLabsStandIn, labsView } from './labs-stand-in.js';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -80,12 +81,14 @@ test.beforeAll(() => {
   }
   mkdirSync(MU_DIR, { recursive: true });
   writeFileSync(FIXTURE, FIXTURE_PLUGIN);
+  installLabsStandIn();
 });
 
 test.afterAll(async ({ playwright }) => {
   if (!isPlaceholder && canInstallFixture) {
     const request = await playwright.request.newContext({ baseURL });
     await request.get('/?bw_quote=cleanup').catch(() => {});
+    await removeLabsStandIn(request);
     await request.dispose();
   }
 
@@ -105,8 +108,6 @@ const skipUnlessLocal = () => {
   test.skip(isPlaceholder, 'No real WordPress target configured (placeholder base URL).');
   test.skip(!canInstallFixture, 'Needs the local WordPress harness.');
 };
-
-const path = (url) => new URL(url, baseURL).pathname.replace(/\/$/, '');
 
 /** Sets a Yes/No toggle. */
 async function toggle(page, name, value) {
@@ -353,7 +354,7 @@ test.describe('Turning the Support page back to the plain slider', () => {
   test('the internal one is unaffected by it', async ({ page }) => {
     await fixture(page, 'public_off');
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
     await expect(page.locator('[data-toggle="hosting"]')).toHaveCount(1);
   });
@@ -364,16 +365,16 @@ test.describe('The quote builder in the Sales section', () => {
 
   test('a salesperson gets it, and sees what the quote pays them', async ({ page }) => {
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
-    await expect(page.locator('.dash-nav a[href*="/dashboard/quote-builder"]')).toHaveCount(1);
+    await expect(page.locator('[data-view-link="quote-builder"]')).toHaveCount(1);
     // The default quote is Growth alone: £6,000 a year at 10%.
     await expect(page.locator('.quote-commission')).toContainText('£600');
   });
 
   test('the commission follows the quote', async ({ page }) => {
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
     await toggle(page, 'hosting', 'yes');
     await page.click('[data-hosting-mode] [data-value="support"]');
@@ -386,7 +387,7 @@ test.describe('The quote builder in the Sales section', () => {
   // total cannot say which rate did what.
   test('it says what each part of the quote pays, and at what rate', async ({ page }) => {
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
     await toggle(page, 'hosting', 'yes');
     await page.click('[data-hosting-mode] [data-value="support"]');
@@ -400,7 +401,7 @@ test.describe('The quote builder in the Sales section', () => {
   // threshold and pays 20%. Ten pages is a 184-hour build, so Enterprise.
   test('a package over the threshold pays the higher rate here too', async ({ page }) => {
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
     await toggle(page, 'hosting', 'yes');
     await page.click('[data-hosting-mode] [data-value="build"]');
@@ -411,10 +412,21 @@ test.describe('The quote builder in the Sales section', () => {
     await expect(page.locator('.quote-commission')).toContainText('£1,840');
   });
 
-  test('an administrator can reach it and a client cannot', async ({ page }) => {
+  test('an administrator gets it too', async ({ page }) => {
     await login(page);
-    await page.goto(cacheBust('/dashboard/quote-builder/'));
+    await page.goto(cacheBust(labsView('quote-builder')));
 
-    expect(path(page.url())).toBe('/dashboard/quote-builder');
+    await expect(page.locator('[data-panel="quote-builder"] .quote-commission')).toBeVisible();
+  });
+
+  // Labs does not load this plugin's stylesheet; the Sales section brings its own.
+  test('is styled and working on the Labs dashboard', async ({ page }) => {
+    await fixture(page, 'sales_in');
+    await page.goto(cacheBust(labsView('quote-builder')));
+
+    const panel = page.locator('[data-panel="quote-builder"]');
+    await expect(panel.locator('.calc')).toHaveCSS('display', 'grid');
+    await toggle(page, 'hosting', 'yes');
+    await expect(panel.locator('[data-hosting-mode]')).toBeVisible();
   });
 });

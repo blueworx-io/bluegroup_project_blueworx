@@ -137,6 +137,21 @@ function blueworx_public_retire_removed_pages() {
 		// 'register' and 'reset-password' went with the forms they carried when
 		// the shop's sign-in form took over /login (1.20.0).
 		array( 'pricing', 'services', 'work', 'toolbox', 'dashboard/toolbox', 'register', 'reset-password' ),
+		// The plugin's own client dashboard, now the Labs customer dashboard's
+		// job (1.23.0). Its two Sales sections moved onto that dashboard; the
+		// rest went. Children before the parent, so none is left orphaned.
+		array(
+			'dashboard/subscriptions',
+			'dashboard/invoices',
+			'dashboard/orders',
+			'dashboard/websites',
+			'dashboard/partner',
+			'dashboard/details',
+			'dashboard/support',
+			'dashboard/commission',
+			'dashboard/quote-builder',
+			'dashboard',
+		),
 		array_map(
 			function ( $slug ) {
 				return 'toolbox/' . $slug;
@@ -144,25 +159,32 @@ function blueworx_public_retire_removed_pages() {
 			blueworx_public_retired_tool_slugs()
 		)
 	);
-	$changed = false;
+	$to_trash = array();
 
 	foreach ( $retired as $slug ) {
 		if ( empty( $map[ $slug ] ) ) {
 			continue;
 		}
 
-		$page_id = (int) $map[ $slug ];
+		$to_trash[] = (int) $map[ $slug ];
+		unset( $map[ $slug ] );
+	}
 
+	if ( array() === $to_trash ) {
+		return;
+	}
+
+	// Out of the map BEFORE anything is trashed. A page in the map is labelled
+	// "BlueWorx page" (blueworx_public_page_source()), and BlueWorx Labs refuses
+	// to trash a labelled page by stopping the request outright — which took the
+	// whole site down in 1.23.0, on every request, because the map was never
+	// saved and so this ran again each time.
+	update_option( 'blueworx_public_page_ids', $map );
+
+	foreach ( $to_trash as $page_id ) {
 		if ( 'page' === get_post_type( $page_id ) && blueworx_public_page_is_ours( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
 			wp_trash_post( $page_id );
 		}
-
-		unset( $map[ $slug ] );
-		$changed = true;
-	}
-
-	if ( $changed ) {
-		update_option( 'blueworx_public_page_ids', $map );
 	}
 }
 

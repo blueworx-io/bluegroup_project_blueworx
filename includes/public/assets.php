@@ -45,6 +45,21 @@ function blueworx_enqueue_public_assets() {
 		true
 	);
 
+	blueworx_public_enqueue_widgets();
+	blueworx_public_enqueue_shop_form_assets();
+	blueworx_public_enqueue_support_calculator();
+}
+add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
+
+/**
+ * The shared widgets script, with the exchange rates it converts prices with.
+ *
+ * The rates are inlined rather than fetched by the browser so prices repaint
+ * the instant the visitor picks a currency, with no request in between.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_widgets() {
 	wp_enqueue_script(
 		'blueworx-public-widgets',
 		BLUEWORX_SITE_URL . 'assets/js/public-widgets.js',
@@ -53,43 +68,62 @@ function blueworx_enqueue_public_assets() {
 		true
 	);
 
-	// The exchange rates the currency switcher converts with. Inlined rather
-	// than fetched by the browser so prices repaint the instant the visitor
-	// picks a currency, with no request in between.
 	wp_add_inline_script(
 		'blueworx-public-widgets',
 		'window.blueworxCurrency = ' . wp_json_encode( blueworx_currency_rates() ) . ';',
 		'before'
 	);
-
-	blueworx_public_enqueue_shop_form_assets();
-	blueworx_public_enqueue_commission_assets();
-	blueworx_public_enqueue_quote_assets();
 }
 
 /**
- * The quote builder, wherever the full one is rendered.
- *
- * Two pages carry it: the Support page (unless the Settings switch is off) and
- * the Sales section's Quote Builder. The model rides along inline so a page
- * count recalculates as it is typed, with no request in between.
+ * The calculators' stylesheet — see assets/css/sales.css for why it is its own.
  *
  * @return void
  */
-function blueworx_public_enqueue_quote_assets() {
+function blueworx_public_enqueue_sales_style() {
+	wp_enqueue_style(
+		'blueworx-fonts',
+		BLUEWORX_SITE_URL . 'assets/css/blueworx-fonts.css',
+		array(),
+		blueworx_site_asset_version( 'assets/css/blueworx-fonts.css' )
+	);
+
+	wp_enqueue_style(
+		'blueworx-sales',
+		BLUEWORX_SITE_URL . 'assets/css/sales.css',
+		array( 'blueworx-fonts' ),
+		blueworx_site_asset_version( 'assets/css/sales.css' )
+	);
+}
+
+/**
+ * The calculator on the Support page: always its styles, and the quote
+ * builder's script unless the Settings switch has put it back to the plain
+ * slider, which the widgets script runs on its own.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_support_calculator() {
 	$page = blueworx_public_current_page();
 
-	if ( ! is_array( $page ) || ! isset( $page['template'] ) ) {
+	if ( ! is_array( $page ) || ! isset( $page['template'] ) || 'pages/support.php' !== $page['template'] ) {
 		return;
 	}
 
-	$on_support = 'pages/support.php' === $page['template'] && blueworx_quote_public_enabled();
-	$on_sales   = 'pages/dashboard-quote-builder.php' === $page['template'];
+	blueworx_public_enqueue_sales_style();
 
-	if ( ! $on_support && ! $on_sales ) {
-		return;
+	if ( blueworx_quote_public_enabled() ) {
+		blueworx_public_enqueue_quote_script();
 	}
+}
 
+/**
+ * The quote builder's script. The model rides along inline so a page count
+ * recalculates as it is typed, with no request in between.
+ *
+ * @return void
+ */
+function blueworx_public_enqueue_quote_script() {
 	wp_enqueue_script(
 		'blueworx-quote',
 		BLUEWORX_SITE_URL . 'assets/js/quote.js',
@@ -104,7 +138,6 @@ function blueworx_public_enqueue_quote_assets() {
 		'before'
 	);
 }
-add_action( 'wp_enqueue_scripts', 'blueworx_enqueue_public_assets' );
 
 /**
  * The shop's front-end bundle, on the sign-in page only.
@@ -136,22 +169,16 @@ function blueworx_public_enqueue_shop_form_assets() {
 }
 
 /**
- * The commission calculator, on its own page only.
+ * The commission calculator's script. Only ever asked for on the Labs
+ * dashboard, for somebody allowed to sell — see includes/public/labs-dashboard.php.
  *
  * The prices and rates ride along inline rather than being fetched, so the
  * first keystroke recalculates with no request in between — the same reason
- * the currency rates are inlined above. Nothing secret is in there: it is the
- * public price list plus the rates already printed on the page.
+ * the currency rates are inlined above.
  *
  * @return void
  */
-function blueworx_public_enqueue_commission_assets() {
-	$page = blueworx_public_current_page();
-
-	if ( ! is_array( $page ) || ! isset( $page['template'] ) || 'pages/dashboard-commission.php' !== $page['template'] ) {
-		return;
-	}
-
+function blueworx_public_enqueue_commission_script() {
 	wp_enqueue_script(
 		'blueworx-commission',
 		BLUEWORX_SITE_URL . 'assets/js/commission.js',

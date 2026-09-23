@@ -19,26 +19,22 @@ require_once BLUEWORX_SITE_PATH . 'includes/public/content.php';
 // After content.php — commerce filters the plans that file defines.
 require_once BLUEWORX_SITE_PATH . 'includes/public/commerce.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/pages.php';
-// Before account.php — the Sales section is gated on the capability this file
-// installs, so the capability has to exist before the section is registered.
+// The Sales section is gated on the capability this file installs.
 require_once BLUEWORX_SITE_PATH . 'includes/public/roles.php';
-// After pages.php — the client area registers its pages on that file's filter.
-require_once BLUEWORX_SITE_PATH . 'includes/public/account.php';
-require_once BLUEWORX_SITE_PATH . 'includes/public/account-data.php';
 // After content.php and commerce.php — the calculator reads its prices from the
 // first and names its packages with the second.
 require_once BLUEWORX_SITE_PATH . 'includes/public/commission.php';
 // After commission.php — a quote is priced with the same packages and rates.
 require_once BLUEWORX_SITE_PATH . 'includes/public/quote.php';
-// After account.php — its handlers run on the pages that file registers, and
-// they redirect through blueworx_account_url().
-require_once BLUEWORX_SITE_PATH . 'includes/public/account-forms.php';
+// After roles.php — the Sales panels it adds to the Labs dashboard are gated on
+// that file's capability.
+require_once BLUEWORX_SITE_PATH . 'includes/public/labs-dashboard.php';
 // After pages.php — the handler asks it which page is being rendered.
 require_once BLUEWORX_SITE_PATH . 'includes/public/contact-form.php';
-// After account.php — the auth pages are where its gate sends people.
+// After labs-dashboard.php — signing in lands people on the dashboard it finds.
 require_once BLUEWORX_SITE_PATH . 'includes/public/auth.php';
-// After account.php and auth.php — it reads the `account`/`auth` flags those
-// files add to the page registry to decide what must never be indexed.
+// After auth.php — it reads the `auth` flag that file adds to the page
+// registry to decide what must never be indexed.
 require_once BLUEWORX_SITE_PATH . 'includes/public/seo-copy.php';
 require_once BLUEWORX_SITE_PATH . 'includes/public/indexing.php';
 // After pages.php — the backfill calls blueworx_public_page_is_ours().

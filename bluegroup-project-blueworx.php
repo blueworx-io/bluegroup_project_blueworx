@@ -3,7 +3,7 @@
  * Plugin Name:       BlueWorx | Marketing Site
  * Plugin URI:        https://blueworx.io/
  * Description:       The BlueWorx public marketing site, rendered by the plugin itself so it is identical wherever it is hosted. Self-contained: no theme and no dependency on other plugins.
- * Version:           1.22.1
+ * Version:           1.23.1
  * Requires at least: 5.0
  * Requires PHP:      8.0
  * Author:            BlueWorx
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BLUEWORX_SITE_VERSION' ) ) {
-	define( 'BLUEWORX_SITE_VERSION', '1.22.1' );
+	define( 'BLUEWORX_SITE_VERSION', '1.23.1' );
 }
 
 if ( ! defined( 'BLUEWORX_SITE_PATH' ) ) {
@@ -59,17 +59,10 @@ function blueworx_site_asset_version( $relative_path ) {
 // which used to guard this include, does not exist here.
 require_once BLUEWORX_SITE_PATH . 'includes/public/bootstrap.php';
 
-// The client website and referral registers (#100, #101). Loaded for every
-// request, not just admin ones: the post types have to be registered on the
-// front end too or the portal cannot read a client's own records.
-require_once BLUEWORX_SITE_PATH . 'includes/records.php';
-
-// The admin surfaces: the settings screen and the field
-// boxes for the two registers. Nothing on the front end needs any of them, so
-// they are not loaded for a public request.
+// The settings screen. Nothing on the front end needs it, so it is not loaded
+// for a public request.
 if ( is_admin() ) {
 	require_once BLUEWORX_SITE_PATH . 'includes/admin/settings.php';
-	require_once BLUEWORX_SITE_PATH . 'includes/admin/records-admin.php';
 }
 
 /**
@@ -86,9 +79,7 @@ function blueworx_site_activate() {
 		blueworx_public_maybe_upgrade();
 	}
 
-	// Before the pages: the Sales section is gated on this capability, and a
-	// page installed while it does not exist yet would be registered as one
-	// nobody can see.
+	// The Sales section on the Labs dashboard is gated on this capability.
 	if ( function_exists( 'blueworx_roles_install' ) ) {
 		blueworx_roles_install();
 	}
