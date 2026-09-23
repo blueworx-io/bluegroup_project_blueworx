@@ -10,6 +10,14 @@ headless app**. That history is preserved in git. Since 1.1.0 the repository
 before 1.1.2) — the same marketing site, rendered by WordPress instead of served
 headlessly from Netlify.
 
+## [1.23.1] - 2026-09-23
+
+### Fixed
+
+- **The site went down after updating to 1.23.0** when BlueWorx Labs was
+  active: every page showed "This is a blueworx page ... cannot be deleted".
+  The update now finishes cleanly.
+
 ## [1.23.0] - 2026-09-23
 
 ### Changed

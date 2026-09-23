@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.23.0
+Stable tag:        1.23.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.23.1 =
+* Fixes the whole site going down after updating to 1.23.0 with BlueWorx Labs active.
 
 = 1.23.0 =
 * Commission and Quote Builder now appear on the BlueWorx Labs customer dashboard, for salespeople and administrators only. This plugin's own /dashboard and its other sections are gone. Its pages are labelled "BlueWorx page" in the Pages list and can only be viewed or edited there, not trashed.

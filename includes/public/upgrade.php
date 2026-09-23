@@ -159,25 +159,32 @@ function blueworx_public_retire_removed_pages() {
 			blueworx_public_retired_tool_slugs()
 		)
 	);
-	$changed = false;
+	$to_trash = array();
 
 	foreach ( $retired as $slug ) {
 		if ( empty( $map[ $slug ] ) ) {
 			continue;
 		}
 
-		$page_id = (int) $map[ $slug ];
+		$to_trash[] = (int) $map[ $slug ];
+		unset( $map[ $slug ] );
+	}
 
+	if ( array() === $to_trash ) {
+		return;
+	}
+
+	// Out of the map BEFORE anything is trashed. A page in the map is labelled
+	// "BlueWorx page" (blueworx_public_page_source()), and BlueWorx Labs refuses
+	// to trash a labelled page by stopping the request outright — which took the
+	// whole site down in 1.23.0, on every request, because the map was never
+	// saved and so this ran again each time.
+	update_option( 'blueworx_public_page_ids', $map );
+
+	foreach ( $to_trash as $page_id ) {
 		if ( 'page' === get_post_type( $page_id ) && blueworx_public_page_is_ours( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
 			wp_trash_post( $page_id );
 		}
-
-		unset( $map[ $slug ] );
-		$changed = true;
-	}
-
-	if ( $changed ) {
-		update_option( 'blueworx_public_page_ids', $map );
 	}
 }
 
