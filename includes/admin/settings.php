@@ -168,7 +168,7 @@ function blueworx_site_sanitize_shortcode( $value ) {
  * Sanitises a link target that may be an absolute URL or a site-relative path.
  *
  * Both forms are legitimate here: the client dashboard may end up as a page on
- * this site ("/dashboard") or on another host entirely, and rejecting either
+ * this site ("/customer-dashboard") or on another host entirely, and rejecting either
  * would just push somebody back to editing PHP.
  *
  * @param string $value Raw submitted value.
@@ -255,7 +255,7 @@ function blueworx_site_render_login_url_field() {
 	?>
 	<input type="text" class="regular-text" id="blueworx_client_login_url" name="blueworx_client_login_url" value="<?php echo esc_attr( $value ); ?>" placeholder="/login" />
 	<p class="description">
-		<?php echo esc_html__( 'Where the Client Login link in the navigation points. A full URL or a path such as /dashboard. Leave it empty to use the sign-in page this plugin renders.', 'bluegroup-project-blueworx' ); ?>
+		<?php echo esc_html__( 'Where the Client Login link in the navigation points. A full URL or a path such as /customer-dashboard. Leave it empty to use the sign-in page this plugin renders.', 'bluegroup-project-blueworx' ); ?>
 	</p>
 	<?php
 }

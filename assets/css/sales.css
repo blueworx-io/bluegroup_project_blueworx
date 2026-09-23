@@ -1,0 +1,193 @@
+/*
+ * The calculators: the quote builder and the commission calculator.
+ *
+ * Their own file, and every rule scoped to .blueworx-sales, because they are
+ * drawn in two places that share nothing else: the Support page, inside this
+ * plugin's own .bw-page, and the Labs customer dashboard, which is not ours
+ * and never loads public.css. Loading public.css there would put its reset on
+ * Labs' whole screen; this file cannot reach past the wrapper.
+ *
+ * So it carries the few things public.css would otherwise have given it — the
+ * tokens, the reset, the type and the one button style the quote uses.
+ */
+
+.blueworx-sales {
+  --ink: #0A0C29;
+  --brand: #4F46E5;
+  --brand-dk: #4338CA;
+  --muted: #5B5D74;
+  --line: #ECEDF3;
+  --dash-ink: #0A0C29;
+  --dash-field: #F5F6FB;
+  --dash-line: #EEEEF5;
+  --dash-body: #6B6E86;
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ink);
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+}
+.blueworx-sales,
+.blueworx-sales *,
+.blueworx-sales *::before,
+.blueworx-sales *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.blueworx-sales button { font-family: inherit; }
+
+.blueworx-sales .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: none; cursor: pointer; font-family: inherit; font-weight: 600; letter-spacing: -.01em; border-radius: 13px; text-decoration: none; transition: background .22s ease, color .22s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }
+.blueworx-sales .btn:hover { transform: translateY(-2px); }
+.blueworx-sales .btn svg { width: 20px; height: 20px; }
+.blueworx-sales .btn-md { height: 54px; padding: 0 30px; font-size: 16px; }
+.blueworx-sales .btn-brand { background: linear-gradient(150deg,#5B52F0,#4338CA); color: #fff; box-shadow: 0 8px 22px rgba(79,70,229,.32), inset 0 1px 0 rgba(255,255,255,.18); }
+.blueworx-sales .btn-brand:hover { color: #fff; box-shadow: 0 16px 34px rgba(79,70,229,.44), inset 0 1px 0 rgba(255,255,255,.22); }
+
+/* The commission calculator's two panels. */
+.blueworx-sales .sales-card { background: #fff; border: 1px solid var(--dash-line); border-radius: 16px; box-shadow: 0 1px 2px rgba(10,12,41,.04); }
+
+/* calculator */
+.blueworx-sales .calc { background: linear-gradient(160deg,#F7F8FF,#EFEEFB); border: 1px solid #ECECF3; border-radius: 24px; padding: 36px; display: grid; grid-template-columns: 1.25fr 0.85fr; gap: 28px; align-items: stretch; }
+.blueworx-sales .calc-panel { background: #fff; border: 1px solid #ECECF3; border-radius: 18px; padding: 30px 32px; box-shadow: 0 10px 30px rgba(10,12,41,.05); }
+.blueworx-sales .calc-field { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #F0F0F5; }
+.blueworx-sales .calc-field:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.blueworx-sales .calc-field > label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
+.blueworx-sales .bw-calc-label { display: block; font-size: 14px; font-weight: 600; color: #0A0C29; margin-bottom: 12px; }
+.blueworx-sales .calc-out { background: linear-gradient(165deg,#141637,#0A0C29); border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 40px 36px; color: #fff; text-align: center; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 24px 54px rgba(10,12,41,.28), inset 0 1px 0 rgba(255,255,255,.08); position: relative; overflow: hidden; }
+.blueworx-sales .calc-out::before { content: ''; position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 340px; height: 240px; background: radial-gradient(ellipse at center, rgba(79,70,229,.55), transparent 65%); pointer-events: none; }
+.blueworx-sales .calc-out .cl, .blueworx-sales .calc-out .cv, .blueworx-sales .calc-out .cp, .blueworx-sales .calc-out .btn { position: relative; z-index: 1; }
+.blueworx-sales .calc-out .cl { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+.blueworx-sales .calc-out .cv { font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-weight: 700; font-size: 56px; letter-spacing: -1px; }
+.blueworx-sales .calc-out .cp { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 24px; }
+
+@media (max-width: 1000px) {
+  .blueworx-sales .calc { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* Support page: hours slider. */
+.blueworx-sales input[type="range"].bw-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 99px; background: #E8E7F7; outline: none; }
+.blueworx-sales input[type="range"].bw-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(10,12,41,.25); cursor: pointer; }
+.blueworx-sales input[type="range"].bw-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #0A0C29; border: 4px solid #fff; cursor: pointer; }
+.blueworx-sales .bw-range-ends { display: flex; justify-content: space-between; font-size: 12.5px; color: #A0AFC0; margin-top: 8px; }
+.blueworx-sales .bw-calc-big { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.blueworx-sales .bw-calc-big b { font-family: 'Sora', sans-serif; font-size: 40px; letter-spacing: -1px; color: #0A0C29; }
+.blueworx-sales .bw-calc-big span { font-size: 15px; color: #667085; }
+.blueworx-sales .bw-calc-name { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 600; color: #0A0C29; }
+.blueworx-sales .bw-calc-blurb { font-size: 14.5px; color: #667085; margin: 6px 0 0; line-height: 1.55; }
+.blueworx-sales .bw-calc-rate { font-family: 'Sora', sans-serif; font-size: 18px; color: #0A0C29; }
+
+/* The commission calculator (#112). Built to the Claude Design handoff; radii,
+   spacing and the two-card split are the design's. */
+.blueworx-sales .comm { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.blueworx-sales .comm-build { flex: 2 1 560px; padding: 0 22px; }
+.blueworx-sales .comm-out { flex: 1 1 320px; padding: 0 22px; position: sticky; top: 0; }
+.blueworx-sales .comm-note { flex: 1 1 100%; display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 13px 18px; border: 1px solid #C9CBFF; border-radius: 12px; background: #F5F6FF; font-size: 13.5px; line-height: 1.45; color: var(--brand-dk); }
+/* The Quote Builder's note, under the calculator rather than inside a flex row. */
+.blueworx-sales > .comm-note { margin-top: 16px; }
+.blueworx-sales .comm-hint-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.blueworx-sales .comm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 14px; border-bottom: 1px solid var(--dash-line); }
+.blueworx-sales .comm-head-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--dash-ink); }
+.blueworx-sales .comm-reset { border: 0; background: none; padding: 0; font-family: inherit; font-size: 13.5px; font-weight: 500; color: var(--brand); cursor: pointer; }
+.blueworx-sales .comm-reset:hover { color: var(--brand-dk); }
+
+.blueworx-sales .comm-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding: 18px 0; border-bottom: 1px solid var(--dash-line); }
+.blueworx-sales .comm-row:last-child { border-bottom: 0; }
+.blueworx-sales .comm-row-name { flex: 1 1 180px; min-width: 0; }
+.blueworx-sales .comm-row-title { font-size: 14.5px; font-weight: 700; }
+.blueworx-sales .comm-row-meta { font-size: 13px; color: var(--dash-body); margin-top: 2px; }
+.blueworx-sales .comm-row-result { flex: 0 0 auto; min-width: 150px; margin-left: auto; text-align: right; white-space: nowrap; }
+.blueworx-sales .comm-row-fee { font-size: 14.5px; font-weight: 700; }
+.blueworx-sales .comm-row-rate { font-size: 12.5px; color: var(--dash-body); margin-top: 2px; }
+
+/* Stepper and segmented control. Both are plain buttons: they change a figure
+   on this page and never navigate, which is the one case a button is right. */
+.blueworx-sales .comm-step { display: inline-flex; align-items: center; height: 34px; border: 1px solid #D8DAE5; border-radius: 8px; overflow: hidden; background: #fff; }
+.blueworx-sales .comm-step-btn { width: 32px; height: 32px; border: 0; background: none; font-size: 16px; line-height: 1; color: var(--dash-body); cursor: pointer; }
+.blueworx-sales .comm-step-btn:hover { background: #F5F6FF; color: var(--brand-dk); }
+.blueworx-sales .comm-step-val { min-width: 34px; padding: 0 4px; text-align: center; font-size: 13.5px; font-weight: 600; border-left: 1px solid var(--dash-line); border-right: 1px solid var(--dash-line); }
+
+.blueworx-sales .comm-seg { display: inline-flex; gap: 2px; padding: 3px; background: var(--dash-field); border: 1px solid var(--dash-line); border-radius: 9px; }
+.blueworx-sales .comm-seg-btn { padding: 5px 12px; border: 1px solid transparent; border-radius: 6px; background: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--dash-body); cursor: pointer; transition: background .16s ease, color .16s ease, border-color .16s ease; }
+.blueworx-sales .comm-seg-btn.on { background: #fff; border-color: #C9CBFF; color: var(--brand); }
+
+.blueworx-sales .comm-select { height: 36px; min-width: 200px; max-width: 100%; padding: 0 10px; border: 1px solid #D8DAE5; border-radius: 8px; background: #fff; font-family: inherit; font-size: 13.5px; color: var(--dash-ink); }
+
+.blueworx-sales .comm-hint { flex: 1 1 100%; display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; border-radius: 8px; background: #F5F6FF; font-size: 13px; color: var(--brand-dk); }
+.blueworx-sales .comm-hint[hidden] { display: none; }
+
+.blueworx-sales .comm-total-block { padding: 20px 0 18px; border-bottom: 1px solid var(--dash-line); }
+.blueworx-sales .comm-total { margin: 0; font-family: 'Helvetica Neue',var(--font-sora),sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -.8px; }
+.blueworx-sales .comm-total-when { font-size: 14px; font-weight: 500; color: var(--dash-body); letter-spacing: 0; }
+.blueworx-sales .comm-total-sub { margin: 4px 0 0; font-size: 13px; color: var(--dash-body); }
+
+.blueworx-sales .comm-break { padding: 6px 0; }
+.blueworx-sales .comm-break-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 10px 0; }
+.blueworx-sales .comm-break-name { font-size: 13.5px; font-weight: 600; }
+.blueworx-sales .comm-break-detail { font-size: 12.5px; color: var(--dash-body); margin-top: 2px; }
+.blueworx-sales .comm-break-fee { font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.blueworx-sales .comm-break-empty { margin: 0; padding: 18px 0; text-align: center; font-size: 13.5px; color: var(--dash-body); }
+
+.blueworx-sales .comm-rates { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 22px; padding: 14px 16px; border-radius: 8px; background: var(--dash-field); font-size: 12.5px; line-height: 1.5; color: var(--dash-body); }
+.blueworx-sales .comm-rates strong { color: var(--dash-ink); }
+
+@media (max-width: 900px) {
+  .blueworx-sales .comm-build, .blueworx-sales .comm-out { flex: 1 1 100%; }
+  .blueworx-sales .comm-out { position: static; }
+}
+
+/* The quote builder (#113). The calculator's own panel styles are shared with
+   the Support page's slider, which this grew out of; only the questions and
+   the quote lines are new. */
+.blueworx-sales .quote-asks { display: flex; flex-wrap: wrap; gap: 12px 26px; }
+.blueworx-sales .quote-ask { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex: 1 1 240px; min-height: 38px; }
+.blueworx-sales .quote-ask-label { font-size: 14px; font-weight: 600; }
+.blueworx-sales .quote-ask-value { font-size: 13.5px; color: var(--muted); }
+/* A question row is display:flex, and a flex rule beats the browser's own
+   [hidden] { display: none }. Without this the ClubHouse page count showed on
+   a hosting build — hidden in the markup, visible on the screen. */
+.blueworx-sales .quote-ask[hidden], .blueworx-sales .quote-branch[hidden], .blueworx-sales .quote-build[hidden], .blueworx-sales .quote-lines[hidden], .blueworx-sales .quote-over[hidden], .blueworx-sales .quote-hours[hidden] { display: none; }
+/* The build questions: one per line, evenly spaced, with the controls lined up
+   in a column of their own rather than wherever the label's length leaves them. */
+.blueworx-sales .quote-rows { display: flex; flex-direction: column; }
+.blueworx-sales .quote-rows .quote-ask { flex: 1 1 auto; padding: 11px 0; border-bottom: 1px solid var(--line, #EEEEF5); }
+.blueworx-sales .quote-rows .quote-ask:first-child { padding-top: 0; }
+.blueworx-sales .quote-rows .quote-ask:last-child { border-bottom: 0; padding-bottom: 0; }
+.blueworx-sales .quote-branch .bw-calc-label, .blueworx-sales .quote-build .bw-calc-label { margin-bottom: 8px; }
+
+.blueworx-sales .quote-stages { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.blueworx-sales .quote-stages li { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-size: 13.5px; color: var(--muted); }
+.blueworx-sales .quote-stages b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+/* The working behind a stage that multiplies out, so the per-page rate is
+   readable without doing the division. margin-left keeps it against the
+   total it produced rather than stranded in the middle of the row. */
+.blueworx-sales .quote-stages [data-note] { margin-left: auto; font-style: normal; font-size: 12px; opacity: .7; white-space: nowrap; }
+.blueworx-sales .quote-hours { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line, #EEEEF5); font-size: 14px; font-weight: 600; }
+.blueworx-sales .quote-hours b { font-size: 20px; }
+.blueworx-sales .quote-hours-left { margin-top: 8px; padding-top: 8px; border-top: 0; font-weight: 500; color: var(--muted); }
+.blueworx-sales .quote-hours-left b { font-size: 15px; color: var(--ink); }
+.blueworx-sales .quote-over { margin: 12px 0 0; padding: 10px 14px; border-radius: 8px; background: #FEF3F2; color: #B42318; font-size: 13px; }
+
+.blueworx-sales .quote-lines { list-style: none; margin: 14px 0 18px; padding: 14px 0 0; border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.blueworx-sales .quote-lines li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; color: rgba(255,255,255,.7); }
+.blueworx-sales .quote-lines b { color: #fff; font-weight: 600; white-space: nowrap; }
+
+/* A standard ClubHouse has no hours and so no package: the panel that would
+   name one is taken out rather than left showing a package nobody is buying. */
+.blueworx-sales .quote-no-package .calc-out .cl, .blueworx-sales .quote-no-package .calc-out .cv, .blueworx-sales .quote-no-package .calc-out .cp { display: none; }
+
+/* The right-hand column: the quote, and under it what the quote pays. The
+   quote panel is the one that stretches, so the column finishes level with the
+   questions beside it however many of them are showing. */
+.blueworx-sales .calc-side { display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
+.blueworx-sales .calc-side .calc-out { flex: 1 1 auto; }
+.blueworx-sales .quote-commission { flex: 0 0 auto; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; padding: 14px 18px; border: 1px solid #C9CBFF; border-radius: 12px; background: #F5F6FF; color: var(--brand-dk, #4338CA); }
+.blueworx-sales .quote-commission-label { font-size: 13.5px; font-weight: 600; }
+.blueworx-sales .quote-commission b { font-size: 20px; font-weight: 700; }
+.blueworx-sales .quote-commission-note { font-size: 12.5px; opacity: .8; }
+
+/* On the dashboard the calculator has no frame of its own: the dashboard is
+   already a framed surface, and the two panels inside are the cards. */
+.blueworx-sales .calc-plain { background: none; border: 0; border-radius: 0; padding: 0; }
+.blueworx-sales .quote-commission-parts { flex: 1 1 100%; font-size: 12.5px; opacity: .85; }
+.blueworx-sales .quote-commission-parts:empty { display: none; }

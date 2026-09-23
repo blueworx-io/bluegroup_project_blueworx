@@ -137,6 +137,21 @@ function blueworx_public_retire_removed_pages() {
 		// 'register' and 'reset-password' went with the forms they carried when
 		// the shop's sign-in form took over /login (1.20.0).
 		array( 'pricing', 'services', 'work', 'toolbox', 'dashboard/toolbox', 'register', 'reset-password' ),
+		// The plugin's own client dashboard, now the Labs customer dashboard's
+		// job (1.23.0). Its two Sales sections moved onto that dashboard; the
+		// rest went. Children before the parent, so none is left orphaned.
+		array(
+			'dashboard/subscriptions',
+			'dashboard/invoices',
+			'dashboard/orders',
+			'dashboard/websites',
+			'dashboard/partner',
+			'dashboard/details',
+			'dashboard/support',
+			'dashboard/commission',
+			'dashboard/quote-builder',
+			'dashboard',
+		),
 		array_map(
 			function ( $slug ) {
 				return 'toolbox/' . $slug;

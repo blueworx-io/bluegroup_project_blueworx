@@ -4,7 +4,7 @@ Tags:              marketing, landing page, site, front-end
 Requires at least: 5.0
 Tested up to:      6.9
 Requires PHP:      8.0
-Stable tag:        1.22.1
+Stable tag:        1.23.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ No. The plugin renders its own pages and does not rely on a theme.
 No. It is fully standalone. If the enhancement plugin is also active, the two integrate automatically, but it is not required.
 
 = Where does the Client Login link point? =
-At the plugin's own sign-in page (/login) by default, which sends the client on to their dashboard. Change it under Settings > BlueWorx Site — a full URL or a path such as /dashboard. All three nav links follow it. Developers can also hook the `blueworx_client_login_url` filter.
+At the plugin's own sign-in page (/login) by default, which sends the client on to their dashboard. Change it under Settings > BlueWorx Site — a full URL or a path such as /customer-dashboard. All three nav links follow it. Developers can also hook the `blueworx_client_login_url` filter.
 
 = How do I add a contact form? =
 Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders it, and shows a placeholder while it is empty. Developers can also hook the `blueworx_contact_form_shortcode` filter.
@@ -44,6 +44,9 @@ Paste the form shortcode into Settings > BlueWorx Site. The Contact page renders
 Copy each plan's price ID out of SureCart and paste it into the matching box under Settings > BlueWorx Site, one for monthly and one for annual. The boxes there now list every Support package plus Hosting and ClubHouse, and each one then shows SureCart's price with its button going to checkout. Leave a plan blank to keep the price built into the plugin.
 
 == Changelog ==
+
+= 1.23.0 =
+* Commission and Quote Builder now appear on the BlueWorx Labs customer dashboard, for salespeople and administrators only. This plugin's own /dashboard and its other sections are gone.
 
 = 1.22.1 =
 * Signing in now always lands on the dashboard, administrators included, instead of sending admins to wp-admin.

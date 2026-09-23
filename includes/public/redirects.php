@@ -68,13 +68,12 @@ function blueworx_public_legacy_redirects() {
 			// our own screens went with it. A reset link sent before this
 			// release lands here too — its key is no longer ours to use, so the
 			// honest destination is the form that can start a fresh one.
-			'register'          => 'login',
-			'reset-password'    => 'login',
+			'register'       => 'login',
+			'reset-password' => 'login',
 
 			// The Toolbox was retired in favour of ClubHouse (2026-09): the
-			// product page, its twelve tool pages and the portal tab.
-			'toolbox'           => 'clubhouse',
-			'dashboard/toolbox' => 'dashboard',
+			// product page and its twelve tool pages.
+			'toolbox'  => 'clubhouse',
 		) + array_fill_keys(
 			array_map(
 				function ( $slug ) {

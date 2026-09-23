@@ -1,11 +1,11 @@
 /**
  * The commission calculator, and who is allowed to see it.
  *
- * Two halves, and the first matters more than the second: this page shows what
- * we pay on a sale, so the specs here are weighted towards a client not being
- * able to reach it. The dashboard deliberately hides tabs without hiding
- * addresses (see blueworx_account_visible_sections()), so "the link is not in
- * the sidebar" is not the test — "the address turns them away" is.
+ * Two halves, and the first matters more than the second: this panel shows
+ * what we pay on a sale, so the specs here are weighted towards a client not
+ * being able to reach it. It lives on the Labs customer dashboard, which draws
+ * every panel on every visit, so "the link is not in the nav" is not the test —
+ * "the panel is not in the page" is.
  *
  * The sums come from the handoff's worked example: the default sale is
  * £40 + £40 + £600 = £680 on £6,400 of annual value, and a support package is
@@ -13,6 +13,7 @@
  */
 
 import { test, expect, cacheBust, isPlaceholder, baseURL, login } from './helpers.js';
+import { installLabsStandIn, removeLabsStandIn, labsView, LABS_DASHBOARD } from './labs-stand-in.js';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -88,12 +89,14 @@ test.beforeAll(() => {
   }
   mkdirSync(MU_DIR, { recursive: true });
   writeFileSync(FIXTURE, FIXTURE_PLUGIN);
+  installLabsStandIn();
 });
 
 test.afterAll(async ({ playwright }) => {
   if (!isPlaceholder && canInstallFixture) {
     const request = await playwright.request.newContext({ baseURL });
     await request.get('/?bw_comm=cleanup').catch(() => {});
+    await removeLabsStandIn(request);
     await request.dispose();
   }
 
@@ -114,8 +117,6 @@ const skipUnlessLocal = () => {
   test.skip(!canInstallFixture, 'Needs the local WordPress harness.');
 };
 
-const path = (url) => new URL(url, baseURL).pathname.replace(/\/$/, '');
-
 test.describe('Who can see the Sales section', () => {
   test.beforeEach(() => skipUnlessLocal());
 
@@ -125,38 +126,56 @@ test.describe('Who can see the Sales section', () => {
     expect(Object.values(roles)).toContain('BlueWorx: Sales Staff');
   });
 
-  test('a salesperson gets a Sales heading and a Commission link', async ({ page }) => {
+  test('a salesperson gets Commission and Quote Builder on the Labs dashboard', async ({
+    page,
+  }) => {
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/'));
+    await page.goto(cacheBust(LABS_DASHBOARD));
 
-    await expect(page.locator('.dash-navlabel', { hasText: 'Sales' })).toHaveCount(1);
-    await expect(page.locator('.dash-nav a[href*="/dashboard/commission"]')).toHaveCount(1);
+    await expect(page.locator('[data-view-link="commission"]')).toHaveText('Commission');
+    await expect(page.locator('[data-view-link="quote-builder"]')).toHaveText('Quote Builder');
+    await expect(page.locator('[data-panel="commission"] .comm-total')).toBeVisible();
   });
 
   test('a client is offered neither', async ({ page }) => {
     await fixture(page, 'client_in');
-    await page.goto(cacheBust('/dashboard/'));
+    await page.goto(cacheBust(LABS_DASHBOARD));
 
-    await expect(page.locator('.dash-navlabel', { hasText: 'Sales' })).toHaveCount(0);
-    await expect(page.locator('.dash-nav a[href*="/dashboard/commission"]')).toHaveCount(0);
+    await expect(page.locator('[data-view-link="commission"]')).toHaveCount(0);
+    await expect(page.locator('[data-view-link="quote-builder"]')).toHaveCount(0);
   });
 
-  // The link being absent is not the control — the address is.
-  test('a client who knows the address is turned away from it', async ({ page }) => {
+  // The nav being empty is not the control — what reaches the page is.
+  test('a client who asks for the panel by name gets nothing of it', async ({ page }) => {
     await fixture(page, 'client_in');
+    await page.goto(cacheBust(labsView('commission')));
 
-    await page.goto(cacheBust('/dashboard/commission/'));
+    await expect(page.locator('.comm-total')).toHaveCount(0);
+    await expect(page.locator('body')).not.toContainText('Build the sale');
+    expect(await page.evaluate(() => typeof window.blueworxCommission)).toBe('undefined');
+  });
 
-    expect(path(page.url())).toBe('/dashboard');
-    await expect(page.locator('body')).not.toContainText('Work out what you earn');
+  test('a signed-out visitor gets nothing of it either', async ({ page }) => {
+    await page.goto(cacheBust(labsView('commission')));
+
+    await expect(page.locator('.comm-total')).toHaveCount(0);
+    expect(await page.evaluate(() => typeof window.blueworxCommission)).toBe('undefined');
   });
 
   test('an administrator sees it without being given the role', async ({ page }) => {
     await login(page);
-    await page.goto(cacheBust('/dashboard/commission/'));
+    await page.goto(cacheBust(labsView('commission')));
 
-    expect(path(page.url())).toBe('/dashboard/commission');
     await expect(page.locator('.comm-total')).toBeVisible();
+  });
+
+  test('the old dashboard is gone', async ({ page }) => {
+    await fixture(page, 'sales_in');
+
+    for (const old of ['/dashboard/', '/dashboard/commission/', '/dashboard/quote-builder/']) {
+      const response = await page.request.get(cacheBust(old), { maxRedirects: 0 });
+      expect(response.status(), old).toBe(404);
+    }
   });
 });
 
@@ -164,7 +183,12 @@ test.describe('What the calculator works out', () => {
   test.beforeEach(async ({ page }) => {
     skipUnlessLocal();
     await fixture(page, 'sales_in');
-    await page.goto(cacheBust('/dashboard/commission/'));
+    await page.goto(cacheBust(labsView('commission')));
+  });
+
+  // Labs does not load this plugin's stylesheet; the Sales section brings its own.
+  test('is styled on the Labs dashboard', async ({ page }) => {
+    await expect(page.locator('.comm')).toHaveCSS('display', 'flex');
   });
 
   // The handoff's worked example: Hosting £40 + ClubHouse £40 + Growth £600.
@@ -232,6 +256,6 @@ test.describe('What the calculator works out', () => {
   test('the rates it quotes are the ones written on the page', async ({ page }) => {
     await expect(page.locator('.comm-rates')).toContainText('20%');
     await expect(page.locator('.comm-rates')).toContainText('£9,000');
-    await expect(page.locator('.comm-note')).toContainText('first year');
+    await expect(page.locator('[data-panel="commission"] .comm-note')).toContainText('first year');
   });
 });

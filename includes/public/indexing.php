@@ -24,9 +24,8 @@
  *    without SureRank serves.
  *
  * Which pages are private is not a list of paths kept in step by hand: it is
- * the `account` and `auth` flags already on the registry entries in
- * account.php and auth.php. A client-area section added later is private by
- * existing.
+ * the `auth` flag already on the registry entries in auth.php. (The client
+ * dashboard is the Labs plugin's page now, not one of ours.)
  *
  * @package BlueWorxSite
  */
@@ -56,7 +55,7 @@ function blueworx_public_private_page_keys() {
 	$keys = array();
 
 	foreach ( blueworx_public_pages() as $key => $page ) {
-		if ( ! empty( $page['account'] ) || ! empty( $page['auth'] ) ) {
+		if ( ! empty( $page['auth'] ) ) {
 			$keys[] = $key;
 		}
 	}

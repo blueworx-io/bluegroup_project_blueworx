@@ -42,11 +42,10 @@ const REDIRECTS = [
   // Work was renamed Portfolio.
   { from: '/work', to: '/portfolio' },
   // The Toolbox was retired in favour of ClubHouse: the product page, its
-  // twelve tool pages and the portal tab.
+  // twelve tool pages.
   { from: '/toolbox', to: '/clubhouse' },
   { from: '/toolbox/surecart', to: '/clubhouse' },
   { from: '/toolbox/equalize-a11y-checker', to: '/clubhouse' },
-  { from: '/dashboard/toolbox', to: '/dashboard' },
 ];
 
 for (const { from, to } of REDIRECTS) {
